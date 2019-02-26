@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        id="cordova-plugin-purchases" version="0.0.1">
+
+    <dependency id="cordova-annotated-plugin-android" />
+
+    <name>Purchases</name>
+    <description>Purchases Cordova Plugin</description>
+    <license>MIT</license>
+    <keywords>cordova,purchases,revenuecat,iap,inapp,in-app,storekit,purchase</keywords>
+    <js-module src="www/plugin.js" name="plugin">
+        <clobbers target="Purchases" />
+    </js-module>
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="PurchasesPlugin">
+                <param name="android-package" value="com.revenuecat.purchases.PurchasesPlugin" />
+            </feature>
+        </config-file>
+        <framework src="com.revenuecat.purchases:purchases:2.0.0" />
+        <source-file src="src/android/PurchasesPlugin.java" target-dir="src/com/revenuecat/purchases"/>
+    </platform>
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="PurchasesPlugin">
+                <param name="ios-package" value="CDVPurchasesPlugin"/>
+            </feature>
+        </config-file>
+        <header-file src="src/ios/CDVPurchasesPlugin.h" />
+        <source-file src="src/ios/CDVPurchasesPlugin.m" />
+        <header-file src="src/ios/RCEntitlement+CDVPurchasesPlugin.h" />
+        <source-file src="src/ios/RCEntitlement+CDVPurchasesPlugin.m" />
+        <header-file src="src/ios/RCPurchaserInfo+CDVPurchasesPlugin.h" />
+        <source-file src="src/ios/RCPurchaserInfo+CDVPurchasesPlugin.m" />
+        <header-file src="src/ios/SKProduct+CDVPurchasesPlugin.h" />
+        <source-file src="src/ios/SKProduct+CDVPurchasesPlugin.m" />
+        <framework src="src/ios/Purchases.framework" embed="true" custom="true" />
+    </platform>
+</plugin>
