@@ -7,14 +7,13 @@ class Purchases {
    */
   static setup(apiKey, appUserID) {
     window.cordova.exec(
-      () => {
-        window.cordova.fireWindowEvent("onPurchaserInfoUpdated");
+      purchaserInfo => {
+        window.cordova.fireWindowEvent("onPurchaserInfoUpdated", purchaserInfo);
       },
       null,
       PLUGIN_NAME,
       "setupPurchases",
-      apiKey,
-      appUserID
+      [apiKey, appUserID]
     );
   }
 

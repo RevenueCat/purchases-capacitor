@@ -30,22 +30,23 @@ import androidx.annotation.NonNull;
 
 public class PurchasesPlugin extends AnnotatedCordovaPlugin {
 
-    private List<CallbackContext> callbackContextUpdatedPurchaserInfoListener = new ArrayList<>();
-
     @Override
-    public void onReset() {
-        super.onReset();
+    public void onDestroy() {
+        super.onDestroy();
         Purchases.getSharedInstance().close();
     }
 
-    @PluginAction(thread = ExecutionThread.MAIN, actionName = "setupPurchases", isAutofinish = true)
+    @PluginAction(thread = ExecutionThread.MAIN, actionName = "setupPurchases", isAutofinish = false)
     private void setupPurchases(String apiKey, String appUserID, CallbackContext callbackContext) {
         Purchases.configure(this.cordova.getActivity(), apiKey, appUserID);
         Purchases.getSharedInstance().setUpdatedPurchaserInfoListener(purchaserInfo -> {
             PluginResult result = new PluginResult(PluginResult.Status.OK, mapPurchaserIfo(purchaserInfo));
-            result.setKeepCallback(true); // Keep callback
+            result.setKeepCallback(true);
             callbackContext.sendPluginResult(result);
         });
+        PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT);
+        result.setKeepCallback(true);
+        callbackContext.sendPluginResult(result);
     }
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "setAllowSharingStoreAccount")
