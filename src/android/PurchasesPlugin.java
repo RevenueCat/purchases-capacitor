@@ -41,6 +41,11 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "setupPurchases", isAutofinish = true)
     private void setupPurchases(String apiKey, String appUserID, CallbackContext callbackContext) {
         Purchases.configure(this.cordova.getActivity(), apiKey, appUserID);
+        Purchases.getSharedInstance().setUpdatedPurchaserInfoListener(purchaserInfo -> {
+            PluginResult result = new PluginResult(PluginResult.Status.OK, mapPurchaserIfo(purchaserInfo));
+            result.setKeepCallback(true); // Keep callback
+            callbackContext.sendPluginResult(result);
+        });
     }
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "setAllowSharingStoreAccount")
@@ -197,20 +202,6 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
     private void createAlias(String newAppUserID, CallbackContext callbackContext) {
         checkPurchases();
         Purchases.getSharedInstance().createAlias(newAppUserID, getReceivePurchaserInfoListener(callbackContext));
-    }
-
-    @PluginAction(thread = ExecutionThread.MAIN, actionName = "setUpdatedPurchaserInfoListener", isAutofinish = false)
-    private void setUpdatedPurchaserInfoListener(CallbackContext callbackContext) {
-        Purchases.getSharedInstance().setUpdatedPurchaserInfoListener(purchaserInfo -> {
-            PluginResult result = new PluginResult(PluginResult.Status.OK, mapPurchaserIfo(purchaserInfo));
-            result.setKeepCallback(true); // Keep callback
-            callbackContext.sendPluginResult(result);
-        });
-    }
-
-    @PluginAction(thread = ExecutionThread.MAIN, actionName = "removeUpdatedPurchaserInfoListener", isAutofinish = true)
-    private void removeUpdatedPurchaserInfoListener(CallbackContext callbackContext) {
-        Purchases.getSharedInstance().setUpdatedPurchaserInfoListener(null);
     }
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "getPurchaserInfo", isAutofinish = false)

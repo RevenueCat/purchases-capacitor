@@ -6,10 +6,16 @@ class Purchases {
    * @param {String?} appUserID A unique id for identifying the user
    */
   static setup(apiKey, appUserID) {
-    window.cordova.exec(null, null, PLUGIN_NAME, "setupPurchases", [
+    window.cordova.exec(
+      () => {
+        window.cordova.fireWindowEvent("onPurchaserInfoUpdated");
+      },
+      null,
+      PLUGIN_NAME,
+      "setupPurchases",
       apiKey,
       appUserID
-    ]);
+    );
   }
 
   /**
@@ -29,7 +35,7 @@ class Purchases {
 
   /**
    * Add a dict of attribution information
-   * @param {Dict} data Attribution data from AppsFlyer, Adjust, or Branch
+   * @param {object} data Attribution data from any of the attribution networks in Purchases.ATTRIBUTION_NETWORKS
    * @param {ATTRIBUTION_NETWORKS} network Which network, see Purchases.ATTRIBUTION_NETWORKS
    */
   static addAttributionData(data, network) {
@@ -38,7 +44,7 @@ class Purchases {
       network
     ]);
   }
-  
+
   /**
    * Success callback used when retrieving entitlements.
    *
@@ -48,7 +54,6 @@ class Purchases {
 
   /**
    * Gets the map of entitlements -> offerings -> products
-   * @param {[String]} productIdentifiers Array of product identifiers
    * @param {EntitlementsSuccessCallback} callback Callback triggered after a successful getEntitlements call. It will receive an structure of entitlements.
    * @param {ErrorCallback} errorcallback Callback triggered after an error or when retrieving entitlements.
    */
@@ -66,7 +71,7 @@ class Purchases {
    * Success callback used when retrieving products.
    *
    * @callback ProductsSuccessCallback
-   * @param {[object]} products - Array containing the product objects.
+   * @param {[Product]} products - Array containing the product objects.
    */
 
   /**
@@ -212,7 +217,9 @@ class Purchases {
     window.cordova.exec(callback, errorcallback, PLUGIN_NAME, "reset", []);
   }
 
-  /** Sets a function to be called on updated purchaser info
+  /**
+   * Gets the current purchaser info. This call will return the cached purchaser info unless the cache is stale, in which case,
+   * it will make a network call to retrieve it from the servers.
    * @param {PurchaserInfoCallback} callback Callback that will receive the purchaser info
    * @param {ErrorCallback} errorcallback Callback that will be triggered whenever there is any problem retrieving the purchaser info
    */
@@ -222,34 +229,6 @@ class Purchases {
       errorcallback,
       PLUGIN_NAME,
       "getPurchaserInfo",
-      []
-    );
-  }
-
-  /** Sets a function to be called on updated purchaser info
-   * @param {PurchaserInfoCallback} updatedPurchaserInfoListener PurchaserInfo update listener
-   */
-  static setUpdatedPurchaserInfoListener(updatedPurchaserInfoListener) {
-    window.cordova.exec(
-      updatedPurchaserInfoListener,
-      null,
-      PLUGIN_NAME,
-      "setUpdatedPurchaserInfoListener",
-      []
-    );
-  }
-
-  /**
-   * Removes a given UpdatedPurchaserInfoListener
-   * @param {UpdatedPurchaserInfoListener} listenerToRemove UpdatedPurchaserInfoListener reference of the listener to remove
-   * @returns {Boolean} True if listener was removed, false otherwise
-   */
-  static removeUpdatedPurchaserInfoListener() {
-    window.cordova.exec(
-      null,
-      null,
-      PLUGIN_NAME,
-      "removeUpdatedPurchaserInfoListener",
       []
     );
   }

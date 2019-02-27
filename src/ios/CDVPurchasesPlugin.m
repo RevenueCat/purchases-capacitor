@@ -24,7 +24,10 @@
     self.products = [NSMutableDictionary new];
     [RCPurchases configureWithAPIKey:apiKey appUserID:appUserID];
     RCPurchases.sharedPurchases.delegate = self;
-    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+
+    self.updatedPurchaserInfoCallbackID = command.callbackId;
+    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
+    [pluginResult setKeepCallbackAsBool:YES];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
@@ -192,13 +195,6 @@
         }
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
-}
-
-- (void)setUpdatedPurchaserInfoListener:(CDVInvokedUrlCommand *)command {
-    self.updatedPurchaserInfoCallbackID = command.callbackId;
-    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
-    [pluginResult setKeepCallbackAsBool:YES];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 #pragma mark Delegate Methods
