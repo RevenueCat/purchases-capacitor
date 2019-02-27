@@ -72,16 +72,15 @@ func displayUpsellScreen() {
 When it comes time to make a purchase, _Purchases_ has a simple method, `makePurchase`. The code sample below shows the process of purchasing a product and confirming it unlocks the "my_entitlement_identifier" content.
 
 ```javascript
-Purchases.shared.makePurchase(product, { (transaction, purchaserInfo, error) in
-    if let error = error {
-        // Error making purchase
-    } else if let purchaserInfo = purchaserInfo {
-
-        if purchaserInfo.activeEntitlements.contains("my_entitlement_identifier") {
-            // Unlock that great "pro" content
-        }
-
+Purchases.makePurchase("product_id", 
+  (productIdentifier, purchaserInfo) {
+    if (purchaserInfo.activeEntitlements.includes("my_entitlement_identifier")) {
+      // Unlock that great "pro" content
     }
+  },
+  error => {
+    // Error making purchase
+  }
 })
 ```
 
@@ -146,7 +145,7 @@ Purchases.restoreTransactions(
 
 ## Debugging
 
-You can enabled detailed debug logs by setting `debugLogsEnabled = true`. You can set this **before** you configure Purchases.
+You can enable detailed debug logs by setting `debugLogsEnabled = true`. You can set this **before** you configure Purchases.
 
 ```javascript
 Purchases.setDebugLogsEnabled(true);
@@ -174,10 +173,6 @@ Example output:
 ## Entitlements
 
 An entitlement represents features or content that a user is "entitled" to. With Entitlements, you can set up your available in-app products remotely and control their availability without the need to update your app. For more information on configuring entitlements, look at our [entitlements documetation](https://docs.revenuecat.com/docs/entitlements).
-
-## Sample App
-
-We've added an example in this project showing a simple example using _Purchases_ with the RevenueCat backend. Note that the pre-registered in app purchases in the demo apps are for illustration purposes only and may not be valid in App Store Connect. [Set up your own purchases](https://docs.revenuecat.com/docs/entitlements) with RevenueCat when running the example.
 
 ## Next Steps
 
