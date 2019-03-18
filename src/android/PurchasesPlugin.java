@@ -30,12 +30,6 @@ import androidx.annotation.NonNull;
 
 public class PurchasesPlugin extends AnnotatedCordovaPlugin {
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Purchases.getSharedInstance().close();
-    }
-
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "setupPurchases", isAutofinish = false)
     private void setupPurchases(String apiKey, String appUserID, CallbackContext callbackContext) {
         Purchases.configure(this.cordova.getActivity(), apiKey, appUserID);
