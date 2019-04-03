@@ -26,6 +26,7 @@
                 <param name="ios-package" value="CDVPurchasesPlugin"/>
             </feature>
         </config-file>
+        <hook type="before_plugin_install" src="scripts/download-purchases-framework.sh" />
         <header-file src="src/ios/CDVPurchasesPlugin.h" />
         <source-file src="src/ios/CDVPurchasesPlugin.m" />
         <header-file src="src/ios/RCEntitlement+CDVPurchasesPlugin.h" />

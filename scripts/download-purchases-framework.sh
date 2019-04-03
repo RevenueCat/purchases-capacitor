@@ -2,7 +2,7 @@
 
 cd src/ios/
 
-VERSION=$1
+VERSION=2.0.0
 CURRENT_VERSION=$(cat .framework_version)
 
 if [ "$VERSION" == "$CURRENT_VERSION" ]; then
