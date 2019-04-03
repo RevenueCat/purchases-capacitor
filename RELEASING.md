@@ -1,5 +1,5 @@
-1. Update to the latest SDK versions in `package.json` and `plugin.xml`.
-2. Update version in package.json.
+1. Update to the latest SDK versions in `package.json`, `plugin.xml` and `scripts/download-purchases-framework.sh`
+2. Update version in `package.json` and `plugin.xml`.
 3. Add an entry to CHANGELOG.md
 4. `git commit -am "Preparing for version x.y.z"`
 5. `git tag x.y.z`
