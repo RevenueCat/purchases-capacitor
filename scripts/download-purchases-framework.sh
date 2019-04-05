@@ -19,30 +19,21 @@ echo "Downloading Purchases iOS $VERSION from $URL, this may take a minute."
 if ! which curl > /dev/null; then echo "curl command not found. Please install curl"; exit 1; fi;
 if ! which unzip > /dev/null; then echo "unzip command not found. Please install unzip"; exit 1; fi;
 
-if [ -d node_modules/cordova-plugin-purchases/src/ios/Purchases.framework ]; then
+if [ -d ./Purchases.framework ]; then
     echo "Old Purchases.framework found. Removing it and installing a $VERSION"
-    rm -rf node_modules/cordova-plugin-purchases/src/ios/Purchases.framework
-    rm -rf plugins/cordova-plugin-purchases/src/ios/Purchases.framework
+    rm -rf ./Purchases.framework
 fi
 
-curl -sSL $URL > cordova-purchases-plugin-temp.zip
+curl -sSL $URL > temp.zip
 # In some cases the temp folder can not be created by unzip, https://github.com/RevenueCat/react-native-purchases/issues/26
-mkdir -p cordova-purchases-plugin-temp
-unzip -o cordova-purchases-plugin-temp.zip -d cordova-purchases-plugin-temp
-mv cordova-purchases-plugin-temp/Purchases.framework .
-rm -r cordova-purchases-plugin-temp
-rm cordova-purchases-plugin-temp.zip
+mkdir -p temp
+unzip -o temp.zip -d temp
+mv temp/Purchases.framework ./Purchases.framework
+rm -r temp
+rm temp.zip
 
 if ! [ -d ./Purchases.framework ]; then
   echo "Purchases.framework not found. Please reinstall cordova-plugin-purchases"; exit 1;
 fi;
 
 echo "$VERSION" > .framework_version
-
-cp -R ./Purchases.framework plugins/cordova-plugin-purchases/src/ios/
-cp -R ./Purchases.framework node_modules/cordova-plugin-purchases/src/ios/
-cp ./.framework_version plugins/cordova-plugin-purchases/src/ios/
-cp ./.framework_version node_modules/cordova-plugin-purchases/src/ios/
-
-rm -rf ./Purchases.framework
-rm ./.framework_version
