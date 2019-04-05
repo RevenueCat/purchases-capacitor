@@ -22,7 +22,6 @@
   ],
   "scripts": {
     "fetch:ios:sdk": "./scripts/download-purchases-framework.sh 2.0.0",
-    "preinstall": "npm run fetch:ios:sdk",
     "lint": "eslint **/*.js"
   },
   "author": "RevenueCat, Inc.",
