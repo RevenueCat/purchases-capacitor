@@ -1,6 +1,9 @@
 #!/bin/sh
-VERSION=2.0.0
-CURRENT_VERSION=$(cat node_modules/cordova-plugin-purchases/src/ios/.framework_version)
+
+cd src/ios/
+
+VERSION=$1
+CURRENT_VERSION=$(cat .framework_version)
 
 if [ "$VERSION" == "$CURRENT_VERSION" ]; then
   echo "The newest version is already installed. Exiting."
