@@ -84,11 +84,6 @@ func displayUpsellScreen() {
 When it comes time to make a purchase, _Purchases_ has a simple method, `makePurchase`. The code sample below shows the process of purchasing a product and confirming it unlocks the "my_entitlement_identifier" content.
 
 ```javascript
-const isSubscriptionProduct = ... // TODO: based on product_id
-
-// type is "subs" for subscriptions, "inapp" for non-subscriptions (e.g. consumables).
-const type = isSubscriptionProduct ? "subs" : "inapp";
-
 Purchases.makePurchase("product_id", 
   (productIdentifier, purchaserInfo) => {
     if (purchaserInfo.activeEntitlements.includes("my_entitlement_identifier")) {
@@ -98,8 +93,8 @@ Purchases.makePurchase("product_id",
   error => {
     // Error making purchase
   },
-  [], // oldSkus, see docs for more details on when this is needed
-  type)
+  [], // Optional: oldSkus, see docs for more details on when this is needed
+  type) // Optional: Pass "subs" for subscriptions, "inapp" for non-subscriptions (e.g. consumables). Needed for Android, iOS will ignore this.
 ```
 
 
