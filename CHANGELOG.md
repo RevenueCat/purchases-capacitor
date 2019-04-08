@@ -1,3 +1,8 @@
+## 0.0.6
+
+- Fixes errors in Android not being sent as int
+- Fixes crash when underlyingErrorMessage is missing
+
 ## 0.0.5
 
 - Updates versions to 2.1.0 with the new error handling.
