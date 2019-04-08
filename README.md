@@ -84,17 +84,24 @@ func displayUpsellScreen() {
 When it comes time to make a purchase, _Purchases_ has a simple method, `makePurchase`. The code sample below shows the process of purchasing a product and confirming it unlocks the "my_entitlement_identifier" content.
 
 ```javascript
+const isSubscriptionProduct = ... // TODO: based on product_id
+
+// type is "subs" for subscriptions, "inapp" for non-subscriptions (e.g. consumables).
+const type = isSubscriptionProduct ? "subs" : "inapp";
+
 Purchases.makePurchase("product_id", 
-  (productIdentifier, purchaserInfo) {
+  (productIdentifier, purchaserInfo) => {
     if (purchaserInfo.activeEntitlements.includes("my_entitlement_identifier")) {
       // Unlock that great "pro" content
     }
   },
   error => {
     // Error making purchase
-  }
-})
+  },
+  [], // oldSkus, see docs for more details on when this is needed
+  type)
 ```
+
 
 > `makePurchase` handles the underlying framework interaction and automatically validates purchases with Apple and Google through our secure servers. This helps reduce in-app purchase fraud and decreases the complexity of your app. Receipt tokens are stored remotely and always kept up-to-date.
 
