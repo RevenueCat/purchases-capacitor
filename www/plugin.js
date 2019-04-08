@@ -110,6 +110,7 @@ class Purchases {
    *
    * @callback makePurchaseErrorCallback
    * @param {object} error - The error containing message, code, domain and if user cancelled the purchase.
+   * @param {Boolean} userCancelled - Wether the user cancelled the purchase or not.
    */
 
   /**
@@ -117,7 +118,7 @@ class Purchases {
    * @param {string} productIdentifier The product identifier of the product you want to purchase.
    * @param {makePurchaseSuccessCallback} callback Callback triggered after a successful purchase.
    * @param {makePurchaseErrorCallback} errorcallback Callback triggered after an error or when the user cancels the purchase.
-   * If user cancelled, error.userCancelled will be true
+   * If user cancelled, userCancelled will be true
    * @param {Array<String>} oldSkus Optional array of skus you wish to upgrade from.
    * @param {String} type Optional type of product, can be inapp or subs. Subs by default
    */
@@ -128,25 +129,11 @@ class Purchases {
     oldSkus = [],
     type = "subs"
   ) {
-    window.cordova.exec(
-      callback,
-      ({ code, domain, message }) => {
-        const userCancelledDomainCodes = {
-          1: "Play Billing",
-          2: "SKErrorDomain"
-        };
-        // TODO send product identifier?
-        errorcallback({
-          code,
-          domain,
-          message,
-          userCancelled: userCancelledDomainCodes[code] === domain
-        });
-      },
-      PLUGIN_NAME,
-      "makePurchase",
-      [productIdentifier, oldSkus, type]
-    );
+    window.cordova.exec(callback, errorcallback, PLUGIN_NAME, "makePurchase", [
+      productIdentifier,
+      oldSkus,
+      type
+    ]);
   }
 
   /**

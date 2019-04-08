@@ -174,7 +174,7 @@ Example output:
 
 ```
 [Purchases] - DEBUG: Debug logging enabled.
-[Purchases] - DEBUG: SDK Version - 2.0.0
+[Purchases] - DEBUG: SDK Version - 2.1.0
 [Purchases] - DEBUG: Initial App User ID - (null)
 [Purchases] - DEBUG: GET /v1/subscribers/<APP_USER_ID>
 [Purchases] - DEBUG: GET /v1/subscribers/<APP_USER_ID>/products

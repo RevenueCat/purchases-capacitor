@@ -20,7 +20,6 @@
     NSString *apiKey = command.arguments[0];
     NSString *appUserID = command.arguments[1];
 
-    RCPurchases.sharedPurchases.delegate = nil;
     self.products = [NSMutableDictionary new];
     [RCPurchases configureWithAPIKey:apiKey appUserID:appUserID];
     RCPurchases.sharedPurchases.delegate = self;
@@ -108,13 +107,21 @@
         return;
     }
     [RCPurchases.sharedPurchases makePurchase:self.products[productIdentifier]
-                          withCompletionBlock:^(SKPaymentTransaction *_Nullable transaction, RCPurchaserInfo *_Nullable purchaserInfo, NSError *_Nullable error) {
+                          withCompletionBlock:^(SKPaymentTransaction *_Nullable transaction, RCPurchaserInfo *_Nullable purchaserInfo, NSError *_Nullable error, BOOL userCancelled) {
                               CDVPluginResult *pluginResult = nil;
                               if (error) {
-                                  pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:[self payloadForError:error]];
+                                  pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                                               messageAsDictionary:@{
+                                                                       @"error": [self payloadForError:error],
+                                                                       @"userCancelled": @(userCancelled)
+                                                               }];
                               } else {
-                                  pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{@"productIdentifier": transaction.payment.productIdentifier, @"purchaserInfo": purchaserInfo.dictionary
-                                  }];
+                                  pluginResult = [
+                                          CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                                       messageAsDictionary:@{
+                                                               @"productIdentifier": transaction.payment.productIdentifier,
+                                                               @"purchaserInfo": purchaserInfo.dictionary
+                                                       }];
                               }
                               [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
                           }];
@@ -211,7 +218,7 @@
     return @{
             @"message": error.localizedDescription,
             @"code": @(error.code),
-            @"domain": error.domain
+            @"underlyingErrorMessage": ((NSError *)error.userInfo[NSUnderlyingErrorKey]).localizedDescription
     };
 }
 

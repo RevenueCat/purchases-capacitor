@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-purchases",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Purchases Cordova Plugin",
   "cordova": {
     "id": "cordova-plugin-purchases",
@@ -21,7 +21,7 @@
     "cordova-android"
   ],
   "scripts": {
-    "fetch:ios:sdk": "./scripts/download-purchases-framework.sh 2.0.0",
+    "fetch:ios:sdk": "./scripts/download-purchases-framework.sh 2.1.0",
     "lint": "eslint **/*.js"
   },
   "author": "RevenueCat, Inc.",

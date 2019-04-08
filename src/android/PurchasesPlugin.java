@@ -1,22 +1,21 @@
 package com.revenuecat.purchases;
 
 import android.support.annotation.Nullable;
-import android.util.Log;
 
+import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.SkuDetails;
 import com.appfeel.cordova.annotated.android.plugin.AnnotatedCordovaPlugin;
 import com.appfeel.cordova.annotated.android.plugin.ExecutionThread;
 import com.appfeel.cordova.annotated.android.plugin.PluginAction;
+import com.revenuecat.purchases.interfaces.Callback;
 import com.revenuecat.purchases.interfaces.GetSkusResponseListener;
-import com.revenuecat.purchases.interfaces.PurchaseCompletedListener;
+import com.revenuecat.purchases.interfaces.MakePurchaseListener;
 import com.revenuecat.purchases.interfaces.ReceiveEntitlementsListener;
 import com.revenuecat.purchases.interfaces.ReceivePurchaserInfoListener;
-import com.revenuecat.purchases.interfaces.UpdatedPurchaserInfoListener;
 import com.revenuecat.purchases.util.Iso8601Utils;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,13 +44,11 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "setAllowSharingStoreAccount")
     public void setAllowSharingStoreAccount(boolean allowSharingStoreAccount, CallbackContext callbackContext) {
-        checkPurchases();
         Purchases.getSharedInstance().setAllowSharingPlayStoreAccount(allowSharingStoreAccount);
     }
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "addAttributionData")
     public void addAttributionData(JSONObject data, Integer network, CallbackContext callbackContext) {
-        checkPurchases();
         for (Purchases.AttributionNetwork attributionNetwork : Purchases.AttributionNetwork.values()) {
             if (attributionNetwork.getServerValue() == network) {
                 Purchases.getSharedInstance().addAttributionData(data, attributionNetwork);
@@ -61,8 +58,6 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "getEntitlements", isAutofinish = false)
     private void getEntitlements(CallbackContext callbackContext) {
-        checkPurchases();
-
         Purchases.getSharedInstance().getEntitlements(new ReceiveEntitlementsListener() {
             @Override
             public void onReceived(@NonNull Map<String, Entitlement> entitlementMap) {
@@ -102,8 +97,6 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "getProductInfo", isAutofinish = false)
     private void getProductInfo(JSONArray productIDs, String type, CallbackContext callbackContext) {
-        checkPurchases();
-
         ArrayList<String> productIDList = new ArrayList<>();
         for (int i = 0; i < productIDs.length(); i++) {
             try {
@@ -138,8 +131,6 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "makePurchase", isAutofinish = false)
     private void makePurchase(String productIdentifier, @Nullable JSONArray oldSkus, String type,
             CallbackContext callbackContext) {
-        checkPurchases();
-
         ArrayList<String> oldSkusList = new ArrayList<>();
         for (int i = 0; i < (oldSkus != null ? oldSkus.length() : 0); i++) {
             try {
@@ -150,12 +141,12 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
         }
 
         Purchases.getSharedInstance().makePurchase(this.cordova.getActivity(), productIdentifier, type, oldSkusList,
-                new PurchaseCompletedListener() {
+                new MakePurchaseListener() {
                     @Override
-                    public void onCompleted(@NonNull String sku, @NonNull PurchaserInfo purchaserInfo) {
+                    public void onCompleted(@NonNull Purchase purchase, @NonNull PurchaserInfo purchaserInfo) {
                         JSONObject object = new JSONObject();
                         try {
-                            object.put("productIdentifier", sku);
+                            object.put("productIdentifier", purchase.getSku());
                             object.put("purchaserInfo", mapPurchaserIfo(purchaserInfo));
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -164,48 +155,50 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
                     }
 
                     @Override
-                    public void onError(@NonNull PurchasesError error) {
-                        callbackContext.error(mapError(error));
+                    public void onError(@NonNull PurchasesError error, Boolean userCancelled) {
+                        JSONObject object = new JSONObject();
+                        try {
+                            object.put("error", mapError(error));
+                            object.put("userCancelled", userCancelled);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        callbackContext.error(object);
                     }
                 });
     }
 
-    @PluginAction(thread = ExecutionThread.MAIN, actionName = "getAppUserID")
+    @PluginAction(thread = ExecutionThread.MAIN, actionName = "getAppUserID", isAutofinish = false)
     private void getAppUserID(CallbackContext callbackContext) {
         callbackContext.success(Purchases.getSharedInstance().getAppUserID());
     }
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "restoreTransactions", isAutofinish = false)
     private void restoreTransactions(CallbackContext callbackContext) {
-        checkPurchases();
         Purchases.getSharedInstance().restorePurchases(getReceivePurchaserInfoListener(callbackContext));
     }
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "reset", isAutofinish = false)
     private void reset(CallbackContext callbackContext) {
-        checkPurchases();
         Purchases.getSharedInstance().reset(getReceivePurchaserInfoListener(callbackContext));
     }
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "identify", isAutofinish = false)
     private void identify(String appUserID, CallbackContext callbackContext) {
-        checkPurchases();
         Purchases.getSharedInstance().identify(appUserID, getReceivePurchaserInfoListener(callbackContext));
     }
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "createAlias", isAutofinish = false)
     private void createAlias(String newAppUserID, CallbackContext callbackContext) {
-        checkPurchases();
         Purchases.getSharedInstance().createAlias(newAppUserID, getReceivePurchaserInfoListener(callbackContext));
     }
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "getPurchaserInfo", isAutofinish = false)
     private void getPurchaserInfo(CallbackContext callbackContext) {
-        checkPurchases();
         Purchases.getSharedInstance().getPurchaserInfo(getReceivePurchaserInfoListener(callbackContext));
     }
 
-    @PluginAction(thread = ExecutionThread.MAIN, actionName = "setDebugLogsEnabled", isAutofinish = true)
+    @PluginAction(thread = ExecutionThread.WORKER, actionName = "setDebugLogsEnabled")
     private void setDebugLogsEnabled(boolean enabled, CallbackContext callbackContext) {
         Purchases.setDebugLogsEnabled(enabled);
     }
@@ -222,12 +215,6 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
                 callbackContext.success(mapError(error));
             }
         };
-    }
-
-    private void checkPurchases() {
-        if (Purchases.getSharedInstance() == null) {
-            throw new RuntimeException("You must call setupPurchases first");
-        }
     }
 
     private JSONObject mapPurchaserIfo(PurchaserInfo purchaserInfo) {
@@ -284,20 +271,10 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
 
     private JSONObject mapError(PurchasesError purchasesError) {
         JSONObject object = new JSONObject();
-        String domainString;
-
-        if (purchasesError.getDomain() == Purchases.ErrorDomains.REVENUECAT_BACKEND) {
-            domainString = "RevenueCat Backend";
-        } else if (purchasesError.getDomain() == Purchases.ErrorDomains.PLAY_BILLING) {
-            domainString = "Play Billing";
-        } else {
-            domainString = "Unknown";
-        }
-
         try {
             object.put("message", purchasesError.getMessage());
             object.put("code", purchasesError.getCode());
-            object.put("domain", domainString);
+            object.put("underlyingErrorMessage", purchasesError.getUnderlyingErrorMessage());
         } catch (JSONException e) {
             e.printStackTrace();
         }
