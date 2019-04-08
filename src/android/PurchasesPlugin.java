@@ -273,7 +273,7 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
         JSONObject object = new JSONObject();
         try {
             object.put("message", purchasesError.getMessage());
-            object.put("code", purchasesError.getCode());
+            object.put("code", purchasesError.getCode().ordinal());
             object.put("underlyingErrorMessage", purchasesError.getUnderlyingErrorMessage());
         } catch (JSONException e) {
             e.printStackTrace();
