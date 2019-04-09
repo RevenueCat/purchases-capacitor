@@ -1,3 +1,7 @@
+## 0.0.7
+
+- Fixes exception on iOS when sending an error
+
 ## 0.0.6
 
 - Fixes errors in Android not being sent as int

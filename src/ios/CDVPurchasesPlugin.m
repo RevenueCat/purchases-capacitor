@@ -215,11 +215,11 @@
 #pragma mark Response Payload Helpers
 
 - (NSDictionary *)payloadForError:(NSError *)error {
-    NSMutableDictionary* dict = @{
-                                 @"message": error.localizedDescription,
-                                 @"code": @(error.code)
-                                 };
-    if ([error.userInfo objectForKey:NSUnderlyingErrorKey]) {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:@{
+            @"message": error.localizedDescription,
+            @"code": @(error.code)
+    }];
+    if (error.userInfo[NSUnderlyingErrorKey]) {
         dict[@"underlyingErrorMessage"] = ((NSError *)error.userInfo[NSUnderlyingErrorKey]).localizedDescription;
     }
     return dict;
