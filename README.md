@@ -27,14 +27,15 @@ cordova plugin add cordova-plugin-purchases --save
 #### Additional iOS Setup
 
 ##### Add Strip Frameworks Phase
+
 The App Store, in it's infinite wisdom, still rejects fat frameworks, so we need to strip our framework before it is deployed. To do this, add the following script phase to your build.
+
 1. In Xcode, in project manager, select your app target.
 2. Open the `Build Phases` tab
 3. Add a new `Run Script`, name it `Strip Frameworks`
 4. Add the following command `"${PROJECT_DIR}/../../node_modules/cordova-plugin-purchases/src/ios/strip-frameworks.sh"` (quotes included)
 
 ![](https://media.giphy.com/media/39zTmnsW1CIrJNk5AM/giphy.gif)
-
 
 ## Getting Started
 
@@ -84,9 +85,12 @@ func displayUpsellScreen() {
 When it comes time to make a purchase, _Purchases_ has a simple method, `makePurchase`. The code sample below shows the process of purchasing a product and confirming it unlocks the "my_entitlement_identifier" content.
 
 ```javascript
-Purchases.makePurchase("product_id", 
+Purchases.makePurchase(
+  "product_id",
   (productIdentifier, purchaserInfo) => {
-    if (purchaserInfo.activeEntitlements.includes("my_entitlement_identifier")) {
+    if (
+      purchaserInfo.activeEntitlements.includes("my_entitlement_identifier")
+    ) {
       // Unlock that great "pro" content
     }
   },
@@ -94,9 +98,9 @@ Purchases.makePurchase("product_id",
     // Error making purchase
   },
   [], // Optional: oldSkus, see docs for more details on when this is needed
-  type) // Optional: Pass "subs" for subscriptions, "inapp" for non-subscriptions (e.g. consumables). Needed for Android, iOS will ignore this.
+  type
+); // Optional: Pass "subs" for subscriptions, "inapp" for non-subscriptions (e.g. consumables). Needed for Android, iOS will ignore this.
 ```
-
 
 > `makePurchase` handles the underlying framework interaction and automatically validates purchases with Apple and Google through our secure servers. This helps reduce in-app purchase fraud and decreases the complexity of your app. Receipt tokens are stored remotely and always kept up-to-date.
 
@@ -174,7 +178,7 @@ Example output:
 
 ```
 [Purchases] - DEBUG: Debug logging enabled.
-[Purchases] - DEBUG: SDK Version - 2.1.0
+[Purchases] - DEBUG: SDK Version - 2.1.1
 [Purchases] - DEBUG: Initial App User ID - (null)
 [Purchases] - DEBUG: GET /v1/subscribers/<APP_USER_ID>
 [Purchases] - DEBUG: GET /v1/subscribers/<APP_USER_ID>/products

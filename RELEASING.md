@@ -1,4 +1,4 @@
-1. Update to the latest SDK versions in `package.json`, `plugin.xml` and `scripts/download-purchases-framework.sh`
+1. Update to the latest SDK versions in `package.json` and `plugin.xml`
 1. Update version in `package.json` and `plugin.xml`.
 1. Run `npm run fetch:ios:sdk`
 1. Add an entry to CHANGELOG.md

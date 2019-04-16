@@ -1,3 +1,7 @@
+## 0.0.8
+
+- Updates iOS SDK to 2.1.1
+
 ## 0.0.7
 
 - Fixes exception on iOS when sending an error
