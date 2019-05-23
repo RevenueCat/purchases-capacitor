@@ -4,8 +4,9 @@ class Purchases {
    * Sets up Purchases with your API key and an app user id.
    * @param {String} apiKey RevenueCat API Key. Needs to be a String
    * @param {String?} appUserID A unique id for identifying the user
+   * @param {Boolean} observerMode An optional boolean. Set this to TRUE if you have your own IAP implementation and want to use only RevenueCat's backend. Default is FALSE.
    */
-  static setup(apiKey, appUserID) {
+  static setup(apiKey, appUserID, observerMode = false) {
     window.cordova.exec(
       purchaserInfo => {
         window.cordova.fireWindowEvent("onPurchaserInfoUpdated", purchaserInfo);
@@ -13,7 +14,7 @@ class Purchases {
       null,
       PLUGIN_NAME,
       "setupPurchases",
-      [apiKey, appUserID]
+      [apiKey, appUserID, observerMode]
     );
   }
 
@@ -36,11 +37,13 @@ class Purchases {
    * Add a dict of attribution information
    * @param {object} data Attribution data from any of the attribution networks in Purchases.ATTRIBUTION_NETWORKS
    * @param {ATTRIBUTION_NETWORKS} network Which network, see Purchases.ATTRIBUTION_NETWORKS
+   * @param {String?} networkUserId An optional unique id for identifying the user. Needs to be a string.
    */
-  static addAttributionData(data, network) {
+  static addAttributionData(data, network, networkUserId) {
     window.cordova.exec(null, null, PLUGIN_NAME, "addAttributionData", [
       data,
-      network
+      network,
+      networkUserId
     ]);
   }
 
@@ -119,19 +122,22 @@ class Purchases {
    * @param {makePurchaseSuccessCallback} callback Callback triggered after a successful purchase.
    * @param {makePurchaseErrorCallback} errorcallback Callback triggered after an error or when the user cancels the purchase.
    * If user cancelled, userCancelled will be true
-   * @param {Array<String>} oldSkus Optional array of skus you wish to upgrade from.
+   * @param {String?} oldSku Optional sku you wish to upgrade from.
    * @param {String} type Optional type of product, can be inapp or subs. Subs by default
    */
   static makePurchase(
     productIdentifier,
     callback,
     errorcallback,
-    oldSkus = [],
+    oldSku,
     type = "subs"
   ) {
+    if (Array.isArray(oldSku)) {
+      throw new Error("Calling a deprecated method!");
+    }
     window.cordova.exec(callback, errorcallback, PLUGIN_NAME, "makePurchase", [
       productIdentifier,
-      oldSkus,
+      oldSku,
       type
     ]);
   }
@@ -227,6 +233,16 @@ class Purchases {
     window.cordova.exec(null, null, PLUGIN_NAME, "setDebugLogsEnabled", [
       enabled
     ]);
+  }
+
+  /**
+   * This method will send all the purchases to the RevenueCat backend. Call this when using your own implementation
+   * for subscriptions anytime a sync is needed, like after a successful purchase.
+   *
+   * @warning This function should only be called if you're not calling makePurchase.
+   */
+  static syncPurchases() {
+    window.cordova.exec(null, null, PLUGIN_NAME, "syncPurchases", []);
   }
 
   /**

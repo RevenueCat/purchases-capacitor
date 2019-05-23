@@ -19,6 +19,6 @@
 - (void)reset:(CDVInvokedUrlCommand *)command;
 - (void)setDebugLogsEnabled:(CDVInvokedUrlCommand *)command;
 - (void)getPurchaserInfo:(CDVInvokedUrlCommand *)command;
-- (void)setUpdatedPurchaserInfoListener:(CDVInvokedUrlCommand *)command;
+- (void)syncPurchases:(CDVInvokedUrlCommand *)command;
 
 @end

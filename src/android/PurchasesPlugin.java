@@ -1,13 +1,15 @@
 package com.revenuecat.purchases;
 
-import android.support.annotation.Nullable;
+import android.app.Activity;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.SkuDetails;
 import com.appfeel.cordova.annotated.android.plugin.AnnotatedCordovaPlugin;
 import com.appfeel.cordova.annotated.android.plugin.ExecutionThread;
 import com.appfeel.cordova.annotated.android.plugin.PluginAction;
-import com.revenuecat.purchases.interfaces.Callback;
 import com.revenuecat.purchases.interfaces.GetSkusResponseListener;
 import com.revenuecat.purchases.interfaces.MakePurchaseListener;
 import com.revenuecat.purchases.interfaces.ReceiveEntitlementsListener;
@@ -22,16 +24,18 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
 
 public class PurchasesPlugin extends AnnotatedCordovaPlugin {
+    private Map<String, Map<String, SkuDetails>> products = new HashMap<>();
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "setupPurchases", isAutofinish = false)
-    private void setupPurchases(String apiKey, String appUserID, CallbackContext callbackContext) {
-        Purchases.configure(this.cordova.getActivity(), apiKey, appUserID);
+    private void setupPurchases(String apiKey, String appUserID, boolean observerMode,
+                                CallbackContext callbackContext) {
+        Purchases.configure(this.cordova.getActivity(), apiKey, appUserID, observerMode);
         Purchases.getSharedInstance().setUpdatedPurchaserInfoListener(purchaserInfo -> {
             PluginResult result = new PluginResult(PluginResult.Status.OK, mapPurchaserIfo(purchaserInfo));
             result.setKeepCallback(true);
@@ -48,10 +52,11 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
     }
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "addAttributionData")
-    public void addAttributionData(JSONObject data, Integer network, CallbackContext callbackContext) {
+    public void addAttributionData(JSONObject data, Integer network, @Nullable String networkUserId,
+                                   CallbackContext callbackContext) {
         for (Purchases.AttributionNetwork attributionNetwork : Purchases.AttributionNetwork.values()) {
             if (attributionNetwork.getServerValue() == network) {
-                Purchases.getSharedInstance().addAttributionData(data, attributionNetwork);
+                Purchases.addAttributionData(data, attributionNetwork, networkUserId);
             }
         }
     }
@@ -61,31 +66,7 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
         Purchases.getSharedInstance().getEntitlements(new ReceiveEntitlementsListener() {
             @Override
             public void onReceived(@NonNull Map<String, Entitlement> entitlementMap) {
-                JSONObject response = new JSONObject();
-                try {
-                    for (String entId : entitlementMap.keySet()) {
-                        Entitlement ent = entitlementMap.get(entId);
-
-                        JSONObject offeringsMap = new JSONObject();
-                        Map<String, Offering> offerings = ent.getOfferings();
-
-                        for (String offeringId : offerings.keySet()) {
-                            Offering offering = offerings.get(offeringId);
-                            SkuDetails skuDetails = offering.getSkuDetails();
-                            if (skuDetails != null) {
-                                JSONObject skuMap = mapSkuDetails(skuDetails);
-                                offeringsMap.put(offeringId, skuMap);
-                            } else {
-                                offeringsMap.put(offeringId, JSONObject.NULL);
-                            }
-                        }
-                        response.put(entId, offeringsMap);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                callbackContext.success(response);
+                callbackContext.success(mapEntitlementsAndCacheProducts(entitlementMap));
             }
 
             @Override
@@ -93,6 +74,39 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
                 callbackContext.error(mapError(error));
             }
         });
+    }
+
+    private JSONObject mapEntitlementsAndCacheProducts(@NonNull Map<String, Entitlement> entitlementMap) {
+        products = new HashMap<>();
+
+        JSONObject response = new JSONObject();
+        try {
+            for (String entId : entitlementMap.keySet()) {
+                Entitlement ent = entitlementMap.get(entId);
+
+                JSONObject offeringsMap = new JSONObject();
+                if (ent != null) {
+                    Map<String, Offering> offerings = ent.getOfferings();
+                    for (String offeringId : offerings.keySet()) {
+                        Offering offering = offerings.get(offeringId);
+                        if (offering != null) {
+                            SkuDetails skuDetails = offering.getSkuDetails();
+                            if (skuDetails != null) {
+                                cacheProduct(skuDetails);
+                                JSONObject skuMap = mapSkuDetails(skuDetails);
+                                offeringsMap.put(offeringId, skuMap);
+                            } else {
+                                offeringsMap.put(offeringId, JSONObject.NULL);
+                            }
+                        }
+                    }
+                }
+                response.put(entId, offeringsMap);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return response;
     }
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "getProductInfo", isAutofinish = false)
@@ -110,6 +124,7 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
             public void onReceived(@NonNull List<SkuDetails> skus) {
                 JSONArray writableArray = new JSONArray();
                 for (SkuDetails detail : skus) {
+                    cacheProduct(detail);
                     writableArray.put(mapSkuDetails(detail));
                 }
                 callbackContext.success(writableArray);
@@ -129,43 +144,79 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
     }
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "makePurchase", isAutofinish = false)
-    private void makePurchase(String productIdentifier, @Nullable JSONArray oldSkus, String type,
-            CallbackContext callbackContext) {
-        ArrayList<String> oldSkusList = new ArrayList<>();
-        for (int i = 0; i < (oldSkus != null ? oldSkus.length() : 0); i++) {
-            try {
-                oldSkusList.add(oldSkus.getString(i));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        Purchases.getSharedInstance().makePurchase(this.cordova.getActivity(), productIdentifier, type, oldSkusList,
-                new MakePurchaseListener() {
+    private void makePurchase(String productIdentifier, @Nullable String oldSku, String type,
+                              CallbackContext callbackContext) {
+        final Activity currentActivity = this.cordova.getActivity();
+        if (currentActivity != null) {
+            if (products.isEmpty()) {
+                Purchases.getSharedInstance().getEntitlements(new ReceiveEntitlementsListener() {
                     @Override
-                    public void onCompleted(@NonNull Purchase purchase, @NonNull PurchaserInfo purchaserInfo) {
-                        JSONObject object = new JSONObject();
-                        try {
-                            object.put("productIdentifier", purchase.getSku());
-                            object.put("purchaserInfo", mapPurchaserIfo(purchaserInfo));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        callbackContext.success(object);
+                    public void onReceived(@NonNull Map<String, Entitlement> entitlementMap) {
+                        mapEntitlementsAndCacheProducts(entitlementMap);
+                        makePurchase(currentActivity, oldSku, type, productIdentifier, callbackContext);
                     }
 
                     @Override
-                    public void onError(@NonNull PurchasesError error, Boolean userCancelled) {
-                        JSONObject object = new JSONObject();
-                        try {
-                            object.put("error", mapError(error));
-                            object.put("userCancelled", userCancelled);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        callbackContext.error(object);
+                    public void onError(@NonNull PurchasesError error) {
+                        callbackContext.error(mapError(error));
                     }
                 });
+            } else {
+                makePurchase(currentActivity, oldSku, type, productIdentifier, callbackContext);
+            }
+        } else {
+            callbackContext.error(mapError(
+                    new PurchasesError(PurchasesErrorCode.PurchaseInvalidError, "There is no current Activity")));
+        }
+    }
+
+    @PluginAction(thread = ExecutionThread.MAIN, actionName = "syncPurchases")
+    public void syncPurchases(CallbackContext callbackContext) {
+        Purchases.getSharedInstance().syncPurchases();
+    }
+
+    private void makePurchase(final Activity currentActivity, final String oldSku, final String type,
+                              final String productIdentifier, final CallbackContext callbackContext) {
+        Map<String, SkuDetails> typeMap = products.get(type);
+        SkuDetails productToBuy = null;
+        if (typeMap != null) {
+            productToBuy = typeMap.get(productIdentifier);
+        }
+        if (productToBuy != null) {
+            MakePurchaseListener listener = new MakePurchaseListener() {
+                @Override
+                public void onCompleted(@NonNull Purchase purchase, @NonNull PurchaserInfo purchaserInfo) {
+                    JSONObject object = new JSONObject();
+                    try {
+                        object.put("productIdentifier", purchase.getSku());
+                        object.put("purchaserInfo", mapPurchaserIfo(purchaserInfo));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    callbackContext.success(object);
+                }
+
+                @Override
+                public void onError(@NonNull PurchasesError error, Boolean userCancelled) {
+                    JSONObject object = new JSONObject();
+                    try {
+                        object.put("error", mapError(error));
+                        object.put("userCancelled", userCancelled);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    callbackContext.error(mapError(error));
+                }
+            };
+            if (oldSku == null || oldSku.isEmpty()) {
+                Purchases.getSharedInstance().makePurchase(currentActivity, productToBuy, listener);
+            } else {
+                Purchases.getSharedInstance().makePurchase(currentActivity, productToBuy, oldSku, listener);
+            }
+        } else {
+            callbackContext.error(mapError(new PurchasesError(PurchasesErrorCode.ProductNotAvailableForPurchaseError,
+                    "Couldn't find product.")));
+        }
     }
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "getAppUserID", isAutofinish = false)
@@ -274,6 +325,7 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
         try {
             object.put("message", purchasesError.getMessage());
             object.put("code", purchasesError.getCode().ordinal());
+            object.put("readable_error_code", purchasesError.getCode().name());
             object.put("underlyingErrorMessage", purchasesError.getUnderlyingErrorMessage());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -306,5 +358,14 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
         }
 
         return map;
+    }
+
+    private void cacheProduct(SkuDetails detail) {
+        Map<String, SkuDetails> typeMap = products.get(detail.getType());
+        if (typeMap == null) {
+            typeMap = new HashMap<>();
+        }
+        typeMap.put(detail.getSku(), detail);
+        products.put(detail.getType(), typeMap);
     }
 }
