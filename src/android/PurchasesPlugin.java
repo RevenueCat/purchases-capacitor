@@ -158,15 +158,14 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
 
                     @Override
                     public void onError(@NonNull PurchasesError error) {
-                        callbackContext.error(mapError(error));
+                        onMakePurchaseError(error, false, callbackContext);
                     }
                 });
             } else {
                 makePurchase(currentActivity, oldSku, type, productIdentifier, callbackContext);
             }
         } else {
-            callbackContext.error(mapError(
-                    new PurchasesError(PurchasesErrorCode.PurchaseInvalidError, "There is no current Activity")));
+            onMakePurchaseError(new PurchasesError(PurchasesErrorCode.PurchaseInvalidError, "There is no current Activity"), false, callbackContext);
         }
     }
 
@@ -198,14 +197,7 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
 
                 @Override
                 public void onError(@NonNull PurchasesError error, Boolean userCancelled) {
-                    JSONObject object = new JSONObject();
-                    try {
-                        object.put("error", mapError(error));
-                        object.put("userCancelled", userCancelled);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    callbackContext.error(mapError(error));
+                    onMakePurchaseError(error, userCancelled, callbackContext);
                 }
             };
             if (oldSku == null || oldSku.isEmpty()) {
@@ -214,9 +206,20 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
                 Purchases.getSharedInstance().makePurchase(currentActivity, productToBuy, oldSku, listener);
             }
         } else {
-            callbackContext.error(mapError(new PurchasesError(PurchasesErrorCode.ProductNotAvailableForPurchaseError,
-                    "Couldn't find product.")));
+            onMakePurchaseError(new PurchasesError(PurchasesErrorCode.ProductNotAvailableForPurchaseError,
+                    "Couldn't find product."), false, callbackContext);
         }
+    }
+
+    private void onMakePurchaseError(@NonNull PurchasesError error, Boolean userCancelled, CallbackContext callbackContext) {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("error", mapError(error));
+            object.put("userCancelled", userCancelled);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        callbackContext.error(object);
     }
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "getAppUserID", isAutofinish = false)

@@ -233,11 +233,14 @@
 - (NSDictionary *)payloadForError:(NSError *)error {
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:@{
                                                                                 @"message": error.localizedDescription,
-                                                                                @"code": @(error.code),
-                                                                                @"readable_error_code": @(error.code)
+                                                                                @"code": @(error.code)
                                                                                 }];
     if (error.userInfo[NSUnderlyingErrorKey]) {
         dict[@"underlyingErrorMessage"] = ((NSError *)error.userInfo[NSUnderlyingErrorKey]).localizedDescription;
+    }
+    
+    if (error.userInfo[RCReadableErrorCodeKey]) {
+        dict[@"readable_error_code"] = error.userInfo[RCReadableErrorCodeKey];
     }
     
     return dict;
