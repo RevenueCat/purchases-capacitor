@@ -1,3 +1,6 @@
+## 0.1.2
+- Compile javascript down to ES5 for better support
+
 ## 0.1.1
 - Fixes Android `makePurchase` errors
 - Fixes `readable_error_code` in iOS
