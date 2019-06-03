@@ -257,6 +257,11 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
         Purchases.setDebugLogsEnabled(enabled);
     }
 
+    @PluginAction(thread = ExecutionThread.WORKER, actionName = "setAutomaticAttributionCollection")
+    private void setAutomaticAttributionCollection(boolean enabled, CallbackContext callbackContext) {
+        // NOOP
+    }
+
     private ReceivePurchaserInfoListener getReceivePurchaserInfoListener(CallbackContext callbackContext) {
         return new ReceivePurchaserInfoListener() {
             @Override

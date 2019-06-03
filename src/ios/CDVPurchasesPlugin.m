@@ -220,6 +220,10 @@
     
 }
 
+- (void)setAutomaticAttributionCollection:(CDVInvokedUrlCommand *)command {
+    [RCPurchases setAutomaticAttributionCollection:[[command argumentAtIndex:0] boolValue]];
+}
+
 #pragma mark Delegate Methods
 
 - (void)purchases:(RCPurchases *)purchases didReceiveUpdatedPurchaserInfo:(RCPurchaserInfo *)purchaserInfo {
