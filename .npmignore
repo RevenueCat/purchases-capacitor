@@ -1,1 +1,10 @@
 src/plugin/
+.vscode
+.circleci
+tests
+tsconfig.json
+tslint.json
+scripts/download-purchases-framework.sh
+src/ios/.framework_version
+RELEASING.md
+jest.config.js
