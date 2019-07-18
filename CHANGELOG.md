@@ -1,3 +1,9 @@
+## 0.2.0
+- Upgrades iOS SDK to https://github.com/RevenueCat/purchases-ios/releases/tag/2.5.0 and Android to https://github.com/RevenueCat/purchases-android/releases/tag/2.3.0.
+- Adds Facebook as supported attribution network.
+- DEPRECATION: automaticAttributionCollection is now deprecated in favor of automaticAppleSearchAdsAttributionCollection since it's a more clear name.
+- Adds introductory pricing to the iOS product.
+
 ## 0.1.2
 - Compile javascript down to ES5 for better support
 

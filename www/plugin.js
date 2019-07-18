@@ -206,7 +206,6 @@ var Purchases = /** @class */ (function () {
      * @param {Boolean} enabled Enable or not automatic collection
      */
     Purchases.setAutomaticAttributionCollection = function (enabled) {
-        console.warn("WARNING! This function is deprecated. Use setAutomaticAppleSearchAdsAttributionCollection instead.");
         window.cordova.exec(null, null, PLUGIN_NAME, "setAutomaticAppleSearchAdsAttributionCollection", [enabled]);
     };
     /**
