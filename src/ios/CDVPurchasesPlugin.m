@@ -1,11 +1,15 @@
+//
+//  Created by RevenueCat.
+//  Copyright © 2019 RevenueCat. All rights reserved.
+//
 
 #import "CDVPurchasesPlugin.h"
 
 @import StoreKit;
 
-#import "RCPurchaserInfo+CDVPurchasesPlugin.h"
-#import "RCEntitlement+CDVPurchasesPlugin.h"
-#import "SKProduct+CDVPurchasesPlugin.h"
+#import "RCPurchaserInfo+HybridAdditions.h"
+#import "RCEntitlement+HybridAdditions.h"
+#import "SKProduct+HybridAdditions.h"
 
 @interface CDVPurchasesPlugin () <RCPurchasesDelegate>
 
@@ -220,8 +224,8 @@
     
 }
 
-- (void)setAutomaticAttributionCollection:(CDVInvokedUrlCommand *)command {
-    [RCPurchases setAutomaticAttributionCollection:[[command argumentAtIndex:0] boolValue]];
+- (void)setAutomaticAppleSearchAdsAttributionCollection:(CDVInvokedUrlCommand *)command {
+    RCPurchases.automaticAppleSearchAdsAttributionCollection = [[command argumentAtIndex:0] boolValue];
 }
 
 #pragma mark Delegate Methods

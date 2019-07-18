@@ -13,6 +13,7 @@ export enum ATTRIBUTION_NETWORKS {
   APPSFLYER = 2,
   BRANCH = 3,
   TENJIN = 4,
+  FACEBOOK = 5,
 }
 
 class Purchases {
@@ -27,6 +28,7 @@ class Purchases {
     APPSFLYER: 2,
     BRANCH: 3,
     TENJIN: 4,
+    FACEBOOK: 5,
   };
 
   /**
@@ -239,6 +241,9 @@ class Purchases {
     callback: any,
     errorcallback: any
   ) {
+    if (typeof newAppUserID === "undefined" || newAppUserID === "") {
+      throw new Error("newAppUserID is required and cannot be empty");
+    }
     window.cordova.exec(callback, errorcallback, PLUGIN_NAME, "identify", [
       newAppUserID,
     ]);
@@ -291,12 +296,37 @@ class Purchases {
   }
 
   /**
-   * Enable automatic collection of Apple Search Ad attribution. Disabled by default
+   * Enable automatic collection of Apple Search Ads attribution. Disabled by default.
+   *
+   * @deprecated Use setAutomaticAttributionCollection instead.
    *
    * @param {Boolean} enabled Enable or not automatic collection
    */
   public static setAutomaticAttributionCollection(enabled: boolean) {
-    window.cordova.exec(null, null, PLUGIN_NAME, "setAutomaticAttributionCollection", [enabled]);
+    window.cordova.exec(
+      null,
+      null,
+      PLUGIN_NAME,
+      "setAutomaticAppleSearchAdsAttributionCollection",
+      [enabled]
+    );
+  }
+
+  /**
+   * Enable automatic collection of Apple Search Ads attribution. Disabled by default.
+   *
+   * @param {Boolean} enabled Enable or not automatic collection
+   */
+  public static setAutomaticAppleSearchAdsAttributionCollection(
+    enabled: boolean
+  ) {
+    window.cordova.exec(
+      null,
+      null,
+      PLUGIN_NAME,
+      "setAutomaticAppleSearchAdsAttributionCollection",
+      [enabled]
+    );
   }
 
   /**

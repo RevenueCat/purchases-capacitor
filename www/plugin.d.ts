@@ -9,7 +9,8 @@ export declare enum ATTRIBUTION_NETWORKS {
     ADJUST = 1,
     APPSFLYER = 2,
     BRANCH = 3,
-    TENJIN = 4
+    TENJIN = 4,
+    FACEBOOK = 5
 }
 declare class Purchases {
     /**
@@ -23,6 +24,7 @@ declare class Purchases {
         APPSFLYER: number;
         BRANCH: number;
         TENJIN: number;
+        FACEBOOK: number;
     };
     /**
      * Sets up Purchases with your API key and an app user id.
@@ -159,10 +161,18 @@ declare class Purchases {
      */
     static syncPurchases(): void;
     /**
-     * Enable automatic collection of Apple Search Ad attribution. Disabled by default
+     * Enable automatic collection of Apple Search Ads attribution. Disabled by default.
+     *
+     * @deprecated Use setAutomaticAttributionCollection instead.
      *
      * @param {Boolean} enabled Enable or not automatic collection
      */
     static setAutomaticAttributionCollection(enabled: boolean): void;
+    /**
+     * Enable automatic collection of Apple Search Ads attribution. Disabled by default.
+     *
+     * @param {Boolean} enabled Enable or not automatic collection
+     */
+    static setAutomaticAppleSearchAdsAttributionCollection(enabled: boolean): void;
 }
 export default Purchases;

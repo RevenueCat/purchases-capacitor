@@ -8,6 +8,7 @@ var ATTRIBUTION_NETWORKS;
     ATTRIBUTION_NETWORKS[ATTRIBUTION_NETWORKS["APPSFLYER"] = 2] = "APPSFLYER";
     ATTRIBUTION_NETWORKS[ATTRIBUTION_NETWORKS["BRANCH"] = 3] = "BRANCH";
     ATTRIBUTION_NETWORKS[ATTRIBUTION_NETWORKS["TENJIN"] = 4] = "TENJIN";
+    ATTRIBUTION_NETWORKS[ATTRIBUTION_NETWORKS["FACEBOOK"] = 5] = "FACEBOOK";
 })(ATTRIBUTION_NETWORKS = exports.ATTRIBUTION_NETWORKS || (exports.ATTRIBUTION_NETWORKS = {}));
 var Purchases = /** @class */ (function () {
     function Purchases() {
@@ -154,6 +155,9 @@ var Purchases = /** @class */ (function () {
      * is an error retrieving the new purchaser info for the new user.
      */
     Purchases.identify = function (newAppUserID, callback, errorcallback) {
+        if (typeof newAppUserID === "undefined" || newAppUserID === "") {
+            throw new Error("newAppUserID is required and cannot be empty");
+        }
         window.cordova.exec(callback, errorcallback, PLUGIN_NAME, "identify", [
             newAppUserID,
         ]);
@@ -195,12 +199,23 @@ var Purchases = /** @class */ (function () {
         window.cordova.exec(null, null, PLUGIN_NAME, "syncPurchases", []);
     };
     /**
-     * Enable automatic collection of Apple Search Ad attribution. Disabled by default
+     * Enable automatic collection of Apple Search Ads attribution. Disabled by default.
+     *
+     * @deprecated Use setAutomaticAttributionCollection instead.
      *
      * @param {Boolean} enabled Enable or not automatic collection
      */
     Purchases.setAutomaticAttributionCollection = function (enabled) {
-        window.cordova.exec(null, null, PLUGIN_NAME, "setAutomaticAttributionCollection", [enabled]);
+        console.warn("WARNING! This function is deprecated. Use setAutomaticAppleSearchAdsAttributionCollection instead.");
+        window.cordova.exec(null, null, PLUGIN_NAME, "setAutomaticAppleSearchAdsAttributionCollection", [enabled]);
+    };
+    /**
+     * Enable automatic collection of Apple Search Ads attribution. Disabled by default.
+     *
+     * @param {Boolean} enabled Enable or not automatic collection
+     */
+    Purchases.setAutomaticAppleSearchAdsAttributionCollection = function (enabled) {
+        window.cordova.exec(null, null, PLUGIN_NAME, "setAutomaticAppleSearchAdsAttributionCollection", [enabled]);
     };
     /**
      * Enum for attribution networks
@@ -213,6 +228,7 @@ var Purchases = /** @class */ (function () {
         APPSFLYER: 2,
         BRANCH: 3,
         TENJIN: 4,
+        FACEBOOK: 5,
     };
     return Purchases;
 }());

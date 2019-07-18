@@ -74,7 +74,11 @@ typedef NS_ENUM(NSInteger, RCAttributionNetwork) {
     /**
      Tenjin https://www.tenjin.io/
      */
-    RCAttributionNetworkTenjin
+    RCAttributionNetworkTenjin,
+    /**
+     Facebook https://developers.facebook.com/
+     */
+    RCAttributionNetworkFacebook
 };
 
 /**
@@ -86,9 +90,14 @@ NS_SWIFT_NAME(Purchases)
 @interface RCPurchases : NSObject
 
 /**
- Enable automatic collection of Apple Search Ad attribution. Disabled by default
+ Enable automatic collection of Apple Search Ads attribution. Disabled by default
  */
-@property (class, nonatomic, assign) BOOL automaticAttributionCollection;
+@property (class, nonatomic, assign) BOOL automaticAttributionCollection DEPRECATED_MSG_ATTRIBUTE("Use automaticAppleSearchAdsAttributionCollection instead.");
+
+/**
+ Enable automatic collection of Apple Search Ads attribution. Disabled by default
+ */
+@property (class, nonatomic, assign) BOOL automaticAppleSearchAdsAttributionCollection;
 
 /**
  Enable debug logging. Useful for debugging issues with the lovely team @RevenueCat
@@ -198,7 +207,7 @@ NS_SWIFT_NAME(createAlias(_:_:));
  This function will identify the current user with an appUserID. Typically this would be used after a logout to identify a new user without calling configure
  @param appUserID The appUserID that should be linked to the currently user
  */
-- (void)identify:(NSString * _Nullable)appUserID completionBlock:(RCReceivePurchaserInfoBlock _Nullable)completion
+- (void)identify:(NSString *)appUserID completionBlock:(RCReceivePurchaserInfoBlock _Nullable)completion
 NS_SWIFT_NAME(identify(_:_:));
 
 /**

@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-purchases",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Purchases Cordova Plugin",
   "cordova": {
     "id": "cordova-plugin-purchases",
@@ -21,7 +21,8 @@
     "cordova-android"
   ],
   "scripts": {
-    "fetch:ios:sdk": "./scripts/download-purchases-framework.sh 2.3.0",
+    "fetch:ios:sdk": "./scripts/download-purchases-framework.sh 2.5.0",
+    "fetch:ios:common": "./scripts/download-purchases-common.sh 0.1.1",
     "build": "tsc",
     "tslint": "tslint -c tslint.json 'src/plugin/*.ts'",
     "test": "jest"
@@ -29,13 +30,13 @@
   "author": "RevenueCat, Inc.",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "^24.0.13",
-    "@types/node": "^12.0.4",
+    "@types/jest": "^24.0.15",
+    "@types/node": "^12.6.8",
     "jest": "^24.8.0",
-    "prettier": "1.16.4",
+    "prettier": "1.18.2",
     "ts-jest": "^24.0.2",
-    "tslint": "^5.17.0",
+    "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.5.1"
+    "typescript": "^3.5.3"
   }
 }
