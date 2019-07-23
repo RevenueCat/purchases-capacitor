@@ -1,3 +1,8 @@
+## 0.2.1
+
+- Fixes a bug when normalizing intro_price_period.
+- **BREAKING_CHANGE** All `intro_price` related fields in the product are strings, or empty strings if inexistent, in both iOS and Android. There were some discrepancies between platforms released in https://github.com/RevenueCat/cordova-plugin-purchases/releases/tag/0.2.0.
+
 ## 0.2.0
 - Upgrades iOS SDK to https://github.com/RevenueCat/purchases-ios/releases/tag/2.5.0 and Android to https://github.com/RevenueCat/purchases-android/releases/tag/2.3.0.
 - Adds Facebook as supported attribution network.
