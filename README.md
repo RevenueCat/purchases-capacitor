@@ -97,7 +97,7 @@ Purchases.makePurchase(
   error => {
     // Error making purchase
   },
-  [], // Optional: oldSkus, see docs for more details on when this is needed
+  oldSku, // Optional: oldSku, see docs for more details on when this is needed
   type
 ); // Optional: Pass "subs" for subscriptions, "inapp" for non-subscriptions (e.g. consumables). Needed for Android, iOS will ignore this.
 ```
