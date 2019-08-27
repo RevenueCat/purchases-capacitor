@@ -134,8 +134,23 @@
                                                      self.products[p.productIdentifier] = p;
                                                      [productObjects addObject:p.dictionary];
                                                  }
-                                                 [RCPurchases.sharedPurchases makePurchase:self.products[productIdentifier]
-                                                                       withCompletionBlock:completionBlock];
+                                                 if (self.products[productIdentifier]) {
+                                                     [RCPurchases.sharedPurchases makePurchase:self.products[productIdentifier]
+                                                                           withCompletionBlock:completionBlock];
+                                                 } else {
+                                                     NSError *error = [NSError errorWithDomain:RCPurchasesErrorDomain
+                                                                         code:RCProductNotAvailableForPurchaseError
+                                                                     userInfo:@{
+                                                                                NSLocalizedDescriptionKey: @"Couldn't find product."
+                                                                                }];
+                                                     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                                                                  messageAsDictionary:@{
+                                                                                                        @"error": [self payloadForError:error],
+                                                                                                        @"userCancelled": @(false)
+                                                                                                        }];
+                                                     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+                                                     
+                                                 }
                                              }];
     } else {
         [RCPurchases.sharedPurchases makePurchase:self.products[productIdentifier]

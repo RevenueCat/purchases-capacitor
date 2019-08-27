@@ -22,7 +22,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -297,12 +299,7 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
             }
             map.put("allPurchasedProductIdentifiers", allPurchasedProductIds);
 
-            Date latest = purchaserInfo.getLatestExpirationDate();
-            if (latest != null) {
-                map.put("latestExpirationDate", Iso8601Utils.format(latest));
-            } else {
-                map.put("latestExpirationDate", JSONObject.NULL);
-            }
+            Mappers.putNullableDate(map, "latestExpirationDate", purchaserInfo.getLatestExpirationDate());
 
             JSONObject allExpirationDates = new JSONObject();
             Map<String, Date> dates = purchaserInfo.getAllExpirationDatesByProduct();
@@ -315,13 +312,20 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
             JSONObject allEntitlementExpirationDates = new JSONObject();
             for (String entitlementId : purchaserInfo.getActiveEntitlements()) {
                 Date date = purchaserInfo.getExpirationDateForEntitlement(entitlementId);
-                if (date != null) {
-                    allEntitlementExpirationDates.put(entitlementId, Iso8601Utils.format(date));
-                } else {
-                    allEntitlementExpirationDates.put(entitlementId, JSONObject.NULL);
-                }
+                Mappers.putNullableDate(allEntitlementExpirationDates, entitlementId, date);
             }
             map.put("expirationsForActiveEntitlements", allEntitlementExpirationDates);
+
+            JSONObject purchaseDatesForActiveEntitlements = new JSONObject();
+            for (String entitlementId : purchaserInfo.getActiveEntitlements()) {
+                Date date = purchaserInfo.getPurchaseDateForEntitlement(entitlementId);
+                Mappers.putNullableDate(purchaseDatesForActiveEntitlements, entitlementId, date);
+            }
+            map.put("purchaseDatesForActiveEntitlements", purchaseDatesForActiveEntitlements);
+
+            map.put("entitlements", Mappers.map(purchaserInfo.getEntitlements()));
+            map.put("firstSeen", Iso8601Utils.format(purchaserInfo.getFirstSeen()));
+            map.put("originalAppUserId",purchaserInfo.getOriginalAppUserId());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -350,6 +354,17 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
             map.put("title", detail.getTitle());
             map.put("price", detail.getPriceAmountMicros() / 1000000d);
             map.put("price_string", detail.getPrice());
+            putIntroPrice(detail, map);
+            map.put("currency_code", detail.getPriceCurrencyCode());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return map;
+    }
+
+    private void putIntroPrice(SkuDetails detail, JSONObject map) throws JSONException {
+        if (detail.getFreeTrialPeriod().isEmpty()) {
             String introductoryPriceAmountMicros = detail.getIntroductoryPriceAmountMicros();
             if (introductoryPriceAmountMicros != null && !introductoryPriceAmountMicros.isEmpty()) {
                 map.put("intro_price", String.valueOf(Long.parseLong(introductoryPriceAmountMicros) / 1000000d));
@@ -375,12 +390,27 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
                 map.put("intro_price_period_number_of_units", "");
             }
             map.put("intro_price_cycles", detail.getIntroductoryPriceCycles());
-            map.put("currency_code", detail.getPriceCurrencyCode());
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } else {
+            map.put("intro_price", "0");
+            // Format using device locale. iOS will format using App Store locale, but there's no way
+            // to figure out how the price in the SKUDetails is being formatted.
+            NumberFormat format = NumberFormat.getCurrencyInstance();
+            format.setCurrency(Currency.getInstance(detail.getPriceCurrencyCode()));
+            map.put("intro_price_string", format.format(0));
+            map.put("intro_price_period", detail.getFreeTrialPeriod());
+            PurchasesPeriod period = PurchasesPeriod.parse(detail.getIntroductoryPricePeriod());
+            if (period.years > 0) {
+                map.put("intro_price_period_unit", "YEAR");
+                map.put("intro_price_period_number_of_units", "" + period.years);
+            } else if (period.months > 0) {
+                map.put("intro_price_period_unit", "MONTH");
+                map.put("intro_price_period_number_of_units", "" + period.months);
+            } else if (period.days > 0) {
+                map.put("intro_price_period_unit", "DAY");
+                map.put("intro_price_period_number_of_units", "" + period.days);
+            }
+            map.put("intro_price_cycles", "1");
         }
-
-        return map;
     }
 
     private void cacheProduct(SkuDetails detail) {

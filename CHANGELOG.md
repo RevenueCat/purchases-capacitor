@@ -1,3 +1,9 @@
+## 0.3.0
+
+- Deprecates activeEntitlements in PurchaserInfo and adds entitlements object to RCPurchaserInfo. For more info check out https://docs.revenuecat.com/docs/purchaserinfo
+- Fixes trial info being lost in Android. Access intro_price in the product information to get information around the trial period.
+- Fixes exception when trying to purchase a product that doesn't exist.
+
 ## 0.2.1
 
 - Fixes a bug when normalizing intro_price_period.
