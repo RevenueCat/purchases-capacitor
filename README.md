@@ -89,7 +89,7 @@ Purchases.makePurchase(
   "product_id",
   (productIdentifier, purchaserInfo) => {
     if (
-      purchaserInfo.activeEntitlements.includes("my_entitlement_identifier")
+      purchaserInfo.entitlements.active.includes("my_entitlement_identifier")
     ) {
       // Unlock that great "pro" content
     }
@@ -116,8 +116,8 @@ Purchases.getPurchaserInfo(
   info => {
     // Option 1: Check if user has access to entitlement (from RevenueCat dashboard)
     const isPro =
-      info.activeEntitlements !== "undefined" &&
-      info.activeEntitlements.includes("pro");
+      info.entitlements !== "undefined" &&
+      info.entitlements.active.includes("pro");
 
     // Option 2: Check if user has active subscription (from App Store Connect or Play Store)
     const isPro =
