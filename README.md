@@ -3,8 +3,8 @@
 </p>
 <h3 align="center">😻 In-app Subscriptions Made Easy 😻</h1>
 
-[![Version](https://img.shields.io/cocoapods/v/Purchases.svg?style=flat)](https://cocoapods.org/pods/Purchases)
-[![License](https://img.shields.io/cocoapods/l/Purchases.svg?style=flat)](http://cocoapods.org/pods/Purchases)
+[![Version](https://img.shields.io/cocoapods/v/Purchases.svg?style=flat)](https://www.npmjs.com/package/cordova-plugin-purchases)
+[![License](https://img.shields.io/cocoapods/l/Purchases.svg?style=flat)](https://www.npmjs.com/package/cordova-plugin-purchases)
 
 ## Purchases.framework
 
