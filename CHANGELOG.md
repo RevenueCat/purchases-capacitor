@@ -1,3 +1,7 @@
+## 1.0.1
+
+- Updates Android to 3.0.3
+
 ## 1.0.0
 
 - Support for new Offerings system.
