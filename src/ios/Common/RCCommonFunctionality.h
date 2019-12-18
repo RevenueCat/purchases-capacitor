@@ -43,7 +43,11 @@ typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer
 
 + (void)purchasePackage:(NSString *)packageIdentifier offering:(NSString *)offeringIdentifier completionBlock:(RCHybridResponseBlock)completion;
 
++ (void)makeDeferredPurchase:(RCDeferredPromotionalPurchaseBlock)deferredPurchase completionBlock:(RCHybridResponseBlock)completion;
+
 + (void)setFinishTransactions:(BOOL)finishTransactions;
+
++ (void)checkTrialOrIntroductoryPriceEligibility:(nonnull NSArray<NSString *> *)productIdentifiers completionBlock:(RCReceiveIntroEligibilityBlock)completion;
 
 @end
 

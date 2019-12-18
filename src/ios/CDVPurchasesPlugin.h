@@ -27,5 +27,6 @@
 - (void)syncPurchases:(CDVInvokedUrlCommand *)command;
 - (void)setAutomaticAppleSearchAdsAttributionCollection:(CDVInvokedUrlCommand *)command;
 - (void)isAnonymous:(CDVInvokedUrlCommand *)command;
+- (void)checkTrialOrIntroductoryPriceEligibility:(CDVInvokedUrlCommand *)command;
 
 @end

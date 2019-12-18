@@ -161,6 +161,20 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, CommonKt.isAnonymous()));
     }
 
+    @PluginAction(thread = ExecutionThread.MAIN, actionName = "checkTrialOrIntroductoryPriceEligibility", isAutofinish = false)
+    private void isAnonymous(JSONArray productIDs, CallbackContext callbackContext) {
+        List<String> productIDList = new ArrayList<>();
+        for (int i = 0; i < productIDs.length(); i++) {
+            try {
+                productIDList.add(productIDs.getString(i));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        Map<String, Map<String, Object>> map = CommonKt.checkTrialOrIntroductoryPriceEligibility(productIDList);
+        callbackContext.success(convertMapToJson(map));
+    }
+
     private OnResult getOnResult(CallbackContext callbackContext) {
         return new OnResult() {
             @Override

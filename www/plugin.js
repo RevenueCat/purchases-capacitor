@@ -96,6 +96,21 @@ var PACKAGE_TYPE;
      */
     PACKAGE_TYPE["WEEKLY"] = "WEEKLY";
 })(PACKAGE_TYPE || (PACKAGE_TYPE = {}));
+var INTRO_ELIGIBILITY_STATUS;
+(function (INTRO_ELIGIBILITY_STATUS) {
+    /**
+     * RevenueCat doesn't have enough information to determine eligibility.
+     */
+    INTRO_ELIGIBILITY_STATUS[INTRO_ELIGIBILITY_STATUS["INTRO_ELIGIBILITY_STATUS_UNKNOWN"] = 0] = "INTRO_ELIGIBILITY_STATUS_UNKNOWN";
+    /**
+     * The user is not eligible for a free trial or intro pricing for this product.
+     */
+    INTRO_ELIGIBILITY_STATUS[INTRO_ELIGIBILITY_STATUS["INTRO_ELIGIBILITY_STATUS_INELIGIBLE"] = 1] = "INTRO_ELIGIBILITY_STATUS_INELIGIBLE";
+    /**
+     * The user is eligible for a free trial or intro pricing for this product.
+     */
+    INTRO_ELIGIBILITY_STATUS[INTRO_ELIGIBILITY_STATUS["INTRO_ELIGIBILITY_STATUS_ELIGIBLE"] = 2] = "INTRO_ELIGIBILITY_STATUS_ELIGIBLE";
+})(INTRO_ELIGIBILITY_STATUS || (INTRO_ELIGIBILITY_STATUS = {}));
 var Purchases = /** @class */ (function () {
     function Purchases() {
     }
@@ -333,6 +348,25 @@ var Purchases = /** @class */ (function () {
         window.cordova.exec(callback, null, PLUGIN_NAME, "isAnonymous", []);
     };
     /**
+     *  iOS only. Computes whether or not a user is eligible for the introductory pricing period of a given product.
+     *  You should use this method to determine whether or not you show the user the normal product price or the
+     *  introductory price. This also applies to trials (trials are considered a type of introductory pricing).
+     *
+     *  @note Subscription groups are automatically collected for determining eligibility. If RevenueCat can't
+     *  definitively compute the eligibility, most likely because of missing group information, it will return
+     *  `INTRO_ELIGIBILITY_STATUS_UNKNOWN`. The best course of action on unknown status is to display the non-intro
+     *  pricing, to not create a misleading situation. To avoid this, make sure you are testing with the latest version of
+     *  iOS so that the subscription group can be collected by the SDK. Android always returns INTRO_ELIGIBILITY_STATUS_UNKNOWN.
+     *
+     *  @param productIdentifiers Array of product identifiers for which you want to compute eligibility
+     *  @param callback Array of product identifiers for which you want to compute eligibility
+     *  @returns {function({ [productId: string]: IntroEligibility }):void} callback Will be sent map of IntroEligibility
+     *  per productId
+     */
+    Purchases.checkTrialOrIntroductoryPriceEligibility = function (productIdentifiers, callback) {
+        window.cordova.exec(callback, null, PLUGIN_NAME, "checkTrialOrIntroductoryPriceEligibility", [productIdentifiers]);
+    };
+    /**
      * @deprecated use ATTRIBUTION_NETWORK instead
      *
      * Enum for attribution networks
@@ -364,6 +398,12 @@ var Purchases = /** @class */ (function () {
      * @enum {string}
      */
     Purchases.PACKAGE_TYPE = PACKAGE_TYPE;
+    /**
+     * Enum of different possible states for intro price eligibility status.
+     * @readonly
+     * @enum {number}
+     */
+    Purchases.INTRO_ELIGIBILITY_STATUS = INTRO_ELIGIBILITY_STATUS;
     return Purchases;
 }());
 if (!window.plugins) {

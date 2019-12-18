@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" id="cordova-plugin-purchases" version="1.0.1">
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" id="cordova-plugin-purchases" version="1.0.2">
 
     <dependency id="cordova-annotated-plugin-android" />
 
@@ -16,7 +16,7 @@
                 <param name="android-package" value="com.revenuecat.purchases.PurchasesPlugin" />
             </feature>
         </config-file>
-        <framework src="com.revenuecat.purchases:purchases:3.0.2" />
+        <framework src="com.revenuecat.purchases:purchases:3.0.4" />
         <lib-file src="src/android/common-release.aar"/>
         <framework src="src/android/common.gradle" custom="true" type="gradleReference"/>
         <source-file src="src/android/PurchasesPlugin.java" target-dir="src/com/revenuecat/purchases"/>
