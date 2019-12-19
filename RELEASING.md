@@ -2,6 +2,7 @@
 1. Update version in `package.json` and `plugin.xml`.
 1. Run `npm run fetch:ios:sdk`
 1. Run `npm run fetch:ios:common`
+1. Compile common files aar
 1. Run `npm run build`
 1. Add an entry to CHANGELOG.md
 1. `git commit -am "Preparing for version x.y.z"`

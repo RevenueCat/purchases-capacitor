@@ -1,4 +1,9 @@
+## 1.0.3
+
+- Renames `introEligibilityStatus` to `status` in `IntroEligibility`
+
 ## 1.0.2
+
 - Adds `checkTrialOrIntroductoryPriceEligibility`. Note that Android always returns INTRO_ELIGIBILITY_STATUS_UNKNOWN.
 - Updates iOS to 3.0.1 and Android to 3.0.4
 
