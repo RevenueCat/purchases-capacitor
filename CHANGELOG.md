@@ -1,3 +1,7 @@
+## 1.0.4
+
+- Adds missing types
+
 ## 1.0.3
 
 - Renames `introEligibilityStatus` to `status` in `IntroEligibility`
