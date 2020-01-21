@@ -415,7 +415,11 @@ interface IntroEligibility {
   readonly description: string;
 }
 
+export type ShouldPurchasePromoProductListener = (deferredPurchase: () => void) => void;
+let shouldPurchasePromoProductListeners: ShouldPurchasePromoProductListener[] = [];
+
 class Purchases {
+
   /**
    * @deprecated use ATTRIBUTION_NETWORK instead
    *
@@ -842,6 +846,36 @@ class Purchases {
     callback: (map: { [productId:string]:IntroEligibility; }) => void
   ) {
     window.cordova.exec(callback, null, PLUGIN_NAME, "checkTrialOrIntroductoryPriceEligibility", [productIdentifiers]);
+  }
+  /**
+   * Sets a function to be called on purchases initiated on the Apple App Store. This is only used in iOS.
+   * @param {ShouldPurchasePromoProductListener} shouldPurchasePromoProductListener Called when a user initiates a
+   * promotional in-app purchase from the App Store. If your app is able to handle a purchase at the current time, run
+   * the deferredPurchase function. If the app is not in a state to make a purchase: cache the deferredPurchase, then
+   * call the deferredPurchase when the app is ready to make the promotional purchase.
+   * If the purchase should never be made, you don't need to ever call the deferredPurchase and the app will not
+   * proceed with promotional purchases.
+   */
+  public static addShouldPurchasePromoProductListener(shouldPurchasePromoProductListener: ShouldPurchasePromoProductListener): void { 
+    if (typeof shouldPurchasePromoProductListener !== "function") {
+      throw new Error("addPurchaserInfoUpdateListener needs a function");
+    }
+    shouldPurchasePromoProductListeners.push(shouldPurchasePromoProductListener);
+  }
+
+  /**
+   * Removes a given ShouldPurchasePromoProductListener
+   * @param {ShouldPurchasePromoProductListener} listenerToRemove ShouldPurchasePromoProductListener reference of the listener to remove
+   * @returns {boolean} True if listener was removed, false otherwise
+   */
+  public static removeShouldPurchasePromoProductListener(listenerToRemove: ShouldPurchasePromoProductListener): boolean { 
+    if (shouldPurchasePromoProductListeners.indexOf(listenerToRemove) != -1) {
+      shouldPurchasePromoProductListeners = shouldPurchasePromoProductListeners.filter(
+        listener => listenerToRemove !== listener
+      );
+      return true;
+    }
+    return false;
   }
 }
 
