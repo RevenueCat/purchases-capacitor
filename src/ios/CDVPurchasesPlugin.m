@@ -149,6 +149,14 @@
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
 }
+- (void)makeDeferredPurchase:(CDVInvokedUrlCommand *)command
+{
+    NSNumber *callbackID = [command argumentAtIndex:0];
+    assert(callbackID.integerValue >= 0);
+    RCDeferredPromotionalPurchaseBlock defermentBlock = self.defermentBlocks[(NSUInteger)callbackID.integerValue];
+    [RCCommonFunctionality makeDeferredPurchase:defermentBlock
+                                completionBlock:[self getResponseCompletionBlock:command]];
+}
 
 #pragma mark Delegate Methods
 
@@ -160,7 +168,8 @@
 }
 
 - (void)purchases:(RCPurchases *)purchases shouldPurchasePromoProduct:(SKProduct *)product
-   defermentBlock:(RCDeferredPromotionalPurchaseBlock)makeDeferredPurchase {
+   defermentBlock:(RCDeferredPromotionalPurchaseBlock)makeDeferredPurchase
+{
     if (!self.defermentBlocks) {
         self.defermentBlocks = [NSMutableArray array];
     }
