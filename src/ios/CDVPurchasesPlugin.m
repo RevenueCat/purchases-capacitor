@@ -14,6 +14,7 @@
 @interface CDVPurchasesPlugin () <RCPurchasesDelegate>
 
 @property (nonatomic, retain) NSString *updatedPurchaserInfoCallbackID;
+@property (nonatomic, retain) NSString *shouldPurchasePromoProductCallbackID;
 @property(nonatomic, retain) NSMutableArray<RCDeferredPromotionalPurchaseBlock> *defermentBlocks;
 
 @end
@@ -156,6 +157,11 @@
     RCDeferredPromotionalPurchaseBlock defermentBlock = self.defermentBlocks[(NSUInteger)callbackID.integerValue];
     [RCCommonFunctionality makeDeferredPurchase:defermentBlock
                                 completionBlock:[self getResponseCompletionBlock:command]];
+}
+
+- (void)setupShouldPurchasePromoProductCallback:(CDVInvokedUrlCommand *)command {
+    self.updatedPurchaserInfoCallbackID = command.callbackId;
+    [self sendOKForCommand:command messageAsArray:nil];
 }
 
 #pragma mark Delegate Methods

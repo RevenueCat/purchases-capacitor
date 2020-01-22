@@ -22,6 +22,7 @@
 - (void)createAlias:(CDVInvokedUrlCommand *)command;
 - (void)identify:(CDVInvokedUrlCommand *)command;
 - (void)reset:(CDVInvokedUrlCommand *)command;
+- (void)setupShouldPurchasePromoProductCallback:(CDVInvokedUrlCommand *)command;
 - (void)setDebugLogsEnabled:(CDVInvokedUrlCommand *)command;
 - (void)getPurchaserInfo:(CDVInvokedUrlCommand *)command;
 - (void)syncPurchases:(CDVInvokedUrlCommand *)command;
