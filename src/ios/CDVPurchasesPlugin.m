@@ -160,7 +160,7 @@
 }
 
 - (void)setupShouldPurchasePromoProductCallback:(CDVInvokedUrlCommand *)command {
-    self.updatedPurchaserInfoCallbackID = command.callbackId;
+    self.shouldPurchasePromoProductCallbackID = command.callbackId;
     [self sendOKForCommand:command messageAsArray:nil];
 }
 
