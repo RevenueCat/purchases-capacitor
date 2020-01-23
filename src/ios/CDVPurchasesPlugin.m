@@ -153,6 +153,7 @@
 - (void)makeDeferredPurchase:(CDVInvokedUrlCommand *)command
 {
     NSNumber *callbackID = [command argumentAtIndex:0];
+    assert(callbackID);
     assert(callbackID.integerValue >= 0);
     RCDeferredPromotionalPurchaseBlock defermentBlock = self.defermentBlocks[(NSUInteger)callbackID.integerValue];
     [RCCommonFunctionality makeDeferredPurchase:defermentBlock
@@ -162,9 +163,9 @@
 - (void)setupShouldPurchasePromoProductCallback:(CDVInvokedUrlCommand *)command {
     self.shouldPurchasePromoProductCallbackID = command.callbackId;
 
-    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:nil];
-    [pluginResult setKeepCallbackAsBool:YES];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+//    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:nil];
+//    [pluginResult setKeepCallbackAsBool:YES];
+//    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 #pragma mark Delegate Methods
@@ -183,7 +184,7 @@
         self.defermentBlocks = [NSMutableArray array];
     }
     [self.defermentBlocks addObject:makeDeferredPurchase];
-    NSInteger position = [self.defermentBlocks count]-1;
+    NSInteger position = self.defermentBlocks.count - 1;
 
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                                   messageAsDictionary:@{@"callbackID": @(position)}];
