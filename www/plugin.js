@@ -128,7 +128,8 @@ var Purchases = /** @class */ (function () {
         window.cordova.exec(function (purchaserInfo) {
             window.cordova.fireWindowEvent("onPurchaserInfoUpdated", purchaserInfo);
         }, null, PLUGIN_NAME, "setupPurchases", [apiKey, appUserID, observerMode]);
-        window.cordova.exec(function (callbackID) {
+        window.cordova.exec(function (callbackResult) {
+            var callbackID = callbackResult.callbackID;
             shouldPurchasePromoProductListeners.forEach(function (listener) {
                 return listener(function () { return window.cordova.exec(null, null, PLUGIN_NAME, "makeDeferredPurchase", [callbackID]); });
             });

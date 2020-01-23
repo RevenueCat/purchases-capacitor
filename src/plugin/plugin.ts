@@ -487,7 +487,7 @@ class Purchases {
     );
     window.cordova.exec(
       (callbackResult: any) => {
-          let callbackID = callbackResult.callbackID;
+          const callbackID = callbackResult.callbackID;
           shouldPurchasePromoProductListeners.forEach(listener =>
             listener(() => window.cordova.exec(null, null, PLUGIN_NAME, "makeDeferredPurchase", [callbackID]))
           );
