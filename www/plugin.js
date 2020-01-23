@@ -111,6 +111,7 @@ var INTRO_ELIGIBILITY_STATUS;
      */
     INTRO_ELIGIBILITY_STATUS[INTRO_ELIGIBILITY_STATUS["INTRO_ELIGIBILITY_STATUS_ELIGIBLE"] = 2] = "INTRO_ELIGIBILITY_STATUS_ELIGIBLE";
 })(INTRO_ELIGIBILITY_STATUS || (INTRO_ELIGIBILITY_STATUS = {}));
+var shouldPurchasePromoProductListeners = [];
 var Purchases = /** @class */ (function () {
     function Purchases() {
     }
@@ -127,6 +128,11 @@ var Purchases = /** @class */ (function () {
         window.cordova.exec(function (purchaserInfo) {
             window.cordova.fireWindowEvent("onPurchaserInfoUpdated", purchaserInfo);
         }, null, PLUGIN_NAME, "setupPurchases", [apiKey, appUserID, observerMode]);
+        window.cordova.exec(function (callbackID) {
+            shouldPurchasePromoProductListeners.forEach(function (listener) {
+                return listener(function () { return window.cordova.exec(null, null, PLUGIN_NAME, "makeDeferredPurchase", [callbackID]); });
+            });
+        }, null, PLUGIN_NAME, "setupShouldPurchasePromoProductCallback", []);
     };
     /**
      * Set this to true if you are passing in an appUserID but it is anonymous, this is true by default if you didn't pass an appUserID
@@ -365,6 +371,33 @@ var Purchases = /** @class */ (function () {
      */
     Purchases.checkTrialOrIntroductoryPriceEligibility = function (productIdentifiers, callback) {
         window.cordova.exec(callback, null, PLUGIN_NAME, "checkTrialOrIntroductoryPriceEligibility", [productIdentifiers]);
+    };
+    /**
+     * Sets a function to be called on purchases initiated on the Apple App Store. This is only used in iOS.
+     * @param {ShouldPurchasePromoProductListener} shouldPurchasePromoProductListener Called when a user initiates a
+     * promotional in-app purchase from the App Store. If your app is able to handle a purchase at the current time, run
+     * the deferredPurchase function. If the app is not in a state to make a purchase: cache the deferredPurchase, then
+     * call the deferredPurchase when the app is ready to make the promotional purchase.
+     * If the purchase should never be made, you don't need to ever call the deferredPurchase and the app will not
+     * proceed with promotional purchases.
+     */
+    Purchases.addShouldPurchasePromoProductListener = function (shouldPurchasePromoProductListener) {
+        if (typeof shouldPurchasePromoProductListener !== "function") {
+            throw new Error("addPurchaserInfoUpdateListener needs a function");
+        }
+        shouldPurchasePromoProductListeners.push(shouldPurchasePromoProductListener);
+    };
+    /**
+     * Removes a given ShouldPurchasePromoProductListener
+     * @param {ShouldPurchasePromoProductListener} listenerToRemove ShouldPurchasePromoProductListener reference of the listener to remove
+     * @returns {boolean} True if listener was removed, false otherwise
+     */
+    Purchases.removeShouldPurchasePromoProductListener = function (listenerToRemove) {
+        if (shouldPurchasePromoProductListeners.indexOf(listenerToRemove) != -1) {
+            shouldPurchasePromoProductListeners = shouldPurchasePromoProductListeners.filter(function (listener) { return listenerToRemove !== listener; });
+            return true;
+        }
+        return false;
     };
     /**
      * @deprecated use ATTRIBUTION_NETWORK instead
