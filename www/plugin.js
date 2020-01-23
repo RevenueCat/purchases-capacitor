@@ -128,12 +128,7 @@ var Purchases = /** @class */ (function () {
         window.cordova.exec(function (purchaserInfo) {
             window.cordova.fireWindowEvent("onPurchaserInfoUpdated", purchaserInfo);
         }, null, PLUGIN_NAME, "setupPurchases", [apiKey, appUserID, observerMode]);
-        window.cordova.exec(function (callbackResult) {
-            var callbackID = callbackResult.callbackID;
-            shouldPurchasePromoProductListeners.forEach(function (listener) {
-                return listener(function () { return window.cordova.exec(null, null, PLUGIN_NAME, "makeDeferredPurchase", [callbackID]); });
-            });
-        }, null, PLUGIN_NAME, "setupShouldPurchasePromoProductCallback", []);
+        this.setupShouldPurchasePromoProductCallback();
     };
     /**
      * Set this to true if you are passing in an appUserID but it is anonymous, this is true by default if you didn't pass an appUserID
@@ -399,6 +394,18 @@ var Purchases = /** @class */ (function () {
             return true;
         }
         return false;
+    };
+    Purchases.setupShouldPurchasePromoProductCallback = function () {
+        var _this = this;
+        window.cordova.exec(function (callbackResult) {
+            var callbackID = callbackResult.callbackID;
+            shouldPurchasePromoProductListeners.forEach(function (listener) {
+                return listener(_this.getMakeDeferredPurchaseFunction(callbackID));
+            });
+        }, null, PLUGIN_NAME, "setupShouldPurchasePromoProductCallback", []);
+    };
+    Purchases.getMakeDeferredPurchaseFunction = function (callbackID) {
+        return function () { return window.cordova.exec(null, null, PLUGIN_NAME, "makeDeferredPurchase", [callbackID]); };
     };
     /**
      * @deprecated use ATTRIBUTION_NETWORK instead

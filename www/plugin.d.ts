@@ -625,5 +625,7 @@ declare class Purchases {
      * @returns {boolean} True if listener was removed, false otherwise
      */
     static removeShouldPurchasePromoProductListener(listenerToRemove: ShouldPurchasePromoProductListener): boolean;
+    private static setupShouldPurchasePromoProductCallback;
+    private static getMakeDeferredPurchaseFunction;
 }
 export default Purchases;

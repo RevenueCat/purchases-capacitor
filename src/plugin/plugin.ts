@@ -485,18 +485,7 @@ class Purchases {
       "setupPurchases",
       [apiKey, appUserID, observerMode]
     );
-    window.cordova.exec(
-      (callbackResult: any) => {
-          const callbackID = callbackResult.callbackID;
-          shouldPurchasePromoProductListeners.forEach(listener =>
-            listener(() => window.cordova.exec(null, null, PLUGIN_NAME, "makeDeferredPurchase", [callbackID]))
-          );
-      },
-      null,
-      PLUGIN_NAME,
-      "setupShouldPurchasePromoProductCallback",
-      []
-    )
+    this.setupShouldPurchasePromoProductCallback();
   }
 
   /**
@@ -888,6 +877,25 @@ class Purchases {
       return true;
     }
     return false;
+  }
+
+  private static setupShouldPurchasePromoProductCallback() { 
+    window.cordova.exec(
+      (callbackResult: any) => {
+          const callbackID = callbackResult.callbackID;
+          shouldPurchasePromoProductListeners.forEach(listener =>
+            listener(this.getMakeDeferredPurchaseFunction(callbackID))
+          );
+      },
+      null,
+      PLUGIN_NAME,
+      "setupShouldPurchasePromoProductCallback",
+      []
+    );
+  }
+
+  private static getMakeDeferredPurchaseFunction(callbackID: number) { 
+    return () => window.cordova.exec(null, null, PLUGIN_NAME, "makeDeferredPurchase", [callbackID]);
   }
 }
 

@@ -15,7 +15,7 @@
 
 @property (nonatomic, retain) NSString *updatedPurchaserInfoCallbackID;
 @property (nonatomic, retain) NSString *shouldPurchasePromoProductCallbackID;
-@property(nonatomic, retain) NSMutableArray<RCDeferredPromotionalPurchaseBlock> *defermentBlocks;
+@property (nonatomic, retain) NSMutableArray<RCDeferredPromotionalPurchaseBlock> *defermentBlocks;
 
 @end
 
