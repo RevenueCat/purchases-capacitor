@@ -881,7 +881,7 @@ class Purchases {
    * @returns {boolean} True if listener was removed, false otherwise
    */
   public static removeShouldPurchasePromoProductListener(listenerToRemove: ShouldPurchasePromoProductListener): boolean { 
-    if (shouldPurchasePromoProductListeners.indexOf(listenerToRemove) != -1) {
+    if (shouldPurchasePromoProductListeners.indexOf(listenerToRemove) !== -1) {
       shouldPurchasePromoProductListeners = shouldPurchasePromoProductListeners.filter(
         listener => listenerToRemove !== listener
       );

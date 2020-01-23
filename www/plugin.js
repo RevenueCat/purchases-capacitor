@@ -394,7 +394,7 @@ var Purchases = /** @class */ (function () {
      * @returns {boolean} True if listener was removed, false otherwise
      */
     Purchases.removeShouldPurchasePromoProductListener = function (listenerToRemove) {
-        if (shouldPurchasePromoProductListeners.indexOf(listenerToRemove) != -1) {
+        if (shouldPurchasePromoProductListeners.indexOf(listenerToRemove) !== -1) {
             shouldPurchasePromoProductListeners = shouldPurchasePromoProductListeners.filter(function (listener) { return listenerToRemove !== listener; });
             return true;
         }
