@@ -162,10 +162,6 @@
 
 - (void)setupShouldPurchasePromoProductCallback:(CDVInvokedUrlCommand *)command {
     self.shouldPurchasePromoProductCallbackID = command.callbackId;
-
-//    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:nil];
-//    [pluginResult setKeepCallbackAsBool:YES];
-//    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 #pragma mark Delegate Methods
