@@ -156,6 +156,11 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
         // NOOP
     }
 
+    @PluginAction(thread = ExecutionThread.WORKER, actionName = "setupShouldPurchasePromoProductCallback")
+    private void setupShouldPurchasePromoProductCallback(CallbackContext callbackContext) {
+        // NOOP
+    }
+
     @PluginAction(thread = ExecutionThread.WORKER, actionName = "isAnonymous")
     private void isAnonymous(CallbackContext callbackContext) {
         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, CommonKt.isAnonymous()));
