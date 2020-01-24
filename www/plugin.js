@@ -397,8 +397,8 @@ var Purchases = /** @class */ (function () {
     };
     Purchases.setupShouldPurchasePromoProductCallback = function () {
         var _this = this;
-        window.cordova.exec(function (callbackResult) {
-            var callbackID = callbackResult.callbackID;
+        window.cordova.exec(function (_a) {
+            var callbackID = _a.callbackID;
             shouldPurchasePromoProductListeners.forEach(function (listener) {
                 return listener(_this.getMakeDeferredPurchaseFunction(callbackID));
             });
