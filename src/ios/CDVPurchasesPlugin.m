@@ -14,6 +14,8 @@
 @interface CDVPurchasesPlugin () <RCPurchasesDelegate>
 
 @property (nonatomic, retain) NSString *updatedPurchaserInfoCallbackID;
+@property (nonatomic, retain) NSString *shouldPurchasePromoProductCallbackID;
+@property (nonatomic, retain) NSMutableArray<RCDeferredPromotionalPurchaseBlock> *defermentBlocks;
 
 @end
 
@@ -148,6 +150,19 @@
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
 }
+- (void)makeDeferredPurchase:(CDVInvokedUrlCommand *)command
+{
+    NSNumber *callbackID = [command argumentAtIndex:0];
+    assert(callbackID);
+    assert(callbackID.integerValue >= 0);
+    RCDeferredPromotionalPurchaseBlock defermentBlock = self.defermentBlocks[(NSUInteger)callbackID.integerValue];
+    [RCCommonFunctionality makeDeferredPurchase:defermentBlock
+                                completionBlock:[self getResponseCompletionBlock:command]];
+}
+
+- (void)setupShouldPurchasePromoProductCallback:(CDVInvokedUrlCommand *)command {
+    self.shouldPurchasePromoProductCallbackID = command.callbackId;
+}
 
 #pragma mark Delegate Methods
 
@@ -156,6 +171,21 @@
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:purchaserInfo.dictionary];
     [pluginResult setKeepCallbackAsBool:YES];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:self.updatedPurchaserInfoCallbackID];
+}
+
+- (void)purchases:(RCPurchases *)purchases shouldPurchasePromoProduct:(SKProduct *)product
+   defermentBlock:(RCDeferredPromotionalPurchaseBlock)makeDeferredPurchase
+{
+    if (!self.defermentBlocks) {
+        self.defermentBlocks = [NSMutableArray array];
+    }
+    [self.defermentBlocks addObject:makeDeferredPurchase];
+    NSInteger position = self.defermentBlocks.count - 1;
+
+    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                                  messageAsDictionary:@{@"callbackID": @(position)}];
+    [pluginResult setKeepCallbackAsBool:YES];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.shouldPurchasePromoProductCallbackID];
 }
 
 #pragma mark Helpers
