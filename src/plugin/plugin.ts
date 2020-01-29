@@ -7,7 +7,7 @@ declare global {
   }
 }
 
-enum ATTRIBUTION_NETWORK {
+export enum ATTRIBUTION_NETWORK {
   APPLE_SEARCH_ADS = 0,
   ADJUST = 1,
   APPSFLYER = 2,
@@ -16,7 +16,7 @@ enum ATTRIBUTION_NETWORK {
   FACEBOOK = 5,
 }
 
-enum PURCHASE_TYPE {
+export enum PURCHASE_TYPE {
   /**
    * A type of SKU for in-app products.
    */
@@ -28,7 +28,7 @@ enum PURCHASE_TYPE {
   SUBS = "subs",
 }
 
-enum PRORATION_MODE {
+export enum PRORATION_MODE {
   UNKNOWN_SUBSCRIPTION_UPGRADE_DOWNGRADE_POLICY = 0,
 
   /**
@@ -57,7 +57,7 @@ enum PRORATION_MODE {
   DEFERRED = 4,
 }
 
-enum PACKAGE_TYPE {
+export enum PACKAGE_TYPE {
 
   /**
    * A package that was defined with a custom identifier.
@@ -105,7 +105,7 @@ enum PACKAGE_TYPE {
   WEEKLY = "WEEKLY",
 }
 
-enum INTRO_ELIGIBILITY_STATUS {
+export enum INTRO_ELIGIBILITY_STATUS {
   /**
    * RevenueCat doesn't have enough information to determine eligibility.
    */
@@ -123,7 +123,7 @@ enum INTRO_ELIGIBILITY_STATUS {
 /**
  * The EntitlementInfo object gives you access to all of the information about the status of a user entitlement.
  */
-interface PurchasesEntitlementInfo {
+export interface PurchasesEntitlementInfo {
   /**
    * The entitlement identifier configured in the RevenueCat dashboard
    */
@@ -184,7 +184,7 @@ interface PurchasesEntitlementInfo {
 /**
  * Contains all the entitlements associated to the user.
  */
-interface PurchasesEntitlementInfos {
+export interface PurchasesEntitlementInfos {
   /**
    * Map of all EntitlementInfo (`PurchasesEntitlementInfo`) objects (active and inactive) keyed by entitlement identifier.
    */
@@ -195,7 +195,7 @@ interface PurchasesEntitlementInfos {
   readonly active: { [key: string]: PurchasesEntitlementInfo };
 }
 
-interface PurchaserInfo {
+export interface PurchaserInfo {
   /**
    * Entitlements attached to this purchaser info
    */
@@ -244,7 +244,7 @@ interface PurchaserInfo {
   readonly originalApplicationVersion: string | null;
 }
 
-interface PurchasesProduct {
+export interface PurchasesProduct {
   /**
    * Product Id.
    */
@@ -262,7 +262,7 @@ interface PurchasesProduct {
    */
   readonly price: number;
   /**
-   * Formatted price of the item, including its currency sign.
+   * Formatted price of the item, including its currency sign, such as €3.99.
    */
   readonly price_string: string;
   /**
@@ -299,7 +299,7 @@ interface PurchasesProduct {
  * Contains information about the product available for the user to purchase.
  * For more info see https://docs.revenuecat.com/docs/entitlements
  */
-interface PurchasesPackage {
+export interface PurchasesPackage {
   /**
    * Unique identifier for this package. Can be one a predefined package type or a custom one.
    */
@@ -322,7 +322,7 @@ interface PurchasesPackage {
  * An offering is a collection of Packages (`PurchasesPackage`) available for the user to purchase.
  * For more info see https://docs.revenuecat.com/docs/entitlements
  */
-interface PurchasesOffering {
+export interface PurchasesOffering {
   /**
    * Unique identifier defined in RevenueCat dashboard.
    */
@@ -369,7 +369,7 @@ interface PurchasesOffering {
  * Contains all the offerings configured in RevenueCat dashboard.
  * For more info see https://docs.revenuecat.com/docs/entitlements
  */
-interface PurchasesOfferings {
+export interface PurchasesOfferings {
   /**
    * Map of all Offerings [PurchasesOffering] objects keyed by their identifier.
    */
@@ -380,17 +380,17 @@ interface PurchasesOfferings {
   readonly current: PurchasesOffering | null;
 }
 
-interface PurchasesError {
+export interface PurchasesError {
   code: number;
   message: string;
   readableErrorCode: string;
-  underlyingErrorMessage: string;
+  underlyingErrorMessage?: string;
 }
 
 /**
  * Holds the information used when upgrading from another sku. For Android use only.
  */
-interface UpgradeInfo {
+export interface UpgradeInfo {
   /**
    * The oldSKU to upgrade from.
    */
@@ -404,7 +404,7 @@ interface UpgradeInfo {
 /**
  * Holds the introductory price status
  */
-interface IntroEligibility {
+export interface IntroEligibility {
   /**
    * The introductory price eligibility status
    */
@@ -492,6 +492,7 @@ class Purchases {
    * Set this to true if you are passing in an appUserID but it is anonymous, this is true by default if you didn't pass an appUserID
    * If a user tries to purchase a product that is active on the current app store account, we will treat it as a restore and alias
    * the new ID with the previous id.
+   * @param {boolean} allowSharing true if enabled, false to disabled
    */
   public static setAllowSharingStoreAccount(allowSharing: boolean) {
     window.cordova.exec(
@@ -506,7 +507,7 @@ class Purchases {
   /**
    * Add a dict of attribution information
    * @param {object} data Attribution data from any of the attribution networks in Purchases.ATTRIBUTION_NETWORKS
-   * @param {ATTRIBUTION_NETWORKS} network Which network, see Purchases.ATTRIBUTION_NETWORKS
+   * @param {ATTRIBUTION_NETWORK} network Which network, see Purchases.ATTRIBUTION_NETWORK
    * @param {string?} networkUserId An optional unique id for identifying the user. Needs to be a string.
    */
   public static addAttributionData(
@@ -522,9 +523,9 @@ class Purchases {
   }
 
   /**
-   * Gets the map of entitlements -> offerings -> products
-   * @param {function(PurchasesOfferings):void} callback Callback triggered after a successful getEntitlements call. It will receive an structure of entitlements.
-   * @param {function(PurchasesError):void} errorCallback Callback triggered after an error or when retrieving entitlements.
+   * Gets the Offerings configured in the RevenueCat dashboard
+   * @param {function(PurchasesOfferings):void} callback Callback triggered after a successful getOfferings call.
+   * @param {function(PurchasesError):void} errorCallback Callback triggered after an error or when retrieving offerings.
    */
   public static getOfferings(
     callback: (offerings: PurchasesOfferings) => void,
@@ -838,9 +839,7 @@ class Purchases {
    *  iOS so that the subscription group can be collected by the SDK. Android always returns INTRO_ELIGIBILITY_STATUS_UNKNOWN.
    *
    *  @param productIdentifiers Array of product identifiers for which you want to compute eligibility
-   *  @param callback Array of product identifiers for which you want to compute eligibility
-   *  @returns {function({ [productId: string]: IntroEligibility }):void} callback Will be sent map of IntroEligibility
-   *  per productId
+   *  @param callback Will be sent a map of IntroEligibility per productId
    */
   public static checkTrialOrIntroductoryPriceEligibility(
     productIdentifiers: string[],
