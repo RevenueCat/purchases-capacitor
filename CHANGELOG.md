@@ -1,3 +1,8 @@
+## 1.0.5
+
+- Adds `shouldPurchasePromoProduct`, which allows the app to decide how and when to handle promotional purchases made by users directly through the App Store (https://github.com/RevenueCat/cordova-plugin-purchases/pull/25). 
+- Fixes some JSDocs and export types https://github.com/RevenueCat/cordova-plugin-purchases/pull/26. 
+
 ## 1.0.4
 
 - Adds missing types
