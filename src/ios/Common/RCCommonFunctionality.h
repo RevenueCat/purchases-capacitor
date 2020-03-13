@@ -47,7 +47,9 @@ typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer
 
 + (void)setFinishTransactions:(BOOL)finishTransactions;
 
-+ (void)checkTrialOrIntroductoryPriceEligibility:(nonnull NSArray<NSString *> *)productIdentifiers completionBlock:(RCReceiveIntroEligibilityBlock)completion;
++ (void)checkTrialOrIntroductoryPriceEligibility:(nonnull NSArray<NSString *> *)productIdentifiers completionBlock:(void (^)(NSDictionary<NSString *, NSDictionary *> *))completion;
+
++ (void)invalidatePurchaserInfoCache;
 
 @end
 
