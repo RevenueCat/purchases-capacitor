@@ -179,7 +179,12 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
         Map<String, Map<String, Object>> map = CommonKt.checkTrialOrIntroductoryPriceEligibility(productIDList);
         callbackContext.success(convertMapToJson(map));
     }
-
+    
+    @PluginAction(thread = ExecutionThread.WORKER, actionName = "invalidatePurchaserInfoCache")
+    private void invalidatePurchaserInfoCache(CallbackContext callbackContext) {
+        CommonKt.invalidatePurchaserInfoCache();
+    }
+    
     private OnResult getOnResult(CallbackContext callbackContext) {
         return new OnResult() {
             @Override
