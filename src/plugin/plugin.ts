@@ -878,7 +878,12 @@ class Purchases {
     return false;
   }
 
-  public static invalidatePurchaserInfoCache() { 
+  /**
+   * Invalidates the cache for purchaser information.
+   * This is useful for cases where purchaser information might have been updated outside of the app, like if a
+   * promotional subscription is granted through the RevenueCat dashboard.
+   */
+  public static invalidatePurchaserInfoCache() {
     window.cordova.exec(
       null,
       null,
