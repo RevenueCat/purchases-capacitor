@@ -878,6 +878,16 @@ class Purchases {
     return false;
   }
 
+  public static invalidatePurchaserInfoCache() { 
+    window.cordova.exec(
+      null,
+      null,
+      PLUGIN_NAME,
+      "invalidatePurchaserInfoCache",
+      []
+    );
+  }
+
   private static setupShouldPurchasePromoProductCallback() { 
     window.cordova.exec(
       ({callbackID}:{callbackID: number}) => {

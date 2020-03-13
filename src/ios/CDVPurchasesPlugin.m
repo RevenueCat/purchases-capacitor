@@ -164,6 +164,11 @@
     self.shouldPurchasePromoProductCallbackID = command.callbackId;
 }
 
+- (void)invalidatePurchaserInfoCache:(CDVInvokedUrlCommand *)command { 
+    [RCCommonFunctionality invalidatePurchaserInfoCache];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
 #pragma mark Delegate Methods
 
 - (void)purchases:(RCPurchases *)purchases didReceiveUpdatedPurchaserInfo:(RCPurchaserInfo *)purchaserInfo

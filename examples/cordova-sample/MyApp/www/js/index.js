@@ -37,6 +37,7 @@ const app = {
   onDeviceReady: function() {
     this.receivedEvent("deviceready");
     this.setupShouldPurchasePromoProductListener();
+    this.invalidatePurchaserInfoCache();
   },
 
   setupShouldPurchasePromoProductListener: function() {
