@@ -14,31 +14,41 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RCDeviceCache : NSObject
 
+- (instancetype)initWith:(NSUserDefaults *)userDefaults;
+
+#pragma mark - appUserID
+
 @property (nonatomic, readonly, nullable) NSString *cachedAppUserID;
 
 @property (nonatomic, readonly, nullable) NSString *cachedLegacyAppUserID;
-
-@property (nonatomic, readonly, nullable) RCOfferings *cachedOfferings;
-
-@property (nonatomic, nullable) NSDate *cachesLastUpdated;
-
-- (instancetype)initWith:(NSUserDefaults *)userDefaults;
 
 - (void)cacheAppUserID:(NSString *)appUserID;
 
 - (void)clearCachesForAppUserID:(NSString *)appUserID;
 
-- (BOOL)isCacheStale;
+#pragma mark - purchaserInfo
 
-- (void)resetCachesTimestamp;
-
-- (void)clearCachesTimestamp;
-
-- (void)cacheOfferings:(RCOfferings *)offerings;
+- (nullable NSData *)cachedPurchaserInfoDataForAppUserID:(NSString *)appUserID;
 
 - (void)cachePurchaserInfo:(NSData *)data forAppUserID:(NSString *)appUserID;
 
-- (nullable NSData *)cachedPurchaserInfoDataForAppUserID:(NSString *)appUserID;
+- (BOOL)isPurchaserInfoCacheStale;
+
+- (void)clearPurchaserInfoCacheTimestamp;
+
+- (void)setPurchaserInfoCacheTimestampToNow;
+
+#pragma mark - offerings
+
+@property (nonatomic, readonly, nullable) RCOfferings *cachedOfferings;
+
+- (void)cacheOfferings:(RCOfferings *)offerings;
+
+- (BOOL)isOfferingsCacheStale;
+
+- (void)clearOfferingsCacheTimestamp;
+
+- (void)setOfferingsCacheTimestampToNow;
 
 @end
 
