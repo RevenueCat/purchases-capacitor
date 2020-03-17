@@ -169,6 +169,33 @@
     [self sendOKForCommand:command messageAsArray:nil];
 }
 
+#pragma mark Subscriber Attributes
+
+- (void)setAttributes:(NSDictionary<NSString *, NSString *> *)attributes {
+    [RCCommonFunctionality setAttributes:attributes];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
+- (void)setEmail:(nullable NSString *)email {
+    [RCCommonFunctionality setEmail:email];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
+- (void)setPhoneNumber:(nullable NSString *)phoneNumber {
+    [RCCommonFunctionality setPhoneNumber:phoneNumber];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
+- (void)setDisplayName:(nullable NSString *)displayName {
+    [RCCommonFunctionality setDisplayName:displayName];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
+- (void)setPushToken:(nullable NSData *)pushToken {
+    [RCCommonFunctionality setPushToken:pushToken];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
 #pragma mark Delegate Methods
 
 - (void)purchases:(RCPurchases *)purchases didReceiveUpdatedPurchaserInfo:(RCPurchaserInfo *)purchaserInfo
