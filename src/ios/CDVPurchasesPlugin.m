@@ -171,27 +171,37 @@
 
 #pragma mark Subscriber Attributes
 
-- (void)setAttributes:(NSDictionary<NSString *, NSString *> *)attributes {
+- (void)setAttributes:(CDVInvokedUrlCommand *)command {
+    NSDictionary <NSString *, NSString *> *attributes = [command argumentAtIndex:0];
+    
     [RCCommonFunctionality setAttributes:attributes];
     [self sendOKForCommand:command messageAsArray:nil];
 }
 
-- (void)setEmail:(nullable NSString *)email {
+- (void)setEmail:(CDVInvokedUrlCommand *)command {
+    NSString *email = [command argumentAtIndex:0];
+    
     [RCCommonFunctionality setEmail:email];
     [self sendOKForCommand:command messageAsArray:nil];
 }
 
-- (void)setPhoneNumber:(nullable NSString *)phoneNumber {
+- (void)setPhoneNumber:(CDVInvokedUrlCommand *)command {
+    NSString *phoneNumber = [command argumentAtIndex:0];
+    
     [RCCommonFunctionality setPhoneNumber:phoneNumber];
     [self sendOKForCommand:command messageAsArray:nil];
 }
 
-- (void)setDisplayName:(nullable NSString *)displayName {
+- (void)setDisplayName:(CDVInvokedUrlCommand *)command {
+    NSString *displayName = [command argumentAtIndex:0];
+    
     [RCCommonFunctionality setDisplayName:displayName];
     [self sendOKForCommand:command messageAsArray:nil];
 }
 
-- (void)setPushToken:(nullable NSData *)pushToken {
+- (void)setPushToken:(CDVInvokedUrlCommand *)command {
+    NSData *pushToken = [command argumentAtIndex:0];
+    
     [RCCommonFunctionality setPushToken:pushToken];
     [self sendOKForCommand:command messageAsArray:nil];
 }
