@@ -222,6 +222,33 @@
     [RCPurchases.sharedPurchases invalidatePurchaserInfoCache];
 }
 
+#pragma mark Subcriber Attributes
+
++ (void)setAttributes:(NSDictionary<NSString *, NSString *> *)attributes {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    [RCPurchases.sharedPurchases setAttributes:attributes];
+}
+
++ (void)setEmail:(nullable NSString *)email {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    [RCPurchases.sharedPurchases setEmail:email];
+}
+
++ (void)setPhoneNumber:(nullable NSString *)phoneNumber {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    [RCPurchases.sharedPurchases setPhoneNumber:phoneNumber];
+}
+
++ (void)setDisplayName:(nullable NSString *)displayName {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    [RCPurchases.sharedPurchases setDisplayName:displayName];
+}
+
++ (void)setPushToken:(nullable NSData *)pushToken {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    [RCPurchases.sharedPurchases setPushToken:pushToken];
+}
+
 + (RCErrorContainer *)payloadForError:(NSError *)error withExtraPayload:(NSDictionary *)extraPayload
 {
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:extraPayload];

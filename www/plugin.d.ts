@@ -630,6 +630,43 @@ declare class Purchases {
      * promotional subscription is granted through the RevenueCat dashboard.
      */
     static invalidatePurchaserInfoCache(): void;
+    /***
+     * Subscriber attributes are useful for storing additional, structured information on a user.
+     * Since attributes are writable using a public key they should not be used for
+     * managing secure or sensitive information such as subscription status, coins, etc.
+     *
+     * Key names starting with "$" are reserved names used by RevenueCat. For a full list of key
+     * restrictions refer to our guide: https://docs.revenuecat.com/docs/subscriber-attributes
+     *
+     * @param attributes Map of attributes by key. Set the value as an empty string to delete an attribute.
+     */
+    static setAttributes(attributes: {
+        [key: string]: string;
+    }): void;
+    /**
+      * Subscriber attribute associated with the email address for the user
+      *
+      * @param email Empty String or nil will delete the subscriber attribute.
+      */
+    static setEmail(email: string): void;
+    /**
+      * Subscriber attribute associated with the phone number for the user
+      *
+      * @param phoneNumber Empty String or nil will delete the subscriber attribute.
+      */
+    static setPhoneNumber(phoneNumber: string): void;
+    /**
+     * Subscriber attribute associated with the display name for the user
+     *
+     * @param displayName Empty String or nil will delete the subscriber attribute.
+     */
+    static setDisplayName(displayName: string): void;
+    /**
+      * Subscriber attribute associated with the push token for the user
+      *
+      * @param pushToken nil will delete the subscriber attribute.
+      */
+    static setPushToken(): void;
     private static setupShouldPurchasePromoProductCallback;
     private static getMakeDeferredPurchaseFunction;
 }

@@ -402,6 +402,51 @@ var Purchases = /** @class */ (function () {
     Purchases.invalidatePurchaserInfoCache = function () {
         window.cordova.exec(null, null, PLUGIN_NAME, "invalidatePurchaserInfoCache", []);
     };
+    /***
+     * Subscriber attributes are useful for storing additional, structured information on a user.
+     * Since attributes are writable using a public key they should not be used for
+     * managing secure or sensitive information such as subscription status, coins, etc.
+     *
+     * Key names starting with "$" are reserved names used by RevenueCat. For a full list of key
+     * restrictions refer to our guide: https://docs.revenuecat.com/docs/subscriber-attributes
+     *
+     * @param attributes Map of attributes by key. Set the value as an empty string to delete an attribute.
+     */
+    Purchases.setAttributes = function (attributes) {
+        window.cordova.exec(null, null, PLUGIN_NAME, "setAttributes", [attributes]);
+    };
+    /**
+      * Subscriber attribute associated with the email address for the user
+      *
+      * @param email Empty String or nil will delete the subscriber attribute.
+      */
+    Purchases.setEmail = function (email) {
+        window.cordova.exec(null, null, PLUGIN_NAME, "setEmail", [email]);
+    };
+    /**
+      * Subscriber attribute associated with the phone number for the user
+      *
+      * @param phoneNumber Empty String or nil will delete the subscriber attribute.
+      */
+    Purchases.setPhoneNumber = function (phoneNumber) {
+        window.cordova.exec(null, null, PLUGIN_NAME, "setPhoneNumber", [phoneNumber]);
+    };
+    /**
+     * Subscriber attribute associated with the display name for the user
+     *
+     * @param displayName Empty String or nil will delete the subscriber attribute.
+     */
+    Purchases.setDisplayName = function (displayName) {
+        window.cordova.exec(null, null, PLUGIN_NAME, "setDisplayName", [displayName]);
+    };
+    /**
+      * Subscriber attribute associated with the push token for the user
+      *
+      * @param pushToken nil will delete the subscriber attribute.
+      */
+    Purchases.setPushToken = function () {
+        window.cordova.exec(null, null, PLUGIN_NAME, "setPushToken", []);
+    };
     Purchases.setupShouldPurchasePromoProductCallback = function () {
         var _this = this;
         window.cordova.exec(function (_a) {
