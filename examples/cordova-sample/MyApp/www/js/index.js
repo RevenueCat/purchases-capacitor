@@ -37,7 +37,9 @@ const app = {
   onDeviceReady: function() {
     this.receivedEvent("deviceready");
     this.setupShouldPurchasePromoProductListener();
-    this.invalidatePurchaserInfoCache();
+    Purchases.setPhoneNumber("12345678");
+    Purchases.setDisplayName("Garfield");
+    Purchases.setAttributes({ "favorite_cat": "garfield" });
   },
 
   setupShouldPurchasePromoProductListener: function() {
