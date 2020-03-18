@@ -19,6 +19,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -184,7 +186,40 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
     private void invalidatePurchaserInfoCache(CallbackContext callbackContext) {
         CommonKt.invalidatePurchaserInfoCache();
     }
-    
+
+    //================================================================================
+    // Subscriber Attributes
+    //================================================================================
+
+    @PluginAction(thread = ExecutionThread.WORKER, actionName = "setAttributes")
+    private void setAttributes(JSONObject attributes, CallbackContext callbackContext) throws JSONException {
+        CommonKt.setAttributes(convertJSONToMap(attributes));
+    }
+
+    @PluginAction(thread = ExecutionThread.WORKER, actionName = "setEmail")
+    private void setEmail(String email, CallbackContext callbackContext) {
+        CommonKt.setEmail(email);
+    }
+
+    @PluginAction(thread = ExecutionThread.WORKER, actionName = "setPhoneNumber")
+    private void setPhoneNumber(String phoneNumber, CallbackContext callbackContext) {
+        CommonKt.setPhoneNumber(phoneNumber);
+    }
+
+    @PluginAction(thread = ExecutionThread.WORKER, actionName = "setDisplayName")
+    private void setDisplayName(String displayName, CallbackContext callbackContext) {
+        CommonKt.setDisplayName(displayName);
+    }
+
+    @PluginAction(thread = ExecutionThread.WORKER, actionName = "setPushToken")
+    private void setPushToken(String pushToken, CallbackContext callbackContext) {
+        CommonKt.setPushToken(pushToken);
+    }
+
+    //================================================================================
+    // Private methods
+    //================================================================================
+
     private OnResult getOnResult(CallbackContext callbackContext) {
         return new OnResult() {
             @Override
@@ -197,6 +232,20 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
                 callbackContext.error(convertMapToJson(errorContainer.getInfo()));
             }
         };
+    }
+
+    private static Map<String, String> convertJSONToMap(JSONObject jsonObject) {
+        HashMap map = new HashMap();
+        Iterator keys = jsonObject.keys();
+        while (keys.hasNext()) {
+            String key = (String) keys.next();
+            try {
+                map.put(key, jsonObject.get(key));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return map;
     }
 
     private static JSONObject convertMapToJson(Map<String, ?> readableMap) {
