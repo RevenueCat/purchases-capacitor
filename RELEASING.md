@@ -2,6 +2,7 @@
 1. Update version in `package.json` and `plugin.xml`.
 1. Run `npm run fetch:ios:sdk`
 1. Run `npm run fetch:ios:common`
+1. Compile android aar: `cd android`, `./gradlew assembleRelease`. The .aar output will be in `common/build/outputs/aar/common-release.aar`
 1. Compile common files aar
 1. Run `npm run build`
 1. Add an entry to CHANGELOG.md
