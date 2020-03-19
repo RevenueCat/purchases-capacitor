@@ -193,7 +193,7 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
 
     @PluginAction(thread = ExecutionThread.WORKER, actionName = "setAttributes")
     private void setAttributes(JSONObject attributes, CallbackContext callbackContext) throws JSONException {
-        CommonKt.setAttributes(convertJSONToMap(attributes));
+        CommonKt.setAttributes(convertJsonToMap(attributes));
     }
 
     @PluginAction(thread = ExecutionThread.WORKER, actionName = "setEmail")
@@ -234,7 +234,7 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
         };
     }
 
-    private static Map<String, String> convertJSONToMap(JSONObject jsonObject) {
+    private static Map<String, String> convertJsonToMap(JSONObject jsonObject) {
         HashMap map = new HashMap();
         Iterator keys = jsonObject.keys();
         while (keys.hasNext()) {
