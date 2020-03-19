@@ -59,7 +59,7 @@ typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer
 
 + (void)setDisplayName:(nullable NSString *)displayName;
 
-+ (void)setPushToken:(nullable NSData *)pushToken;
++ (void)setPushToken:(nullable NSString *)pushToken;
 
 @end
 

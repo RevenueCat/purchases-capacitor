@@ -7,6 +7,7 @@
 #import "RCErrorContainer.h"
 #import "RCOfferings+HybridAdditions.h"
 #import "RCPurchaserInfo+HybridAdditions.h"
+#import "RCPurchases+HybridAdditions.h"
 
 @implementation RCCommonFunctionality
 
@@ -244,9 +245,9 @@
     [RCPurchases.sharedPurchases setDisplayName:displayName];
 }
 
-+ (void)setPushToken:(nullable NSData *)pushToken {
++ (void)setPushToken:(nullable NSString *)pushToken {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
-    [RCPurchases.sharedPurchases setPushToken:pushToken];
+    [RCPurchases.sharedPurchases _setPushTokenString:pushToken];
 }
 
 + (RCErrorContainer *)payloadForError:(NSError *)error withExtraPayload:(NSDictionary *)extraPayload

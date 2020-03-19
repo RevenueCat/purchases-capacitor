@@ -963,13 +963,13 @@ class Purchases {
     *
     * @param pushToken nil will delete the subscriber attribute.
     */
-  public static setPushToken() {
+  public static setPushToken(pushToken: String) {
     window.cordova.exec(
       null,
       null,
       PLUGIN_NAME,
       "setPushToken",
-      []
+      [pushToken]
     );
   }
   

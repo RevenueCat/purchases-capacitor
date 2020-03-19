@@ -47,6 +47,7 @@
         <source-file src="src/ios/Common/RCOfferings+HybridAdditions.m" />
         <source-file src="src/ios/Common/RCPackage+HybridAdditions.h" />
         <source-file src="src/ios/Common/RCPackage+HybridAdditions.m" />
+        <source-file src="src/ios/Common/RCPurchases+HybridAdditions.h" />
         <framework src="src/ios/Purchases.framework" embed="true" custom="true" />
     </platform>
 </plugin>

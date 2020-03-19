@@ -200,7 +200,7 @@
 }
 
 - (void)setPushToken:(CDVInvokedUrlCommand *)command {
-    NSData *pushToken = [command argumentAtIndex:0];
+    NSString *pushToken = [command argumentAtIndex:0];
     
     [RCCommonFunctionality setPushToken:pushToken];
     [self sendOKForCommand:command messageAsArray:nil];
