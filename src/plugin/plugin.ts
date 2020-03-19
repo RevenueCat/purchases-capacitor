@@ -916,7 +916,7 @@ class Purchases {
   /**
    * Subscriber attribute associated with the email address for the user
    *
-   * @param email Empty String or nil will delete the subscriber attribute.
+   * @param email Empty String or null will delete the subscriber attribute.
    */
   public static setEmail(email: string) {
     window.cordova.exec(
@@ -931,7 +931,7 @@ class Purchases {
   /**
    * Subscriber attribute associated with the phone number for the user
    *
-   * @param phoneNumber Empty String or nil will delete the subscriber attribute.
+   * @param phoneNumber Empty String or null will delete the subscriber attribute.
    */
   public static setPhoneNumber(phoneNumber: string) {
     window.cordova.exec(
@@ -946,7 +946,7 @@ class Purchases {
   /**
    * Subscriber attribute associated with the display name for the user
    *
-   * @param displayName Empty String or nil will delete the subscriber attribute.
+   * @param displayName Empty String or null will delete the subscriber attribute.
    */
   public static setDisplayName(displayName: string) {
     window.cordova.exec(

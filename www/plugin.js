@@ -418,7 +418,7 @@ var Purchases = /** @class */ (function () {
     /**
      * Subscriber attribute associated with the email address for the user
      *
-     * @param email Empty String or nil will delete the subscriber attribute.
+     * @param email Empty String or null will delete the subscriber attribute.
      */
     Purchases.setEmail = function (email) {
         window.cordova.exec(null, null, PLUGIN_NAME, "setEmail", [email]);
@@ -426,7 +426,7 @@ var Purchases = /** @class */ (function () {
     /**
      * Subscriber attribute associated with the phone number for the user
      *
-     * @param phoneNumber Empty String or nil will delete the subscriber attribute.
+     * @param phoneNumber Empty String or null will delete the subscriber attribute.
      */
     Purchases.setPhoneNumber = function (phoneNumber) {
         window.cordova.exec(null, null, PLUGIN_NAME, "setPhoneNumber", [phoneNumber]);
@@ -434,7 +434,7 @@ var Purchases = /** @class */ (function () {
     /**
      * Subscriber attribute associated with the display name for the user
      *
-     * @param displayName Empty String or nil will delete the subscriber attribute.
+     * @param displayName Empty String or null will delete the subscriber attribute.
      */
     Purchases.setDisplayName = function (displayName) {
         window.cordova.exec(null, null, PLUGIN_NAME, "setDisplayName", [displayName]);
