@@ -961,7 +961,7 @@ class Purchases {
   /**
    * Subscriber attribute associated with the push token for the user
    *
-   * @param pushToken nil will delete the subscriber attribute.
+   * @param pushToken null will delete the subscriber attribute.
    */
   public static setPushToken(pushToken: string) {
     window.cordova.exec(

@@ -664,7 +664,7 @@ declare class Purchases {
     /**
      * Subscriber attribute associated with the push token for the user
      *
-     * @param pushToken nil will delete the subscriber attribute.
+     * @param pushToken null will delete the subscriber attribute.
      */
     static setPushToken(pushToken: string): void;
     private static setupShouldPurchasePromoProductCallback;

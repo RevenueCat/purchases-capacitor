@@ -442,7 +442,7 @@ var Purchases = /** @class */ (function () {
     /**
      * Subscriber attribute associated with the push token for the user
      *
-     * @param pushToken nil will delete the subscriber attribute.
+     * @param pushToken null will delete the subscriber attribute.
      */
     Purchases.setPushToken = function (pushToken) {
         window.cordova.exec(null, null, PLUGIN_NAME, "setPushToken", [pushToken]);
