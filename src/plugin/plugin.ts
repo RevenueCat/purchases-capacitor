@@ -893,7 +893,7 @@ class Purchases {
     );
   }
 
-  /***
+  /**
    * Subscriber attributes are useful for storing additional, structured information on a user.
    * Since attributes are writable using a public key they should not be used for
    * managing secure or sensitive information such as subscription status, coins, etc.
@@ -914,10 +914,10 @@ class Purchases {
   }
   
   /**
-    * Subscriber attribute associated with the email address for the user
-    *
-    * @param email Empty String or nil will delete the subscriber attribute.
-    */
+   * Subscriber attribute associated with the email address for the user
+   *
+   * @param email Empty String or nil will delete the subscriber attribute.
+   */
   public static setEmail(email: string) {
     window.cordova.exec(
       null,
@@ -929,10 +929,10 @@ class Purchases {
   }
 
   /**
-    * Subscriber attribute associated with the phone number for the user
-    *
-    * @param phoneNumber Empty String or nil will delete the subscriber attribute.
-    */
+   * Subscriber attribute associated with the phone number for the user
+   *
+   * @param phoneNumber Empty String or nil will delete the subscriber attribute.
+   */
   public static setPhoneNumber(phoneNumber: string) {
     window.cordova.exec(
       null,
@@ -959,11 +959,11 @@ class Purchases {
   }
   
   /**
-    * Subscriber attribute associated with the push token for the user
-    *
-    * @param pushToken nil will delete the subscriber attribute.
-    */
-  public static setPushToken(pushToken: String) {
+   * Subscriber attribute associated with the push token for the user
+   *
+   * @param pushToken nil will delete the subscriber attribute.
+   */
+  public static setPushToken(pushToken: string) {
     window.cordova.exec(
       null,
       null,
