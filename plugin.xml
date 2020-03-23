@@ -16,7 +16,7 @@
                 <param name="android-package" value="com.revenuecat.purchases.PurchasesPlugin" />
             </feature>
         </config-file>
-        <framework src="com.revenuecat.purchases:purchases:3.1.1" />
+        <framework src="com.revenuecat.purchases:purchases:3.1.2" />
         <lib-file src="src/android/common-release.aar"/>
         <framework src="src/android/common.gradle" custom="true" type="gradleReference"/>
         <source-file src="src/android/PurchasesPlugin.java" target-dir="src/com/revenuecat/purchases"/>

@@ -40,6 +40,7 @@ const app = {
     Purchases.setPhoneNumber("12345678");
     Purchases.setDisplayName("Garfield");
     Purchases.setAttributes({ "favorite_cat": "garfield" });
+    Purchases.setEmail("garfield@revenuecat.com");
   },
 
   setupShouldPurchasePromoProductListener: function() {
