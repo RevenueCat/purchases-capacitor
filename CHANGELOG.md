@@ -1,3 +1,12 @@
+## 1.0.6
+
+- Adds an example project that shows how to set up an app with RevenueCat
+    https://github.com/RevenueCat/cordova-plugin-purchases/pull/29
+- Adds Subscriber Attributes, which allow developers to store additional, structured information
+for a user in RevenueCat. More info: https://docs.revenuecat.com/docs/user-attributes.
+- Adds new method to invalidate the purchaser info cache, useful when promotional purchases are granted from outside the app.
+    https://github.com/RevenueCat/cordova-plugin-purchases/pull/32
+
 ## 1.0.5
 
 - Adds `shouldPurchasePromoProduct`, which allows the app to decide how and when to handle promotional purchases made by users directly through the App Store (https://github.com/RevenueCat/cordova-plugin-purchases/pull/25). 
