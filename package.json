@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-purchases",
-  "version": "1.0.6-SNAPSHOT",
+  "version": "1.0.6",
   "description": "Purchases Cordova Plugin",
   "cordova": {
     "id": "cordova-plugin-purchases",
@@ -21,8 +21,8 @@
     "cordova-android"
   ],
   "scripts": {
-    "fetch:ios:common": "./scripts/download-purchases-common.sh dev_subscriber_attributes",
     "fetch:ios:sdk": "./scripts/download-purchases-framework.sh 3.1.2",
+    "fetch:ios:common": "./scripts/download-purchases-common.sh 1.0.8",
     "build": "tsc",
     "build-watch": "tsc --watch",
     "tslint": "tslint -c tslint.json 'src/plugin/*.ts'",

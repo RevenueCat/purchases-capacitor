@@ -7,7 +7,6 @@
 #import "RCErrorContainer.h"
 #import "RCOfferings+HybridAdditions.h"
 #import "RCPurchaserInfo+HybridAdditions.h"
-#import "RCPurchases+HybridAdditions.h"
 
 @implementation RCCommonFunctionality
 
