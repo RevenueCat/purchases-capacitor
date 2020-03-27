@@ -21,8 +21,8 @@
     "cordova-android"
   ],
   "scripts": {
-    "fetch:ios:sdk": "./scripts/download-purchases-framework.sh 3.1.2",
-    "fetch:ios:common": "./scripts/download-purchases-common.sh 1.0.8",
+    "fetch:ios:sdk": "./scripts/download-purchases-framework.sh 3.2.1",
+    "fetch:ios:common": "./scripts/download-purchases-common.sh 1.0.9",
     "build": "tsc",
     "build-watch": "tsc --watch",
     "tslint": "tslint -c tslint.json 'src/plugin/*.ts'",
