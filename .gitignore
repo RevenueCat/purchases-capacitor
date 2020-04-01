@@ -1,4 +1,8 @@
 node_modules
 .vscode
-/.idea/
+*.idea/
 *.DS_Store
+*.log
+examples/cordova-sample/MyApp/node_modules
+examples/cordova-sample/MyApp/platforms
+examples/cordova-sample/MyApp/plugins

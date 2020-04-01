@@ -8,3 +8,4 @@ scripts/download-purchases-framework.sh
 src/ios/.framework_version
 RELEASING.md
 jest.config.js
+examples/
