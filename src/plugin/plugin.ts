@@ -903,7 +903,7 @@ class Purchases {
    *
    * @param attributes Map of attributes by key. Set the value as an empty string to delete an attribute.
    */
-  public static setAttributes(attributes: { [key: string]: string }) {
+  public static setAttributes(attributes: { [key: string]: string | null }) {
     window.cordova.exec(
       null,
       null,
@@ -918,7 +918,7 @@ class Purchases {
    *
    * @param email Empty String or null will delete the subscriber attribute.
    */
-  public static setEmail(email: string) {
+  public static setEmail(email: string | null) {
     window.cordova.exec(
       null,
       null,
@@ -933,7 +933,7 @@ class Purchases {
    *
    * @param phoneNumber Empty String or null will delete the subscriber attribute.
    */
-  public static setPhoneNumber(phoneNumber: string) {
+  public static setPhoneNumber(phoneNumber: string | null) {
     window.cordova.exec(
       null,
       null,
@@ -948,7 +948,7 @@ class Purchases {
    *
    * @param displayName Empty String or null will delete the subscriber attribute.
    */
-  public static setDisplayName(displayName: string) {
+  public static setDisplayName(displayName: string | null) {
     window.cordova.exec(
       null,
       null,
@@ -963,7 +963,7 @@ class Purchases {
    *
    * @param pushToken null will delete the subscriber attribute.
    */
-  public static setPushToken(pushToken: string) {
+  public static setPushToken(pushToken: string | null) {
     window.cordova.exec(
       null,
       null,
