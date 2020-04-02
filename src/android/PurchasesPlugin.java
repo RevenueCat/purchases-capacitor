@@ -44,12 +44,14 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "setAllowSharingStoreAccount")
     public void setAllowSharingStoreAccount(boolean allowSharingStoreAccount, CallbackContext callbackContext) {
         CommonKt.setAllowSharingAppStoreAccount(allowSharingStoreAccount);
+        callbackContext.success();
     }
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "addAttributionData")
     public void addAttributionData(JSONObject data, Integer network, @Nullable String networkUserId,
                                    CallbackContext callbackContext) {
         CommonKt.addAttributionData(data, network, networkUserId);
+        callbackContext.success();
     }
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "getOfferings", isAutofinish = false)
@@ -116,6 +118,7 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "syncPurchases")
     public void syncPurchases(CallbackContext callbackContext) {
         CommonKt.syncPurchases();
+        callbackContext.success();
     }
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "getAppUserID", isAutofinish = false)
@@ -151,6 +154,7 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
     @PluginAction(thread = ExecutionThread.WORKER, actionName = "setDebugLogsEnabled")
     private void setDebugLogsEnabled(boolean enabled, CallbackContext callbackContext) {
         CommonKt.setDebugLogsEnabled(enabled);
+        callbackContext.success();
     }
 
     @PluginAction(thread = ExecutionThread.WORKER, actionName = "setAutomaticAppleSearchAdsAttributionCollection")
@@ -185,6 +189,7 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
     @PluginAction(thread = ExecutionThread.WORKER, actionName = "invalidatePurchaserInfoCache")
     private void invalidatePurchaserInfoCache(CallbackContext callbackContext) {
         CommonKt.invalidatePurchaserInfoCache();
+        callbackContext.success();
     }
 
     //================================================================================
@@ -194,26 +199,31 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
     @PluginAction(thread = ExecutionThread.WORKER, actionName = "setAttributes")
     private void setAttributes(JSONObject attributes, CallbackContext callbackContext) throws JSONException {
         CommonKt.setAttributes(convertJsonToMap(attributes));
+        callbackContext.success();
     }
 
     @PluginAction(thread = ExecutionThread.WORKER, actionName = "setEmail")
     private void setEmail(String email, CallbackContext callbackContext) {
         CommonKt.setEmail(email);
+        callbackContext.success();
     }
 
     @PluginAction(thread = ExecutionThread.WORKER, actionName = "setPhoneNumber")
     private void setPhoneNumber(String phoneNumber, CallbackContext callbackContext) {
         CommonKt.setPhoneNumber(phoneNumber);
+        callbackContext.success();
     }
 
     @PluginAction(thread = ExecutionThread.WORKER, actionName = "setDisplayName")
     private void setDisplayName(String displayName, CallbackContext callbackContext) {
         CommonKt.setDisplayName(displayName);
+        callbackContext.success();
     }
 
     @PluginAction(thread = ExecutionThread.WORKER, actionName = "setPushToken")
     private void setPushToken(String pushToken, CallbackContext callbackContext) {
         CommonKt.setPushToken(pushToken);
+        callbackContext.success();
     }
 
     //================================================================================
