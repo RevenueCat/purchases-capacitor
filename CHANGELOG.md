@@ -1,4 +1,4 @@
-## 1.0.6
+## 1.1.0
 
 - Adds an example project that shows how to set up an app with RevenueCat
     https://github.com/RevenueCat/cordova-plugin-purchases/pull/29
