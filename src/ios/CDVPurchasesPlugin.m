@@ -74,7 +74,9 @@
 {
     NSString *productIdentifier = [command argumentAtIndex:0];
 
-    [RCCommonFunctionality purchaseProduct:productIdentifier completionBlock:[self getResponseCompletionBlock:command]];
+    [RCCommonFunctionality purchaseProduct:productIdentifier
+                   signedDiscountTimestamp:nil
+                           completionBlock:[self getResponseCompletionBlock:command]];
 }
 
 - (void)purchasePackage:(CDVInvokedUrlCommand *)command
@@ -82,7 +84,10 @@
     NSString *packageIdentifier = [command argumentAtIndex:0];
     NSString *offeringIdentifier = [command argumentAtIndex:1];
 
-    [RCCommonFunctionality purchasePackage:packageIdentifier offering:offeringIdentifier completionBlock:[self getResponseCompletionBlock:command]];
+    [RCCommonFunctionality purchasePackage:packageIdentifier
+                                  offering:offeringIdentifier
+                   signedDiscountTimestamp:nil
+                           completionBlock:[self getResponseCompletionBlock:command]];
 }
 
 - (void)restoreTransactions:(CDVInvokedUrlCommand *)command
