@@ -19,6 +19,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -42,12 +44,14 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "setAllowSharingStoreAccount")
     public void setAllowSharingStoreAccount(boolean allowSharingStoreAccount, CallbackContext callbackContext) {
         CommonKt.setAllowSharingAppStoreAccount(allowSharingStoreAccount);
+        callbackContext.success();
     }
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "addAttributionData")
     public void addAttributionData(JSONObject data, Integer network, @Nullable String networkUserId,
                                    CallbackContext callbackContext) {
         CommonKt.addAttributionData(data, network, networkUserId);
+        callbackContext.success();
     }
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "getOfferings", isAutofinish = false)
@@ -114,6 +118,7 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "syncPurchases")
     public void syncPurchases(CallbackContext callbackContext) {
         CommonKt.syncPurchases();
+        callbackContext.success();
     }
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "getAppUserID", isAutofinish = false)
@@ -149,6 +154,7 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
     @PluginAction(thread = ExecutionThread.WORKER, actionName = "setDebugLogsEnabled")
     private void setDebugLogsEnabled(boolean enabled, CallbackContext callbackContext) {
         CommonKt.setDebugLogsEnabled(enabled);
+        callbackContext.success();
     }
 
     @PluginAction(thread = ExecutionThread.WORKER, actionName = "setAutomaticAppleSearchAdsAttributionCollection")
@@ -179,6 +185,50 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
         Map<String, Map<String, Object>> map = CommonKt.checkTrialOrIntroductoryPriceEligibility(productIDList);
         callbackContext.success(convertMapToJson(map));
     }
+    
+    @PluginAction(thread = ExecutionThread.WORKER, actionName = "invalidatePurchaserInfoCache")
+    private void invalidatePurchaserInfoCache(CallbackContext callbackContext) {
+        CommonKt.invalidatePurchaserInfoCache();
+        callbackContext.success();
+    }
+
+    //================================================================================
+    // Subscriber Attributes
+    //================================================================================
+
+    @PluginAction(thread = ExecutionThread.WORKER, actionName = "setAttributes")
+    private void setAttributes(JSONObject attributes, CallbackContext callbackContext) throws JSONException {
+        CommonKt.setAttributes(convertJsonToMap(attributes));
+        callbackContext.success();
+    }
+
+    @PluginAction(thread = ExecutionThread.WORKER, actionName = "setEmail")
+    private void setEmail(String email, CallbackContext callbackContext) {
+        CommonKt.setEmail(email);
+        callbackContext.success();
+    }
+
+    @PluginAction(thread = ExecutionThread.WORKER, actionName = "setPhoneNumber")
+    private void setPhoneNumber(String phoneNumber, CallbackContext callbackContext) {
+        CommonKt.setPhoneNumber(phoneNumber);
+        callbackContext.success();
+    }
+
+    @PluginAction(thread = ExecutionThread.WORKER, actionName = "setDisplayName")
+    private void setDisplayName(String displayName, CallbackContext callbackContext) {
+        CommonKt.setDisplayName(displayName);
+        callbackContext.success();
+    }
+
+    @PluginAction(thread = ExecutionThread.WORKER, actionName = "setPushToken")
+    private void setPushToken(String pushToken, CallbackContext callbackContext) {
+        CommonKt.setPushToken(pushToken);
+        callbackContext.success();
+    }
+
+    //================================================================================
+    // Private methods
+    //================================================================================
 
     private OnResult getOnResult(CallbackContext callbackContext) {
         return new OnResult() {
@@ -192,6 +242,20 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
                 callbackContext.error(convertMapToJson(errorContainer.getInfo()));
             }
         };
+    }
+
+    private static Map<String, String> convertJsonToMap(JSONObject jsonObject) {
+        HashMap map = new HashMap();
+        Iterator keys = jsonObject.keys();
+        while (keys.hasNext()) {
+            String key = (String) keys.next();
+            try {
+                map.put(key, jsonObject.get(key));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return map;
     }
 
     private static JSONObject convertMapToJson(Map<String, ?> readableMap) {

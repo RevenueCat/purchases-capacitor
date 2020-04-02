@@ -375,6 +375,56 @@ NS_SWIFT_NAME(restoreTransactions(_:));
            withDiscount:(SKPaymentDiscount *)discount
         completionBlock:(RCPurchaseCompletedBlock)completion NS_SWIFT_NAME(purchasePackage(_:discount:_:)) API_AVAILABLE(ios(12.2), macosx(10.14.4));
 
+
+/**
+ Invalidates the cache for purchaser information.
+ This is useful for cases where purchaser information might have been updated outside of the app, like if a
+ promotional subscription is granted through the RevenueCat dashboard.
+ */
+- (void)invalidatePurchaserInfoCache;
+
+#pragma mark Subscriber Attributes
+
+/**
+ Subscriber attributes are useful for storing additional, structured information on a user.
+ Since attributes are writable using a public key they should not be used for
+ managing secure or sensitive information such as subscription status, coins, etc.
+
+ Key names starting with "$" are reserved names used by RevenueCat. For a full list of key
+ restrictions refer to our guide: https://docs.revenuecat.com/docs/subscriber-attributes
+
+ @param attributes Map of attributes by key. Set the value as an empty string to delete an attribute.
+*/
+- (void)setAttributes:(NSDictionary<NSString *, NSString *> *)attributes;
+
+/**
+ * Subscriber attribute associated with the email address for the user
+ *
+ *  @param email Empty String or nil will delete the subscriber attribute.
+ */
+- (void)setEmail:(nullable NSString *)email;
+
+/**
+ * Subscriber attribute associated with the phone number for the user
+ *
+ *  @param phoneNumber Empty String or nil will delete the subscriber attribute.
+ */
+- (void)setPhoneNumber:(nullable NSString *)phoneNumber;
+
+/**
+ * Subscriber attribute associated with the display name for the user
+ *
+ *  @param displayName Empty String or nil will delete the subscriber attribute.
+ */
+- (void)setDisplayName:(nullable NSString *)displayName;
+
+/**
+ * Subscriber attribute associated with the push token for the user
+ *
+ *  @param pushToken nil will delete the subscriber attribute.
+ */
+- (void)setPushToken:(nullable NSData *)pushToken;
+
 #pragma mark Unavailable Methods
 #define RC_UNAVAILABLE(msg) __attribute__((unavailable(msg)));
 /// :nodoc:
@@ -406,7 +456,7 @@ NS_SWIFT_NAME(PurchasesDelegate)
 /**
  Called whenever `RCPurchases` receives updated purchaser info. This may happen periodically
  throughout the life of the app if new information becomes available (e.g. UIApplicationDidBecomeActive).
- 
+
  @param purchases Related `RCPurchases` object
  @param purchaserInfo Updated `RCPurchaserInfo`
  */
@@ -415,7 +465,7 @@ NS_SWIFT_NAME(purchases(_:didReceiveUpdated:));
 
 /**
  Called when a user initiates a promotional in-app purchase from the App Store. If your app is able to handle a purchase at the current time, run the deferment block in this method. If the app is not in a state to make a purchase: cache the defermentBlock, then call the defermentBlock when the app is ready to make the promotional purchase. If the purchase should never be made, you don't need to ever call the defermentBlock and `RCPurchases` will not proceed with promotional purchases.
- 
+
  @param product `SKProduct` the product that was selected from the app store
  */
 - (void)purchases:(RCPurchases *)purchases shouldPurchasePromoProduct:(SKProduct *)product defermentBlock:(RCDeferredPromotionalPurchaseBlock)makeDeferredPurchase;

@@ -74,7 +74,9 @@
 {
     NSString *productIdentifier = [command argumentAtIndex:0];
 
-    [RCCommonFunctionality purchaseProduct:productIdentifier completionBlock:[self getResponseCompletionBlock:command]];
+    [RCCommonFunctionality purchaseProduct:productIdentifier
+                   signedDiscountTimestamp:nil
+                           completionBlock:[self getResponseCompletionBlock:command]];
 }
 
 - (void)purchasePackage:(CDVInvokedUrlCommand *)command
@@ -82,7 +84,10 @@
     NSString *packageIdentifier = [command argumentAtIndex:0];
     NSString *offeringIdentifier = [command argumentAtIndex:1];
 
-    [RCCommonFunctionality purchasePackage:packageIdentifier offering:offeringIdentifier completionBlock:[self getResponseCompletionBlock:command]];
+    [RCCommonFunctionality purchasePackage:packageIdentifier
+                                  offering:offeringIdentifier
+                   signedDiscountTimestamp:nil
+                           completionBlock:[self getResponseCompletionBlock:command]];
 }
 
 - (void)restoreTransactions:(CDVInvokedUrlCommand *)command
@@ -162,6 +167,48 @@
 
 - (void)setupShouldPurchasePromoProductCallback:(CDVInvokedUrlCommand *)command {
     self.shouldPurchasePromoProductCallbackID = command.callbackId;
+}
+
+- (void)invalidatePurchaserInfoCache:(CDVInvokedUrlCommand *)command { 
+    [RCCommonFunctionality invalidatePurchaserInfoCache];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
+#pragma mark Subscriber Attributes
+
+- (void)setAttributes:(CDVInvokedUrlCommand *)command {
+    NSDictionary <NSString *, NSString *> *attributes = [command argumentAtIndex:0];
+    
+    [RCCommonFunctionality setAttributes:attributes];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
+- (void)setEmail:(CDVInvokedUrlCommand *)command {
+    NSString *email = [command argumentAtIndex:0];
+    
+    [RCCommonFunctionality setEmail:email];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
+- (void)setPhoneNumber:(CDVInvokedUrlCommand *)command {
+    NSString *phoneNumber = [command argumentAtIndex:0];
+    
+    [RCCommonFunctionality setPhoneNumber:phoneNumber];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
+- (void)setDisplayName:(CDVInvokedUrlCommand *)command {
+    NSString *displayName = [command argumentAtIndex:0];
+    
+    [RCCommonFunctionality setDisplayName:displayName];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
+- (void)setPushToken:(CDVInvokedUrlCommand *)command {
+    NSString *pushToken = [command argumentAtIndex:0];
+    
+    [RCCommonFunctionality setPushToken:pushToken];
+    [self sendOKForCommand:command messageAsArray:nil];
 }
 
 #pragma mark Delegate Methods

@@ -878,6 +878,102 @@ class Purchases {
     return false;
   }
 
+  /**
+   * Invalidates the cache for purchaser information.
+   * This is useful for cases where purchaser information might have been updated outside of the app, like if a
+   * promotional subscription is granted through the RevenueCat dashboard.
+   */
+  public static invalidatePurchaserInfoCache() {
+    window.cordova.exec(
+      null,
+      null,
+      PLUGIN_NAME,
+      "invalidatePurchaserInfoCache",
+      []
+    );
+  }
+
+  /**
+   * Subscriber attributes are useful for storing additional, structured information on a user.
+   * Since attributes are writable using a public key they should not be used for
+   * managing secure or sensitive information such as subscription status, coins, etc.
+   *
+   * Key names starting with "$" are reserved names used by RevenueCat. For a full list of key
+   * restrictions refer to our guide: https://docs.revenuecat.com/docs/subscriber-attributes
+   *
+   * @param attributes Map of attributes by key. Set the value as an empty string to delete an attribute.
+   */
+  public static setAttributes(attributes: { [key: string]: string | null }) {
+    window.cordova.exec(
+      null,
+      null,
+      PLUGIN_NAME,
+      "setAttributes",
+      [attributes]
+    );
+  }
+  
+  /**
+   * Subscriber attribute associated with the email address for the user
+   *
+   * @param email Empty String or null will delete the subscriber attribute.
+   */
+  public static setEmail(email: string | null) {
+    window.cordova.exec(
+      null,
+      null,
+      PLUGIN_NAME,
+      "setEmail",
+      [email]
+    );
+  }
+
+  /**
+   * Subscriber attribute associated with the phone number for the user
+   *
+   * @param phoneNumber Empty String or null will delete the subscriber attribute.
+   */
+  public static setPhoneNumber(phoneNumber: string | null) {
+    window.cordova.exec(
+      null,
+      null,
+      PLUGIN_NAME,
+      "setPhoneNumber",
+      [phoneNumber]
+    );
+  }
+
+  /**
+   * Subscriber attribute associated with the display name for the user
+   *
+   * @param displayName Empty String or null will delete the subscriber attribute.
+   */
+  public static setDisplayName(displayName: string | null) {
+    window.cordova.exec(
+      null,
+      null,
+      PLUGIN_NAME,
+      "setDisplayName",
+      [displayName]
+    );
+  }
+  
+  /**
+   * Subscriber attribute associated with the push token for the user
+   *
+   * @param pushToken null will delete the subscriber attribute.
+   */
+  public static setPushToken(pushToken: string | null) {
+    window.cordova.exec(
+      null,
+      null,
+      PLUGIN_NAME,
+      "setPushToken",
+      [pushToken]
+    );
+  }
+  
+
   private static setupShouldPurchasePromoProductCallback() { 
     window.cordova.exec(
       ({callbackID}:{callbackID: number}) => {

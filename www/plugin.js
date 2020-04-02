@@ -20,7 +20,7 @@ var ATTRIBUTION_NETWORK;
     ATTRIBUTION_NETWORK[ATTRIBUTION_NETWORK["BRANCH"] = 3] = "BRANCH";
     ATTRIBUTION_NETWORK[ATTRIBUTION_NETWORK["TENJIN"] = 4] = "TENJIN";
     ATTRIBUTION_NETWORK[ATTRIBUTION_NETWORK["FACEBOOK"] = 5] = "FACEBOOK";
-})(ATTRIBUTION_NETWORK || (ATTRIBUTION_NETWORK = {}));
+})(ATTRIBUTION_NETWORK = exports.ATTRIBUTION_NETWORK || (exports.ATTRIBUTION_NETWORK = {}));
 var PURCHASE_TYPE;
 (function (PURCHASE_TYPE) {
     /**
@@ -31,7 +31,7 @@ var PURCHASE_TYPE;
      * A type of SKU for subscriptions.
      */
     PURCHASE_TYPE["SUBS"] = "subs";
-})(PURCHASE_TYPE || (PURCHASE_TYPE = {}));
+})(PURCHASE_TYPE = exports.PURCHASE_TYPE || (exports.PURCHASE_TYPE = {}));
 var PRORATION_MODE;
 (function (PRORATION_MODE) {
     PRORATION_MODE[PRORATION_MODE["UNKNOWN_SUBSCRIPTION_UPGRADE_DOWNGRADE_POLICY"] = 0] = "UNKNOWN_SUBSCRIPTION_UPGRADE_DOWNGRADE_POLICY";
@@ -56,7 +56,7 @@ var PRORATION_MODE;
      * be charged at the same time.
      */
     PRORATION_MODE[PRORATION_MODE["DEFERRED"] = 4] = "DEFERRED";
-})(PRORATION_MODE || (PRORATION_MODE = {}));
+})(PRORATION_MODE = exports.PRORATION_MODE || (exports.PRORATION_MODE = {}));
 var PACKAGE_TYPE;
 (function (PACKAGE_TYPE) {
     /**
@@ -95,7 +95,7 @@ var PACKAGE_TYPE;
      * A package configured with the predefined weekly identifier.
      */
     PACKAGE_TYPE["WEEKLY"] = "WEEKLY";
-})(PACKAGE_TYPE || (PACKAGE_TYPE = {}));
+})(PACKAGE_TYPE = exports.PACKAGE_TYPE || (exports.PACKAGE_TYPE = {}));
 var INTRO_ELIGIBILITY_STATUS;
 (function (INTRO_ELIGIBILITY_STATUS) {
     /**
@@ -110,7 +110,7 @@ var INTRO_ELIGIBILITY_STATUS;
      * The user is eligible for a free trial or intro pricing for this product.
      */
     INTRO_ELIGIBILITY_STATUS[INTRO_ELIGIBILITY_STATUS["INTRO_ELIGIBILITY_STATUS_ELIGIBLE"] = 2] = "INTRO_ELIGIBILITY_STATUS_ELIGIBLE";
-})(INTRO_ELIGIBILITY_STATUS || (INTRO_ELIGIBILITY_STATUS = {}));
+})(INTRO_ELIGIBILITY_STATUS = exports.INTRO_ELIGIBILITY_STATUS || (exports.INTRO_ELIGIBILITY_STATUS = {}));
 var shouldPurchasePromoProductListeners = [];
 var Purchases = /** @class */ (function () {
     function Purchases() {
@@ -134,6 +134,7 @@ var Purchases = /** @class */ (function () {
      * Set this to true if you are passing in an appUserID but it is anonymous, this is true by default if you didn't pass an appUserID
      * If a user tries to purchase a product that is active on the current app store account, we will treat it as a restore and alias
      * the new ID with the previous id.
+     * @param {boolean} allowSharing true if enabled, false to disabled
      */
     Purchases.setAllowSharingStoreAccount = function (allowSharing) {
         window.cordova.exec(null, null, PLUGIN_NAME, "setAllowSharingStoreAccount", [allowSharing]);
@@ -141,7 +142,7 @@ var Purchases = /** @class */ (function () {
     /**
      * Add a dict of attribution information
      * @param {object} data Attribution data from any of the attribution networks in Purchases.ATTRIBUTION_NETWORKS
-     * @param {ATTRIBUTION_NETWORKS} network Which network, see Purchases.ATTRIBUTION_NETWORKS
+     * @param {ATTRIBUTION_NETWORK} network Which network, see Purchases.ATTRIBUTION_NETWORK
      * @param {string?} networkUserId An optional unique id for identifying the user. Needs to be a string.
      */
     Purchases.addAttributionData = function (data, network, networkUserId) {
@@ -152,9 +153,9 @@ var Purchases = /** @class */ (function () {
         ]);
     };
     /**
-     * Gets the map of entitlements -> offerings -> products
-     * @param {function(PurchasesOfferings):void} callback Callback triggered after a successful getEntitlements call. It will receive an structure of entitlements.
-     * @param {function(PurchasesError):void} errorCallback Callback triggered after an error or when retrieving entitlements.
+     * Gets the Offerings configured in the RevenueCat dashboard
+     * @param {function(PurchasesOfferings):void} callback Callback triggered after a successful getOfferings call.
+     * @param {function(PurchasesError):void} errorCallback Callback triggered after an error or when retrieving offerings.
      */
     Purchases.getOfferings = function (callback, errorCallback) {
         window.cordova.exec(callback, errorCallback, PLUGIN_NAME, "getOfferings", []);
@@ -361,9 +362,7 @@ var Purchases = /** @class */ (function () {
      *  iOS so that the subscription group can be collected by the SDK. Android always returns INTRO_ELIGIBILITY_STATUS_UNKNOWN.
      *
      *  @param productIdentifiers Array of product identifiers for which you want to compute eligibility
-     *  @param callback Array of product identifiers for which you want to compute eligibility
-     *  @returns {function({ [productId: string]: IntroEligibility }):void} callback Will be sent map of IntroEligibility
-     *  per productId
+     *  @param callback Will be sent a map of IntroEligibility per productId
      */
     Purchases.checkTrialOrIntroductoryPriceEligibility = function (productIdentifiers, callback) {
         window.cordova.exec(callback, null, PLUGIN_NAME, "checkTrialOrIntroductoryPriceEligibility", [productIdentifiers]);
@@ -394,6 +393,59 @@ var Purchases = /** @class */ (function () {
             return true;
         }
         return false;
+    };
+    /**
+     * Invalidates the cache for purchaser information.
+     * This is useful for cases where purchaser information might have been updated outside of the app, like if a
+     * promotional subscription is granted through the RevenueCat dashboard.
+     */
+    Purchases.invalidatePurchaserInfoCache = function () {
+        window.cordova.exec(null, null, PLUGIN_NAME, "invalidatePurchaserInfoCache", []);
+    };
+    /**
+     * Subscriber attributes are useful for storing additional, structured information on a user.
+     * Since attributes are writable using a public key they should not be used for
+     * managing secure or sensitive information such as subscription status, coins, etc.
+     *
+     * Key names starting with "$" are reserved names used by RevenueCat. For a full list of key
+     * restrictions refer to our guide: https://docs.revenuecat.com/docs/subscriber-attributes
+     *
+     * @param attributes Map of attributes by key. Set the value as an empty string to delete an attribute.
+     */
+    Purchases.setAttributes = function (attributes) {
+        window.cordova.exec(null, null, PLUGIN_NAME, "setAttributes", [attributes]);
+    };
+    /**
+     * Subscriber attribute associated with the email address for the user
+     *
+     * @param email Empty String or null will delete the subscriber attribute.
+     */
+    Purchases.setEmail = function (email) {
+        window.cordova.exec(null, null, PLUGIN_NAME, "setEmail", [email]);
+    };
+    /**
+     * Subscriber attribute associated with the phone number for the user
+     *
+     * @param phoneNumber Empty String or null will delete the subscriber attribute.
+     */
+    Purchases.setPhoneNumber = function (phoneNumber) {
+        window.cordova.exec(null, null, PLUGIN_NAME, "setPhoneNumber", [phoneNumber]);
+    };
+    /**
+     * Subscriber attribute associated with the display name for the user
+     *
+     * @param displayName Empty String or null will delete the subscriber attribute.
+     */
+    Purchases.setDisplayName = function (displayName) {
+        window.cordova.exec(null, null, PLUGIN_NAME, "setDisplayName", [displayName]);
+    };
+    /**
+     * Subscriber attribute associated with the push token for the user
+     *
+     * @param pushToken null will delete the subscriber attribute.
+     */
+    Purchases.setPushToken = function (pushToken) {
+        window.cordova.exec(null, null, PLUGIN_NAME, "setPushToken", [pushToken]);
     };
     Purchases.setupShouldPurchasePromoProductCallback = function () {
         var _this = this;

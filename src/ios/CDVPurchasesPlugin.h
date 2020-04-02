@@ -29,5 +29,11 @@
 - (void)setAutomaticAppleSearchAdsAttributionCollection:(CDVInvokedUrlCommand *)command;
 - (void)isAnonymous:(CDVInvokedUrlCommand *)command;
 - (void)checkTrialOrIntroductoryPriceEligibility:(CDVInvokedUrlCommand *)command;
+- (void)invalidatePurchaserInfoCache:(CDVInvokedUrlCommand *)command;
+- (void)setAttributes:(NSDictionary<NSString *, NSString *> *)attributes;
+- (void)setEmail:(nullable NSString *)email;
+- (void)setPhoneNumber:(nullable NSString *)phoneNumber;
+- (void)setDisplayName:(nullable NSString *)displayName;
+- (void)setPushToken:(nullable NSData *)pushToken;
 
 @end

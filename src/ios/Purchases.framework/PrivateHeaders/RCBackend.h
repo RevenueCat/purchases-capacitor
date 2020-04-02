@@ -10,10 +10,11 @@
 #import <StoreKit/StoreKit.h>
 
 #import "RCPurchases.h"
+#import "RCSubscriberAttribute.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class RCPurchaserInfo, RCHTTPClient, RCIntroEligibility, RCPromotionalOffer;
+@class RCPurchaserInfo, RCHTTPClient, RCIntroEligibility, RCPromotionalOffer, RCSubscriberAttribute;
 
 typedef NS_ENUM(NSInteger, RCPaymentMode) {
     RCPaymentModeNone = -1,
@@ -21,6 +22,10 @@ typedef NS_ENUM(NSInteger, RCPaymentMode) {
     RCPaymentModePayUpFront = 1,
     RCPaymentModeFreeTrial = 2
 };
+
+extern NSErrorUserInfoKey const RCSuccessfullySyncedKey;
+extern NSString * const RCAttributeErrorsKey;
+extern NSString * const RCAttributeErrorsResponseKey;
 
 API_AVAILABLE(ios(11.2), macos(10.13.2))
 RCPaymentMode RCPaymentModeFromSKProductDiscountPaymentMode(SKProductDiscountPaymentMode paymentMode);
@@ -41,7 +46,7 @@ typedef void(^RCOfferSigningResponseHandler)(NSString * _Nullable signature,
 
 @interface RCBackend : NSObject
 
-- (nullable instancetype)initWithAPIKey:(NSString *)APIKey;
+- (nullable instancetype)initWithAPIKey:(NSString *)APIKey platformFlavor:(nullable NSString *)platformFlavor;
 
 - (nullable instancetype)initWithHTTPClient:(RCHTTPClient *)client
                                      APIKey:(NSString *)APIKey;
@@ -58,6 +63,7 @@ typedef void(^RCOfferSigningResponseHandler)(NSString * _Nullable signature,
                   discounts:(nullable NSArray<RCPromotionalOffer *> *)discounts
 presentedOfferingIdentifier:(nullable NSString *)offeringIdentifier
                observerMode:(BOOL)observerMode
+       subscriberAttributes:(nullable RCSubscriberAttributeDict)subscriberAttributesByKey
                  completion:(RCBackendPurchaserInfoResponseHandler)completion;
 
 - (void)getSubscriberDataWithAppUserID:(NSString *)appUserID
@@ -86,6 +92,10 @@ presentedOfferingIdentifier:(nullable NSString *)offeringIdentifier
                 receiptData:(NSData *)data
                   appUserID:(NSString *)applicationUsername
                  completion:(RCOfferSigningResponseHandler)completion;
+
+- (void)postSubscriberAttributes:(RCSubscriberAttributeDict)subscriberAttributes
+                       appUserID:(NSString *)appUserID
+                      completion:(nullable void (^)(NSError * _Nullable error))completion;
 
 @end
 

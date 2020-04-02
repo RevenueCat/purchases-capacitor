@@ -4,7 +4,7 @@ declare global {
         plugins: any;
     }
 }
-declare enum ATTRIBUTION_NETWORK {
+export declare enum ATTRIBUTION_NETWORK {
     APPLE_SEARCH_ADS = 0,
     ADJUST = 1,
     APPSFLYER = 2,
@@ -12,7 +12,7 @@ declare enum ATTRIBUTION_NETWORK {
     TENJIN = 4,
     FACEBOOK = 5
 }
-declare enum PURCHASE_TYPE {
+export declare enum PURCHASE_TYPE {
     /**
      * A type of SKU for in-app products.
      */
@@ -22,7 +22,7 @@ declare enum PURCHASE_TYPE {
      */
     SUBS = "subs"
 }
-declare enum PRORATION_MODE {
+export declare enum PRORATION_MODE {
     UNKNOWN_SUBSCRIPTION_UPGRADE_DOWNGRADE_POLICY = 0,
     /**
      * Replacement takes effect immediately, and the remaining time will be
@@ -46,7 +46,7 @@ declare enum PRORATION_MODE {
      */
     DEFERRED = 4
 }
-declare enum PACKAGE_TYPE {
+export declare enum PACKAGE_TYPE {
     /**
      * A package that was defined with a custom identifier.
      */
@@ -84,7 +84,7 @@ declare enum PACKAGE_TYPE {
      */
     WEEKLY = "WEEKLY"
 }
-declare enum INTRO_ELIGIBILITY_STATUS {
+export declare enum INTRO_ELIGIBILITY_STATUS {
     /**
      * RevenueCat doesn't have enough information to determine eligibility.
      */
@@ -101,7 +101,7 @@ declare enum INTRO_ELIGIBILITY_STATUS {
 /**
  * The EntitlementInfo object gives you access to all of the information about the status of a user entitlement.
  */
-interface PurchasesEntitlementInfo {
+export interface PurchasesEntitlementInfo {
     /**
      * The entitlement identifier configured in the RevenueCat dashboard
      */
@@ -161,7 +161,7 @@ interface PurchasesEntitlementInfo {
 /**
  * Contains all the entitlements associated to the user.
  */
-interface PurchasesEntitlementInfos {
+export interface PurchasesEntitlementInfos {
     /**
      * Map of all EntitlementInfo (`PurchasesEntitlementInfo`) objects (active and inactive) keyed by entitlement identifier.
      */
@@ -175,7 +175,7 @@ interface PurchasesEntitlementInfos {
         [key: string]: PurchasesEntitlementInfo;
     };
 }
-interface PurchaserInfo {
+export interface PurchaserInfo {
     /**
      * Entitlements attached to this purchaser info
      */
@@ -227,7 +227,7 @@ interface PurchaserInfo {
      */
     readonly originalApplicationVersion: string | null;
 }
-interface PurchasesProduct {
+export interface PurchasesProduct {
     /**
      * Product Id.
      */
@@ -245,7 +245,7 @@ interface PurchasesProduct {
      */
     readonly price: number;
     /**
-     * Formatted price of the item, including its currency sign.
+     * Formatted price of the item, including its currency sign, such as €3.99.
      */
     readonly price_string: string;
     /**
@@ -281,7 +281,7 @@ interface PurchasesProduct {
  * Contains information about the product available for the user to purchase.
  * For more info see https://docs.revenuecat.com/docs/entitlements
  */
-interface PurchasesPackage {
+export interface PurchasesPackage {
     /**
      * Unique identifier for this package. Can be one a predefined package type or a custom one.
      */
@@ -303,7 +303,7 @@ interface PurchasesPackage {
  * An offering is a collection of Packages (`PurchasesPackage`) available for the user to purchase.
  * For more info see https://docs.revenuecat.com/docs/entitlements
  */
-interface PurchasesOffering {
+export interface PurchasesOffering {
     /**
      * Unique identifier defined in RevenueCat dashboard.
      */
@@ -349,7 +349,7 @@ interface PurchasesOffering {
  * Contains all the offerings configured in RevenueCat dashboard.
  * For more info see https://docs.revenuecat.com/docs/entitlements
  */
-interface PurchasesOfferings {
+export interface PurchasesOfferings {
     /**
      * Map of all Offerings [PurchasesOffering] objects keyed by their identifier.
      */
@@ -361,16 +361,16 @@ interface PurchasesOfferings {
      */
     readonly current: PurchasesOffering | null;
 }
-interface PurchasesError {
+export interface PurchasesError {
     code: number;
     message: string;
     readableErrorCode: string;
-    underlyingErrorMessage: string;
+    underlyingErrorMessage?: string;
 }
 /**
  * Holds the information used when upgrading from another sku. For Android use only.
  */
-interface UpgradeInfo {
+export interface UpgradeInfo {
     /**
      * The oldSKU to upgrade from.
      */
@@ -383,7 +383,7 @@ interface UpgradeInfo {
 /**
  * Holds the introductory price status
  */
-interface IntroEligibility {
+export interface IntroEligibility {
     /**
      * The introductory price eligibility status
      */
@@ -446,21 +446,22 @@ declare class Purchases {
      * Set this to true if you are passing in an appUserID but it is anonymous, this is true by default if you didn't pass an appUserID
      * If a user tries to purchase a product that is active on the current app store account, we will treat it as a restore and alias
      * the new ID with the previous id.
+     * @param {boolean} allowSharing true if enabled, false to disabled
      */
     static setAllowSharingStoreAccount(allowSharing: boolean): void;
     /**
      * Add a dict of attribution information
      * @param {object} data Attribution data from any of the attribution networks in Purchases.ATTRIBUTION_NETWORKS
-     * @param {ATTRIBUTION_NETWORKS} network Which network, see Purchases.ATTRIBUTION_NETWORKS
+     * @param {ATTRIBUTION_NETWORK} network Which network, see Purchases.ATTRIBUTION_NETWORK
      * @param {string?} networkUserId An optional unique id for identifying the user. Needs to be a string.
      */
     static addAttributionData(data: {
         [key: string]: any;
     }, network: ATTRIBUTION_NETWORK, networkUserId?: string): void;
     /**
-     * Gets the map of entitlements -> offerings -> products
-     * @param {function(PurchasesOfferings):void} callback Callback triggered after a successful getEntitlements call. It will receive an structure of entitlements.
-     * @param {function(PurchasesError):void} errorCallback Callback triggered after an error or when retrieving entitlements.
+     * Gets the Offerings configured in the RevenueCat dashboard
+     * @param {function(PurchasesOfferings):void} callback Callback triggered after a successful getOfferings call.
+     * @param {function(PurchasesError):void} errorCallback Callback triggered after an error or when retrieving offerings.
      */
     static getOfferings(callback: (offerings: PurchasesOfferings) => void, errorCallback: (error: PurchasesError) => void): void;
     /**
@@ -602,9 +603,7 @@ declare class Purchases {
      *  iOS so that the subscription group can be collected by the SDK. Android always returns INTRO_ELIGIBILITY_STATUS_UNKNOWN.
      *
      *  @param productIdentifiers Array of product identifiers for which you want to compute eligibility
-     *  @param callback Array of product identifiers for which you want to compute eligibility
-     *  @returns {function({ [productId: string]: IntroEligibility }):void} callback Will be sent map of IntroEligibility
-     *  per productId
+     *  @param callback Will be sent a map of IntroEligibility per productId
      */
     static checkTrialOrIntroductoryPriceEligibility(productIdentifiers: string[], callback: (map: {
         [productId: string]: IntroEligibility;
@@ -625,6 +624,49 @@ declare class Purchases {
      * @returns {boolean} True if listener was removed, false otherwise
      */
     static removeShouldPurchasePromoProductListener(listenerToRemove: ShouldPurchasePromoProductListener): boolean;
+    /**
+     * Invalidates the cache for purchaser information.
+     * This is useful for cases where purchaser information might have been updated outside of the app, like if a
+     * promotional subscription is granted through the RevenueCat dashboard.
+     */
+    static invalidatePurchaserInfoCache(): void;
+    /**
+     * Subscriber attributes are useful for storing additional, structured information on a user.
+     * Since attributes are writable using a public key they should not be used for
+     * managing secure or sensitive information such as subscription status, coins, etc.
+     *
+     * Key names starting with "$" are reserved names used by RevenueCat. For a full list of key
+     * restrictions refer to our guide: https://docs.revenuecat.com/docs/subscriber-attributes
+     *
+     * @param attributes Map of attributes by key. Set the value as an empty string to delete an attribute.
+     */
+    static setAttributes(attributes: {
+        [key: string]: string | null;
+    }): void;
+    /**
+     * Subscriber attribute associated with the email address for the user
+     *
+     * @param email Empty String or null will delete the subscriber attribute.
+     */
+    static setEmail(email: string | null): void;
+    /**
+     * Subscriber attribute associated with the phone number for the user
+     *
+     * @param phoneNumber Empty String or null will delete the subscriber attribute.
+     */
+    static setPhoneNumber(phoneNumber: string | null): void;
+    /**
+     * Subscriber attribute associated with the display name for the user
+     *
+     * @param displayName Empty String or null will delete the subscriber attribute.
+     */
+    static setDisplayName(displayName: string | null): void;
+    /**
+     * Subscriber attribute associated with the push token for the user
+     *
+     * @param pushToken null will delete the subscriber attribute.
+     */
+    static setPushToken(pushToken: string | null): void;
     private static setupShouldPurchasePromoProductCallback;
     private static getMakeDeferredPurchaseFunction;
 }
