@@ -4,6 +4,7 @@
 //
 
 #import <Purchases/RCPurchases.h>
+#import <PurchasesHybridCommon/PurchasesHybridCommon.h>
 #import <Cordova/CDVPlugin.h>
 
 @interface CDVPurchasesPlugin : CDVPlugin
