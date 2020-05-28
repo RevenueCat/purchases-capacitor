@@ -7,9 +7,6 @@
 
 @import StoreKit;
 
-#import "RCPurchaserInfo+HybridAdditions.h"
-#import "RCCommonFunctionality.h"
-#import "RCErrorContainer.h"
 
 @interface CDVPurchasesPlugin () <RCPurchasesDelegate>
 
@@ -27,7 +24,12 @@
     NSString *appUserID = [command argumentAtIndex:1];
     BOOL observerMode = [[command argumentAtIndex:2] boolValue];
 
-    [RCPurchases configureWithAPIKey:apiKey appUserID:appUserID observerMode:observerMode];
+    [RCPurchases configureWithAPIKey:apiKey
+                           appUserID:appUserID
+                        observerMode:observerMode
+                        userDefaults:nil
+                      platformFlavor:self.platformFlavor
+               platformFlavorVersion:self.platformFlavorVersion];
     RCPurchases.sharedPurchases.delegate = self;
 
     self.updatedPurchaserInfoCallbackID = command.callbackId;
@@ -254,6 +256,14 @@
 {
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:theMessage];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (NSString *)platformFlavor {
+    return @"cordova";
+}
+
+- (NSString *)platformFlavorVersion {
+    return @"1.1.0";
 }
 
 @end

@@ -1,6 +1,0 @@
-framework module Purchases {
-  umbrella header "Purchases.h"
-
-  export *
-  module * { export * }
-}

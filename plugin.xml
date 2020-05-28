@@ -29,29 +29,7 @@
         </config-file>
         <header-file src="src/ios/CDVPurchasesPlugin.h" />
         <source-file src="src/ios/CDVPurchasesPlugin.m" />
-        <header-file src="src/ios/Common/RCCommonFunctionality.h" />
-        <header-file src="src/ios/Common/RCEntitlementInfo+HybridAdditions.h" />
-        <header-file src="src/ios/Common/RCEntitlementInfos+HybridAdditions.h" />
-        <header-file src="src/ios/Common/RCErrorContainer.h" />
-        <header-file src="src/ios/Common/RCOffering+HybridAdditions.h" />
-        <header-file src="src/ios/Common/RCOfferings+HybridAdditions.h" />
-        <header-file src="src/ios/Common/RCPackage+HybridAdditions.h" />
-        <header-file src="src/ios/Common/RCPurchaserInfo+HybridAdditions.h" />
-        <header-file src="src/ios/Common/RCPurchases+HybridAdditions.h" />
-        <header-file src="src/ios/Common/SKPaymentDiscount+HybridAdditions.h" />
-        <header-file src="src/ios/Common/SKProduct+HybridAdditions.h" />
-        <header-file src="src/ios/Common/SKProductDiscount+HybridAdditions.h" />
-        <source-file src="src/ios/Common/RCCommonFunctionality.m" />
-        <source-file src="src/ios/Common/RCEntitlementInfo+HybridAdditions.m" />
-        <source-file src="src/ios/Common/RCEntitlementInfos+HybridAdditions.m" />
-        <source-file src="src/ios/Common/RCErrorContainer.m" />
-        <source-file src="src/ios/Common/RCOffering+HybridAdditions.m" />
-        <source-file src="src/ios/Common/RCOfferings+HybridAdditions.m" />
-        <source-file src="src/ios/Common/RCPackage+HybridAdditions.m" />
-        <source-file src="src/ios/Common/RCPurchaserInfo+HybridAdditions.m" />
-        <source-file src="src/ios/Common/SKPaymentDiscount+HybridAdditions.m" />
-        <source-file src="src/ios/Common/SKProduct+HybridAdditions.m" />
-        <source-file src="src/ios/Common/SKProductDiscount+HybridAdditions.m" />
-        <framework src="src/ios/Purchases.framework" embed="true" custom="true" />
+        <framework src="Purchases" type="podspec" spec="3.3.1" />
+        <framework src="PurchasesHybridCommon" type="podspec" spec="1.1.0" />
     </platform>
 </plugin>
