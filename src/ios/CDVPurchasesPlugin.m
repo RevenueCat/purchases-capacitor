@@ -25,11 +25,11 @@
     BOOL observerMode = [[command argumentAtIndex:2] boolValue];
 
     [RCPurchases configureWithAPIKey:apiKey
-                appUserID:appUserID
-             observerMode:observerMode
-             userDefaults:nil
-           platformFlavor:self.platformFlavor
-    platformFlavorVersion:self.platformFlavorVersion];
+                           appUserID:appUserID
+                        observerMode:observerMode
+                        userDefaults:nil
+                      platformFlavor:self.platformFlavor
+               platformFlavorVersion:self.platformFlavorVersion];
     RCPurchases.sharedPurchases.delegate = self;
 
     self.updatedPurchaserInfoCallbackID = command.callbackId;
