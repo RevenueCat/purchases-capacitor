@@ -17,8 +17,7 @@
             </feature>
         </config-file>
         <framework src="com.revenuecat.purchases:purchases:3.1.0" />
-        <lib-file src="src/android/common-release.aar"/>
-        <framework src="src/android/common.gradle" custom="true" type="gradleReference"/>
+        <framework src="com.revenuecat.purchases:purchases-hybrid-common:1.1.2" />
         <source-file src="src/android/PurchasesPlugin.java" target-dir="src/com/revenuecat/purchases"/>
     </platform>
     <platform name="ios">
