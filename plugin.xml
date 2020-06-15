@@ -28,7 +28,13 @@
         </config-file>
         <header-file src="src/ios/CDVPurchasesPlugin.h" />
         <source-file src="src/ios/CDVPurchasesPlugin.m" />
-        <framework src="Purchases" type="podspec" spec="3.3.1" />
-        <framework src="PurchasesHybridCommon" type="podspec" spec="1.1.0" />
+        <podspec>
+            <config>
+                <source url="https://github.com/CocoaPods/Specs.git"/>
+            </config>
+            <pods use-frameworks="true">
+                <pod name="PurchasesHybridCommon" spec="1.1.0" />
+            </pods>
+        </podspec>
     </platform>
 </plugin>
