@@ -1,7 +1,6 @@
-1. Update to the latest SDK versions in `package.json` and `plugin.xml`
-1. Update version in `package.json` and `plugin.xml`.
-1. Update version in `CDVPurchasesPlugin.m`.
-1. Grab the `purchases-hybrid-common` .aar [from its release page](https://github.com/RevenueCat/purchases-hybrid-common/releases/) and replace it in `src/android/common-release.aar`
+1. Update versions in `VERSIONS.md`
+1. Update to the latest purchases-hybrid-sdk version in `plugin.xml`
+1. Update version in `package.json`, `plugin.xml`, `PurchasesPlugin.java`, and `CDVPurchasesPlugin.m`.
 1. Run `npm run build`
 1. Add an entry to CHANGELOG.md
 1. `git commit -am "Preparing for version x.y.z"`

@@ -23,11 +23,12 @@
     NSString *apiKey = [command argumentAtIndex:0];
     NSString *appUserID = [command argumentAtIndex:1];
     BOOL observerMode = [[command argumentAtIndex:2] boolValue];
+    NSString *userDefaultsSuiteName = [command argumentAtIndex:3];
 
     [RCPurchases configureWithAPIKey:apiKey
                            appUserID:appUserID
                         observerMode:observerMode
-                        userDefaults:nil
+               userDefaultsSuiteName:userDefaultsSuiteName
                       platformFlavor:self.platformFlavor
                platformFlavorVersion:self.platformFlavorVersion];
     RCPurchases.sharedPurchases.delegate = self;
@@ -176,6 +177,12 @@
     [self sendOKForCommand:command messageAsArray:nil];
 }
 
+- (void)setProxyURLString:(CDVInvokedUrlCommand *)command {
+    NSString *proxyURLString = [command argumentAtIndex:0];
+    [RCCommonFunctionality setProxyURLString:proxyURLString];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
 #pragma mark Subscriber Attributes
 
 - (void)setAttributes:(CDVInvokedUrlCommand *)command {
@@ -263,7 +270,7 @@
 }
 
 - (NSString *)platformFlavorVersion {
-    return @"1.1.0";
+    return @"1.2.0";
 }
 
 @end
