@@ -122,12 +122,15 @@ var Purchases = /** @class */ (function () {
      * @param {boolean} observerMode An optional boolean. Set this to TRUE if you have your own IAP implementation and
      * want to use only RevenueCat's backend. Default is FALSE. If you are on Android and setting this to ON, you will have
      * to acknowledge the purchases yourself.
+     * @param {string?} userDefaultsSuiteName An optional string. iOS-only, will be ignored for Android.
+     * Set this if you would like the RevenueCat SDK to store its preferences in a different NSUserDefaults
+     * suite, otherwise it will use standardUserDefaults. Default is null, which will make the SDK use standardUserDefaults.
      */
-    Purchases.setup = function (apiKey, appUserID, observerMode) {
+    Purchases.setup = function (apiKey, appUserID, observerMode, userDefaultsSuiteName) {
         if (observerMode === void 0) { observerMode = false; }
         window.cordova.exec(function (purchaserInfo) {
             window.cordova.fireWindowEvent("onPurchaserInfoUpdated", purchaserInfo);
-        }, null, PLUGIN_NAME, "setupPurchases", [apiKey, appUserID, observerMode]);
+        }, null, PLUGIN_NAME, "setupPurchases", [apiKey, appUserID, observerMode, userDefaultsSuiteName]);
         this.setupShouldPurchasePromoProductCallback();
     };
     /**
@@ -451,6 +454,13 @@ var Purchases = /** @class */ (function () {
      */
     Purchases.setPushToken = function (pushToken) {
         window.cordova.exec(null, null, PLUGIN_NAME, "setPushToken", [pushToken]);
+    };
+    /**
+     * Set this property to your proxy URL before configuring Purchases *only* if you've received a proxy key value from your RevenueCat contact.
+     * @param url Proxy URL as a string.
+     */
+    Purchases.setProxyURL = function (url) {
+        window.cordova.exec(null, null, PLUGIN_NAME, "setProxyURLString", [url]);
     };
     Purchases.setupShouldPurchasePromoProductCallback = function () {
         var _this = this;

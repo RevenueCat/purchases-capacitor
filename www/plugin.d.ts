@@ -226,6 +226,18 @@ export interface PurchaserInfo {
      * in Android
      */
     readonly originalApplicationVersion: string | null;
+    /**
+     * Returns the purchase date for the version of the application when the user bought the app.
+     * Use this for grandfathering users when migrating to subscriptions.
+     */
+    readonly originalPurchaseDate: string | null;
+    /**
+     * URL to manage the active subscription of the user. If this user has an active iOS
+     * subscription, this will point to the App Store, if the user has an active Play Store subscription
+     * it will point there. If there are no active subscriptions it will be null.
+     * If there are multiple for different platforms, it will point to the device store.
+     */
+    readonly managementURL: string | null;
 }
 export interface PurchasesProduct {
     /**
@@ -440,8 +452,11 @@ declare class Purchases {
      * @param {boolean} observerMode An optional boolean. Set this to TRUE if you have your own IAP implementation and
      * want to use only RevenueCat's backend. Default is FALSE. If you are on Android and setting this to ON, you will have
      * to acknowledge the purchases yourself.
+     * @param {string?} userDefaultsSuiteName An optional string. iOS-only, will be ignored for Android.
+     * Set this if you would like the RevenueCat SDK to store its preferences in a different NSUserDefaults
+     * suite, otherwise it will use standardUserDefaults. Default is null, which will make the SDK use standardUserDefaults.
      */
-    static setup(apiKey: string, appUserID?: string | null, observerMode?: boolean): void;
+    static setup(apiKey: string, appUserID?: string | null, observerMode?: boolean, userDefaultsSuiteName?: string): void;
     /**
      * Set this to true if you are passing in an appUserID but it is anonymous, this is true by default if you didn't pass an appUserID
      * If a user tries to purchase a product that is active on the current app store account, we will treat it as a restore and alias
@@ -672,6 +687,11 @@ declare class Purchases {
      * @param pushToken null will delete the subscriber attribute.
      */
     static setPushToken(pushToken: string | null): void;
+    /**
+     * Set this property to your proxy URL before configuring Purchases *only* if you've received a proxy key value from your RevenueCat contact.
+     * @param url Proxy URL as a string.
+     */
+    static setProxyURL(url: string): void;
     private static setupShouldPurchasePromoProductCallback;
     private static getMakeDeferredPurchaseFunction;
 }

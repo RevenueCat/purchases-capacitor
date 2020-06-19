@@ -1,4 +1,7 @@
 #! /bin/sh
+cordova platform remove ios
+cordova platform remove android
+
 cordova platform add ios
 cordova platform add android
 
