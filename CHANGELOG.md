@@ -1,3 +1,7 @@
+## 1.2.1
+
+- Removed lambda from Android code (https://github.com/RevenueCat/cordova-plugin-purchases/pull/51)
+
 ## 1.2.0
 
 - Bumped iOS to 3.4.0 [Changelog here](https://github.com/RevenueCat/purchases-ios/releases)

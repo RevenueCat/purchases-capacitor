@@ -270,7 +270,7 @@
 }
 
 - (NSString *)platformFlavorVersion {
-    return @"1.3.0-SNAPSHOT";
+    return @"1.2.1";
 }
 
 @end
