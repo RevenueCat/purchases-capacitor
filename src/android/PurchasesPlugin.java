@@ -35,10 +35,13 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
                                 @Nullable String userDefaultsSuiteName, CallbackContext callbackContext) {
         PlatformInfo platformInfo = new PlatformInfo(PLATFORM_NAME, PLUGIN_VERSION);
         CommonKt.configure(this.cordova.getActivity(), apiKey, appUserID, observerMode, platformInfo);
-        Purchases.getSharedInstance().setUpdatedPurchaserInfoListener(purchaserInfo -> {
-            PluginResult result = new PluginResult(PluginResult.Status.OK, convertMapToJson(MappersKt.map(purchaserInfo)));
-            result.setKeepCallback(true);
-            callbackContext.sendPluginResult(result);
+        Purchases.getSharedInstance().setUpdatedPurchaserInfoListener(new UpdatedPurchaserInfoListener() {
+            @Override
+            public void onReceived(@NonNull PurchaserInfo purchaserInfo) {
+                PluginResult result = new PluginResult(PluginResult.Status.OK, convertMapToJson(MappersKt.map(purchaserInfo)));
+                result.setKeepCallback(true);
+                callbackContext.sendPluginResult(result);
+            }
         });
         PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT);
         result.setKeepCallback(true);
