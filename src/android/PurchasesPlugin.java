@@ -1,6 +1,7 @@
 package com.revenuecat.purchases;
 
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.appfeel.cordova.annotated.android.plugin.AnnotatedCordovaPlugin;
@@ -11,6 +12,7 @@ import com.revenuecat.purchases.common.ErrorContainer;
 import com.revenuecat.purchases.common.MappersKt;
 import com.revenuecat.purchases.common.OnResult;
 import com.revenuecat.purchases.common.OnResultList;
+import com.revenuecat.purchases.interfaces.UpdatedPurchaserInfoListener;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
@@ -28,7 +30,7 @@ import java.util.Map;
 public class PurchasesPlugin extends AnnotatedCordovaPlugin {
 
     public static final String PLATFORM_NAME = "cordova";
-    public static final String PLUGIN_VERSION = "1.2.1";
+    public static final String PLUGIN_VERSION = "1.2.2";
 
     @PluginAction(thread = ExecutionThread.MAIN, actionName = "setupPurchases", isAutofinish = false)
     private void setupPurchases(String apiKey, @Nullable String appUserID, boolean observerMode,

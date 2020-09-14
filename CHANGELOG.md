@@ -1,3 +1,7 @@
+## 1.2.2
+
+- Adds missing import.
+
 ## 1.2.1
 
 - Removed lambda from Android code (https://github.com/RevenueCat/cordova-plugin-purchases/pull/51)
