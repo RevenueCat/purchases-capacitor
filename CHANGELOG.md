@@ -1,3 +1,16 @@
+### 1.3.0
+
+- Attribution V2:
+    - Deprecated `addAttribution` in favor of `setAdjustId`, `setAppsflyerId`, `setFbAnonymousId`, `setMparticleId`.
+    - Added support for OneSignal via `setOnesignalId`
+    - Added `setMediaSource`, `setCampaign`, `setAdGroup`, `setAd`, `setKeyword`, `setCreative`, and `collectDeviceIdentifiers`
+         https://github.com/RevenueCat/purchases-android/pull/184
+- Bumped `purchases-hybrid-common` to 1.4.3 [Changelog here](https://github.com/RevenueCat/purchases-hybrid-common/releases)
+- Bumped `purchases-ios` to 3.7.2 [Changelog here](https://github.com/RevenueCat/purchases-ios/releases)
+- Bumped `purchases-android` to 3.5.0 [Changelog here](https://github.com/RevenueCat/purchases-android/releases)
+- Added `PurchasesPlugin.swift` to prevent compiling issues on objective-c projects
+- removed `use-frameworks` setting in the sample app to fix linking issues
+
 ## 1.2.2
 
 - Adds missing import.

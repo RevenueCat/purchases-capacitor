@@ -220,6 +220,77 @@
     [self sendOKForCommand:command messageAsArray:nil];
 }
 
+- (void)setAdjustID:(CDVInvokedUrlCommand *)command {
+    NSString *adjustID = [command argumentAtIndex:0];
+    [RCCommonFunctionality setAdjustID:adjustID];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
+- (void)setAppsflyerID:(CDVInvokedUrlCommand *)command {
+    NSString *appsflyerID = [command argumentAtIndex:0];
+    [RCCommonFunctionality setAppsflyerID:appsflyerID];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
+- (void)setFBAnonymousID:(CDVInvokedUrlCommand *)command {
+    NSString *fbAnonymousID = [command argumentAtIndex:0];
+    [RCCommonFunctionality setFBAnonymousID:fbAnonymousID];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
+- (void)setMparticleID:(CDVInvokedUrlCommand *)command {
+    NSString *mparticleID = [command argumentAtIndex:0];
+    [RCCommonFunctionality setMparticleID:mparticleID];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
+- (void)setOnesignalID:(CDVInvokedUrlCommand *)command {
+    NSString *onesignalID = [command argumentAtIndex:0];
+    [RCCommonFunctionality setOnesignalID:onesignalID];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
+- (void)setMediaSource:(CDVInvokedUrlCommand *)command {
+    NSString *mediaSource = [command argumentAtIndex:0];
+    [RCCommonFunctionality setMediaSource:mediaSource];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
+- (void)setCampaign:(CDVInvokedUrlCommand *)command {
+    NSString *campaign = [command argumentAtIndex:0];
+    [RCCommonFunctionality setCampaign:campaign];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
+- (void)setAdGroup:(CDVInvokedUrlCommand *)command {
+    NSString *adGroup = [command argumentAtIndex:0];
+    [RCCommonFunctionality setAdGroup:adGroup];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
+- (void)setAd:(CDVInvokedUrlCommand *)command {
+    NSString *ad = [command argumentAtIndex:0];
+    [RCCommonFunctionality setAd:ad];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
+- (void)setKeyword:(CDVInvokedUrlCommand *)command {
+    NSString *keyword = [command argumentAtIndex:0];
+    [RCCommonFunctionality setKeyword:keyword];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
+- (void)setCreative:(CDVInvokedUrlCommand *)command {
+    NSString *creative = [command argumentAtIndex:0];
+    [RCCommonFunctionality setCreative:creative];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
+- (void)collectDeviceIdentifiers:(CDVInvokedUrlCommand *)command {
+    [RCCommonFunctionality collectDeviceIdentifiers];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
 #pragma mark Delegate Methods
 
 - (void)purchases:(RCPurchases *)purchases didReceiveUpdatedPurchaserInfo:(RCPurchaserInfo *)purchaserInfo
@@ -270,7 +341,7 @@
 }
 
 - (NSString *)platformFlavorVersion {
-    return @"1.2.2";
+    return @"1.3.0";
 }
 
 @end

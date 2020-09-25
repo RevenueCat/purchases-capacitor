@@ -10,6 +10,7 @@
   "author": "Apache Cordova Team",
   "license": "Apache-2.0",
   "dependencies": {
+    "cordova": "^10.0.0",
     "cordova-android": "^8.1.0",
     "cordova-annotated-plugin-android": "^1.0.4",
     "cordova-ios": "^5.1.1",

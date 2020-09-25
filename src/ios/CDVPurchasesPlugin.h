@@ -37,5 +37,16 @@
 - (void)setDisplayName:(CDVInvokedUrlCommand *)command;
 - (void)setPushToken:(CDVInvokedUrlCommand *)command;
 - (void)setProxyURLString:(CDVInvokedUrlCommand *)command;
-
+- (void)setAdjustID:(CDVInvokedUrlCommand *)command;
+- (void)setAppsflyerID:(CDVInvokedUrlCommand *)command;
+- (void)setFBAnonymousID:(CDVInvokedUrlCommand *)command;
+- (void)setMparticleID:(CDVInvokedUrlCommand *)command;
+- (void)setOnesignalID:(CDVInvokedUrlCommand *)command;
+- (void)setMediaSource:(CDVInvokedUrlCommand *)command;
+- (void)setCampaign:(CDVInvokedUrlCommand *)command;
+- (void)setAdGroup:(CDVInvokedUrlCommand *)command;
+- (void)setAd:(CDVInvokedUrlCommand *)command;
+- (void)setKeyword:(CDVInvokedUrlCommand *)command;
+- (void)setCreative:(CDVInvokedUrlCommand *)command;
+- (void)collectDeviceIdentifiers:(CDVInvokedUrlCommand *)command;
 @end
