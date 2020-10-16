@@ -1,3 +1,8 @@
+### 1.3.1
+
+- Bumped `purchases-hybrid-common` to 1.4.4 [Changelog here](https://github.com/RevenueCat/purchases-hybrid-common/releases)
+- Bumped `purchases-android` to 3.5.2 [Changelog here](https://github.com/RevenueCat/purchases-android/releases)
+
 ### 1.3.0
 
 - Attribution V2:

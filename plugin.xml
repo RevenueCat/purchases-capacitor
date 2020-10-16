@@ -16,7 +16,7 @@
                 <param name="android-package" value="com.revenuecat.purchases.PurchasesPlugin" />
             </feature>
         </config-file>
-        <framework src="com.revenuecat.purchases:purchases-hybrid-common:1.4.3" />
+        <framework src="com.revenuecat.purchases:purchases-hybrid-common:1.4.4" />
         <source-file src="src/android/PurchasesPlugin.java" target-dir="src/com/revenuecat/purchases"/>
     </platform>
     <platform name="ios">
@@ -33,7 +33,7 @@
                 <source url="https://github.com/CocoaPods/Specs.git"/>
             </config>
             <pods use-frameworks="true">
-                <pod name="PurchasesHybridCommon" spec="1.4.3"/>
+                <pod name="PurchasesHybridCommon" spec="1.4.4"/>
             </pods>
         </podspec>
     </platform>
