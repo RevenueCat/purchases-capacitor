@@ -1017,7 +1017,8 @@ class Purchases {
   }
   
   /**
-   * Subscriber attribute associated with the adjustID for the user
+   * Subscriber attribute associated with the Adjust Id for the user
+   * Required for the RevenueCat Adjust integration
    *
    * @param adjustID Empty String or null will delete the subscriber attribute.
    */
@@ -1032,8 +1033,8 @@ class Purchases {
   }
   
   /**
-   * Subscriber attribute associated with the appsflyerID for the user
-   *
+   * Subscriber attribute associated with the AppsFlyer Id for the user
+   * Required for the RevenueCat AppsFlyer integration
    * @param appsflyerID Empty String or null will delete the subscriber attribute.
    */
   public static setAppsflyerID(appsflyerID: string | null) { 
@@ -1047,7 +1048,8 @@ class Purchases {
   }
   
   /**
-   * Subscriber attribute associated with the fbAnonymousID for the user
+   * Subscriber attribute associated with the Facebook SDK Anonymous Id for the user
+   * Recommended for the RevenueCat Facebook integration
    *
    * @param fbAnonymousID Empty String or null will delete the subscriber attribute.
    */
@@ -1062,7 +1064,8 @@ class Purchases {
   }
   
   /**
-   * Subscriber attribute associated with the mparticleID for the user
+   * Subscriber attribute associated with the mParticle Id for the user
+   * Recommended for the RevenueCat mParticle integration
    *
    * @param mparticleID Empty String or null will delete the subscriber attribute.
    */
@@ -1077,7 +1080,8 @@ class Purchases {
   }
   
   /**
-   * Subscriber attribute associated with the onesignalID for the user
+   * Subscriber attribute associated with the OneSignal Player Id for the user
+   * Required for the RevenueCat OneSignal integration
    *
    * @param onesignalID Empty String or null will delete the subscriber attribute.
    */
@@ -1092,7 +1096,7 @@ class Purchases {
   }
   
   /**
-   * Subscriber attribute associated with the mediaSource for the user
+   * Subscriber attribute associated with the install media source for the user
    *
    * @param mediaSource Empty String or null will delete the subscriber attribute.
    */
@@ -1107,7 +1111,7 @@ class Purchases {
   }
   
   /**
-   * Subscriber attribute associated with the campaign for the user
+   * Subscriber attribute associated with the install campaign for the user
    *
    * @param campaign Empty String or null will delete the subscriber attribute.
    */
@@ -1122,7 +1126,7 @@ class Purchases {
   }
   
   /**
-   * Subscriber attribute associated with the adGroup for the user
+   * Subscriber attribute associated with the install ad group for the user
    *
    * @param adGroup Empty String or null will delete the subscriber attribute.
    */
@@ -1137,7 +1141,7 @@ class Purchases {
   }
   
   /**
-   * Subscriber attribute associated with ad token for the user
+   * Subscriber attribute associated with the install ad for the user
    *
    * @param ad Empty String or null will delete the subscriber attribute.
    */
@@ -1152,7 +1156,7 @@ class Purchases {
   }
   
   /**
-   * Subscriber attribute associated with the keyword for the user
+   * Subscriber attribute associated with the install keyword for the user
    *
    * @param keyword Empty String or null will delete the subscriber attribute.
    */
@@ -1167,7 +1171,7 @@ class Purchases {
   }
   
   /**
-   * Subscriber attribute associated with the creative for the user
+   * Subscriber attribute associated with the install ad creative for the user
    *
    * @param creative Empty String or null will delete the subscriber attribute.
    */
@@ -1182,7 +1186,7 @@ class Purchases {
   }
 
   /**
-   * Automatically collect subscriber attributes associated with the device identifiers
+   * Automatically collect subscriber attributes associated with the device identifiers.
    * $idfa, $idfv, $ip on iOS
    * $gpsAdId, $androidId, $ip on Android
    */
