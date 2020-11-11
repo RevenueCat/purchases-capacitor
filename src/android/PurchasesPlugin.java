@@ -34,7 +34,7 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
     public static final String PLATFORM_NAME = "cordova";
     public static final String PLUGIN_VERSION = "1.3.2";
 
-    @PluginAction(thread = ExecutionThread.MAIN, actionName = "setupPurchases", isAutofinish = false)
+    @PluginAction(thread = ExecutionThread.UI, actionName = "setupPurchases", isAutofinish = false)
     private void setupPurchases(String apiKey, @Nullable String appUserID, boolean observerMode,
                                 @Nullable String userDefaultsSuiteName, CallbackContext callbackContext) {
         PlatformInfo platformInfo = new PlatformInfo(PLATFORM_NAME, PLUGIN_VERSION);
@@ -52,25 +52,25 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
         callbackContext.sendPluginResult(result);
     }
 
-    @PluginAction(thread = ExecutionThread.MAIN, actionName = "setAllowSharingStoreAccount")
+    @PluginAction(thread = ExecutionThread.UI, actionName = "setAllowSharingStoreAccount")
     public void setAllowSharingStoreAccount(boolean allowSharingStoreAccount, CallbackContext callbackContext) {
         CommonKt.setAllowSharingAppStoreAccount(allowSharingStoreAccount);
         callbackContext.success();
     }
 
-    @PluginAction(thread = ExecutionThread.MAIN, actionName = "addAttributionData")
+    @PluginAction(thread = ExecutionThread.UI, actionName = "addAttributionData")
     public void addAttributionData(JSONObject data, Integer network, @Nullable String networkUserId,
                                    CallbackContext callbackContext) {
         SubscriberAttributesKt.addAttributionData(data, network, networkUserId);
         callbackContext.success();
     }
 
-    @PluginAction(thread = ExecutionThread.MAIN, actionName = "getOfferings", isAutofinish = false)
+    @PluginAction(thread = ExecutionThread.UI, actionName = "getOfferings", isAutofinish = false)
     private void getOfferings(CallbackContext callbackContext) {
         CommonKt.getOfferings(getOnResult(callbackContext));
     }
 
-    @PluginAction(thread = ExecutionThread.MAIN, actionName = "getProductInfo", isAutofinish = false)
+    @PluginAction(thread = ExecutionThread.UI, actionName = "getProductInfo", isAutofinish = false)
     private void getProductInfo(JSONArray productIDs, String type, CallbackContext callbackContext) {
         List<String> productIDList = new ArrayList<>();
         for (int i = 0; i < productIDs.length(); i++) {
@@ -98,7 +98,7 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
         });
     }
 
-    @PluginAction(thread = ExecutionThread.MAIN, actionName = "purchaseProduct", isAutofinish = false)
+    @PluginAction(thread = ExecutionThread.UI, actionName = "purchaseProduct", isAutofinish = false)
     private void purchaseProduct(final String productIdentifier, @Nullable final String oldSKU,
                                  @Nullable final Integer prorationMode, final String type,
                                  final CallbackContext callbackContext) {
@@ -111,7 +111,7 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
                 getOnResult(callbackContext));
     }
 
-    @PluginAction(thread = ExecutionThread.MAIN, actionName = "purchasePackage", isAutofinish = false)
+    @PluginAction(thread = ExecutionThread.UI, actionName = "purchasePackage", isAutofinish = false)
     private void purchasePackage(final String packageIdentifier,
                                  final String offeringIdentifier,
                                  @Nullable final String oldSKU,
@@ -126,38 +126,38 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
                 getOnResult(callbackContext));
     }
 
-    @PluginAction(thread = ExecutionThread.MAIN, actionName = "syncPurchases")
+    @PluginAction(thread = ExecutionThread.UI, actionName = "syncPurchases")
     public void syncPurchases(CallbackContext callbackContext) {
         CommonKt.syncPurchases();
         callbackContext.success();
     }
 
-    @PluginAction(thread = ExecutionThread.MAIN, actionName = "getAppUserID", isAutofinish = false)
+    @PluginAction(thread = ExecutionThread.UI, actionName = "getAppUserID", isAutofinish = false)
     private void getAppUserID(CallbackContext callbackContext) {
         callbackContext.success(CommonKt.getAppUserID());
     }
 
-    @PluginAction(thread = ExecutionThread.MAIN, actionName = "restoreTransactions", isAutofinish = false)
+    @PluginAction(thread = ExecutionThread.UI, actionName = "restoreTransactions", isAutofinish = false)
     private void restoreTransactions(CallbackContext callbackContext) {
         CommonKt.restoreTransactions(getOnResult(callbackContext));
     }
 
-    @PluginAction(thread = ExecutionThread.MAIN, actionName = "reset", isAutofinish = false)
+    @PluginAction(thread = ExecutionThread.UI, actionName = "reset", isAutofinish = false)
     private void reset(CallbackContext callbackContext) {
         CommonKt.reset(getOnResult(callbackContext));
     }
 
-    @PluginAction(thread = ExecutionThread.MAIN, actionName = "identify", isAutofinish = false)
+    @PluginAction(thread = ExecutionThread.UI, actionName = "identify", isAutofinish = false)
     private void identify(String appUserID, CallbackContext callbackContext) {
         CommonKt.identify(appUserID, getOnResult(callbackContext));
     }
 
-    @PluginAction(thread = ExecutionThread.MAIN, actionName = "createAlias", isAutofinish = false)
+    @PluginAction(thread = ExecutionThread.UI, actionName = "createAlias", isAutofinish = false)
     private void createAlias(String newAppUserID, CallbackContext callbackContext) {
         CommonKt.createAlias(newAppUserID, getOnResult(callbackContext));
     }
 
-    @PluginAction(thread = ExecutionThread.MAIN, actionName = "getPurchaserInfo", isAutofinish = false)
+    @PluginAction(thread = ExecutionThread.UI, actionName = "getPurchaserInfo", isAutofinish = false)
     private void getPurchaserInfo(CallbackContext callbackContext) {
         CommonKt.getPurchaserInfo(getOnResult(callbackContext));
     }
@@ -183,7 +183,7 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, CommonKt.isAnonymous()));
     }
 
-    @PluginAction(thread = ExecutionThread.MAIN, actionName = "checkTrialOrIntroductoryPriceEligibility", isAutofinish = false)
+    @PluginAction(thread = ExecutionThread.UI, actionName = "checkTrialOrIntroductoryPriceEligibility", isAutofinish = false)
     private void isAnonymous(JSONArray productIDs, CallbackContext callbackContext) {
         List<String> productIDList = new ArrayList<>();
         for (int i = 0; i < productIDs.length(); i++) {
@@ -203,7 +203,7 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
         callbackContext.success();
     }
     
-    @PluginAction(thread = ExecutionThread.MAIN, actionName = "setProxyURLString")
+    @PluginAction(thread = ExecutionThread.UI, actionName = "setProxyURLString")
     public void setProxyURLString(String proxyURLString, CallbackContext callbackContext) {
         CommonKt.setProxyURLString(proxyURLString);
         callbackContext.success();
