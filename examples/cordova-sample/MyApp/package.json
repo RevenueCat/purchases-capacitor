@@ -23,7 +23,8 @@
     "plugins": {
       "cordova-plugin-whitelist": {},
       "cordova-annotated-plugin-android": {},
-      "cordova-plugin-purchases": {}
+      "cordova-plugin-purchases": {},
+      "cordova-plugin-add-swift-support": {}
     },
     "platforms": [
       "ios",
@@ -32,6 +33,7 @@
   },
   "devDependencies": {
     "cordova-android": "^9.0.0",
-    "cordova-ios": "^6.1.1"
+    "cordova-ios": "^6.1.1",
+    "cordova-plugin-add-swift-support": "^2.0.2"
   }
 }
