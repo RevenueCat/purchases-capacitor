@@ -25,7 +25,9 @@
     "build": "tsc",
     "build-watch": "tsc --watch",
     "tslint": "tslint -c tslint.json 'src/plugin/*.ts'",
-    "test": "jest"
+    "test": "jest",
+    "test:android": "cordova-paramedic --verbose --platform android --plugin .",
+    "test:ios": "cordova-paramedic --verbose --platform ios --plugin ."
   },
   "author": "RevenueCat, Inc.",
   "license": "MIT",

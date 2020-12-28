@@ -1,36 +1,137 @@
+release-tags-and-branches: &release-tags-and-branches
+  filters:
+    tags:
+      ignore: /^.*-SNAPSHOT/
+    branches:
+      only: /^release\/.*/
+
 version: 2.1
-jobs:
-  runtest:
-    macos:
-      xcode: "10.2.0"
-
+commands:
+  android-sdk-dependencies:
+    description: "Install and set android SDK"
     steps:
-      - checkout
+      - run:
+          name: set ANDROID_SDK_ROOT
+          command: |
+            echo 'export ANDROID_SDK_ROOT=$HOME/android-tools'  >> $BASH_ENV
+      - restore_cache:
+          key: android=tools-v1-{{ checksum "scripts/install-android-tools.sh" }}-{{ arch }}
 
-      # Download and cache dependencies
+      - run:
+          name: install android tools
+          command: |
+            sh scripts/install-android-tools.sh
+            echo 'export PATH=$ANDROID_SDK_ROOT/tools/bin:$PATH'  >> $BASH_ENV
+            echo 'export PATH=$ANDROID_SDK_ROOT/tools:$PATH'  >> $BASH_ENV
+            echo 'export PATH=$ANDROID_SDK_ROOT/platform-tools:$PATH'  >> $BASH_ENV
+            echo 'export PATH=$ANDROID_SDK_ROOT/emulator:$PATH'  >> $BASH_ENV
+            source $BASH_ENV
+      - save_cache:
+          key: android=tools-v1-{{ checksum "scripts/install-android-tools.sh" }}-{{ arch }}
+          paths:
+            - ~/android-tools
+
+  create-launch-android-emulator:
+    description: "create and launch android emulators"
+    steps:
+      - run:
+          name: create AVD
+          command: |
+            echo "no" | avdmanager --verbose create avd --force \
+              --name "Pixel_3a_API_26" \
+              --package "system-images;android-26;google_apis_playstore;x86"
+
+      - run:
+          name: start AVD
+          command: emulator @Pixel_3a_API_26 -no-window -no-audio
+          background: true
+
+      - run:
+          name: wait for emulator
+          command: |
+            adb wait-for-device shell 'while [[ -z $(getprop dev.bootcomplete) ]]; do sleep 1; done;'
+  
+  npm-dependencies:
+    description: "installs all global and local npm dependencies"
+    steps:
+      - run: npm install -g cordova
+      - run: npm install -g github:apache/cordova-paramedic
+      - run: npm install -g ios-deploy
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
-
-      - run: yarn
-
+      - run: npm install
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+    
+  replace-api-key:
+    description: "replace API_KEY"
+    steps:
+      - run: sed -i .bck s/api_key/$API_KEY/ tests/tests.js
 
+jobs:
+  android-integration-test:
+    description: "Run Android integration tests for Flutter"
+    macos:
+      xcode: 11.3.1
+    steps:
+      - checkout
+      - run: brew install gradle
+      - android-sdk-dependencies
+      - create-launch-android-emulator
+      - npm-dependencies
+      - replace-api-key
+      - run: npm run test:android
+
+  ios-integration-test:
+    description: "Run iOS integration tests for Flutter"
+    macos:
+      xcode: 11.3.1
+    steps:
+      - checkout
+      - run:
+          name: Start simulator
+          command: xcrun instruments -w "iPhone 11 Pro (13.3) [" || true
+      - npm-dependencies
+      - replace-api-key
+      - run: npm run test:ios
+
+  runtest:
+    docker:
+      - image: circleci/node:lts
+
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - run: yarn
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
       - run: yarn test
-
       - run: yarn tslint
-
       - run:
           name: Build
           command: |
             yarn build
+
 workflows:
   version: 2
   build-test:
     jobs:
       - runtest
+  
+  android-integration-test:
+    jobs:
+      - android-integration-test: *release-tags-and-branches
+  
+  ios-integration-test:
+    jobs:
+      - ios-integration-test: *release-tags-and-branches
+
