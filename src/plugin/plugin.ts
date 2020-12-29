@@ -604,47 +604,6 @@ class Purchases {
   /**
    * Make a purchase
    *
-   * @deprecated Use purchaseProduct instead.
-   *
-   * @param {string} productIdentifier The product identifier of the product you want to purchase.
-   * @param {function(string, PurchaserInfo):void} callback Callback triggered after a successful purchase.
-   * @param {function(PurchasesError, boolean):void} errorCallback Callback triggered after an error or when the user cancels the purchase.
-   * If user cancelled, userCancelled will be true
-   * @param {string?} oldSKU Optional sku you wish to upgrade from.
-   * @param {PURCHASE_TYPE} type Optional type of product, can be inapp or subs. Subs by default
-   */
-  public static makePurchase(
-    productIdentifier: string,
-    callback: ({productIdentifier, purchaserInfo}: { productIdentifier: string; purchaserInfo: PurchaserInfo; }) => void,
-    errorCallback: ({error, userCancelled}: { error: PurchasesError; userCancelled: boolean; }) => void,
-    oldSKU?: string | null,
-    type: PURCHASE_TYPE = PURCHASE_TYPE.SUBS
-  ) {
-    if (Array.isArray(oldSKU)) {
-      throw new Error("Calling a deprecated method!");
-    }
-    if (oldSKU !== undefined && oldSKU !== null) {
-      this.purchaseProduct(
-        productIdentifier,
-        callback,
-        errorCallback,
-        {oldSKU},
-        type
-      );
-    } else {
-      this.purchaseProduct(
-        productIdentifier,
-        callback,
-        errorCallback,
-        null,
-        type
-      );
-    }
-  }
-
-  /**
-   * Make a purchase
-   *
    * @param {string} productIdentifier The product identifier of the product you want to purchase.
    * @param {function(string, PurchaserInfo):void} callback Callback triggered after a successful purchase.
    * @param {function(PurchasesError, boolean):void} errorCallback Callback triggered after an error or when the user cancels the purchase.
@@ -934,6 +893,15 @@ class Purchases {
       "invalidatePurchaserInfoCache",
       []
     );
+  }
+
+  /** 
+   * iOS only. Presents a code redemption sheet, useful for redeeming offer codes
+   * Refer to https://docs.revenuecat.com/docs/ios-subscription-offers#offer-codes for more information on how
+   * to configure and use offer codes.
+   */
+  public static presentCodeRedemptionSheet() {
+    window.cordova.exec(null, null, PLUGIN_NAME, "presentCodeRedemptionSheet", []);
   }
 
   /**

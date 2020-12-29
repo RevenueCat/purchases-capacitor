@@ -31,6 +31,7 @@
 - (void)isAnonymous:(CDVInvokedUrlCommand *)command;
 - (void)checkTrialOrIntroductoryPriceEligibility:(CDVInvokedUrlCommand *)command;
 - (void)invalidatePurchaserInfoCache:(CDVInvokedUrlCommand *)command;
+- (void)presentCodeRedemptionSheet:(CDVInvokedUrlCommand *)command;
 - (void)setAttributes:(CDVInvokedUrlCommand *)command;
 - (void)setEmail:(CDVInvokedUrlCommand *)command;
 - (void)setPhoneNumber:(CDVInvokedUrlCommand *)command;

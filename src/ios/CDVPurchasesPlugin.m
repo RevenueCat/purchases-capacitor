@@ -18,8 +18,7 @@
 
 @implementation CDVPurchasesPlugin
 
-- (void)setupPurchases:(CDVInvokedUrlCommand *)command
-{
+- (void)setupPurchases:(CDVInvokedUrlCommand *)command {
     NSString *apiKey = [command argumentAtIndex:0];
     NSString *appUserID = [command argumentAtIndex:1];
     BOOL observerMode = [[command argumentAtIndex:2] boolValue];
@@ -39,8 +38,7 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
-- (void)setAllowSharingStoreAccount:(CDVInvokedUrlCommand *)command
-{
+- (void)setAllowSharingStoreAccount:(CDVInvokedUrlCommand *)command {
     BOOL allowSharingStoreAccount = [[command argumentAtIndex:0] boolValue];
 
     [RCCommonFunctionality setAllowSharingStoreAccount:allowSharingStoreAccount];
@@ -48,8 +46,7 @@
     [self sendOKForCommand:command messageAsArray:nil];
 }
 
-- (void)addAttributionData:(CDVInvokedUrlCommand *)command
-{
+- (void)addAttributionData:(CDVInvokedUrlCommand *)command {
     NSDictionary *data = [command argumentAtIndex:0];
     NSInteger network = [[command argumentAtIndex:1] integerValue];
     NSString *networkUserId = [command argumentAtIndex:2];
@@ -59,13 +56,11 @@
     [self sendOKForCommand:command messageAsArray:nil];
 }
 
-- (void)getOfferings:(CDVInvokedUrlCommand *)command
-{
+- (void)getOfferings:(CDVInvokedUrlCommand *)command {
     [RCCommonFunctionality getOfferingsWithCompletionBlock:[self getResponseCompletionBlock:command]];
 }
 
-- (void)getProductInfo:(CDVInvokedUrlCommand *)command
-{
+- (void)getProductInfo:(CDVInvokedUrlCommand *)command {
     NSArray *products = [command argumentAtIndex:0];
 
     [RCCommonFunctionality getProductInfo:products completionBlock:^(NSArray<NSDictionary *> *productObjects) {
@@ -73,8 +68,7 @@
     }];
 }
 
-- (void)purchaseProduct:(CDVInvokedUrlCommand *)command
-{
+- (void)purchaseProduct:(CDVInvokedUrlCommand *)command {
     NSString *productIdentifier = [command argumentAtIndex:0];
 
     [RCCommonFunctionality purchaseProduct:productIdentifier
@@ -82,8 +76,7 @@
                            completionBlock:[self getResponseCompletionBlock:command]];
 }
 
-- (void)purchasePackage:(CDVInvokedUrlCommand *)command
-{
+- (void)purchasePackage:(CDVInvokedUrlCommand *)command {
     NSString *packageIdentifier = [command argumentAtIndex:0];
     NSString *offeringIdentifier = [command argumentAtIndex:1];
 
@@ -93,73 +86,61 @@
                            completionBlock:[self getResponseCompletionBlock:command]];
 }
 
-- (void)restoreTransactions:(CDVInvokedUrlCommand *)command
-{
+- (void)restoreTransactions:(CDVInvokedUrlCommand *)command {
     [RCCommonFunctionality restoreTransactionsWithCompletionBlock:[self getResponseCompletionBlock:command]];
 }
 
-- (void)getAppUserID:(CDVInvokedUrlCommand *)command
-{
+- (void)syncPurchases:(CDVInvokedUrlCommand *)command {
+    [RCCommonFunctionality syncPurchasesWithCompletionBlock:[self getResponseCompletionBlock:command]];
+}
+
+- (void)getAppUserID:(CDVInvokedUrlCommand *)command {
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[RCCommonFunctionality appUserID]];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
-- (void)createAlias:(CDVInvokedUrlCommand *)command
-{
+- (void)createAlias:(CDVInvokedUrlCommand *)command {
     NSString *newAppUserID = [command argumentAtIndex:0];
 
     [RCCommonFunctionality createAlias:newAppUserID completionBlock:[self getResponseCompletionBlock:command]];
 }
 
-- (void)identify:(CDVInvokedUrlCommand *)command
-{
+- (void)identify:(CDVInvokedUrlCommand *)command {
     NSString *appUserID = [command argumentAtIndex:0];
     [RCCommonFunctionality identify:appUserID completionBlock:[self getResponseCompletionBlock:command]];
 }
 
-- (void)reset:(CDVInvokedUrlCommand *)command
-{
+- (void)reset:(CDVInvokedUrlCommand *)command {
     [RCCommonFunctionality resetWithCompletionBlock:[self getResponseCompletionBlock:command]];
 }
 
-- (void)setDebugLogsEnabled:(CDVInvokedUrlCommand *)command
-{
+- (void)setDebugLogsEnabled:(CDVInvokedUrlCommand *)command {
     [RCCommonFunctionality setDebugLogsEnabled:[[command argumentAtIndex:0] boolValue]];
     [self sendOKForCommand:command messageAsArray:nil];
 }
 
-- (void)getPurchaserInfo:(CDVInvokedUrlCommand *)command
-{
+- (void)getPurchaserInfo:(CDVInvokedUrlCommand *)command {
     [RCCommonFunctionality getPurchaserInfoWithCompletionBlock:[self getResponseCompletionBlock:command]];
 }
 
-- (void)syncPurchases:(CDVInvokedUrlCommand *)command
-{
-    // NO-OP
-}
-
-- (void)setAutomaticAppleSearchAdsAttributionCollection:(CDVInvokedUrlCommand *)command
-{
+- (void)setAutomaticAppleSearchAdsAttributionCollection:(CDVInvokedUrlCommand *)command {
     [RCCommonFunctionality setAutomaticAppleSearchAdsAttributionCollection:[[command argumentAtIndex:0] boolValue]];
     [self sendOKForCommand:command messageAsArray:nil];
 }
 
-- (void)isAnonymous:(CDVInvokedUrlCommand *)command
-{
+- (void)isAnonymous:(CDVInvokedUrlCommand *)command {
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:[RCCommonFunctionality isAnonymous]];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
-- (void)checkTrialOrIntroductoryPriceEligibility:(CDVInvokedUrlCommand *)command
-{
+- (void)checkTrialOrIntroductoryPriceEligibility:(CDVInvokedUrlCommand *)command {
     NSArray *products = [command argumentAtIndex:0];
     [RCCommonFunctionality checkTrialOrIntroductoryPriceEligibility:products completionBlock:^(NSDictionary<NSString *,RCIntroEligibility *> * _Nonnull responseDictionary) {
         CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:responseDictionary];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
 }
-- (void)makeDeferredPurchase:(CDVInvokedUrlCommand *)command
-{
+- (void)makeDeferredPurchase:(CDVInvokedUrlCommand *)command {
     NSNumber *callbackID = [command argumentAtIndex:0];
     assert(callbackID);
     assert(callbackID.integerValue >= 0);
@@ -180,6 +161,15 @@
 - (void)setProxyURLString:(CDVInvokedUrlCommand *)command {
     NSString *proxyURLString = [command argumentAtIndex:0];
     [RCCommonFunctionality setProxyURLString:proxyURLString];
+    [self sendOKForCommand:command messageAsArray:nil];
+}
+
+- (void)presentCodeRedemptionSheet:(CDVInvokedUrlCommand *)command {
+    if (@available(iOS 14.0, *)) {
+        [RCCommonFunctionality presentCodeRedemptionSheet];
+    } else {
+        NSLog(@"[Purchases] Warning: tried to present codeRedemptionSheet, but it's only available on iOS 14.0 or greater.");
+    }
     [self sendOKForCommand:command messageAsArray:nil];
 }
 
@@ -293,16 +283,14 @@
 
 #pragma mark Delegate Methods
 
-- (void)purchases:(RCPurchases *)purchases didReceiveUpdatedPurchaserInfo:(RCPurchaserInfo *)purchaserInfo
-{
+- (void)purchases:(RCPurchases *)purchases didReceiveUpdatedPurchaserInfo:(RCPurchaserInfo *)purchaserInfo {
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:purchaserInfo.dictionary];
     [pluginResult setKeepCallbackAsBool:YES];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:self.updatedPurchaserInfoCallbackID];
 }
 
 - (void)purchases:(RCPurchases *)purchases shouldPurchasePromoProduct:(SKProduct *)product
-   defermentBlock:(RCDeferredPromotionalPurchaseBlock)makeDeferredPurchase
-{
+   defermentBlock:(RCDeferredPromotionalPurchaseBlock)makeDeferredPurchase {
     if (!self.defermentBlocks) {
         self.defermentBlocks = [NSMutableArray array];
     }
@@ -317,8 +305,7 @@
 
 #pragma mark Helpers
 
-- (void (^)(NSDictionary *, RCErrorContainer *))getResponseCompletionBlock:(CDVInvokedUrlCommand *)command
-{
+- (void (^)(NSDictionary *, RCErrorContainer *))getResponseCompletionBlock:(CDVInvokedUrlCommand *)command {
     return ^(NSDictionary *_Nullable responseDictionary, RCErrorContainer *_Nullable error) {
         CDVPluginResult *pluginResult = nil;
         if (error) {
@@ -330,8 +317,7 @@
     };
 }
 
-- (void)sendOKForCommand:(CDVInvokedUrlCommand *)command messageAsArray:(nullable NSArray *)theMessage
-{
+- (void)sendOKForCommand:(CDVInvokedUrlCommand *)command messageAsArray:(nullable NSArray *)theMessage {
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:theMessage];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
@@ -341,7 +327,7 @@
 }
 
 - (NSString *)platformFlavorVersion {
-    return @"1.3.2";
+    return @"2.0.0";
 }
 
 @end

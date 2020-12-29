@@ -32,7 +32,7 @@ import java.util.Map;
 public class PurchasesPlugin extends AnnotatedCordovaPlugin {
 
     public static final String PLATFORM_NAME = "cordova";
-    public static final String PLUGIN_VERSION = "1.3.2";
+    public static final String PLUGIN_VERSION = "2.0.0";
 
     @PluginAction(thread = ExecutionThread.UI, actionName = "setupPurchases", isAutofinish = false)
     private void setupPurchases(String apiKey, @Nullable String appUserID, boolean observerMode,
@@ -312,6 +312,12 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
     @PluginAction(thread = ExecutionThread.WORKER, actionName = "collectDeviceIdentifiers")
     private void collectDeviceIdentifiers(CallbackContext callbackContext) { 
         SubscriberAttributesKt.collectDeviceIdentifiers();
+        callbackContext.success();
+    }
+
+    @PluginAction(thread = ExecutionThread.WORKER, actionName = "presentCodeRedemptionSheet")
+    private void presentCodeRedemptionSheet(CallbackContext callbackContext) {
+        // noop
         callbackContext.success();
     }
 

@@ -1,13 +1,23 @@
+### 2.0.0
+
+- removes deprecated `makePurchase`, replaced by `purchaseProduct`
+ - iOS: 
+     - added new method, `syncPurchases`, that enables syncing the purchases in the local receipt with the backend without risking a password prompt. The method was already available on Android.
+     - added a new method, `presentCodeRedemptionSheet`, for offer codes redemption.
+- Bumped `purchases-hybrid-common` to 1.5.0 [Changelog here](https://github.com/RevenueCat/purchases-hybrid-common/releases/1.5.0)
+- Bumped `purchases-ios` to 3.9.2 [Changelog here](https://github.com/RevenueCat/purchases-ios/releases/3.9.2)
+- Bumped `purchases-android` to 4.0.1 [Changelog here](https://github.com/RevenueCat/purchases-android/releases/4.0.1)
+
 ### 1.3.2
 
-- Bumped `purchases-hybrid-common` to 1.4.5 [Changelog here](https://github.com/RevenueCat/purchases-hybrid-common/releases)
-- Bumped `purchases-ios` to 3.7.5 [Changelog here](https://github.com/RevenueCat/purchases-ios/releases)
+- Bumped `purchases-hybrid-common` to 1.4.5 [Changelog here](https://github.com/RevenueCat/purchases-hybrid-common/releases/1.4.5)
+- Bumped `purchases-ios` to 3.7.5 [Changelog here](https://github.com/RevenueCat/purchases-ios/releases/3.7.5)
 - Updates docs for subscriber attributes https://github.com/RevenueCat/cordova-plugin-purchases/pull/57
 
 ### 1.3.1
 
-- Bumped `purchases-hybrid-common` to 1.4.4 [Changelog here](https://github.com/RevenueCat/purchases-hybrid-common/releases)
-- Bumped `purchases-android` to 3.5.2 [Changelog here](https://github.com/RevenueCat/purchases-android/releases)
+- Bumped `purchases-hybrid-common` to 1.4.4 [Changelog here](https://github.com/RevenueCat/purchases-hybrid-common/releases/1.4.4)
+- Bumped `purchases-android` to 3.5.2 [Changelog here](https://github.com/RevenueCat/purchases-android/releases/3.5.2)
 
 ### 1.3.0
 
@@ -16,9 +26,9 @@
     - Added support for OneSignal via `setOnesignalId`
     - Added `setMediaSource`, `setCampaign`, `setAdGroup`, `setAd`, `setKeyword`, `setCreative`, and `collectDeviceIdentifiers`
          https://github.com/RevenueCat/purchases-android/pull/184
-- Bumped `purchases-hybrid-common` to 1.4.3 [Changelog here](https://github.com/RevenueCat/purchases-hybrid-common/releases)
-- Bumped `purchases-ios` to 3.7.2 [Changelog here](https://github.com/RevenueCat/purchases-ios/releases)
-- Bumped `purchases-android` to 3.5.0 [Changelog here](https://github.com/RevenueCat/purchases-android/releases)
+- Bumped `purchases-hybrid-common` to 1.4.3 [Changelog here](https://github.com/RevenueCat/purchases-hybrid-common/releases/1.4.3)
+- Bumped `purchases-ios` to 3.7.2 [Changelog here](https://github.com/RevenueCat/purchases-ios/releases/3.7.2)
+- Bumped `purchases-android` to 3.5.0 [Changelog here](https://github.com/RevenueCat/purchases-android/releases/3.5.0)
 - Added `PurchasesPlugin.swift` to prevent compiling issues on objective-c projects
 - removed `use-frameworks` setting in the sample app to fix linking issues
 

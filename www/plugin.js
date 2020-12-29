@@ -180,30 +180,6 @@ var Purchases = /** @class */ (function () {
     /**
      * Make a purchase
      *
-     * @deprecated Use purchaseProduct instead.
-     *
-     * @param {string} productIdentifier The product identifier of the product you want to purchase.
-     * @param {function(string, PurchaserInfo):void} callback Callback triggered after a successful purchase.
-     * @param {function(PurchasesError, boolean):void} errorCallback Callback triggered after an error or when the user cancels the purchase.
-     * If user cancelled, userCancelled will be true
-     * @param {string?} oldSKU Optional sku you wish to upgrade from.
-     * @param {PURCHASE_TYPE} type Optional type of product, can be inapp or subs. Subs by default
-     */
-    Purchases.makePurchase = function (productIdentifier, callback, errorCallback, oldSKU, type) {
-        if (type === void 0) { type = PURCHASE_TYPE.SUBS; }
-        if (Array.isArray(oldSKU)) {
-            throw new Error("Calling a deprecated method!");
-        }
-        if (oldSKU !== undefined && oldSKU !== null) {
-            this.purchaseProduct(productIdentifier, callback, errorCallback, { oldSKU: oldSKU }, type);
-        }
-        else {
-            this.purchaseProduct(productIdentifier, callback, errorCallback, null, type);
-        }
-    };
-    /**
-     * Make a purchase
-     *
      * @param {string} productIdentifier The product identifier of the product you want to purchase.
      * @param {function(string, PurchaserInfo):void} callback Callback triggered after a successful purchase.
      * @param {function(PurchasesError, boolean):void} errorCallback Callback triggered after an error or when the user cancels the purchase.
@@ -412,6 +388,14 @@ var Purchases = /** @class */ (function () {
      */
     Purchases.invalidatePurchaserInfoCache = function () {
         window.cordova.exec(null, null, PLUGIN_NAME, "invalidatePurchaserInfoCache", []);
+    };
+    /**
+     * iOS only. Presents a code redemption sheet, useful for redeeming offer codes
+     * Refer to https://docs.revenuecat.com/docs/ios-subscription-offers#offer-codes for more information on how
+     * to configure and use offer codes.
+     */
+    Purchases.presentCodeRedemptionSheet = function () {
+        window.cordova.exec(null, null, PLUGIN_NAME, "presentCodeRedemptionSheet", []);
     };
     /**
      * Subscriber attributes are useful for storing additional, structured information on a user.
