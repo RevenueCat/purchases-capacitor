@@ -793,6 +793,17 @@ class Purchases {
   }
 
   /**
+   * iOS only.
+   * @param {Boolean} simulatesAskToBuyInSandbox Set this property to true *only* when testing the ask-to-buy / SCA purchases flow. 
+   * More information: http://errors.rev.cat/ask-to-buy
+   */
+  public static setSimulatesAskToBuyInSandbox(enabled: boolean) {
+    window.cordova.exec(null, null, PLUGIN_NAME, "setSimulatesAskToBuyInSandbox", [
+      enabled,
+    ]);
+  }
+
+  /**
    * This method will send all the purchases to the RevenueCat backend. Call this when using your own implementation
    * for subscriptions anytime a sync is needed, like after a successful purchase.
    *

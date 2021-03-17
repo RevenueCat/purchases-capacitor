@@ -592,6 +592,12 @@ declare class Purchases {
      */
     static setDebugLogsEnabled(enabled: boolean): void;
     /**
+     * iOS only.
+     * @param {Boolean} simulatesAskToBuyInSandbox Set this property to true *only* when testing the ask-to-buy / SCA purchases flow.
+     * More information: http://errors.rev.cat/ask-to-buy
+     */
+    static setSimulatesAskToBuyInSandbox(enabled: boolean): void;
+    /**
      * This method will send all the purchases to the RevenueCat backend. Call this when using your own implementation
      * for subscriptions anytime a sync is needed, like after a successful purchase.
      *

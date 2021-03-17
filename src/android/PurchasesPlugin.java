@@ -32,7 +32,7 @@ import java.util.Map;
 public class PurchasesPlugin extends AnnotatedCordovaPlugin {
 
     public static final String PLATFORM_NAME = "cordova";
-    public static final String PLUGIN_VERSION = "2.0.0";
+    public static final String PLUGIN_VERSION = "2.1.0";
 
     @PluginAction(thread = ExecutionThread.UI, actionName = "setupPurchases", isAutofinish = false)
     private void setupPurchases(String apiKey, @Nullable String appUserID, boolean observerMode,
@@ -166,6 +166,11 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
     private void setDebugLogsEnabled(boolean enabled, CallbackContext callbackContext) {
         CommonKt.setDebugLogsEnabled(enabled);
         callbackContext.success();
+    }
+
+    @PluginAction(thread = ExecutionThread.WORKER, actionName = "setSimulatesAskToBuyInSandbox")
+    private void setSimulatesAskToBuyInSandbox(boolean enabled, CallbackContext callbackContext) {
+        // NOOP
     }
 
     @PluginAction(thread = ExecutionThread.WORKER, actionName = "setAutomaticAppleSearchAdsAttributionCollection")
