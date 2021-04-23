@@ -227,7 +227,7 @@ export interface PurchaserInfo {
    * Returns all the non-subscription purchases a user has made.
    * The purchases are ordered by purchase date in ascending order.
    */
-  readonly nonSubscriptionTransactions: [PurchasesTransaction];
+  readonly nonSubscriptionTransactions: PurchasesTransaction[];
   /**
    * The latest expiration date of all purchased skus
    */
@@ -511,7 +511,7 @@ class Purchases {
     appUserID?: string | null,
     observerMode: boolean = false,
     userDefaultsSuiteName?: string
-  ) {
+  ): void {
     window.cordova.exec(
       (purchaserInfo: any) => {
         window.cordova.fireWindowEvent("onPurchaserInfoUpdated", purchaserInfo);
@@ -530,7 +530,7 @@ class Purchases {
    * the new ID with the previous id.
    * @param {boolean} allowSharing true if enabled, false to disabled
    */
-  public static setAllowSharingStoreAccount(allowSharing: boolean) {
+  public static setAllowSharingStoreAccount(allowSharing: boolean): void {
     window.cordova.exec(
       null,
       null,
@@ -553,7 +553,7 @@ class Purchases {
     data: { [key: string]: any },
     network: ATTRIBUTION_NETWORK,
     networkUserId?: string
-  ) {
+  ): void {
     window.cordova.exec(null, null, PLUGIN_NAME, "addAttributionData", [
       data,
       network,
@@ -784,9 +784,9 @@ class Purchases {
 
   /**
    * Enables/Disables debugs logs
-   * @param {Boolean} enabled Enable or not debug logs
+   * @param {boolean} enabled Enable or not debug logs
    */
-  public static setDebugLogsEnabled(enabled: boolean) {
+  public static setDebugLogsEnabled(enabled: boolean): void {
     window.cordova.exec(null, null, PLUGIN_NAME, "setDebugLogsEnabled", [
       enabled,
     ]);
@@ -794,10 +794,10 @@ class Purchases {
 
   /**
    * iOS only.
-   * @param {Boolean} simulatesAskToBuyInSandbox Set this property to true *only* when testing the ask-to-buy / SCA purchases flow. 
+   * @param {boolean} simulatesAskToBuyInSandbox Set this property to true *only* when testing the ask-to-buy / SCA purchases flow. 
    * More information: http://errors.rev.cat/ask-to-buy
    */
-  public static setSimulatesAskToBuyInSandbox(enabled: boolean) {
+  public static setSimulatesAskToBuyInSandbox(enabled: boolean): void {
     window.cordova.exec(null, null, PLUGIN_NAME, "setSimulatesAskToBuyInSandbox", [
       enabled,
     ]);
@@ -809,16 +809,16 @@ class Purchases {
    *
    * @warning This function should only be called if you're not calling makePurchase.
    */
-  public static syncPurchases() {
+  public static syncPurchases(): void {
     window.cordova.exec(null, null, PLUGIN_NAME, "syncPurchases", []);
   }
 
   /**
    * Enable automatic collection of Apple Search Ads attribution. Disabled by default.
    *
-   * @param {Boolean} enabled Enable or not automatic collection
+   * @param {boolean} enabled Enable or not automatic collection
    */
-  public static setAutomaticAppleSearchAdsAttributionCollection(enabled: boolean) {
+  public static setAutomaticAppleSearchAdsAttributionCollection(enabled: boolean): void {
     window.cordova.exec(
       null,
       null,
@@ -896,7 +896,7 @@ class Purchases {
    * This is useful for cases where purchaser information might have been updated outside of the
    * app, like if a promotional subscription is granted through the RevenueCat dashboard.
    */
-  public static invalidatePurchaserInfoCache() {
+  public static invalidatePurchaserInfoCache(): void {
     window.cordova.exec(
       null,
       null,
@@ -911,7 +911,7 @@ class Purchases {
    * Refer to https://docs.revenuecat.com/docs/ios-subscription-offers#offer-codes for more information on how
    * to configure and use offer codes.
    */
-  public static presentCodeRedemptionSheet() {
+  public static presentCodeRedemptionSheet(): void {
     window.cordova.exec(null, null, PLUGIN_NAME, "presentCodeRedemptionSheet", []);
   }
 
@@ -925,7 +925,7 @@ class Purchases {
    *
    * @param attributes Map of attributes by key. Set the value as an empty string to delete an attribute.
    */
-  public static setAttributes(attributes: { [key: string]: string | null }) {
+  public static setAttributes(attributes: { [key: string]: string | null }): void {
     window.cordova.exec(
       null,
       null,
@@ -940,7 +940,7 @@ class Purchases {
    *
    * @param email Empty String or null will delete the subscriber attribute.
    */
-  public static setEmail(email: string | null) {
+  public static setEmail(email: string | null): void {
     window.cordova.exec(
       null,
       null,
@@ -955,7 +955,7 @@ class Purchases {
    *
    * @param phoneNumber Empty String or null will delete the subscriber attribute.
    */
-  public static setPhoneNumber(phoneNumber: string | null) {
+  public static setPhoneNumber(phoneNumber: string | null): void {
     window.cordova.exec(
       null,
       null,
@@ -970,7 +970,7 @@ class Purchases {
    *
    * @param displayName Empty String or null will delete the subscriber attribute.
    */
-  public static setDisplayName(displayName: string | null) {
+  public static setDisplayName(displayName: string | null): void {
     window.cordova.exec(
       null,
       null,
@@ -985,7 +985,7 @@ class Purchases {
    *
    * @param pushToken Empty String or null will delete the subscriber attribute.
    */
-  public static setPushToken(pushToken: string | null) {
+  public static setPushToken(pushToken: string | null): void {
     window.cordova.exec(
       null,
       null,
@@ -1001,7 +1001,7 @@ class Purchases {
    *
    * @param adjustID Empty String or null will delete the subscriber attribute.
    */
-  public static setAdjustID(adjustID: string | null) { 
+  public static setAdjustID(adjustID: string | null) : void {
     window.cordova.exec(
       null,
       null,
@@ -1016,7 +1016,7 @@ class Purchases {
    * Required for the RevenueCat AppsFlyer integration
    * @param appsflyerID Empty String or null will delete the subscriber attribute.
    */
-  public static setAppsflyerID(appsflyerID: string | null) { 
+  public static setAppsflyerID(appsflyerID: string | null) : void {
     window.cordova.exec(
       null,
       null,
@@ -1032,7 +1032,7 @@ class Purchases {
    *
    * @param fbAnonymousID Empty String or null will delete the subscriber attribute.
    */
-  public static setFBAnonymousID(fbAnonymousID: string | null) { 
+  public static setFBAnonymousID(fbAnonymousID: string | null) : void {
     window.cordova.exec(
       null,
       null,
@@ -1048,7 +1048,7 @@ class Purchases {
    *
    * @param mparticleID Empty String or null will delete the subscriber attribute.
    */
-  public static setMparticleID(mparticleID: string | null) { 
+  public static setMparticleID(mparticleID: string | null) : void {
     window.cordova.exec(
       null,
       null,
@@ -1064,7 +1064,7 @@ class Purchases {
    *
    * @param onesignalID Empty String or null will delete the subscriber attribute.
    */
-  public static setOnesignalID(onesignalID: string | null) { 
+  public static setOnesignalID(onesignalID: string | null) : void {
     window.cordova.exec(
       null,
       null,
@@ -1079,7 +1079,7 @@ class Purchases {
    *
    * @param mediaSource Empty String or null will delete the subscriber attribute.
    */
-  public static setMediaSource(mediaSource: string | null) { 
+  public static setMediaSource(mediaSource: string | null) : void {
     window.cordova.exec(
       null,
       null,
@@ -1094,7 +1094,7 @@ class Purchases {
    *
    * @param campaign Empty String or null will delete the subscriber attribute.
    */
-  public static setCampaign(campaign: string | null) { 
+  public static setCampaign(campaign: string | null) : void {
     window.cordova.exec(
       null,
       null,
@@ -1109,7 +1109,7 @@ class Purchases {
    *
    * @param adGroup Empty String or null will delete the subscriber attribute.
    */
-  public static setAdGroup(adGroup: string | null) { 
+  public static setAdGroup(adGroup: string | null) : void {
     window.cordova.exec(
       null,
       null,
@@ -1124,7 +1124,7 @@ class Purchases {
    *
    * @param ad Empty String or null will delete the subscriber attribute.
    */
-  public static setAd(ad: string | null) { 
+  public static setAd(ad: string | null) : void {
     window.cordova.exec(
       null,
       null,
@@ -1139,7 +1139,7 @@ class Purchases {
    *
    * @param keyword Empty String or null will delete the subscriber attribute.
    */
-  public static setKeyword(keyword: string | null) { 
+  public static setKeyword(keyword: string | null) : void {
     window.cordova.exec(
       null,
       null,
@@ -1154,7 +1154,7 @@ class Purchases {
    *
    * @param creative Empty String or null will delete the subscriber attribute.
    */
-  public static setCreative(creative: string | null) { 
+  public static setCreative(creative: string | null) : void {
     window.cordova.exec(
       null,
       null,
@@ -1169,7 +1169,7 @@ class Purchases {
    * $idfa, $idfv, $ip on iOS
    * $gpsAdId, $androidId, $ip on Android
    */
-  public static collectDeviceIdentifiers() { 
+  public static collectDeviceIdentifiers(): void { 
     window.cordova.exec(
       null,
       null,
@@ -1183,7 +1183,7 @@ class Purchases {
    * Set this property to your proxy URL before configuring Purchases *only* if you've received a proxy key value from your RevenueCat contact.
    * @param url Proxy URL as a string.
    */
-  public static setProxyURL(url: string) {
+  public static setProxyURL(url: string): void {
     window.cordova.exec(
       null,
       null,
@@ -1193,7 +1193,7 @@ class Purchases {
     );
   }
 
-  private static setupShouldPurchasePromoProductCallback() { 
+  private static setupShouldPurchasePromoProductCallback(): void { 
     window.cordova.exec(
       ({callbackID}:{callbackID: number}) => {
           shouldPurchasePromoProductListeners.forEach(listener =>

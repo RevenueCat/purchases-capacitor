@@ -206,7 +206,7 @@ export interface PurchaserInfo {
      * Returns all the non-subscription purchases a user has made.
      * The purchases are ordered by purchase date in ascending order.
      */
-    readonly nonSubscriptionTransactions: [PurchasesTransaction];
+    readonly nonSubscriptionTransactions: PurchasesTransaction[];
     /**
      * The latest expiration date of all purchased skus
      */
@@ -588,12 +588,12 @@ declare class Purchases {
     static getPurchaserInfo(callback: (purchaserInfo: PurchaserInfo) => void, errorCallback: (error: PurchasesError) => void): void;
     /**
      * Enables/Disables debugs logs
-     * @param {Boolean} enabled Enable or not debug logs
+     * @param {boolean} enabled Enable or not debug logs
      */
     static setDebugLogsEnabled(enabled: boolean): void;
     /**
      * iOS only.
-     * @param {Boolean} simulatesAskToBuyInSandbox Set this property to true *only* when testing the ask-to-buy / SCA purchases flow.
+     * @param {boolean} simulatesAskToBuyInSandbox Set this property to true *only* when testing the ask-to-buy / SCA purchases flow.
      * More information: http://errors.rev.cat/ask-to-buy
      */
     static setSimulatesAskToBuyInSandbox(enabled: boolean): void;
@@ -607,7 +607,7 @@ declare class Purchases {
     /**
      * Enable automatic collection of Apple Search Ads attribution. Disabled by default.
      *
-     * @param {Boolean} enabled Enable or not automatic collection
+     * @param {boolean} enabled Enable or not automatic collection
      */
     static setAutomaticAppleSearchAdsAttributionCollection(enabled: boolean): void;
     /**

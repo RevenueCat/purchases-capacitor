@@ -301,7 +301,7 @@ var Purchases = /** @class */ (function () {
     };
     /**
      * Enables/Disables debugs logs
-     * @param {Boolean} enabled Enable or not debug logs
+     * @param {boolean} enabled Enable or not debug logs
      */
     Purchases.setDebugLogsEnabled = function (enabled) {
         window.cordova.exec(null, null, PLUGIN_NAME, "setDebugLogsEnabled", [
@@ -310,7 +310,7 @@ var Purchases = /** @class */ (function () {
     };
     /**
      * iOS only.
-     * @param {Boolean} simulatesAskToBuyInSandbox Set this property to true *only* when testing the ask-to-buy / SCA purchases flow.
+     * @param {boolean} simulatesAskToBuyInSandbox Set this property to true *only* when testing the ask-to-buy / SCA purchases flow.
      * More information: http://errors.rev.cat/ask-to-buy
      */
     Purchases.setSimulatesAskToBuyInSandbox = function (enabled) {
@@ -330,7 +330,7 @@ var Purchases = /** @class */ (function () {
     /**
      * Enable automatic collection of Apple Search Ads attribution. Disabled by default.
      *
-     * @param {Boolean} enabled Enable or not automatic collection
+     * @param {boolean} enabled Enable or not automatic collection
      */
     Purchases.setAutomaticAppleSearchAdsAttributionCollection = function (enabled) {
         window.cordova.exec(null, null, PLUGIN_NAME, "setAutomaticAppleSearchAdsAttributionCollection", [enabled]);
