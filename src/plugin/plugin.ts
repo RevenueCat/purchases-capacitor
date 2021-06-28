@@ -366,7 +366,7 @@ export interface PurchasesOffering {
   /**
    * Array of `Package` objects available for purchase.
    */
-  readonly availablePackages: [PurchasesPackage];
+  readonly availablePackages: PurchasesPackage[];
   /**
    * Lifetime package type configured in the RevenueCat dashboard, if available.
    */
