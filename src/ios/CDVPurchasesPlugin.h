@@ -50,4 +50,5 @@
 - (void)setKeyword:(CDVInvokedUrlCommand *)command;
 - (void)setCreative:(CDVInvokedUrlCommand *)command;
 - (void)collectDeviceIdentifiers:(CDVInvokedUrlCommand *)command;
+- (void)canMakePayments:(CDVInvokedUrlCommand *)command;
 @end

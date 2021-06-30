@@ -28,6 +28,37 @@ export enum PURCHASE_TYPE {
   SUBS = "subs",
 }
 
+/**
+ * Enum for billing features.
+ * Currently, these are only relevant for Google Play Android users:
+ * https://developer.android.com/reference/com/android/billingclient/api/BillingClient.FeatureType
+ */
+ export enum BILLING_FEATURE {
+  /**
+   * Purchase/query for subscriptions.
+   */
+  SUBSCRIPTIONS,
+
+  /**
+   * Subscriptions update/replace.
+   */
+  SUBSCRIPTIONS_UPDATE,
+
+  /**
+   * Purchase/query for in-app items on VR.
+   */
+  IN_APP_ITEMS_ON_VR,
+
+  /**
+   * Purchase/query for subscriptions on VR.
+   */
+  SUBSCRIPTIONS_ON_VR,
+
+  /**
+   * Launch a price change confirmation flow.
+   */
+  PRICE_CHANGE_CONFIRMATION,
+}
 export enum PRORATION_MODE {
   UNKNOWN_SUBSCRIPTION_UPGRADE_DOWNGRADE_POLICY = 0,
 
@@ -473,6 +504,13 @@ class Purchases {
    * @enum {string}
    */
   public static PURCHASE_TYPE = PURCHASE_TYPE;
+
+  /**
+   * Enum for billing features.
+   * Currently, these are only relevant for Google Play Android users:
+   * https://developer.android.com/reference/com/android/billingclient/api/BillingClient.FeatureType
+   */
+    public static BILLING_FEATURE = BILLING_FEATURE;
 
   /**
    * Replace SKU's ProrationMode.
@@ -1190,6 +1228,30 @@ class Purchases {
       PLUGIN_NAME,
       "setProxyURLString",
       [url]
+    );
+  }
+
+/**
+ * Check if billing is supported for the current user (meaning IN-APP purchases are supported)
+ * and optionally, whether a list of specified feature types are supported. 
+ * 
+ * Note: Billing features are only relevant to Google Play Android users.
+ * For other stores and platforms, billing features won't be checked.
+ * @param feature An array of feature types to check for support. Feature types must be one of 
+ *       [BILLING_FEATURE]. By default, is an empty list and no specific feature support will be checked.
+ * @returns {Promise<Boolean>} promise with boolean response
+ */
+
+  public static canMakePayments(
+    features: BILLING_FEATURE[] = [],
+    callback: (canMakePayments: boolean) => void,
+    errorCallback: (error: PurchasesError) => void) {
+    window.cordova.exec(
+      callback,
+      errorCallback,
+      PLUGIN_NAME,
+      "canMakePayments",
+      [features]
     );
   }
 

@@ -286,6 +286,13 @@
     [self sendOKForCommand:command messageAsArray:nil];
 }
 
+- (void)canMakePayments:(CDVInvokedUrlCommand *)command {
+    BOOL canMakePayments = [RCCommonFunctionality canMakePaymentsWithFeatures:[command argumentAtIndex:0]];
+    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:canMakePayments];
+    
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
 #pragma mark Delegate Methods
 
 - (void)purchases:(RCPurchases *)purchases didReceiveUpdatedPurchaserInfo:(RCPurchaserInfo *)purchaserInfo {

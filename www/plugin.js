@@ -11,6 +11,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.INTRO_ELIGIBILITY_STATUS = exports.PACKAGE_TYPE = exports.PRORATION_MODE = exports.BILLING_FEATURE = exports.PURCHASE_TYPE = exports.ATTRIBUTION_NETWORK = void 0;
 var PLUGIN_NAME = "PurchasesPlugin";
 var ATTRIBUTION_NETWORK;
 (function (ATTRIBUTION_NETWORK) {
@@ -32,6 +33,34 @@ var PURCHASE_TYPE;
      */
     PURCHASE_TYPE["SUBS"] = "subs";
 })(PURCHASE_TYPE = exports.PURCHASE_TYPE || (exports.PURCHASE_TYPE = {}));
+/**
+ * Enum for billing features.
+ * Currently, these are only relevant for Google Play Android users:
+ * https://developer.android.com/reference/com/android/billingclient/api/BillingClient.FeatureType
+ */
+var BILLING_FEATURE;
+(function (BILLING_FEATURE) {
+    /**
+     * Purchase/query for subscriptions.
+     */
+    BILLING_FEATURE[BILLING_FEATURE["SUBSCRIPTIONS"] = 0] = "SUBSCRIPTIONS";
+    /**
+     * Subscriptions update/replace.
+     */
+    BILLING_FEATURE[BILLING_FEATURE["SUBSCRIPTIONS_UPDATE"] = 1] = "SUBSCRIPTIONS_UPDATE";
+    /**
+     * Purchase/query for in-app items on VR.
+     */
+    BILLING_FEATURE[BILLING_FEATURE["IN_APP_ITEMS_ON_VR"] = 2] = "IN_APP_ITEMS_ON_VR";
+    /**
+     * Purchase/query for subscriptions on VR.
+     */
+    BILLING_FEATURE[BILLING_FEATURE["SUBSCRIPTIONS_ON_VR"] = 3] = "SUBSCRIPTIONS_ON_VR";
+    /**
+     * Launch a price change confirmation flow.
+     */
+    BILLING_FEATURE[BILLING_FEATURE["PRICE_CHANGE_CONFIRMATION"] = 4] = "PRICE_CHANGE_CONFIRMATION";
+})(BILLING_FEATURE = exports.BILLING_FEATURE || (exports.BILLING_FEATURE = {}));
 var PRORATION_MODE;
 (function (PRORATION_MODE) {
     PRORATION_MODE[PRORATION_MODE["UNKNOWN_SUBSCRIPTION_UPGRADE_DOWNGRADE_POLICY"] = 0] = "UNKNOWN_SUBSCRIPTION_UPGRADE_DOWNGRADE_POLICY";
@@ -559,6 +588,20 @@ var Purchases = /** @class */ (function () {
     Purchases.setProxyURL = function (url) {
         window.cordova.exec(null, null, PLUGIN_NAME, "setProxyURLString", [url]);
     };
+    /**
+     * Check if billing is supported for the current user (meaning IN-APP purchases are supported)
+     * and optionally, whether a list of specified feature types are supported.
+     *
+     * Note: Billing features are only relevant to Google Play Android users.
+     * For other stores and platforms, billing features won't be checked.
+     * @param feature An array of feature types to check for support. Feature types must be one of
+     *       [BILLING_FEATURE]. By default, is an empty list and no specific feature support will be checked.
+     * @returns {Promise<Boolean>} promise with boolean response
+     */
+    Purchases.canMakePayments = function (features, callback, errorCallback) {
+        if (features === void 0) { features = []; }
+        window.cordova.exec(callback, errorCallback, PLUGIN_NAME, "canMakePayments", [features]);
+    };
     Purchases.setupShouldPurchasePromoProductCallback = function () {
         var _this = this;
         window.cordova.exec(function (_a) {
@@ -591,6 +634,12 @@ var Purchases = /** @class */ (function () {
      * @enum {string}
      */
     Purchases.PURCHASE_TYPE = PURCHASE_TYPE;
+    /**
+     * Enum for billing features.
+     * Currently, these are only relevant for Google Play Android users:
+     * https://developer.android.com/reference/com/android/billingclient/api/BillingClient.FeatureType
+     */
+    Purchases.BILLING_FEATURE = BILLING_FEATURE;
     /**
      * Replace SKU's ProrationMode.
      * @readonly

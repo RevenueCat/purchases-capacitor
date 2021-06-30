@@ -22,6 +22,33 @@ export declare enum PURCHASE_TYPE {
      */
     SUBS = "subs"
 }
+/**
+ * Enum for billing features.
+ * Currently, these are only relevant for Google Play Android users:
+ * https://developer.android.com/reference/com/android/billingclient/api/BillingClient.FeatureType
+ */
+export declare enum BILLING_FEATURE {
+    /**
+     * Purchase/query for subscriptions.
+     */
+    SUBSCRIPTIONS = 0,
+    /**
+     * Subscriptions update/replace.
+     */
+    SUBSCRIPTIONS_UPDATE = 1,
+    /**
+     * Purchase/query for in-app items on VR.
+     */
+    IN_APP_ITEMS_ON_VR = 2,
+    /**
+     * Purchase/query for subscriptions on VR.
+     */
+    SUBSCRIPTIONS_ON_VR = 3,
+    /**
+     * Launch a price change confirmation flow.
+     */
+    PRICE_CHANGE_CONFIRMATION = 4
+}
 export declare enum PRORATION_MODE {
     UNKNOWN_SUBSCRIPTION_UPGRADE_DOWNGRADE_POLICY = 0,
     /**
@@ -447,6 +474,12 @@ declare class Purchases {
      */
     static PURCHASE_TYPE: typeof PURCHASE_TYPE;
     /**
+     * Enum for billing features.
+     * Currently, these are only relevant for Google Play Android users:
+     * https://developer.android.com/reference/com/android/billingclient/api/BillingClient.FeatureType
+     */
+    static BILLING_FEATURE: typeof BILLING_FEATURE;
+    /**
      * Replace SKU's ProrationMode.
      * @readonly
      * @enum {number}
@@ -783,6 +816,17 @@ declare class Purchases {
      * @param url Proxy URL as a string.
      */
     static setProxyURL(url: string): void;
+    /**
+     * Check if billing is supported for the current user (meaning IN-APP purchases are supported)
+     * and optionally, whether a list of specified feature types are supported.
+     *
+     * Note: Billing features are only relevant to Google Play Android users.
+     * For other stores and platforms, billing features won't be checked.
+     * @param feature An array of feature types to check for support. Feature types must be one of
+     *       [BILLING_FEATURE]. By default, is an empty list and no specific feature support will be checked.
+     * @returns {Promise<Boolean>} promise with boolean response
+     */
+    static canMakePayments(features: BILLING_FEATURE[] | undefined, callback: (canMakePayments: boolean) => void, errorCallback: (error: PurchasesError) => void): void;
     private static setupShouldPurchasePromoProductCallback;
     private static getMakeDeferredPurchaseFunction;
 }
