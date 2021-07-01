@@ -1,3 +1,12 @@
+## 2.2.0
+
+- Add canMakePayments method (https://github.com/RevenueCat/cordova-plugin-purchases/pull/96)
+- Update type for availablePackages (https://github.com/RevenueCat/cordova-plugin-purchases/pull/94)
+- Cleaned up return types for sync methods (https://github.com/RevenueCat/cordova-plugin-purchases/pull/82)
+- Bumped purchases-hybrid-common to 1.7.1 [Changelog here](https://github.com/RevenueCat/purchases-hybrid-common/releases/1.7.1)
+- Bumped purchases-ios to 3.11.1 [Changelog here](https://github.com/RevenueCat/purchases-ios/releases/3.11.1)
+- Bumped purchases-android to 4.2.1 [Changelog here](https://github.com/RevenueCat/purchases-hybrid-common/releases/4.2.1)
+
 ## 2.1.1
 
 - Bumped purchases-hybrid-common to 1.6.2 [Changelog here](https://github.com/RevenueCat/purchases-hybrid-common/releases/1.6.2)
