@@ -32,11 +32,11 @@
   "author": "RevenueCat, Inc.",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "^24.0.15",
+    "@types/jest": "^26.0.24",
     "@types/node": "^12.6.8",
-    "jest": "^24.8.0",
+    "jest": "^27.0.0",
     "prettier": "1.18.2",
-    "ts-jest": "^24.0.2",
+    "ts-jest": "^27.0.0-next.12",
     "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.5.3"

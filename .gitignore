@@ -3,6 +3,7 @@ node_modules
 *.idea/
 *.DS_Store
 *.log
+yarn.lock
 examples/cordova-sample/MyApp/node_modules
 examples/cordova-sample/MyApp/platforms
 examples/cordova-sample/MyApp/plugins
