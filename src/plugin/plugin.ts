@@ -1239,13 +1239,12 @@ class Purchases {
  * For other stores and platforms, billing features won't be checked.
  * @param feature An array of feature types to check for support. Feature types must be one of 
  *       [BILLING_FEATURE]. By default, is an empty list and no specific feature support will be checked.
- * @returns {Promise<Boolean>} promise with boolean response
  */
 
   public static canMakePayments(
     features: BILLING_FEATURE[] = [],
     callback: (canMakePayments: boolean) => void,
-    errorCallback: (error: PurchasesError) => void) {
+    errorCallback: (error: PurchasesError) => void): void {
     window.cordova.exec(
       callback,
       errorCallback,
