@@ -1,6 +1,3 @@
-<p align="center">
-  <img src="https://d2jzmbury1aqmc.cloudfront.net/assets/images/build.svg" alt="RevenueCat"/>
-</p>
 <h3 align="center">😻 In-app Subscriptions Made Easy 😻</h1>
 
 [![Version](https://img.shields.io/npm/v/cordova-plugin-purchases.svg?style=flat)](https://www.npmjs.com/package/cordova-plugin-purchases)
