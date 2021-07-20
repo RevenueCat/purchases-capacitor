@@ -143,6 +143,16 @@ public class PurchasesPlugin extends AnnotatedCordovaPlugin {
         CommonKt.restoreTransactions(getOnResult(callbackContext));
     }
 
+    @PluginAction(thread = ExecutionThread.UI, actionName = "logIn", isAutofinish = false)
+    private void logIn(String appUserID, CallbackContext callbackContext) {
+        CommonKt.logIn(appUserID, getOnResult(callbackContext));
+    }
+
+    @PluginAction(thread = ExecutionThread.UI, actionName = "logOut", isAutofinish = false)
+    private void logOut(CallbackContext callbackContext) {
+        CommonKt.logOut(getOnResult(callbackContext));
+    }
+
     @PluginAction(thread = ExecutionThread.UI, actionName = "reset", isAutofinish = false)
     private void reset(CallbackContext callbackContext) {
         CommonKt.reset(getOnResult(callbackContext));

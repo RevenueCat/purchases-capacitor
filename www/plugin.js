@@ -163,6 +163,7 @@ var Purchases = /** @class */ (function () {
         this.setupShouldPurchasePromoProductCallback();
     };
     /**
+     * @deprecated, configure behavior through the RevenueCat dashboard instead.
      * Set this to true if you are passing in an appUserID but it is anonymous, this is true by default if you didn't pass an appUserID
      * If a user tries to purchase a product that is active on the current app store account, we will treat it as a restore and alias
      * the new ID with the previous id.
@@ -279,6 +280,34 @@ var Purchases = /** @class */ (function () {
         window.cordova.exec(callback, null, PLUGIN_NAME, "getAppUserID", []);
     };
     /**
+     * This function will logIn the current user with an appUserID. Typically this would be used after a log in
+     * to identify a user without calling configure.
+     * @param {String} appUserID The appUserID that should be linked to the currently user
+     * @param {function(LogInResult):void} callback Callback that will receive an object that contains the purchaserInfo after logging in, as well as a boolean indicating
+     * whether the user has just been created for the first time in the RevenueCat backend.
+     * @param {function(PurchasesError):void} errorCallback Callback that will be triggered whenever there is any problem logging in.
+     */
+    Purchases.logIn = function (appUserID, callback, errorCallback) {
+        // noinspection SuspiciousTypeOfGuard
+        if (typeof appUserID !== "string") {
+            throw new Error("appUserID needs to be a string");
+        }
+        window.cordova.exec(callback, errorCallback, PLUGIN_NAME, "logIn", [
+            appUserID,
+        ]);
+    };
+    /**
+     * Logs out the Purchases client clearing the saved appUserID. This will generate a random user id and save it in the cache.
+     * If the current user is already anonymous, this will produce a PurchasesError.
+     * @param {function(PurchaserInfo):void} callback Callback that will receive the new purchaser info after resetting
+     * @param {function(PurchasesError):void} errorCallback Callback that will be triggered whenever there is an error when logging out.
+     * This could happen for example if logOut is called but the current user is anonymous.
+     */
+    Purchases.logOut = function (callback, errorCallback) {
+        window.cordova.exec(callback, errorCallback, PLUGIN_NAME, "logOut", []);
+    };
+    /**
+     * @deprecated, use logIn instead.
      * This function will alias two appUserIDs together.
      * @param {string} newAppUserID The new appUserID that should be linked to the currently identified appUserID. Needs to be a string.
      * @param {function(PurchaserInfo):void} callback Callback that will receive the new purchaser info after creating the alias
@@ -295,6 +324,7 @@ var Purchases = /** @class */ (function () {
         ]);
     };
     /**
+     * @deprecated, use logIn instead.
      * This function will identify the current user with an appUserID. Typically this would be used after a logout to identify a new user without calling configure
      * @param {string} newAppUserID The appUserID that should be linked to the currently user
      * @param {function(PurchaserInfo):void} callback Callback that will receive the new purchaser info after identifying.
@@ -311,6 +341,7 @@ var Purchases = /** @class */ (function () {
         ]);
     };
     /**
+     * @deprecated, use logOut instead.
      * Resets the Purchases client clearing the saved appUserID. This will generate a random user id and save it in the cache.
      * @param {function(PurchaserInfo):void} callback Callback that will receive the new purchaser info after resetting
      * @param {function(PurchasesError, boolean):void} errorCallback Callback that will be triggered whenever there is any problem resetting the SDK. This gets normally triggered if there
