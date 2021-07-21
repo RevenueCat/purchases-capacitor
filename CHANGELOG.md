@@ -23,7 +23,7 @@ Detailed docs about the new system are available [here](https://docs.revenuecat.
 - Dependency security updates
     https://github.com/RevenueCat/cordova-plugin-purchases/pull/98
 - Bumped purchases-ios to 3.12.2 [Changelog here](https://github.com/RevenueCat/purchases-ios/releases/3.12.2)
-- Bumped purchases-android to 4.3.0 [Changelog here](https://github.com/RevenueCat/purchases-hybrid-common/releases/4.3.0)
+- Bumped purchases-android to 4.3.0 [Changelog here](https://github.com/RevenueCat/purchases-android/releases/4.3.0)
 
 ## 2.2.0
 
