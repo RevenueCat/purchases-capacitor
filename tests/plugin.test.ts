@@ -8,7 +8,7 @@ window.cordova = {
 
 describe("Purchases", () => {
   it("setup fires PurchasesPlugin with the correct arguments", () => {
-    Purchases.setup("api_key", "app_user_id");
+    Purchases.setup({apiKey: "api_key", appUserID: "app_user_id"});
 
     expect(execFn).toHaveBeenCalledWith(
       expect.any(Function),
@@ -20,7 +20,7 @@ describe("Purchases", () => {
   });
 
   it("setup fires PurchasesPlugin with the correct arguments when specifying observermode", () => {
-    Purchases.setup("api_key", "app_user_id", true);
+    Purchases.setup({apiKey: "api_key", appUserID: "app_user_id", observerMode: true});
 
     expect(execFn).toHaveBeenCalledWith(
       expect.any(Function),
@@ -34,7 +34,7 @@ describe("Purchases", () => {
   it("setup fires PurchasesPlugin with the correct arguments when setting user defaults suite name", () => {
     const expected = "suite-name";
 
-    Purchases.setup("api_key", "app_user_id", false, expected);
+    Purchases.setup({apiKey: "api_key", appUserID: "app_user_id", userDefaultsSuiteName: expected});
 
     expect(execFn).toHaveBeenCalledWith(
       expect.any(Function),

@@ -156,10 +156,10 @@ var Purchases = /** @class */ (function () {
      * suite, otherwise it will use standardUserDefaults. Default is null, which will make the SDK use standardUserDefaults.
      */
     Purchases.setup = function (_a) {
-        var apiKey = _a.apiKey, _b = _a.appUserID, appUserID = _b === void 0 ? null : _b, _c = _a.observerMode, observerMode = _c === void 0 ? false : _c, _d = _a.userDefaultsSuiteName, userDefaultsSuiteName = _d === void 0 ? null : _d, _e = _a.useAmazon, useAmazon = _e === void 0 ? false : _e;
+        var apiKey = _a.apiKey, _b = _a.appUserID, appUserID = _b === void 0 ? null : _b, _c = _a.observerMode, observerMode = _c === void 0 ? false : _c, userDefaultsSuiteName = _a.userDefaultsSuiteName, _d = _a.useAmazon, useAmazon = _d === void 0 ? false : _d;
         window.cordova.exec(function (purchaserInfo) {
             window.cordova.fireWindowEvent("onPurchaserInfoUpdated", purchaserInfo);
-        }, null, PLUGIN_NAME, "setupPurchases", [apiKey, appUserID, observerMode, userDefaultsSuiteName, useAmazon]);
+        }, null, PLUGIN_NAME, "setupPurchases", [apiKey, appUserID, observerMode, userDefaultsSuiteName || null, useAmazon]);
         this.setupShouldPurchasePromoProductCallback();
     };
     /**

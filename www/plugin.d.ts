@@ -467,9 +467,9 @@ export interface LogInResult {
 export interface PurchasesConfiguration {
     apiKey: string;
     appUserID?: string | null;
-    observerMode: boolean;
-    userDefaultsSuiteName?: string | null;
-    useAmazon: boolean;
+    observerMode?: boolean;
+    userDefaultsSuiteName?: string;
+    useAmazon?: boolean;
 }
 export declare type ShouldPurchasePromoProductListener = (deferredPurchase: () => void) => void;
 declare class Purchases {
