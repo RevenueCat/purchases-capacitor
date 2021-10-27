@@ -18,6 +18,7 @@
     <allow-intent href="geo:*" />
     <platform name="android">
         <allow-intent href="market:*" />
+        <resource-file src="in-app-purchasing-2.0.76.jar" target="app/libs/in-app-purchasing-2.0.76.jar" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />

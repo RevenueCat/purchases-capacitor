@@ -63,7 +63,7 @@ const app = {
     console.log("Received Event: " + id);
     console.log("---------");
     Purchases.setDebugLogsEnabled(true);
-    Purchases.setup("api_key");
+    Purchases.setup({apiKey: "api_key",  useAmazon: true});
     Purchases.getPurchaserInfo(
       info => {
         const isPro = typeof info.entitlements.active.pro_cat !== "undefined";
