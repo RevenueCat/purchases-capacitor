@@ -492,6 +492,14 @@ export interface LogInResult {
   readonly created: boolean;
 }
 
+export interface PurchasesConfiguration {
+  apiKey: string;
+  appUserID?: string | null;
+  observerMode: boolean;
+  userDefaultsSuiteName?: string | null;
+  useAmazon: boolean;
+}
+
 export type ShouldPurchasePromoProductListener = (deferredPurchase: () => void) => void;
 let shouldPurchasePromoProductListeners: ShouldPurchasePromoProductListener[] = [];
 
@@ -558,12 +566,13 @@ class Purchases {
    * Set this if you would like the RevenueCat SDK to store its preferences in a different NSUserDefaults 
    * suite, otherwise it will use standardUserDefaults. Default is null, which will make the SDK use standardUserDefaults.
    */
-  public static setup(
-    apiKey: string,
-    appUserID?: string | null,
-    observerMode: boolean = false,
-    userDefaultsSuiteName?: string
-  ): void {
+   public static setup({
+    apiKey,
+    appUserID = null,
+    observerMode = false,
+    userDefaultsSuiteName = null,
+    useAmazon = false
+}: PurchasesConfiguration): void {
     window.cordova.exec(
       (purchaserInfo: any) => {
         window.cordova.fireWindowEvent("onPurchaserInfoUpdated", purchaserInfo);
@@ -571,7 +580,7 @@ class Purchases {
       null,
       PLUGIN_NAME,
       "setupPurchases",
-      [apiKey, appUserID, observerMode, userDefaultsSuiteName]
+      [apiKey, appUserID, observerMode, userDefaultsSuiteName, useAmazon]
     );
     this.setupShouldPurchasePromoProductCallback();
   }

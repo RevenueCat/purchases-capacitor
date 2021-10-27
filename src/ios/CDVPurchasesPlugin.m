@@ -358,7 +358,7 @@
 }
 
 - (NSString *)platformFlavorVersion {
-    return @"2.3.1";
+    return @"3.0.0-amazon.alpha.1";
 }
 
 @end

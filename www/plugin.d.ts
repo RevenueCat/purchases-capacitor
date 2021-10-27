@@ -464,6 +464,13 @@ export interface LogInResult {
      */
     readonly created: boolean;
 }
+export interface PurchasesConfiguration {
+    apiKey: string;
+    appUserID?: string | null;
+    observerMode: boolean;
+    userDefaultsSuiteName?: string | null;
+    useAmazon: boolean;
+}
 export declare type ShouldPurchasePromoProductListener = (deferredPurchase: () => void) => void;
 declare class Purchases {
     /**
@@ -521,7 +528,7 @@ declare class Purchases {
      * Set this if you would like the RevenueCat SDK to store its preferences in a different NSUserDefaults
      * suite, otherwise it will use standardUserDefaults. Default is null, which will make the SDK use standardUserDefaults.
      */
-    static setup(apiKey: string, appUserID?: string | null, observerMode?: boolean, userDefaultsSuiteName?: string): void;
+    static setup({ apiKey, appUserID, observerMode, userDefaultsSuiteName, useAmazon }: PurchasesConfiguration): void;
     /**
      * @deprecated, configure behavior through the RevenueCat dashboard instead.
      * Set this to true if you are passing in an appUserID but it is anonymous, this is true by default if you didn't pass an appUserID

@@ -33,13 +33,18 @@ import java.util.Map;
 public class PurchasesPlugin extends AnnotatedCordovaPlugin {
 
     public static final String PLATFORM_NAME = "cordova";
-    public static final String PLUGIN_VERSION = "2.3.1";
+    public static final String PLUGIN_VERSION = "3.0.0-amazon.alpha.1";
 
     @PluginAction(thread = ExecutionThread.UI, actionName = "setupPurchases", isAutofinish = false)
     private void setupPurchases(String apiKey, @Nullable String appUserID, boolean observerMode,
-                                @Nullable String userDefaultsSuiteName, CallbackContext callbackContext) {
+                                @Nullable String userDefaultsSuiteName, boolean useAmazon, 
+                                CallbackContext callbackContext) {
         PlatformInfo platformInfo = new PlatformInfo(PLATFORM_NAME, PLUGIN_VERSION);
-        CommonKt.configure(this.cordova.getActivity(), apiKey, appUserID, observerMode, platformInfo);
+        Store store = Store.PLAY_STORE;
+        if (useAmazon) {
+            store = Store.AMAZON;
+        }
+        CommonKt.configure(this.cordova.getActivity(), apiKey, appUserID, observerMode, platformInfo, store);
         Purchases.getSharedInstance().setUpdatedPurchaserInfoListener(new UpdatedPurchaserInfoListener() {
             @Override
             public void onReceived(@NonNull PurchaserInfo purchaserInfo) {
