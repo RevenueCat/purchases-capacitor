@@ -71,12 +71,12 @@ Provides partial result.
 ### getOfferings()
 
 ```typescript
-getOfferings() => Promise<{ data: { offerings: PurchasesOfferings; }; }>
+getOfferings() => Promise<{ offerings: PurchasesOfferings; }>
 ```
 
 Gets the Offerings configured in the RevenueCat dashboard
 
-**Returns:** <code>Promise&lt;{ data: { offerings: <a href="#purchasesofferings">PurchasesOfferings</a>; }; }&gt;</code>
+**Returns:** <code>Promise&lt;{ offerings: <a href="#purchasesofferings">PurchasesOfferings</a>; }&gt;</code>
 
 --------------------
 
@@ -84,7 +84,7 @@ Gets the Offerings configured in the RevenueCat dashboard
 ### purchasePackage(...)
 
 ```typescript
-purchasePackage(data: { aPackage: PurchasesPackage; upgradeInfo?: UpgradeInfo | null; }) => Promise<{ data: { productIdentifier: string; purchaserInfo: PurchaserInfo; }; }>
+purchasePackage(data: { aPackage: PurchasesPackage; upgradeInfo?: UpgradeInfo | null; }) => Promise<{ productIdentifier: string; purchaserInfo: PurchaserInfo; }>
 ```
 
 Make a purchase
@@ -93,7 +93,7 @@ Make a purchase
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | **`data`** | <code>{ aPackage: <a href="#purchasespackage">PurchasesPackage</a>; upgradeInfo?: <a href="#upgradeinfo">UpgradeInfo</a> \| null; }</code> |
 
-**Returns:** <code>Promise&lt;{ data: { productIdentifier: string; purchaserInfo: <a href="#purchaserinfo">PurchaserInfo</a>; }; }&gt;</code>
+**Returns:** <code>Promise&lt;{ productIdentifier: string; purchaserInfo: <a href="#purchaserinfo">PurchaserInfo</a>; }&gt;</code>
 
 --------------------
 
@@ -101,12 +101,12 @@ Make a purchase
 ### restoreTransactions()
 
 ```typescript
-restoreTransactions() => Promise<{ data: { purchaserInfo: PurchaserInfo; }; }>
+restoreTransactions() => Promise<{ purchaserInfo: PurchaserInfo; }>
 ```
 
 Restores a user's previous purchases and links their appUserIDs to any user's also using those purchases.
 
-**Returns:** <code>Promise&lt;{ data: { purchaserInfo: <a href="#purchaserinfo">PurchaserInfo</a>; }; }&gt;</code>
+**Returns:** <code>Promise&lt;{ purchaserInfo: <a href="#purchaserinfo">PurchaserInfo</a>; }&gt;</code>
 
 --------------------
 
@@ -134,7 +134,7 @@ restrictions refer to our guide: https://docs.revenuecat.com/docs/subscriber-att
 ### logIn(...)
 
 ```typescript
-logIn(data: { appUserID: string; }) => Promise<{ data: LogInResult; }>
+logIn(data: { appUserID: string; }) => Promise<LogInResult>
 ```
 
 This function will logIn the current user with an appUserID. Typically this would be used after a log in 
@@ -144,7 +144,7 @@ to identify a user without calling configure.
 | ---------- | ----------------------------------- |
 | **`data`** | <code>{ appUserID: string; }</code> |
 
-**Returns:** <code>Promise&lt;{ data: <a href="#loginresult">LogInResult</a>; }&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#loginresult">LogInResult</a>&gt;</code>
 
 --------------------
 
@@ -152,13 +152,13 @@ to identify a user without calling configure.
 ### logOut()
 
 ```typescript
-logOut() => Promise<{ data: { purchaserInfo: PurchaserInfo; }; }>
+logOut() => Promise<{ purchaserInfo: PurchaserInfo; }>
 ```
 
 Logs out the Purchases client clearing the saved appUserID. This will generate a random user id and save it in the cache.
 If the current user is already anonymous, this will produce a PurchasesError.
 
-**Returns:** <code>Promise&lt;{ data: { purchaserInfo: <a href="#purchaserinfo">PurchaserInfo</a>; }; }&gt;</code>
+**Returns:** <code>Promise&lt;{ purchaserInfo: <a href="#purchaserinfo">PurchaserInfo</a>; }&gt;</code>
 
 --------------------
 
@@ -166,13 +166,13 @@ If the current user is already anonymous, this will produce a PurchasesError.
 ### getPurchaserInfo()
 
 ```typescript
-getPurchaserInfo() => Promise<{ data: { purchaserInfo: PurchaserInfo; }; }>
+getPurchaserInfo() => Promise<{ purchaserInfo: PurchaserInfo; }>
 ```
 
 Gets the current purchaser info. This call will return the cached purchaser info unless the cache is stale, in which case,
 it will make a network call to retrieve it from the servers.
 
-**Returns:** <code>Promise&lt;{ data: { purchaserInfo: <a href="#purchaserinfo">PurchaserInfo</a>; }; }&gt;</code>
+**Returns:** <code>Promise&lt;{ purchaserInfo: <a href="#purchaserinfo">PurchaserInfo</a>; }&gt;</code>
 
 --------------------
 
