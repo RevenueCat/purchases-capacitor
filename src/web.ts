@@ -13,7 +13,7 @@ export class CapacitorPurchasesWeb
     throw new Error("Method not implemented.");
   }
 
-  async getOfferings(): Promise<{data: {offerings: PurchasesOfferings}}> {
+  async getOfferings(): Promise<{offerings: PurchasesOfferings}> {
     console.log('getOfferings');
     throw new Error("Method not implemented.");
   }
@@ -21,13 +21,13 @@ export class CapacitorPurchasesWeb
   async purchasePackage(data: {
     aPackage: PurchasesPackage,
     upgradeInfo?: UpgradeInfo | null
-  }): Promise<{data: { productIdentifier: string; purchaserInfo: PurchaserInfo; }}> {
+  }): Promise<{ productIdentifier: string; purchaserInfo: PurchaserInfo; }> {
     console.log('purchasePackage', data);
     throw new Error("Method not implemented.");
   }
 
   async restoreTransactions(
-  ): Promise<{data: { purchaserInfo: PurchaserInfo; }}> {
+  ): Promise<{ purchaserInfo: PurchaserInfo; }> {
     console.log('purchasePackage');
     throw new Error("Method not implemented.");
   }
@@ -39,18 +39,18 @@ export class CapacitorPurchasesWeb
 
   async logIn(data: {
     appUserID: string, 
-  }): Promise<{data: LogInResult }> {
+  }): Promise<LogInResult> {
     console.log('logIn', data);
     throw new Error("Method not implemented.");
   }
 
   async logOut(
-  ): Promise<{data: { purchaserInfo: PurchaserInfo }}> {
+  ): Promise<{ purchaserInfo: PurchaserInfo }> {
     console.log('logOut');
     throw new Error("Method not implemented.");
   }
   async getPurchaserInfo(
-  ): Promise<{data: { purchaserInfo: PurchaserInfo }}> {
+  ): Promise<{ purchaserInfo: PurchaserInfo }> {
     console.log('getPurchaserInfo');
     throw new Error("Method not implemented.");
   }

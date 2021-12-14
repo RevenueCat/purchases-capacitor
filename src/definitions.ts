@@ -510,7 +510,7 @@ export interface CapacitorPurchasesPlugin {
   /**
    * Gets the Offerings configured in the RevenueCat dashboard
    */
-  getOfferings(): Promise<{data: {offerings: PurchasesOfferings}}>
+  getOfferings(): Promise<{offerings: PurchasesOfferings}>
 
   /**
    * Make a purchase
@@ -520,13 +520,13 @@ export interface CapacitorPurchasesPlugin {
   purchasePackage(data: {
     aPackage: PurchasesPackage,
     upgradeInfo?: UpgradeInfo | null
-  }): Promise<{data: { productIdentifier: string; purchaserInfo: PurchaserInfo; }}>
+  }): Promise<{ productIdentifier: string; purchaserInfo: PurchaserInfo; }>
 
   /**
    * Restores a user's previous purchases and links their appUserIDs to any user's also using those purchases.
    */
   restoreTransactions(
-  ): Promise<{data: { purchaserInfo: PurchaserInfo; }}>
+  ): Promise<{ purchaserInfo: PurchaserInfo; }>
 
   /**
    * Subscriber attributes are useful for storing additional, structured information on a user.
@@ -550,7 +550,7 @@ export interface CapacitorPurchasesPlugin {
    */
   logIn(data: {
     appUserID: string, 
-  }): Promise<{data: LogInResult }>
+  }): Promise<LogInResult>
 
   /**
    * Logs out the Purchases client clearing the saved appUserID. This will generate a random user id and save it in the cache.
@@ -560,7 +560,7 @@ export interface CapacitorPurchasesPlugin {
    * This could happen for example if logOut is called but the current user is anonymous.
    */
   logOut(
-  ): Promise<{data: { purchaserInfo: PurchaserInfo }}>
+  ): Promise<{ purchaserInfo: PurchaserInfo }>
 
   /**
    * Gets the current purchaser info. This call will return the cached purchaser info unless the cache is stale, in which case,
@@ -569,7 +569,7 @@ export interface CapacitorPurchasesPlugin {
    * @param {function(PurchasesError, boolean):void} errorCallback Callback that will be triggered whenever there is any problem retrieving the purchaser info
    */
   getPurchaserInfo(
-  ): Promise<{data: { purchaserInfo: PurchaserInfo }}>
+  ): Promise<{ purchaserInfo: PurchaserInfo }>
 
   /**
    * Enables/Disables debugs logs
