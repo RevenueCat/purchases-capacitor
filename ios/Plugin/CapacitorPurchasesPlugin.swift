@@ -5,7 +5,7 @@ import StoreKit
 
 
 @objc public extension SKProductSubscriptionPeriod {
-    func toJson() -> [String: Any]? {
+    func toJson() -> [String: Any] {
         return [
             "numberOfUnits": numberOfUnits,
             "unit": unit.rawValue
@@ -14,22 +14,38 @@ import StoreKit
 }
 
 @objc public extension SKProductDiscount {
+    var localizedPrice: String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.locale = priceLocale
+        return formatter.string(from: price)!
+    }
     @available(iOS 12.2, *)
-    func toJson() -> [String: Any]? {
+    func toJson() -> [String: Any] {
         return [
             "identifier": identifier as Any,
             "type": type.rawValue,
             "price": price,
-            "currency": priceLocale.currencySymbol as Any,
+            "localizedPrice": localizedPrice,
+            "currencySymbol": priceLocale.currencySymbol as Any,
+            "currencyCode": priceLocale.currencyCode as Any,
             "paymentMode": paymentMode.rawValue,
             "numberOfPeriods": numberOfPeriods,
-            "subscriptionPeriod": subscriptionPeriod.toJson() as Any,
+            "subscriptionPeriod": subscriptionPeriod.toJson(),
         ]
     }
 }
 
 @objc public extension SKProduct {
-    func toJson() -> [String: Any]? {
+
+    var localizedPrice: String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.locale = priceLocale
+        return formatter.string(from: price)!
+    }
+    
+    func toJson() -> [String: Any] {
         var isFamilyShareable = false
         var discounts: [Any] = []
         var introPrice: Any = [:]
@@ -46,7 +62,9 @@ import StoreKit
             "localizedDescription": localizedDescription,
             "localizedTitle": localizedTitle,
             "price": price,
-            "currency": priceLocale.currencySymbol as Any,
+            "localizedPrice": localizedPrice,
+            "currencySymbol": priceLocale.currencySymbol as Any,
+            "currencyCode": priceLocale.currencyCode as Any,
             "productIdentifier": productIdentifier,
             "isFamilyShareable": isFamilyShareable,
             "subscriptionGroupIdentifier": subscriptionGroupIdentifier as Any,
@@ -57,33 +75,73 @@ import StoreKit
     }
 }
 
+public extension PackageType {
+// copied from revenueCat sdk
+    var description: String? {
+        switch self {
+        case .unknown: return nil
+        case .custom: return nil
+        case .lifetime: return "$rc_lifetime"
+        case .annual: return "$rc_annual"
+        case .sixMonth: return "$rc_six_month"
+        case .threeMonth: return "$rc_three_month"
+        case .twoMonth: return "$rc_two_month"
+        case .monthly: return "$rc_monthly"
+        case .weekly: return "$rc_weekly"
+        }
+    }
+    func toJson() -> String? {
+        return self.description?.replacingOccurrences(of: "$rc_", with: "").uppercased()
+    }
+
+    static var typesByDescription: [String: PackageType] {
+        [
+            "$rc_lifetime": .lifetime,
+            "$rc_annual": .annual,
+            "$rc_six_month": .sixMonth,
+            "$rc_three_month": .threeMonth,
+            "$rc_two_month": .twoMonth,
+            "$rc_monthly": .monthly,
+            "$rc_weekly": .weekly
+        ]
+    }
+}
+
 @objc public extension Package {
-    func toJson() -> [String: Any]? {
+    func toJson() -> [String: Any] {
         return [
             "identifier": identifier,
-            "packageType": packageType.rawValue,
-            "product": product.toJson() as Any,
+            "packageType": packageType.toJson() as Any,
+            "product": product.toJson(),
             "offeringIdentifier": offeringIdentifier
         ]
     }
 }
 
 @objc public extension Offering {
-    func toJson() -> [String: Any]? {
+    func toJson() -> [String: Any] {
         var allPack: [Any] = []
         for pack in availablePackages {
-            allPack.append(pack.toJson()!)
+            allPack.append(pack.toJson())
         }
         return [
             "identifier": identifier,
             "serverDescription": serverDescription,
             "availablePackages": allPack,
+            "annual": annual?.toJson() as Any,
+            "lifetime": lifetime?.toJson() as Any,
+            "annual": annual?.toJson() as Any,
+            "sixMonth": sixMonth?.toJson() as Any,
+            "threeMonth": threeMonth?.toJson() as Any,
+            "twoMonth": twoMonth?.toJson() as Any,
+            "monthly": monthly?.toJson() as Any,
+            "weekly": weekly?.toJson() as Any,
         ]
     }
 }
 
 @objc public extension Offerings {
-    func toJson() -> [String: Any]? {
+    func toJson() -> [String: Any] {
         var allJson: [String: Any] = [:]
         for (id, off) in all {
             allJson[id] = off.toJson()
