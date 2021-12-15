@@ -146,7 +146,6 @@ public extension PackageType {
             allJson[id] = off.toJson()
         }
         return [
-            "description": description,
             "current": current?.toJson() as Any,
             "all": allJson
         ]
