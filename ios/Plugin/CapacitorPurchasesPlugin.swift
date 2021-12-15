@@ -128,7 +128,6 @@ public extension PackageType {
             "identifier": identifier,
             "serverDescription": serverDescription,
             "availablePackages": allPack,
-            "annual": annual?.toJson() as Any,
             "lifetime": lifetime?.toJson() as Any,
             "annual": annual?.toJson() as Any,
             "sixMonth": sixMonth?.toJson() as Any,

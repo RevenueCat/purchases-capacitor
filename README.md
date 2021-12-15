@@ -37,7 +37,7 @@ npx cap sync
 setup(data: { apiKey: string; }) => Promise<void>
 ```
 
-Sets up Purchases with your API key and an app user id.
+Sets up  with your API key and an app user id.
 
 | Param      | Type                             |
 | ---------- | -------------------------------- |
@@ -49,17 +49,17 @@ Sets up Purchases with your API key and an app user id.
 ### addListener('purchasesUpdate', ...)
 
 ```typescript
-addListener(eventName: "purchasesUpdate", listenerFunc: (data: { purchases: PurchasesPackage; purchaserInfo: PurchaserInfo; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: "purchasesUpdate", listenerFunc: (data: { purchases: Package; purchaserInfo: PurchaserInfo; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Called when partialResults set to true and result received
 
 Provides partial result.
 
-| Param              | Type                                                                                                                                                        |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>'purchasesUpdate'</code>                                                                                                                              |
-| **`listenerFunc`** | <code>(data: { purchases: <a href="#purchasespackage">PurchasesPackage</a>; purchaserInfo: <a href="#purchaserinfo">PurchaserInfo</a>; }) =&gt; void</code> |
+| Param              | Type                                                                                                                                      |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'purchasesUpdate'</code>                                                                                                            |
+| **`listenerFunc`** | <code>(data: { purchases: <a href="#package">Package</a>; purchaserInfo: <a href="#purchaserinfo">PurchaserInfo</a>; }) =&gt; void</code> |
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
@@ -71,12 +71,12 @@ Provides partial result.
 ### getOfferings()
 
 ```typescript
-getOfferings() => Promise<{ offerings: PurchasesOfferings; }>
+getOfferings() => Promise<{ offerings: Offerings; }>
 ```
 
-Gets the Offerings configured in the RevenueCat dashboard
+Gets the <a href="#offerings">Offerings</a> configured in the RevenueCat dashboard
 
-**Returns:** <code>Promise&lt;{ offerings: <a href="#purchasesofferings">PurchasesOfferings</a>; }&gt;</code>
+**Returns:** <code>Promise&lt;{ offerings: <a href="#offerings">Offerings</a>; }&gt;</code>
 
 --------------------
 
@@ -84,14 +84,14 @@ Gets the Offerings configured in the RevenueCat dashboard
 ### purchasePackage(...)
 
 ```typescript
-purchasePackage(data: { aPackage: PurchasesPackage; upgradeInfo?: UpgradeInfo | null; }) => Promise<{ productIdentifier: string; purchaserInfo: PurchaserInfo; }>
+purchasePackage(data: { aPackage: Package; upgradeInfo?: UpgradeInfo | null; }) => Promise<{ productIdentifier: string; purchaserInfo: PurchaserInfo; }>
 ```
 
 Make a purchase
 
-| Param      | Type                                                                                                                                       |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| **`data`** | <code>{ aPackage: <a href="#purchasespackage">PurchasesPackage</a>; upgradeInfo?: <a href="#upgradeinfo">UpgradeInfo</a> \| null; }</code> |
+| Param      | Type                                                                                                                     |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------ |
+| **`data`** | <code>{ aPackage: <a href="#package">Package</a>; upgradeInfo?: <a href="#upgradeinfo">UpgradeInfo</a> \| null; }</code> |
 
 **Returns:** <code>Promise&lt;{ productIdentifier: string; purchaserInfo: <a href="#purchaserinfo">PurchaserInfo</a>; }&gt;</code>
 
@@ -104,7 +104,7 @@ Make a purchase
 restoreTransactions() => Promise<{ purchaserInfo: PurchaserInfo; }>
 ```
 
-Restores a user's previous purchases and links their appUserIDs to any user's also using those purchases.
+Restores a user's previous  and links their appUserIDs to any user's also using those .
 
 **Returns:** <code>Promise&lt;{ purchaserInfo: <a href="#purchaserinfo">PurchaserInfo</a>; }&gt;</code>
 
@@ -155,8 +155,8 @@ to identify a user without calling configure.
 logOut() => Promise<{ purchaserInfo: PurchaserInfo; }>
 ```
 
-Logs out the Purchases client clearing the saved appUserID. This will generate a random user id and save it in the cache.
-If the current user is already anonymous, this will produce a PurchasesError.
+Logs out the  client clearing the saved appUserID. This will generate a random user id and save it in the cache.
+If the current user is already anonymous, this will produce a Error.
 
 **Returns:** <code>Promise&lt;{ purchaserInfo: <a href="#purchaserinfo">PurchaserInfo</a>; }&gt;</code>
 
@@ -202,69 +202,90 @@ Enables/Disables debugs logs
 | **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 
-#### PurchasesPackage
+#### Package
 
 Contains information about the product available for the user to purchase.
 For more info see https://docs.revenuecat.com/docs/entitlements
 
-| Prop                     | Type                                                          | Description                                                                               |
-| ------------------------ | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| **`identifier`**         | <code>string</code>                                           | Unique identifier for this package. Can be one a predefined package type or a custom one. |
-| **`packageType`**        | <code><a href="#package_type">PACKAGE_TYPE</a></code>         | Package type for the product. Will be one of [PACKAGE_TYPE].                              |
-| **`product`**            | <code><a href="#purchasesproduct">PurchasesProduct</a></code> | Product assigned to this package.                                                         |
-| **`offeringIdentifier`** | <code>string</code>                                           | Offering this package belongs to.                                                         |
+| Prop                     | Type                                                  | Description                                                                               |
+| ------------------------ | ----------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| **`identifier`**         | <code>string</code>                                   | Unique identifier for this package. Can be one a predefined package type or a custom one. |
+| **`packageType`**        | <code><a href="#package_type">PACKAGE_TYPE</a></code> | <a href="#package">Package</a> type for the product. Will be one of [PACKAGE_TYPE].       |
+| **`product`**            | <code><a href="#product">Product</a></code>           | <a href="#product">Product</a> assigned to this package.                                  |
+| **`offeringIdentifier`** | <code>string</code>                                   | <a href="#offering">Offering</a> this package belongs to.                                 |
 
 
-#### PurchasesProduct
+#### Product
 
-| Prop                                     | Type                        | Description                                                                                                |
-| ---------------------------------------- | --------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| **`identifier`**                         | <code>string</code>         | Product Id.                                                                                                |
-| **`description`**                        | <code>string</code>         | Description of the product.                                                                                |
-| **`title`**                              | <code>string</code>         | Title of the product.                                                                                      |
-| **`price`**                              | <code>number</code>         | Price of the product in the local currency.                                                                |
-| **`price_string`**                       | <code>string</code>         | Formatted price of the item, including its currency sign, such as €3.99.                                   |
-| **`currency_code`**                      | <code>string</code>         | Currency code for price and original price.                                                                |
-| **`intro_price`**                        | <code>number \| null</code> | Introductory price of a subscription in the local currency.                                                |
-| **`intro_price_string`**                 | <code>string \| null</code> | Formatted introductory price of a subscription, including its currency sign, such as €3.99.                |
-| **`intro_price_period`**                 | <code>string \| null</code> | Billing period of the introductory price, specified in ISO 8601 format.                                    |
-| **`intro_price_cycles`**                 | <code>number \| null</code> | Number of subscription billing periods for which the user will be given the introductory price, such as 3. |
-| **`intro_price_period_unit`**            | <code>string \| null</code> | Unit for the billing period of the introductory price, can be DAY, WEEK, MONTH or YEAR.                    |
-| **`intro_price_period_number_of_units`** | <code>number \| null</code> | Number of units for the billing period of the introductory price.                                          |
+| Prop                     | Type                                                              | Description                                                              |
+| ------------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| **`identifier`**         | <code>string</code>                                               | <a href="#product">Product</a> Id.                                       |
+| **`description`**        | <code>string</code>                                               | Description of the product.                                              |
+| **`title`**              | <code>string</code>                                               | Title of the product.                                                    |
+| **`price`**              | <code>number</code>                                               | Price of the product in the local currency.                              |
+| **`localizedPrice`**     | <code>string</code>                                               | Formatted price of the item, including its currency sign, such as €3.99. |
+| **`currencyCode`**       | <code>string</code>                                               | Currency code for price and original price.                              |
+| **`currencySymbol`**     | <code>string</code>                                               | Currency symbol for price and original price.                            |
+| **`subscriptionPeriod`** | <code><a href="#subscriptionperiod">SubscriptionPeriod</a></code> | The <a href="#product">Product</a> subcription group identifier.         |
+| **`introductoryPrice`**  | <code><a href="#skproductdiscount">SKProductDiscount</a></code>   | The <a href="#product">Product</a> introductory Price.                   |
+| **`discounts`**          | <code><a href="#skproductdiscount">SKProductDiscount</a></code>   | The <a href="#product">Product</a> discounts list.                       |
+
+
+#### SubscriptionPeriod
+
+| Prop                | Type                | Description                             |
+| ------------------- | ------------------- | --------------------------------------- |
+| **`numberOfUnits`** | <code>number</code> | The Subscription Period number of unit. |
+| **`unit`**          | <code>number</code> | The Subscription Period unit.           |
+
+
+#### SKProductDiscount
+
+| Prop                     | Type                                                              | Description                                                              |
+| ------------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| **`identifier`**         | <code>string</code>                                               | The <a href="#product">Product</a> discount identifier.                  |
+| **`type`**               | <code>number</code>                                               | The <a href="#product">Product</a> discount type.                        |
+| **`price`**              | <code>number</code>                                               | The <a href="#product">Product</a> discount price.                       |
+| **`localizedPrice`**     | <code>string</code>                                               | Formatted price of the item, including its currency sign, such as €3.99. |
+| **`currencySymbol`**     | <code>string</code>                                               | The <a href="#product">Product</a> discount currency symbol.             |
+| **`currencyCode`**       | <code>string</code>                                               | The <a href="#product">Product</a> discount currency code.               |
+| **`paymentMode`**        | <code>number</code>                                               | The <a href="#product">Product</a> discount paymentMode.                 |
+| **`numberOfPeriods`**    | <code>number</code>                                               | The <a href="#product">Product</a> discount number Of Periods.           |
+| **`subscriptionPeriod`** | <code><a href="#subscriptionperiod">SubscriptionPeriod</a></code> | The <a href="#product">Product</a> discount subscription period.         |
 
 
 #### PurchaserInfo
 
-| Prop                                 | Type                                                                            | Description                                                                                                                                                                                                                                                                                                                                      |
-| ------------------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **`entitlements`**                   | <code><a href="#purchasesentitlementinfos">PurchasesEntitlementInfos</a></code> | Entitlements attached to this purchaser info                                                                                                                                                                                                                                                                                                     |
-| **`activeSubscriptions`**            | <code>[string]</code>                                                           | Set of active subscription skus                                                                                                                                                                                                                                                                                                                  |
-| **`allPurchasedProductIdentifiers`** | <code>[string]</code>                                                           | Set of purchased skus, active and inactive                                                                                                                                                                                                                                                                                                       |
-| **`nonSubscriptionTransactions`**    | <code>PurchasesTransaction[]</code>                                             | Returns all the non-subscription purchases a user has made. The purchases are ordered by purchase date in ascending order.                                                                                                                                                                                                                       |
-| **`latestExpirationDate`**           | <code>string \| null</code>                                                     | The latest expiration date of all purchased skus                                                                                                                                                                                                                                                                                                 |
-| **`firstSeen`**                      | <code>string</code>                                                             | The date this user was first seen in RevenueCat.                                                                                                                                                                                                                                                                                                 |
-| **`originalAppUserId`**              | <code>string</code>                                                             | The original App User Id recorded for this user.                                                                                                                                                                                                                                                                                                 |
-| **`requestDate`**                    | <code>string</code>                                                             | Date when this info was requested                                                                                                                                                                                                                                                                                                                |
-| **`allExpirationDates`**             | <code>{ [key: string]: string \| null; }</code>                                 | Map of skus to expiration dates                                                                                                                                                                                                                                                                                                                  |
-| **`allPurchaseDates`**               | <code>{ [key: string]: string \| null; }</code>                                 | Map of skus to purchase dates                                                                                                                                                                                                                                                                                                                    |
-| **`originalApplicationVersion`**     | <code>string \| null</code>                                                     | Returns the version number for the version of the application when the user bought the app. Use this for grandfathering users when migrating to subscriptions. This corresponds to the value of CFBundleVersion (in iOS) in the Info.plist file when the purchase was originally made. This is always null in Android                            |
-| **`originalPurchaseDate`**           | <code>string \| null</code>                                                     | Returns the purchase date for the version of the application when the user bought the app. Use this for grandfathering users when migrating to subscriptions.                                                                                                                                                                                    |
-| **`managementURL`**                  | <code>string \| null</code>                                                     | URL to manage the active subscription of the user. If this user has an active iOS subscription, this will point to the App Store, if the user has an active Play Store subscription it will point there. If there are no active subscriptions it will be null. If there are multiple for different platforms, it will point to the device store. |
+| Prop                                 | Type                                                          | Description                                                                                                                                                                                                                                                                                                                                      |
+| ------------------------------------ | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **`entitlements`**                   | <code><a href="#entitlementinfos">EntitlementInfos</a></code> | Entitlements attached to this purchaser info                                                                                                                                                                                                                                                                                                     |
+| **`activeSubscriptions`**            | <code>[string]</code>                                         | Set of active subscription skus                                                                                                                                                                                                                                                                                                                  |
+| **`allPurchasedProductIdentifiers`** | <code>[string]</code>                                         | Set of purchased skus, active and inactive                                                                                                                                                                                                                                                                                                       |
+| **`nonSubscriptionTransactions`**    | <code>Transaction[]</code>                                    | Returns all the non-subscription a user has made. The are ordered by purchase date in ascending order.                                                                                                                                                                                                                                           |
+| **`latestExpirationDate`**           | <code>string \| null</code>                                   | The latest expiration date of all purchased skus                                                                                                                                                                                                                                                                                                 |
+| **`firstSeen`**                      | <code>string</code>                                           | The date this user was first seen in RevenueCat.                                                                                                                                                                                                                                                                                                 |
+| **`originalAppUserId`**              | <code>string</code>                                           | The original App User Id recorded for this user.                                                                                                                                                                                                                                                                                                 |
+| **`requestDate`**                    | <code>string</code>                                           | Date when this info was requested                                                                                                                                                                                                                                                                                                                |
+| **`allExpirationDates`**             | <code>{ [key: string]: string \| null; }</code>               | Map of skus to expiration dates                                                                                                                                                                                                                                                                                                                  |
+| **`allPurchaseDates`**               | <code>{ [key: string]: string \| null; }</code>               | Map of skus to purchase dates                                                                                                                                                                                                                                                                                                                    |
+| **`originalApplicationVersion`**     | <code>string \| null</code>                                   | Returns the version number for the version of the application when the user bought the app. Use this for grandfathering users when migrating to subscriptions. This corresponds to the value of CFBundleVersion (in iOS) in the Info.plist file when the purchase was originally made. This is always null in Android                            |
+| **`originalPurchaseDate`**           | <code>string \| null</code>                                   | Returns the purchase date for the version of the application when the user bought the app. Use this for grandfathering users when migrating to subscriptions.                                                                                                                                                                                    |
+| **`managementURL`**                  | <code>string \| null</code>                                   | URL to manage the active subscription of the user. If this user has an active iOS subscription, this will point to the App Store, if the user has an active Play Store subscription it will point there. If there are no active subscriptions it will be null. If there are multiple for different platforms, it will point to the device store. |
 
 
-#### PurchasesEntitlementInfos
+#### EntitlementInfos
 
 Contains all the entitlements associated to the user.
 
-| Prop         | Type                                                                                              | Description                                                                                                                                                    |
-| ------------ | ------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`all`**    | <code>{ [key: string]: <a href="#purchasesentitlementinfo">PurchasesEntitlementInfo</a>; }</code> | Map of all EntitlementInfo (<a href="#purchasesentitlementinfo">`PurchasesEntitlementInfo`</a>) objects (active and inactive) keyed by entitlement identifier. |
-| **`active`** | <code>{ [key: string]: <a href="#purchasesentitlementinfo">PurchasesEntitlementInfo</a>; }</code> | Map of active EntitlementInfo (<a href="#purchasesentitlementinfo">`PurchasesEntitlementInfo`</a>) objects keyed by entitlement identifier.                    |
+| Prop         | Type                                                                            | Description                                                                                                                                           |
+| ------------ | ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`all`**    | <code>{ [key: string]: <a href="#entitlementinfo">EntitlementInfo</a>; }</code> | Map of all <a href="#entitlementinfo">EntitlementInfo</a> (`PurchasesEntitlementInfo`) objects (active and inactive) keyed by entitlement identifier. |
+| **`active`** | <code>{ [key: string]: <a href="#entitlementinfo">EntitlementInfo</a>; }</code> | Map of active <a href="#entitlementinfo">EntitlementInfo</a> (`PurchasesEntitlementInfo`) objects keyed by entitlement identifier.                    |
 
 
-#### PurchasesEntitlementInfo
+#### EntitlementInfo
 
-The EntitlementInfo object gives you access to all of the information about the status of a user entitlement.
+The <a href="#entitlementinfo">EntitlementInfo</a> object gives you access to all of the information about the status of a user entitlement.
 
 | Prop                         | Type                        | Description                                                                                                                                                       |
 | ---------------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -282,43 +303,43 @@ The EntitlementInfo object gives you access to all of the information about the 
 | **`billingIssueDetectedAt`** | <code>string \| null</code> | The date a billing issue was detected. Can be `null` if there is no billing issue or an issue has been resolved                                                   |
 
 
-#### PurchasesTransaction
+#### Transaction
 
-| Prop               | Type                | Description                                          |
-| ------------------ | ------------------- | ---------------------------------------------------- |
-| **`revenueCatId`** | <code>string</code> | RevenueCat Id associated to the transaction.         |
-| **`productId`**    | <code>string</code> | Product Id associated with the transaction.          |
-| **`purchaseDate`** | <code>string</code> | Purchase date of the transaction in ISO 8601 format. |
+| Prop               | Type                | Description                                                        |
+| ------------------ | ------------------- | ------------------------------------------------------------------ |
+| **`revenueCatId`** | <code>string</code> | RevenueCat Id associated to the transaction.                       |
+| **`productId`**    | <code>string</code> | <a href="#product">Product</a> Id associated with the transaction. |
+| **`purchaseDate`** | <code>string</code> | Purchase date of the transaction in ISO 8601 format.               |
 
 
-#### PurchasesOfferings
+#### Offerings
 
 Contains all the offerings configured in RevenueCat dashboard.
 For more info see https://docs.revenuecat.com/docs/entitlements
 
-| Prop          | Type                                                                                | Description                                                                 |
-| ------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| **`all`**     | <code>{ [key: string]: <a href="#purchasesoffering">PurchasesOffering</a>; }</code> | Map of all Offerings [PurchasesOffering] objects keyed by their identifier. |
-| **`current`** | <code><a href="#purchasesoffering">PurchasesOffering</a> \| null</code>             | Current offering configured in the RevenueCat dashboard.                    |
+| Prop          | Type                                                              | Description                                                                                          |
+| ------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| **`all`**     | <code>{ [key: string]: <a href="#offering">Offering</a>; }</code> | Map of all <a href="#offerings">Offerings</a> [PurchasesOffering] objects keyed by their identifier. |
+| **`current`** | <code><a href="#offering">Offering</a> \| null</code>             | Current offering configured in the RevenueCat dashboard.                                             |
 
 
-#### PurchasesOffering
+#### Offering
 
-An offering is a collection of Packages (<a href="#purchasespackage">`PurchasesPackage`</a>) available for the user to purchase.
+An offering is a collection of Packages (`PurchasesPackage`) available for the user to purchase.
 For more info see https://docs.revenuecat.com/docs/entitlements
 
-| Prop                    | Type                                                                  | Description                                                                    |
-| ----------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| **`identifier`**        | <code>string</code>                                                   | Unique identifier defined in RevenueCat dashboard.                             |
-| **`serverDescription`** | <code>string</code>                                                   | Offering description defined in RevenueCat dashboard.                          |
-| **`availablePackages`** | <code>PurchasesPackage[]</code>                                       | Array of `Package` objects available for purchase.                             |
-| **`lifetime`**          | <code><a href="#purchasespackage">PurchasesPackage</a> \| null</code> | Lifetime package type configured in the RevenueCat dashboard, if available.    |
-| **`annual`**            | <code><a href="#purchasespackage">PurchasesPackage</a> \| null</code> | Annual package type configured in the RevenueCat dashboard, if available.      |
-| **`sixMonth`**          | <code><a href="#purchasespackage">PurchasesPackage</a> \| null</code> | Six month package type configured in the RevenueCat dashboard, if available.   |
-| **`threeMonth`**        | <code><a href="#purchasespackage">PurchasesPackage</a> \| null</code> | Three month package type configured in the RevenueCat dashboard, if available. |
-| **`twoMonth`**          | <code><a href="#purchasespackage">PurchasesPackage</a> \| null</code> | Two month package type configured in the RevenueCat dashboard, if available.   |
-| **`monthly`**           | <code><a href="#purchasespackage">PurchasesPackage</a> \| null</code> | Monthly package type configured in the RevenueCat dashboard, if available.     |
-| **`weekly`**            | <code><a href="#purchasespackage">PurchasesPackage</a> \| null</code> | Weekly package type configured in the RevenueCat dashboard, if available.      |
+| Prop                    | Type                                                | Description                                                                    |
+| ----------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------ |
+| **`identifier`**        | <code>string</code>                                 | Unique identifier defined in RevenueCat dashboard.                             |
+| **`serverDescription`** | <code>string</code>                                 | <a href="#offering">Offering</a> description defined in RevenueCat dashboard.  |
+| **`availablePackages`** | <code>Package[]</code>                              | Array of <a href="#package">`Package`</a> objects available for purchase.      |
+| **`lifetime`**          | <code><a href="#package">Package</a> \| null</code> | Lifetime package type configured in the RevenueCat dashboard, if available.    |
+| **`annual`**            | <code><a href="#package">Package</a> \| null</code> | Annual package type configured in the RevenueCat dashboard, if available.      |
+| **`sixMonth`**          | <code><a href="#package">Package</a> \| null</code> | Six month package type configured in the RevenueCat dashboard, if available.   |
+| **`threeMonth`**        | <code><a href="#package">Package</a> \| null</code> | Three month package type configured in the RevenueCat dashboard, if available. |
+| **`twoMonth`**          | <code><a href="#package">Package</a> \| null</code> | Two month package type configured in the RevenueCat dashboard, if available.   |
+| **`monthly`**           | <code><a href="#package">Package</a> \| null</code> | Monthly package type configured in the RevenueCat dashboard, if available.     |
+| **`weekly`**            | <code><a href="#package">Package</a> \| null</code> | Weekly package type configured in the RevenueCat dashboard, if available.      |
 
 
 #### UpgradeInfo
