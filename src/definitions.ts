@@ -367,7 +367,7 @@ export interface Product {
   /**
    * Formatted price of the item, including its currency sign, such as €3.99.
    */
-  readonly localizedPrice: string;
+  readonly priceString: string;
   /**
    * Currency code for price and original price.
    */
@@ -376,6 +376,14 @@ export interface Product {
    * Currency symbol for price and original price.
    */
   readonly currencySymbol: string;
+  /**
+   * Boolean indicating if the product is sharable with family
+   */
+  readonly isFamilyShareable: boolean;
+  /**
+   * Group identifier for the product.
+   */
+  readonly subscriptionGroupIdentifier: string;
   /**
    * The Product subcription group identifier.
    */

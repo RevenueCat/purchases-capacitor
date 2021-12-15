@@ -59,13 +59,13 @@ import StoreKit
             introPrice = introductoryPrice?.toJson() as Any
         }
         return [
-            "localizedDescription": localizedDescription,
-            "localizedTitle": localizedTitle,
+            "description": localizedDescription,
+            "title": localizedTitle,
             "price": price,
-            "localizedPrice": localizedPrice,
+            "priceString": localizedPrice,
             "currencySymbol": priceLocale.currencySymbol as Any,
             "currencyCode": priceLocale.currencyCode as Any,
-            "productIdentifier": productIdentifier,
+            "identifier": productIdentifier,
             "isFamilyShareable": isFamilyShareable,
             "subscriptionGroupIdentifier": subscriptionGroupIdentifier as Any,
             "subscriptionPeriod": subscriptionPeriod?.toJson() as Any,
