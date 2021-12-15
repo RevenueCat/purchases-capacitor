@@ -3,6 +3,98 @@ import Capacitor
 import RevenueCat
 import StoreKit
 
+
+@objc public extension SKProductSubscriptionPeriod {
+    func toJson() -> [String: Any]? {
+        return [
+            "numberOfUnits": numberOfUnits,
+            "unit": unit.rawValue
+        ]
+    }
+}
+
+@objc public extension SKProductDiscount {
+    @available(iOS 12.2, *)
+    func toJson() -> [String: Any]? {
+        return [
+            "identifier": identifier as Any,
+            "type": type.rawValue,
+            "price": price,
+            "currency": priceLocale.currencySymbol as Any,
+            "paymentMode": paymentMode.rawValue,
+            "numberOfPeriods": numberOfPeriods,
+            "subscriptionPeriod": subscriptionPeriod.toJson() as Any,
+        ]
+    }
+}
+
+@objc public extension SKProduct {
+    func toJson() -> [String: Any]? {
+        var isFamilyShareable = false
+        var discounts: [Any] = []
+        var introPrice: Any = [:]
+        if #available(iOS 14, *) {
+            isFamilyShareable = self.isFamilyShareable
+        }
+        if #available(iOS 12.2, *) {
+            for disc in self.discounts {
+                discounts.append(disc.toJson() as Any)
+            }
+            introPrice = introductoryPrice?.toJson() as Any
+        }
+        return [
+            "localizedDescription": localizedDescription,
+            "localizedTitle": localizedTitle,
+            "price": price,
+            "currency": priceLocale.currencySymbol as Any,
+            "productIdentifier": productIdentifier,
+            "isFamilyShareable": isFamilyShareable,
+            "subscriptionGroupIdentifier": subscriptionGroupIdentifier as Any,
+            "subscriptionPeriod": subscriptionPeriod?.toJson() as Any,
+            "introductoryPrice": introPrice,
+            "discounts": discounts,
+        ]
+    }
+}
+
+@objc public extension Package {
+    func toJson() -> [String: Any]? {
+        return [
+            "identifier": identifier,
+            "packageType": packageType.rawValue,
+            "product": product.toJson() as Any,
+            "offeringIdentifier": offeringIdentifier
+        ]
+    }
+}
+
+@objc public extension Offering {
+    func toJson() -> [String: Any]? {
+        var allPack: [Any] = []
+        for pack in availablePackages {
+            allPack.append(pack.toJson()!)
+        }
+        return [
+            "identifier": identifier,
+            "serverDescription": serverDescription,
+            "availablePackages": allPack,
+        ]
+    }
+}
+
+@objc public extension Offerings {
+    func toJson() -> [String: Any]? {
+        var allJson: [String: Any] = [:]
+        for (id, off) in all {
+            allJson[id] = off.toJson()
+        }
+        return [
+            "description": description,
+            "current": current?.toJson() as Any,
+            "all": allJson
+        ]
+    }
+}
 /**
  * Please read the Capacitor iOS Plugin Development Guide
  * here: https://capacitorjs.com/docs/plugins/ios
@@ -26,9 +118,15 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
             if ((error) != nil) {
                 call.reject("getOfferings failed")
             } else {
-                call.resolve([
-                    "offerings": offerings!
-                ])
+                let offJson = offerings?.toJson()
+                print(offJson as Any)
+                if(offJson != nil) {
+                    call.resolve([
+                        "offerings": offJson as Any
+                    ])
+                } else {
+                    call.reject("getOfferings failed to convert in json")
+                }
             }
         }
     }
