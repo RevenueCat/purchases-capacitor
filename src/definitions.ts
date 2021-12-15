@@ -147,7 +147,7 @@ export enum INTRO_ELIGIBILITY_STATUS {
 /**
  * The EntitlementInfo object gives you access to all of the information about the status of a user entitlement.
  */
-export interface PurchasesEntitlementInfo {
+export interface EntitlementInfo {
   /**
    * The entitlement identifier configured in the RevenueCat dashboard
    */
@@ -208,18 +208,18 @@ export interface PurchasesEntitlementInfo {
 /**
  * Contains all the entitlements associated to the user.
  */
-export interface PurchasesEntitlementInfos {
+export interface EntitlementInfos {
   /**
    * Map of all EntitlementInfo (`PurchasesEntitlementInfo`) objects (active and inactive) keyed by entitlement identifier.
    */
-  readonly all: { [key: string]: PurchasesEntitlementInfo };
+  readonly all: { [key: string]: EntitlementInfo };
   /**
    * Map of active EntitlementInfo (`PurchasesEntitlementInfo`) objects keyed by entitlement identifier.
    */
-  readonly active: { [key: string]: PurchasesEntitlementInfo };
+  readonly active: { [key: string]: EntitlementInfo };
 }
 
-export interface PurchasesTransaction { 
+export interface Transaction { 
   /**
    * RevenueCat Id associated to the transaction.
    */
@@ -238,7 +238,7 @@ export interface PurchaserInfo {
   /**
    * Entitlements attached to this purchaser info
    */
-  readonly entitlements: PurchasesEntitlementInfos;
+  readonly entitlements: EntitlementInfos;
   /**
    * Set of active subscription skus
    */
@@ -248,10 +248,10 @@ export interface PurchaserInfo {
    */
   readonly allPurchasedProductIdentifiers: [string];
   /**
-   * Returns all the non-subscription purchases a user has made.
-   * The purchases are ordered by purchase date in ascending order.
+   * Returns all the non-subscription  a user has made.
+   * The  are ordered by purchase date in ascending order.
    */
-  readonly nonSubscriptionTransactions: PurchasesTransaction[];
+  readonly nonSubscriptionTransactions: Transaction[];
   /**
    * The latest expiration date of all purchased skus
    */
@@ -299,8 +299,55 @@ export interface PurchaserInfo {
    */
   readonly managementURL: string | null;
 }
-
-export interface PurchasesProduct {
+export interface SubscriptionPeriod {
+  /**
+   * The Subscription Period number of unit.
+   */
+  readonly numberOfUnits: number;
+  /**
+   * The Subscription Period unit.
+   */
+  readonly unit: number;
+}
+export interface SKProductDiscount {
+  /**
+   * The Product discount identifier.
+   */
+  readonly identifier: string;
+  /**
+   * The Product discount type.
+   */
+  readonly type: number;
+  /**
+   * The Product discount price.
+   */
+  readonly price: number;
+  /**
+   * Formatted price of the item, including its currency sign, such as €3.99.
+   */
+  readonly localizedPrice: string;
+  /**
+   * The Product discount currency symbol.
+   */
+  readonly currencySymbol: string;
+  /**
+   * The Product discount currency code.
+   */
+  readonly currencyCode: string;
+  /**
+   * The Product discount paymentMode.
+   */
+  readonly paymentMode: number;
+  /**
+   * The Product discount number Of Periods.
+   */
+  readonly numberOfPeriods: number;
+  /**
+   * The Product discount subscription period.
+   */
+  readonly subscriptionPeriod: SubscriptionPeriod;
+}
+export interface Product {
   /**
    * Product Id.
    */
@@ -320,42 +367,34 @@ export interface PurchasesProduct {
   /**
    * Formatted price of the item, including its currency sign, such as €3.99.
    */
-  readonly price_string: string;
+  readonly localizedPrice: string;
   /**
    * Currency code for price and original price.
    */
-  readonly currency_code: string;
+  readonly currencyCode: string;
   /**
-   * Introductory price of a subscription in the local currency.
+   * Currency symbol for price and original price.
    */
-  readonly intro_price: number | null;
+  readonly currencySymbol: string;
   /**
-   * Formatted introductory price of a subscription, including its currency sign, such as €3.99.
+   * The Product subcription group identifier.
    */
-  readonly intro_price_string: string | null;
+  readonly subscriptionPeriod: SubscriptionPeriod;
   /**
-   * Billing period of the introductory price, specified in ISO 8601 format.
+   * The Product introductory Price.
    */
-  readonly intro_price_period: string | null;
+  readonly introductoryPrice:  SKProductDiscount;
   /**
-   * Number of subscription billing periods for which the user will be given the introductory price, such as 3.
+   * The Product discounts list.
    */
-  readonly intro_price_cycles: number | null;
-  /**
-   * Unit for the billing period of the introductory price, can be DAY, WEEK, MONTH or YEAR.
-   */
-  readonly intro_price_period_unit: string | null;
-  /**
-   * Number of units for the billing period of the introductory price.
-   */
-  readonly intro_price_period_number_of_units: number | null;
+  readonly discounts:  SKProductDiscount;
 }
 
 /**
  * Contains information about the product available for the user to purchase.
  * For more info see https://docs.revenuecat.com/docs/entitlements
  */
-export interface PurchasesPackage {
+export interface Package {
   /**
    * Unique identifier for this package. Can be one a predefined package type or a custom one.
    */
@@ -367,7 +406,7 @@ export interface PurchasesPackage {
   /**
    * Product assigned to this package.
    */
-  readonly product: PurchasesProduct;
+  readonly product: Product;
   /**
    * Offering this package belongs to.
    */
@@ -378,7 +417,7 @@ export interface PurchasesPackage {
  * An offering is a collection of Packages (`PurchasesPackage`) available for the user to purchase.
  * For more info see https://docs.revenuecat.com/docs/entitlements
  */
-export interface PurchasesOffering {
+export interface Offering {
   /**
    * Unique identifier defined in RevenueCat dashboard.
    */
@@ -390,53 +429,53 @@ export interface PurchasesOffering {
   /**
    * Array of `Package` objects available for purchase.
    */
-  readonly availablePackages: PurchasesPackage[];
+  readonly availablePackages: Package[];
   /**
    * Lifetime package type configured in the RevenueCat dashboard, if available.
    */
-  readonly lifetime: PurchasesPackage | null;
+  readonly lifetime: Package | null;
   /**
    * Annual package type configured in the RevenueCat dashboard, if available.
    */
-  readonly annual: PurchasesPackage | null;
+  readonly annual: Package | null;
   /**
    * Six month package type configured in the RevenueCat dashboard, if available.
    */
-  readonly sixMonth: PurchasesPackage | null;
+  readonly sixMonth: Package | null;
   /**
    * Three month package type configured in the RevenueCat dashboard, if available.
    */
-  readonly threeMonth: PurchasesPackage | null;
+  readonly threeMonth: Package | null;
   /**
    * Two month package type configured in the RevenueCat dashboard, if available.
    */
-  readonly twoMonth: PurchasesPackage | null;
+  readonly twoMonth: Package | null;
   /**
    * Monthly package type configured in the RevenueCat dashboard, if available.
    */
-  readonly monthly: PurchasesPackage | null;
+  readonly monthly: Package | null;
   /**
    * Weekly package type configured in the RevenueCat dashboard, if available.
    */
-  readonly weekly: PurchasesPackage | null;
+  readonly weekly: Package | null;
 }
 
 /**
  * Contains all the offerings configured in RevenueCat dashboard.
  * For more info see https://docs.revenuecat.com/docs/entitlements
  */
-export interface PurchasesOfferings {
+export interface Offerings {
   /**
    * Map of all Offerings [PurchasesOffering] objects keyed by their identifier.
    */
-  readonly all: { [key: string]: PurchasesOffering };
+  readonly all: { [key: string]: Offering };
   /**
    * Current offering configured in the RevenueCat dashboard.
    */
-  readonly current: PurchasesOffering | null;
+  readonly current: Offering | null;
 }
 
-export interface PurchasesError {
+export interface Error {
   code: number;
   message: string;
   readableErrorCode: string;
@@ -489,7 +528,7 @@ export type ShouldPurchasePromoProductListener = (deferredPurchase: () => void) 
 
 export interface CapacitorPurchasesPlugin {
   /**
-   * Sets up Purchases with your API key and an app user id.
+   * Sets up  with your API key and an app user id.
    * @param {string} apiKey RevenueCat API Key. Needs to be a string
    */
   setup(data: {
@@ -505,12 +544,12 @@ export interface CapacitorPurchasesPlugin {
    */
   addListener(
     eventName: "purchasesUpdate",
-    listenerFunc: (data: { purchases: PurchasesPackage, purchaserInfo: PurchaserInfo }) => void
+    listenerFunc: (data: { purchases: Package, purchaserInfo: PurchaserInfo }) => void
   ): Promise<PluginListenerHandle> & PluginListenerHandle;
   /**
    * Gets the Offerings configured in the RevenueCat dashboard
    */
-  getOfferings(): Promise<{offerings: PurchasesOfferings}>
+  getOfferings(): Promise<{offerings: Offerings}>
 
   /**
    * Make a purchase
@@ -518,12 +557,12 @@ export interface CapacitorPurchasesPlugin {
    * @param {PurchasesPackage} aPackage The Package you wish to purchase. You can get the Packages by calling getOfferings
    */
   purchasePackage(data: {
-    aPackage: PurchasesPackage,
+    aPackage: Package,
     upgradeInfo?: UpgradeInfo | null
   }): Promise<{ productIdentifier: string; purchaserInfo: PurchaserInfo; }>
 
   /**
-   * Restores a user's previous purchases and links their appUserIDs to any user's also using those purchases.
+   * Restores a user's previous  and links their appUserIDs to any user's also using those .
    */
   restoreTransactions(
   ): Promise<{ purchaserInfo: PurchaserInfo; }>
@@ -553,8 +592,8 @@ export interface CapacitorPurchasesPlugin {
   }): Promise<LogInResult>
 
   /**
-   * Logs out the Purchases client clearing the saved appUserID. This will generate a random user id and save it in the cache.
-   * If the current user is already anonymous, this will produce a PurchasesError.
+   * Logs out the  client clearing the saved appUserID. This will generate a random user id and save it in the cache.
+   * If the current user is already anonymous, this will produce a Error.
    * @param {function(PurchaserInfo):void} callback Callback that will receive the new purchaser info after resetting
    * @param {function(PurchasesError):void} errorCallback Callback that will be triggered whenever there is an error when logging out. 
    * This could happen for example if logOut is called but the current user is anonymous.
