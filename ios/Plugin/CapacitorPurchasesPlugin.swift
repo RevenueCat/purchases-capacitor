@@ -1,6 +1,7 @@
 import Foundation
 import Capacitor
-import Purchases
+import RevenueCat
+import StoreKit
 
 /**
  * Please read the Capacitor iOS Plugin Development Guide
@@ -16,12 +17,12 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
         call.resolve()
     }
     
-    public func purchases(_ purchases: Purchases, didReceiveUpdated purchaserInfo: Purchases.PurchaserInfo) {
+    public func purchases(_ purchases: Purchases, receivedUpdated purchaserInfo: CustomerInfo) {
         self.notifyListeners("purchasesUpdate", data: ["purchases": purchases, "purchaserInfo": purchaserInfo])
     }
 
     @objc func getOfferings(_ call: CAPPluginCall) {
-        Purchases.shared.offerings { (offerings, error) in
+        Purchases.shared.getOfferings { (offerings, error) in
             if ((error) != nil) {
                 call.reject("getOfferings failed")
             } else {
@@ -34,25 +35,28 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
 
     @objc func purchasePackage(_ call: CAPPluginCall) {
         let aPackage = call.getObject("aPackage") ?? [:]
-//    identifier: String, packageType: PackageType, storeProduct: StoreProduct, offeringIdentifier: String
-//        let package = new Purchases.Package(identifier: aPackage["identifier"],packageType: aPackage["packageType"], storeProduct: aPackage["storeProduct"], offeringIdentifier: aPackage["offeringIdentifier"])
-//        Purchases.Package.
-//        if let package = [Purchases.Package].from(data: aPackage) {
-//            print("Casting good")
-//        } else {
-//
-//            print("Casting error")
-//        }
-// this line still fails
-        Purchases.shared.purchasePackage(aPackage) { (transaction, purchaserInfo, error, userCancelled) in
+        let identifier = aPackage["identifier"] as! String
+        let identifierOff = aPackage["offeringIdentifier"] as! String
+        Purchases.shared.getOfferings { (offerings, error) in
             if ((error) != nil) {
-                call.reject("Restore failed")
+                call.reject("getOfferings failed")
             } else {
-                if purchaserInfo!.entitlements["your_entitlement_id"]?.isActive == true {
-                    // Unlock that great "pro" content
-                    call.resolve()
-                } else {
-                    call.reject("Purchase failed")
+                let offering = offerings?.offering(identifier: identifierOff)
+                let package = offering?.package(identifier: identifier)
+                if (package == nil) {
+                    call.reject("cannot found package in current offering")
+                    return
+                }
+                Purchases.shared.purchase(package: package!) { (transaction, purchaserInfo, error, userCancelled) in
+                    if ((error) != nil) {
+                        call.reject("Restore failed")
+                    } else {
+                        if purchaserInfo!.entitlements["your_entitlement_id"]?.isActive == true {
+                            call.resolve()
+                        } else {
+                            call.reject("Purchase failed")
+                        }
+                    }
                 }
             }
         }
@@ -69,11 +73,13 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
             }
         }
     }
+    
     @objc func setAttributes(_ call: CAPPluginCall) {
         let attributes = call.getObject("attributes") ?? [:]
         Purchases.shared.setAttributes((attributes as? [String: String])!)
         call.resolve()
     }
+    
     @objc func logIn(_ call: CAPPluginCall) {
         let appUserID = call.getString("appUserID") ?? ""
         Purchases.shared.logIn(appUserID) { (purchaserInfo, created, error) in
@@ -87,6 +93,7 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
             }
         }
     }
+    
     @objc func logOut(_ call: CAPPluginCall) {
         Purchases.shared.logOut() { (purchaserInfo, error) in
             if ((error) != nil) {
@@ -98,8 +105,9 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
             }
         }
     }
+    
     @objc func getPurchaserInfo(_ call: CAPPluginCall) {
-        Purchases.shared.purchaserInfo { (purchaserInfo, error) in
+        Purchases.shared.getCustomerInfo { (purchaserInfo, error) in
             if ((error) != nil) {
                 call.reject("Get purchaser info failed")
             } else {
@@ -109,6 +117,7 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
             }
         }
     }
+    
     @objc func setDebugLogsEnabled(_ call: CAPPluginCall) {
         let enabled = call.getBool("enabled") ?? false
         Purchases.logLevel = enabled ? .debug : .error
