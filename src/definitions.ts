@@ -269,14 +269,6 @@ export interface PurchaserInfo {
    */
   readonly requestDate: string;
   /**
-   * Map of skus to expiration dates
-   */
-  readonly allExpirationDates: { [key: string]: string | null };
-  /**
-   * Map of skus to purchase dates
-   */
-  readonly allPurchaseDates: { [key: string]: string | null };
-  /**
    * Returns the version number for the version of the application when the
    * user bought the app. Use this for grandfathering users when migrating
    * to subscriptions.
