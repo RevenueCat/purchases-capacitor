@@ -247,18 +247,19 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
     }
 
     @objc func purchasePackage(_ call: CAPPluginCall) {
-        let aPackage = call.getObject("aPackage") ?? [:]
-        if(aPackage.count == 0) {
+        print("purchasePackage")
+        let identifier = call.getString("identifier") ?? ""
+        let offeringIdentifier = call.getString("offeringIdentifier") ?? ""
+        if(identifier == "" || offeringIdentifier == "") {
             call.reject("No package provided")
             return
         }
-        let identifier = aPackage["identifier"] as! String
-        let identifierOff = aPackage["offeringIdentifier"] as! String
+        print("purchasePackage", identifier, offeringIdentifier)
         Purchases.shared.getOfferings { (offerings, error) in
             if ((error) != nil) {
                 call.reject("getOfferings failed")
             } else {
-                let offering = offerings?.offering(identifier: identifierOff)
+                let offering = offerings?.offering(identifier: offeringIdentifier)
                 let package = offering?.package(identifier: identifier)
                 if (package == nil) {
                     call.reject("cannot found package in current offering")

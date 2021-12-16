@@ -84,14 +84,14 @@ Gets the <a href="#offerings">Offerings</a> configured in the RevenueCat dashboa
 ### purchasePackage(...)
 
 ```typescript
-purchasePackage(data: { aPackage: Package; upgradeInfo?: UpgradeInfo | null; }) => Promise<{ productIdentifier: string; purchaserInfo: PurchaserInfo; }>
+purchasePackage(data: { identifier: string; offeringIdentifier: string; }) => Promise<{ productIdentifier: string; purchaserInfo: PurchaserInfo; }>
 ```
 
 Make a purchase
 
-| Param      | Type                                                                                                                     |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------ |
-| **`data`** | <code>{ aPackage: <a href="#package">Package</a>; upgradeInfo?: <a href="#upgradeinfo">UpgradeInfo</a> \| null; }</code> |
+| Param      | Type                                                             |
+| ---------- | ---------------------------------------------------------------- |
+| **`data`** | <code>{ identifier: string; offeringIdentifier: string; }</code> |
 
 **Returns:** <code>Promise&lt;{ productIdentifier: string; purchaserInfo: <a href="#purchaserinfo">PurchaserInfo</a>; }&gt;</code>
 
@@ -268,8 +268,6 @@ For more info see https://docs.revenuecat.com/docs/entitlements
 | **`firstSeen`**                      | <code>string</code>                                           | The date this user was first seen in RevenueCat.                                                                                                                                                                                                                                                                                                 |
 | **`originalAppUserId`**              | <code>string</code>                                           | The original App User Id recorded for this user.                                                                                                                                                                                                                                                                                                 |
 | **`requestDate`**                    | <code>string</code>                                           | Date when this info was requested                                                                                                                                                                                                                                                                                                                |
-| **`allExpirationDates`**             | <code>{ [key: string]: string \| null; }</code>               | Map of skus to expiration dates                                                                                                                                                                                                                                                                                                                  |
-| **`allPurchaseDates`**               | <code>{ [key: string]: string \| null; }</code>               | Map of skus to purchase dates                                                                                                                                                                                                                                                                                                                    |
 | **`originalApplicationVersion`**     | <code>string \| null</code>                                   | Returns the version number for the version of the application when the user bought the app. Use this for grandfathering users when migrating to subscriptions. This corresponds to the value of CFBundleVersion (in iOS) in the Info.plist file when the purchase was originally made. This is always null in Android                            |
 | **`originalPurchaseDate`**           | <code>string \| null</code>                                   | Returns the purchase date for the version of the application when the user bought the app. Use this for grandfathering users when migrating to subscriptions.                                                                                                                                                                                    |
 | **`managementURL`**                  | <code>string \| null</code>                                   | URL to manage the active subscription of the user. If this user has an active iOS subscription, this will point to the App Store, if the user has an active Play Store subscription it will point there. If there are no active subscriptions it will be null. If there are multiple for different platforms, it will point to the device store. |
@@ -344,16 +342,6 @@ For more info see https://docs.revenuecat.com/docs/entitlements
 | **`weekly`**            | <code><a href="#package">Package</a> \| null</code> | Weekly package type configured in the RevenueCat dashboard, if available.      |
 
 
-#### UpgradeInfo
-
-Holds the information used when upgrading from another sku. For Android use only.
-
-| Prop                | Type                                                      | Description                                                  |
-| ------------------- | --------------------------------------------------------- | ------------------------------------------------------------ |
-| **`oldSKU`**        | <code>string</code>                                       | The oldSKU to upgrade from.                                  |
-| **`prorationMode`** | <code><a href="#proration_mode">PRORATION_MODE</a></code> | The [PRORATION_MODE] to use when upgrading the given oldSKU. |
-
-
 #### LogInResult
 
 Holds the logIn result
@@ -380,16 +368,5 @@ Holds the logIn result
 | **`TWO_MONTH`**   | <code>"TWO_MONTH"</code>   | A package configured with the predefined two month identifier.   |
 | **`MONTHLY`**     | <code>"MONTHLY"</code>     | A package configured with the predefined monthly identifier.     |
 | **`WEEKLY`**      | <code>"WEEKLY"</code>      | A package configured with the predefined weekly identifier.      |
-
-
-#### PRORATION_MODE
-
-| Members                                             | Value          | Description                                                                                                                                                                               |
-| --------------------------------------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`UNKNOWN_SUBSCRIPTION_UPGRADE_DOWNGRADE_POLICY`** | <code>0</code> |                                                                                                                                                                                           |
-| **`IMMEDIATE_WITH_TIME_PRORATION`**                 | <code>1</code> | Replacement takes effect immediately, and the remaining time will be prorated and credited to the user. This is the current default behavior.                                             |
-| **`IMMEDIATE_AND_CHARGE_PRORATED_PRICE`**           | <code>2</code> | Replacement takes effect immediately, and the billing cycle remains the same. The price for the remaining period will be charged. This option is only available for subscription upgrade. |
-| **`IMMEDIATE_WITHOUT_PRORATION`**                   | <code>3</code> | Replacement takes effect immediately, and the new price will be charged on next recurrence time. The billing cycle stays the same.                                                        |
-| **`DEFERRED`**                                      | <code>4</code> | Replacement takes effect when the old plan expires, and the new price will be charged at the same time.                                                                                   |
 
 </docgen-api>

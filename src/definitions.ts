@@ -557,8 +557,10 @@ export interface CapacitorPurchasesPlugin {
    * @param {PurchasesPackage} aPackage The Package you wish to purchase. You can get the Packages by calling getOfferings
    */
   purchasePackage(data: {
-    aPackage: Package,
-    upgradeInfo?: UpgradeInfo | null
+    // aPackage: Package,
+    identifier: string,
+    offeringIdentifier: string,
+    // upgradeInfo?: UpgradeInfo | null
   }): Promise<{ productIdentifier: string; purchaserInfo: PurchaserInfo; }>
 
   /**

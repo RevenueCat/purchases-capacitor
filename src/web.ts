@@ -1,6 +1,7 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { CapacitorPurchasesPlugin, LogInResult, PurchaserInfo, Offerings, Package, UpgradeInfo } from './definitions';
+import type { CapacitorPurchasesPlugin, LogInResult, PurchaserInfo, Offerings } from './definitions';
+// import type { CapacitorPurchasesPlugin, LogInResult, PurchaserInfo, Offerings, Package, UpgradeInfo } from './definitions';
 
 export class CapacitorPurchasesWeb
   extends WebPlugin
@@ -19,8 +20,10 @@ export class CapacitorPurchasesWeb
   }
 
   async purchasePackage(data: {
-    aPackage: Package,
-    upgradeInfo?: UpgradeInfo | null
+    // aPackage: Package,
+    identifier: string,
+    offeringIdentifier: string,
+    // upgradeInfo?: UpgradeInfo | null
   }): Promise<{ productIdentifier: string; purchaserInfo: PurchaserInfo; }> {
     console.log('purchasePackage', data);
     throw new Error("Method not implemented.");
