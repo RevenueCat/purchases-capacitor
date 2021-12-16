@@ -3,6 +3,65 @@ import Capacitor
 import RevenueCat
 import StoreKit
 
+extension ISO8601DateFormatter {
+    convenience init(_ formatOptions: Options) {
+        self.init()
+        self.formatOptions = formatOptions
+    }
+}
+extension Formatter {
+    static let iso8601withFractionalSeconds = ISO8601DateFormatter([.withInternetDateTime, .withFractionalSeconds])
+}
+extension Date {
+    var iso8601withFractionalSeconds: String { return Formatter.iso8601withFractionalSeconds.string(from: self) }
+}
+extension String {
+    var iso8601withFractionalSeconds: Date? { return Formatter.iso8601withFractionalSeconds.date(from: self) }
+}
+
+@objc public extension RevenueCat.Transaction {
+    func toJson() -> [String: Any] {
+        return [
+            "productId": productId,
+            "revenueCatId": revenueCatId,
+            "purchaseDate": purchaseDate.iso8601withFractionalSeconds,
+        ]
+    }
+}
+@objc public extension EntitlementInfos {
+    func toJson() -> [String: Any] {
+        var allJson: [String: Any] = [:]
+        var activeJson: [String: Any] = [:]
+        for (id, ent) in all {
+            allJson[id] = ent.rawData
+        }
+        for (id, activ) in active {
+            activeJson[id] = activ.rawData
+        }
+        return [
+            "active": activeJson,
+            "all": allJson
+        ]
+    }
+}
+@objc public extension CustomerInfo {
+    func toJson() -> [String: Any] {
+        return [
+            "entitlements": entitlements.toJson(),
+            "activeSubscriptions": Array(activeSubscriptions),
+            "allPurchasedProductIdentifiers": Array(allPurchasedProductIdentifiers),
+            "nonSubscriptionTransactions": [nonSubscriptionTransactions[0].toJson()],
+            "latestExpirationDate": latestExpirationDate?.iso8601withFractionalSeconds as Any,
+            "firstSeen": firstSeen.iso8601withFractionalSeconds,
+            "originalAppUserId": originalAppUserId,
+            "requestDate": requestDate.iso8601withFractionalSeconds,
+            "originalApplicationVersion": originalApplicationVersion as Any,
+            "originalPurchaseDate": originalPurchaseDate?.iso8601withFractionalSeconds as Any,
+            "managementURL": managementURL?.absoluteString as Any
+        ]
+    }
+}
+
 
 @objc public extension SKProductSubscriptionPeriod {
     func toJson() -> [String: Any] {
@@ -189,6 +248,10 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
 
     @objc func purchasePackage(_ call: CAPPluginCall) {
         let aPackage = call.getObject("aPackage") ?? [:]
+        if(aPackage.count == 0) {
+            call.reject("No package provided")
+            return
+        }
         let identifier = aPackage["identifier"] as! String
         let identifierOff = aPackage["offeringIdentifier"] as! String
         Purchases.shared.getOfferings { (offerings, error) in
@@ -222,7 +285,7 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
                 call.reject("Restore failed")
             } else {
                 call.resolve([
-                    "purchaserInfo": purchaserInfo!
+                    "purchaserInfo": purchaserInfo?.toJson() as Any
                 ])
             }
         }
@@ -266,7 +329,7 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
                 call.reject("Get purchaser info failed")
             } else {
                 call.resolve([
-                    "purchaserInfo": purchaserInfo!,
+                    "purchaserInfo": purchaserInfo?.toJson() as Any,
                 ])
             }
         }
