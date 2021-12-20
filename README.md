@@ -84,7 +84,7 @@ Gets the <a href="#offerings">Offerings</a> configured in the RevenueCat dashboa
 ### purchasePackage(...)
 
 ```typescript
-purchasePackage(data: { identifier: string; offeringIdentifier: string; }) => Promise<{ productIdentifier: string; purchaserInfo: PurchaserInfo; }>
+purchasePackage(data: { identifier: string; offeringIdentifier: string; }) => Promise<{ purchaserInfo: PurchaserInfo; }>
 ```
 
 Make a purchase
@@ -93,7 +93,7 @@ Make a purchase
 | ---------- | ---------------------------------------------------------------- |
 | **`data`** | <code>{ identifier: string; offeringIdentifier: string; }</code> |
 
-**Returns:** <code>Promise&lt;{ productIdentifier: string; purchaserInfo: <a href="#purchaserinfo">PurchaserInfo</a>; }&gt;</code>
+**Returns:** <code>Promise&lt;{ purchaserInfo: <a href="#purchaserinfo">PurchaserInfo</a>; }&gt;</code>
 
 --------------------
 

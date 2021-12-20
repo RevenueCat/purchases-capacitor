@@ -561,7 +561,7 @@ export interface CapacitorPurchasesPlugin {
     identifier: string,
     offeringIdentifier: string,
     // upgradeInfo?: UpgradeInfo | null
-  }): Promise<{ productIdentifier: string; purchaserInfo: PurchaserInfo; }>
+  }): Promise<{ purchaserInfo: PurchaserInfo; }>
 
   /**
    * Restores a user's previous  and links their appUserIDs to any user's also using those .

@@ -234,7 +234,6 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
                 call.reject("getOfferings failed")
             } else {
                 let offJson = offerings?.toJson()
-                print(offJson as Any)
                 if(offJson != nil) {
                     call.resolve([
                         "offerings": offJson as Any
@@ -247,14 +246,12 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
     }
 
     @objc func purchasePackage(_ call: CAPPluginCall) {
-        print("purchasePackage")
         let identifier = call.getString("identifier") ?? ""
         let offeringIdentifier = call.getString("offeringIdentifier") ?? ""
         if(identifier == "" || offeringIdentifier == "") {
             call.reject("No package provided")
             return
         }
-        print("purchasePackage", identifier, offeringIdentifier)
         Purchases.shared.getOfferings { (offerings, error) in
             if ((error) != nil) {
                 call.reject("getOfferings failed")
@@ -270,7 +267,9 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
                         call.reject("Restore failed")
                     } else {
                         if purchaserInfo!.entitlements["your_entitlement_id"]?.isActive == true {
-                            call.resolve()
+                            call.resolve([
+                                "purchaserInfo": purchaserInfo?.toJson() as Any
+                            ])
                         } else {
                             call.reject("Purchase failed")
                         }

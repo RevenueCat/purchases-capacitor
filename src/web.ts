@@ -24,7 +24,7 @@ export class CapacitorPurchasesWeb
     identifier: string,
     offeringIdentifier: string,
     // upgradeInfo?: UpgradeInfo | null
-  }): Promise<{ productIdentifier: string; purchaserInfo: PurchaserInfo; }> {
+  }): Promise<{ purchaserInfo: PurchaserInfo; }> {
     console.log('purchasePackage', data);
     throw new Error("Method not implemented.");
   }
