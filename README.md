@@ -370,3 +370,8 @@ Holds the logIn result
 | **`WEEKLY`**      | <code>"WEEKLY"</code>      | A package configured with the predefined weekly identifier.      |
 
 </docgen-api>
+
+### TODO
+
+Migrate ios to rc-2
+Prepare android migration to v5
