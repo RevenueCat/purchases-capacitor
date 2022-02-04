@@ -19,11 +19,11 @@ extension String {
     var iso8601withFractionalSeconds: Date? { return Formatter.iso8601withFractionalSeconds.date(from: self) }
 }
 
-@objc public extension RevenueCat.Transaction {
+@objc public extension RevenueCat.StoreTransaction {
     func toJson() -> [String: Any] {
         return [
-            "productId": productId,
-            "revenueCatId": revenueCatId,
+            "productId": productIdentifier,
+            "revenueCatId": transactionIdentifier,
             "purchaseDate": purchaseDate.iso8601withFractionalSeconds,
         ]
     }
@@ -51,17 +51,25 @@ extension String {
             "activeSubscriptions": Array(activeSubscriptions),
             "allPurchasedProductIdentifiers": Array(allPurchasedProductIdentifiers),
             "nonSubscriptionTransactions": [nonSubscriptionTransactions[0].toJson()],
-            "latestExpirationDate": latestExpirationDate?.iso8601withFractionalSeconds as Any,
+            "latestExpirationDate": latestExpirationDate?.iso8601withFractionalSeconds ?? [:],
             "firstSeen": firstSeen.iso8601withFractionalSeconds,
             "originalAppUserId": originalAppUserId,
             "requestDate": requestDate.iso8601withFractionalSeconds,
-            "originalApplicationVersion": originalApplicationVersion as Any,
-            "originalPurchaseDate": originalPurchaseDate?.iso8601withFractionalSeconds as Any,
-            "managementURL": managementURL?.absoluteString as Any
+            "originalApplicationVersion": originalApplicationVersion ?? "",
+            "originalPurchaseDate": originalPurchaseDate?.iso8601withFractionalSeconds ?? "",
+            "managementURL": managementURL?.absoluteString ?? ""
         ]
     }
 }
 
+@objc public extension SubscriptionPeriod {
+    func toJson() -> [String: Any] {
+        return [
+            "numberOfUnits": value,
+            "unit": unit.rawValue
+        ]
+    }
+}
 
 @objc public extension SKProductSubscriptionPeriod {
     func toJson() -> [String: Any] {
@@ -72,37 +80,35 @@ extension String {
     }
 }
 
-@objc public extension SKProductDiscount {
+@objc public extension StoreProductDiscount {
+    @available(iOS 12.2, *)
     var localizedPrice: String {
+        if(sk1Discount == nil) {
+            return ""
+        }
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
-        formatter.locale = priceLocale
-        return formatter.string(from: price)!
+        formatter.locale = sk1Discount?.priceLocale
+        return formatter.string(from: NSNumber(nonretainedObject: price))!
     }
+    
     @available(iOS 12.2, *)
     func toJson() -> [String: Any] {
         return [
-            "identifier": identifier as Any,
-            "type": type.rawValue,
+            "identifier": offerIdentifier ?? "",
+            "type": paymentMode,
             "price": price,
             "localizedPrice": localizedPrice,
-            "currencySymbol": priceLocale.currencySymbol as Any,
-            "currencyCode": priceLocale.currencyCode as Any,
+            "currencySymbol": sk1Discount?.priceLocale.currencySymbol ?? "",
+            "currencyCode": sk1Discount?.priceLocale.currencyCode ?? "",
             "paymentMode": paymentMode.rawValue,
-            "numberOfPeriods": numberOfPeriods,
+            "numberOfPeriods": subscriptionPeriod.value,
             "subscriptionPeriod": subscriptionPeriod.toJson(),
         ]
     }
 }
 
-@objc public extension SKProduct {
-
-    var localizedPrice: String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.locale = priceLocale
-        return formatter.string(from: price)!
-    }
+@objc public extension StoreProduct {
     
     func toJson() -> [String: Any] {
         var isFamilyShareable = false
@@ -113,21 +119,22 @@ extension String {
         }
         if #available(iOS 12.2, *) {
             for disc in self.discounts {
-                discounts.append(disc.toJson() as Any)
+                discounts.append(disc.toJson())
             }
-            introPrice = introductoryPrice?.toJson() as Any
+            introPrice = introductoryDiscount? .toJson() ?? [:]
         }
+//        self.sk1Product.
         return [
             "description": localizedDescription,
             "title": localizedTitle,
             "price": price,
-            "priceString": localizedPrice,
-            "currencySymbol": priceLocale.currencySymbol as Any,
-            "currencyCode": priceLocale.currencyCode as Any,
+            "priceString": localizedPriceString,
+            "currencySymbol": priceFormatter?.currencySymbol ?? "",
+            "currencyCode": priceFormatter?.currencyCode ?? "",
             "identifier": productIdentifier,
             "isFamilyShareable": isFamilyShareable,
-            "subscriptionGroupIdentifier": subscriptionGroupIdentifier as Any,
-            "subscriptionPeriod": subscriptionPeriod?.toJson() as Any,
+            "subscriptionGroupIdentifier": subscriptionGroupIdentifier ?? "",
+            "subscriptionPeriod": subscriptionPeriod? .toJson() ?? [:],
             "introductoryPrice": introPrice,
             "discounts": discounts,
         ]
@@ -170,8 +177,8 @@ public extension PackageType {
     func toJson() -> [String: Any] {
         return [
             "identifier": identifier,
-            "packageType": packageType.toJson() as Any,
-            "product": product.toJson(),
+            "packageType": packageType .toJson() ?? [:],
+            "product": storeProduct.toJson(),
             "offeringIdentifier": offeringIdentifier
         ]
     }
@@ -187,13 +194,13 @@ public extension PackageType {
             "identifier": identifier,
             "serverDescription": serverDescription,
             "availablePackages": allPack,
-            "lifetime": lifetime?.toJson() as Any,
-            "annual": annual?.toJson() as Any,
-            "sixMonth": sixMonth?.toJson() as Any,
-            "threeMonth": threeMonth?.toJson() as Any,
-            "twoMonth": twoMonth?.toJson() as Any,
-            "monthly": monthly?.toJson() as Any,
-            "weekly": weekly?.toJson() as Any,
+            "lifetime": lifetime? .toJson() ?? [:],
+            "annual": annual? .toJson() ?? [:],
+            "sixMonth": sixMonth? .toJson() ?? [:],
+            "threeMonth": threeMonth? .toJson() ?? [:],
+            "twoMonth": twoMonth? .toJson() ?? [:],
+            "monthly": monthly? .toJson() ?? [:],
+            "weekly": weekly? .toJson() ?? [:],
         ]
     }
 }
@@ -205,7 +212,7 @@ public extension PackageType {
             allJson[id] = off.toJson()
         }
         return [
-            "current": current?.toJson() as Any,
+            "current": current? .toJson() ?? [:],
             "all": allJson
         ]
     }
@@ -236,7 +243,7 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
                 let offJson = offerings?.toJson()
                 if(offJson != nil) {
                     call.resolve([
-                        "offerings": offJson as Any
+                        "offerings": offJson ?? [:]
                     ])
                 } else {
                     call.reject("getOfferings failed to convert in json")
@@ -268,7 +275,7 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
                     } else {
                         if purchaserInfo!.entitlements["your_entitlement_id"]?.isActive == true {
                             call.resolve([
-                                "purchaserInfo": purchaserInfo?.toJson() as Any
+                                "purchaserInfo": purchaserInfo? .toJson() ?? [:]
                             ])
                         } else {
                             call.reject("Purchase failed")
@@ -280,12 +287,12 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
     }
 
     @objc func restoreTransactions(_ call: CAPPluginCall) {
-        Purchases.shared.restoreTransactions { purchaserInfo, error in
+        Purchases.shared.restorePurchases { purchaserInfo, error in
             if ((error) != nil) {
                 call.reject("Restore failed")
             } else {
                 call.resolve([
-                    "purchaserInfo": purchaserInfo?.toJson() as Any
+                    "purchaserInfo": purchaserInfo? .toJson() ?? [:]
                 ])
             }
         }
@@ -329,7 +336,7 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
                 call.reject("Get purchaser info failed")
             } else {
                 call.resolve([
-                    "purchaserInfo": purchaserInfo?.toJson() as Any,
+                    "purchaserInfo": purchaserInfo? .toJson() ?? [:],
                 ])
             }
         }

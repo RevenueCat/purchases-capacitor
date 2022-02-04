@@ -373,5 +373,4 @@ Holds the logIn result
 
 ### TODO
 
-Migrate ios to rc-2
 Prepare android migration to v5
