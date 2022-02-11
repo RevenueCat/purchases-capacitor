@@ -273,13 +273,9 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
                     if ((error) != nil) {
                         call.reject("Restore failed")
                     } else {
-                        if purchaserInfo!.entitlements["your_entitlement_id"]?.isActive == true {
-                            call.resolve([
-                                "purchaserInfo": purchaserInfo?.toJson() as Any
-                            ])
-                        } else {
-                            call.reject("Purchase failed")
-                        }
+                        call.resolve([
+                            "purchaserInfo": purchaserInfo?.toJson() as Any
+                        ])
                     }
                 }
             }
