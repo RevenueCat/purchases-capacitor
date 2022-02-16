@@ -2,6 +2,8 @@
 
 In-app Subscriptions Made Easy with RevenueCat sdk
 
+Capacitor implementation with new swift SDK 
+
 ## Install
 
 ```bash
