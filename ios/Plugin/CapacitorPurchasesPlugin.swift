@@ -50,7 +50,7 @@ extension String {
             "entitlements": entitlements.toJson(),
             "activeSubscriptions": Array(activeSubscriptions),
             "allPurchasedProductIdentifiers": Array(allPurchasedProductIdentifiers),
-            "nonSubscriptionTransactions": [nonSubscriptionTransactions[0].toJson()],
+            "nonSubscriptionTransactions": nonSubscriptionTransactions.map { $0.toJson() },
             "latestExpirationDate": latestExpirationDate?.iso8601withFractionalSeconds as Any,
             "firstSeen": firstSeen.iso8601withFractionalSeconds,
             "originalAppUserId": originalAppUserId,
