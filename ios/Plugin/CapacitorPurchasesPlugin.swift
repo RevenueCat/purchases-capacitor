@@ -89,7 +89,12 @@ extension String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
         formatter.locale = sk1Discount?.priceLocale
-        return formatter.string(from: NSNumber(nonretainedObject: price))!
+        if let formated = formatter.string(from: NSNumber(nonretainedObject: price)) {
+            return formated
+        } else {
+            return ""
+        }
+
     }
 
     @available(iOS 12.2, *)
