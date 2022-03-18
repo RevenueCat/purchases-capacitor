@@ -2,7 +2,7 @@
 
 In-app Subscriptions Made Easy with RevenueCat sdk
 
-Capacitor implementation with new swift SDK 
+Capacitor implementation with new RevenueCat swift SDK v4
 
 ## Install
 
