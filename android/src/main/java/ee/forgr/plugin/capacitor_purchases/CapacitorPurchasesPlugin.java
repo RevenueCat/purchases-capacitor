@@ -110,7 +110,6 @@ public class CapacitorPurchasesPlugin extends Plugin {
             public void onReceived(Map<String, ?> map) {
                 JSObject ret = new JSObject();
                 ret.put(name, convertMapToJson(map));
-                Log.i("TAG", "convertMapToJson \"" + ret);
                 call.resolve(ret);
             }
 
