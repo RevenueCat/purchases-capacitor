@@ -52,7 +52,7 @@ public class CapacitorPurchasesPlugin extends Plugin {
 
     @PluginMethod
     public void getOfferings(PluginCall call) {
-        CommonKt.getOfferings(getOnResult(call));
+        CommonKt.getOfferings(getOnResult(call, "offerings"));
     }
 
     @PluginMethod
@@ -69,28 +69,28 @@ public class CapacitorPurchasesPlugin extends Plugin {
                 offeringIdentifier,
                 null,
                 null,
-                getOnResult(call));
+                getOnResult(call, "purchaserInfo"));
     }
 
     @PluginMethod
     public void restoreTransactions(PluginCall call) {
-        CommonKt.restoreTransactions(getOnResult(call));
+        CommonKt.restoreTransactions(getOnResult(call, "purchaserInfo"));
     }
 
     @PluginMethod
     public void logIn(PluginCall call) {
         String appUserID = call.getString("appUserID");
-        CommonKt.logIn(appUserID, getOnResult(call));
+        CommonKt.logIn(appUserID, getOnResult(call, "purchaserInfo"));
     }
 
     @PluginMethod
     public void logOut(PluginCall call) {
-        CommonKt.logOut(getOnResult(call));
+        CommonKt.logOut(getOnResult(call, "purchaserInfo"));
     }
 
     @PluginMethod
     public void getPurchaserInfo(PluginCall call) {
-        CommonKt.getPurchaserInfo(getOnResult(call));
+        CommonKt.getPurchaserInfo(getOnResult(call, "purchaserInfo"));
     }
 
     @PluginMethod
@@ -104,11 +104,14 @@ public class CapacitorPurchasesPlugin extends Plugin {
     // Private methods
     //================================================================================
 
-    private OnResult getOnResult(PluginCall call) {
+    private OnResult getOnResult(PluginCall call, String name) {
         return new OnResult() {
             @Override
             public void onReceived(Map<String, ?> map) {
-                call.resolve(convertMapToJson(map));
+                JSObject ret = new JSObject();
+                ret.put(name, convertMapToJson(map));
+                Log.i("TAG", "convertMapToJson \"" + ret);
+                call.resolve(ret);
             }
 
             @Override
