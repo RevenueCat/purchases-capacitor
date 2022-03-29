@@ -1,5 +1,7 @@
 package ee.forgr.plugin.capacitor_purchases;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.getcapacitor.JSObject;
@@ -111,7 +113,9 @@ public class CapacitorPurchasesPlugin extends Plugin {
 
             @Override
             public void onError(ErrorContainer errorContainer) {
-                call.resolve(convertMapToJson(errorContainer.getInfo()));
+                JSObject object = convertMapToJson(errorContainer.getInfo());
+                Log.e("Purchases", "Error  \"" + object);
+                call.reject(object.getString("message"));
             }
         };
     }
