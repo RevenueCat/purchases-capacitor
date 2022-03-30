@@ -139,7 +139,15 @@ public class CapacitorPurchasesPlugin extends Plugin {
             } else if (entry.getValue() instanceof List) {
                 object.put(entry.getKey(), convertArrayToJsonArray(((List) entry.getValue()).toArray()));
             } else if (entry.getValue() != null) {
-                object.put(entry.getKey(), entry.getValue());
+                Object value = entry.getValue();
+                if (entry.getKey() == "price_string") {
+                    String currency_symbol = ((String) value).replaceAll("\\d","").replace(".","").replace(",","");
+                    object.put("currencySymbol", currency_symbol);
+                }
+                if (entry.getKey() == "title") {
+                    value = ((String) value).replace("(" + AppName + ")", "");
+                }
+                object.put(entry.getKey(), value);
             }
         }
 
