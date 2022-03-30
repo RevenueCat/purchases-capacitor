@@ -61,5 +61,5 @@ dependencies {
     implementation "androidx.core:core-ktx:+"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "com.revenuecat.purchases:purchases:4.6.1"
-    implementation "com.revenuecat.purchases:purchases-hybrid-common:1.11.2"
+    implementation "com.revenuecat.purchases:purchases-hybrid-common:2.0.1"
 }

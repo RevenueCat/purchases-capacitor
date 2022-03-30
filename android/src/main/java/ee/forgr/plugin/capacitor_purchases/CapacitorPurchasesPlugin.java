@@ -80,7 +80,7 @@ public class CapacitorPurchasesPlugin extends Plugin {
     @PluginMethod
     public void logIn(PluginCall call) {
         String appUserID = call.getString("appUserID");
-        CommonKt.logIn(appUserID, getOnResult(call, "purchaserInfo"));
+        CommonKt.logIn(appUserID, getOnResult(call, ""));
     }
 
     @PluginMethod
@@ -108,6 +108,10 @@ public class CapacitorPurchasesPlugin extends Plugin {
         return new OnResult() {
             @Override
             public void onReceived(Map<String, ?> map) {
+                if (name.equals("")) {
+                    call.resolve(convertMapToJson(map));
+                    return;
+                }
                 JSObject ret = new JSObject();
                 ret.put(name, convertMapToJson(map));
                 call.resolve(ret);
