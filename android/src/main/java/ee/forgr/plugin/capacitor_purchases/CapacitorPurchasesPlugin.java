@@ -69,7 +69,7 @@ public class CapacitorPurchasesPlugin extends Plugin {
                 offeringIdentifier,
                 null,
                 null,
-                getOnResult(call, "purchaserInfo"));
+                getOnResult(call, ""));
     }
 
     @PluginMethod
