@@ -10,6 +10,7 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
+import com.google.common.base.CaseFormat;
 import com.revenuecat.purchases.PurchaserInfo;
 import com.revenuecat.purchases.Purchases;
 
@@ -132,24 +133,25 @@ public class CapacitorPurchasesPlugin extends Plugin {
         JSObject object = new JSObject();
 
         for (Map.Entry<String, ?> entry : readableMap.entrySet()) {
+            String camelKey = entry.getKey().contains("_") ? CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, entry.getKey()) : entry.getKey();
             if (entry.getValue() == null) {
-                object.put(entry.getKey(), JSONObject.NULL);
+                object.put(camelKey, JSONObject.NULL);
             } else if (entry.getValue() instanceof Map) {
-                object.put(entry.getKey(), convertMapToJson((Map<String, Object>) entry.getValue()));
+                object.put(camelKey, convertMapToJson((Map<String, Object>) entry.getValue()));
             } else if (entry.getValue() instanceof Object[]) {
-                object.put(entry.getKey(), convertArrayToJsonArray((Object[]) entry.getValue()));
+                object.put(camelKey, convertArrayToJsonArray((Object[]) entry.getValue()));
             } else if (entry.getValue() instanceof List) {
-                object.put(entry.getKey(), convertArrayToJsonArray(((List) entry.getValue()).toArray()));
+                object.put(camelKey, convertArrayToJsonArray(((List) entry.getValue()).toArray()));
             } else if (entry.getValue() != null) {
                 Object value = entry.getValue();
-                if (entry.getKey() == "price_string") {
+                if (camelKey == "priceString") {
                     String currency_symbol = ((String) value).replaceAll("\\d","").replace(".","").replace(",","");
                     object.put("currencySymbol", currency_symbol);
                 }
-                if (entry.getKey() == "title") {
+                if (camelKey == "title") {
                     value = ((String) value).replace("(" + AppName + ")", "");
                 }
-                object.put(entry.getKey(), value);
+                object.put(camelKey, value);
             }
         }
 
