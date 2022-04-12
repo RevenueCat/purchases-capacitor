@@ -101,7 +101,7 @@ extension String {
     func toJson() -> [String: Any] {
         return [
             "identifier": offerIdentifier as Any,
-            "type": paymentMode,
+            "type": paymentMode.rawValue,
             "price": price,
             "localizedPrice": localizedPrice,
             "currencySymbol": sk1Discount?.priceLocale.currencySymbol as Any,
