@@ -232,7 +232,7 @@ For more info see https://docs.revenuecat.com/docs/entitlements
 | **`subscriptionGroupIdentifier`** | <code>string</code>                                               | Group identifier for the product.                                        |
 | **`subscriptionPeriod`**          | <code><a href="#subscriptionperiod">SubscriptionPeriod</a></code> | The <a href="#product">Product</a> subcription group identifier.         |
 | **`introductoryPrice`**           | <code><a href="#skproductdiscount">SKProductDiscount</a></code>   | The <a href="#product">Product</a> introductory Price.                   |
-| **`discounts`**                   | <code><a href="#skproductdiscount">SKProductDiscount</a></code>   | The <a href="#product">Product</a> discounts list.                       |
+| **`discounts`**                   | <code>SKProductDiscount[]</code>                                  | The <a href="#product">Product</a> discounts list.                       |
 
 
 #### SubscriptionPeriod

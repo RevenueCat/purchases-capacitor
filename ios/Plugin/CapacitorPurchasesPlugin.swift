@@ -81,21 +81,6 @@ extension String {
 }
 
 @objc public extension StoreProductDiscount {
-    @available(iOS 12.2, *)
-    var localizedPrice: String {
-        if(sk1Discount == nil) {
-            return ""
-        }
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.locale = sk1Discount?.priceLocale
-        if let formated = formatter.string(from: NSNumber(nonretainedObject: price)) {
-            return formated
-        } else {
-            return ""
-        }
-
-    }
 
     @available(iOS 12.2, *)
     func toJson() -> [String: Any] {
@@ -103,7 +88,7 @@ extension String {
             "identifier": offerIdentifier as Any,
             "type": paymentMode.rawValue,
             "price": price,
-            "localizedPrice": localizedPrice,
+            "localizedPrice": localizedPriceString,
             "currencySymbol": sk1Discount?.priceLocale.currencySymbol as Any,
             "currencyCode": sk1Discount?.priceLocale.currencyCode as Any,
             "paymentMode": paymentMode.rawValue,

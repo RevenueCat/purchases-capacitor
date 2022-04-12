@@ -387,7 +387,7 @@ export interface Product {
   /**
    * The Product discounts list.
    */
-  readonly discounts:  SKProductDiscount;
+  readonly discounts:  SKProductDiscount[];
 }
 
 /**
