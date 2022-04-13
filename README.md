@@ -250,7 +250,7 @@ For more info see https://docs.revenuecat.com/docs/entitlements
 | **`identifier`**         | <code>string</code>                                               | The <a href="#product">Product</a> discount identifier.                  |
 | **`type`**               | <code>number</code>                                               | The <a href="#product">Product</a> discount type.                        |
 | **`price`**              | <code>number</code>                                               | The <a href="#product">Product</a> discount price.                       |
-| **`localizedPrice`**     | <code>string</code>                                               | Formatted price of the item, including its currency sign, such as €3.99. |
+| **`priceString`**        | <code>string</code>                                               | Formatted price of the item, including its currency sign, such as €3.99. |
 | **`currencySymbol`**     | <code>string</code>                                               | The <a href="#product">Product</a> discount currency symbol.             |
 | **`currencyCode`**       | <code>string</code>                                               | The <a href="#product">Product</a> discount currency code.               |
 | **`paymentMode`**        | <code>number</code>                                               | The <a href="#product">Product</a> discount paymentMode.                 |

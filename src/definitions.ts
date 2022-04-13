@@ -317,7 +317,7 @@ export interface SKProductDiscount {
   /**
    * Formatted price of the item, including its currency sign, such as €3.99.
    */
-  readonly localizedPrice: string;
+  readonly priceString: string;
   /**
    * The Product discount currency symbol.
    */

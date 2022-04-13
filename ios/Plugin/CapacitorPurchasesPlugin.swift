@@ -88,7 +88,7 @@ extension String {
             "identifier": offerIdentifier as Any,
             "type": paymentMode.rawValue,
             "price": price,
-            "localizedPrice": localizedPriceString,
+            "priceString": localizedPriceString,
             "currencySymbol": sk1Discount?.priceLocale.currencySymbol as Any,
             "currencyCode": sk1Discount?.priceLocale.currencyCode as Any,
             "paymentMode": paymentMode.rawValue,
