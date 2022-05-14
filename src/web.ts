@@ -27,8 +27,8 @@ export const mockPack: Package = {
 } 
 
 export const mockCurrent: Offering = {
-  identifier: 'com.example.test.test',
-  serverDescription: "Test",
+  identifier: 'com.example.test.offering1',
+  serverDescription: "Test offering",
   availablePackages: [mockPack],
   lifetime: mockPack,
   annual: mockPack,
