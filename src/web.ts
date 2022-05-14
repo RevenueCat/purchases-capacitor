@@ -1,64 +1,129 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { CapacitorPurchasesPlugin, LogInResult, PurchaserInfo, Offerings } from './definitions';
-// import type { CapacitorPurchasesPlugin, LogInResult, PurchaserInfo, Offerings, Package, UpgradeInfo } from './definitions';
+import { PACKAGE_TYPE } from './definitions';
+import type { CapacitorPurchasesPlugin, LogInResult, PurchaserInfo, Offerings, Offering, Package } from './definitions';
+
+export const mockPack: Package = {
+  identifier: 'com.example.test',
+  packageType: PACKAGE_TYPE.ANNUAL,
+  product: {
+    identifier: 'com.example.test',
+    description: 'Test',
+    title: 'Test',
+    price: 0.99,
+    priceString: '$0.99',
+    currencyCode: 'USD',
+    currencySymbol: '$',
+    isFamilyShareable: false,
+    subscriptionGroupIdentifier: 'com.example.test',
+    subscriptionPeriod: {
+      numberOfUnits: 1,
+      unit: 1,
+    },
+    introductoryPrice: null,
+    discounts: [],
+  },
+  offeringIdentifier: 'com.example.test.offering1'
+} 
+
+export const mockCurrent: Offering = {
+  identifier: 'com.example.test.test',
+  serverDescription: "Test",
+  availablePackages: [mockPack],
+  lifetime: mockPack,
+  annual: mockPack,
+  sixMonth: mockPack,
+  threeMonth: mockPack,
+  twoMonth: mockPack,
+  monthly: mockPack,
+  weekly: mockPack,
+};
+
+export const mockPurchaserInfo: PurchaserInfo = {
+  entitlements: {
+    all: {},
+    active: {},
+  },
+  activeSubscriptions: [''],
+  allPurchasedProductIdentifiers: [''],
+  nonSubscriptionTransactions: [],
+  latestExpirationDate: null,
+  firstSeen: '2020-01-01T00:00:00.000Z',
+  originalAppUserId: '',
+  requestDate: '2020-01-01T00:00:00.000Z',
+  originalApplicationVersion: '',
+  originalPurchaseDate: null,
+  managementURL: null
+}
+
+export const mockAll: {[key: string]: Offering} = {
+  "current": mockCurrent
+}
+
+
+export const mockOffering: Offerings = {
+  all: mockAll,
+  current: mockCurrent
+}
 
 export class CapacitorPurchasesWeb
   extends WebPlugin
   implements CapacitorPurchasesPlugin {
-  // add all missing declaration
+
   setup(data: {
     apiKey: string,
   }): Promise<void> {
-    console.log('setup', data);
-    throw new Error("Method not implemented.");
+    console.error('setup only mocked in web', data);
+    return Promise.resolve();
   }
 
   async getOfferings(): Promise<{offerings: Offerings}> {
-    console.log('getOfferings');
-    throw new Error("Method not implemented.");
+    console.error('getOfferings only mocked in web');
+    return {offerings: mockOffering};
   }
 
   async purchasePackage(data: {
-    // aPackage: Package,
     identifier: string,
     offeringIdentifier: string,
-    // upgradeInfo?: UpgradeInfo | null
   }): Promise<{ purchaserInfo: PurchaserInfo; }> {
-    console.log('purchasePackage', data);
-    throw new Error("Method not implemented.");
+    console.error('purchasePackage only mocked in web', data);
+    return { purchaserInfo: mockPurchaserInfo };
   }
 
   async restoreTransactions(
   ): Promise<{ purchaserInfo: PurchaserInfo; }> {
-    console.log('purchasePackage');
-    throw new Error("Method not implemented.");
+    console.error('purchasePackage only mocked in web');
+    return { purchaserInfo: mockPurchaserInfo };
   }
 
   async setAttributes(data: {attributes: { [key: string]: string | null }}): Promise<void> {
-    console.log('setAttributes', data);
-    throw new Error("Method not implemented.");
+    console.error('setAttributes only mocked in web', data);
+    return Promise.resolve();
   }
 
   async logIn(data: {
     appUserID: string, 
   }): Promise<LogInResult> {
-    console.log('logIn', data);
-    throw new Error("Method not implemented.");
+    console.error('logIn only mocked in web', data);
+    return {
+      purchaserInfo: mockPurchaserInfo,
+      created: true,
+    }
   }
 
   async logOut(
   ): Promise<{ purchaserInfo: PurchaserInfo }> {
-    console.log('logOut');
-    throw new Error("Method not implemented.");
+    console.error('logOut only mocked in web');
+    return { purchaserInfo: mockPurchaserInfo };
   }
+
   async getPurchaserInfo(
   ): Promise<{ purchaserInfo: PurchaserInfo }> {
-    console.log('getPurchaserInfo');
-    throw new Error("Method not implemented.");
+    console.error('getPurchaserInfo only mocked in web');
+    return { purchaserInfo: mockPurchaserInfo };
   }
+
   async setDebugLogsEnabled(data: {enabled: boolean}): Promise<void> {
-    console.log('setDebugLogsEnabled', data);
-    throw new Error("Method not implemented.");
+    console.error('setDebugLogsEnabled only mocked in web', data);
   }
 }
