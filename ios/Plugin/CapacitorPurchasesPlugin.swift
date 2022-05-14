@@ -103,7 +103,7 @@ extension String {
     func toJson() -> [String: Any] {
         var isFamilyShareable = false
         var discounts: [Any] = []
-        var introPrice: Any = [:]
+        var introPrice: Any? = nil
         if #available(iOS 14, *) {
             isFamilyShareable = self.isFamilyShareable
         }

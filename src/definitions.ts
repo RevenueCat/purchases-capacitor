@@ -383,7 +383,7 @@ export interface Product {
   /**
    * The Product introductory Price.
    */
-  readonly introductoryPrice:  SKProductDiscount;
+  readonly introductoryPrice:  SKProductDiscount | null;
   /**
    * The Product discounts list.
    */
