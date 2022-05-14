@@ -3,15 +3,38 @@ import { WebPlugin } from '@capacitor/core';
 import { PACKAGE_TYPE } from './definitions';
 import type { CapacitorPurchasesPlugin, LogInResult, PurchaserInfo, Offerings, Offering, Package } from './definitions';
 
-export const mockPack: Package = {
+export const mockPackA: Package = {
   identifier: 'com.example.test',
   packageType: PACKAGE_TYPE.ANNUAL,
   product: {
-    identifier: 'com.example.test',
+    identifier: 'com.example.yearly',
     description: 'Test',
     title: 'Test',
-    price: 0.99,
-    priceString: '$0.99',
+    price: 19.99,
+    priceString: '$19.99',
+    currencyCode: 'USD',
+    currencySymbol: '$',
+    isFamilyShareable: false,
+    subscriptionGroupIdentifier: 'com.example.test',
+    subscriptionPeriod: {
+      numberOfUnits: 1,
+      unit: 1,
+    },
+    introductoryPrice: null,
+    discounts: [],
+  },
+  offeringIdentifier: 'com.example.test.offering1'
+} 
+
+export const mockPackM: Package = {
+  identifier: 'com.example.test',
+  packageType: PACKAGE_TYPE.MONTHLY,
+  product: {
+    identifier: 'com.example.monthly',
+    description: 'Test',
+    title: 'Test',
+    price: 3.99,
+    priceString: '$3.99',
     currencyCode: 'USD',
     currencySymbol: '$',
     isFamilyShareable: false,
@@ -29,14 +52,14 @@ export const mockPack: Package = {
 export const mockCurrent: Offering = {
   identifier: 'com.example.test.offering1',
   serverDescription: "Test offering",
-  availablePackages: [mockPack],
-  lifetime: mockPack,
-  annual: mockPack,
-  sixMonth: mockPack,
-  threeMonth: mockPack,
-  twoMonth: mockPack,
-  monthly: mockPack,
-  weekly: mockPack,
+  availablePackages: [mockPackA, mockPackM],
+  lifetime: null,
+  annual: mockPackA,
+  sixMonth: null,
+  threeMonth: null,
+  twoMonth: null,
+  monthly: mockPackM,
+  weekly: null,
 };
 
 export const mockPurchaserInfo: PurchaserInfo = {

@@ -1,6 +1,6 @@
 {
   "name": "capacitor-purchases",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "In-app Subscriptions Made Easy with RevenueCat sdk",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
