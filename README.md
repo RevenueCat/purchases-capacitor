@@ -219,20 +219,20 @@ For more info see https://docs.revenuecat.com/docs/entitlements
 
 #### Product
 
-| Prop                              | Type                                                              | Description                                                              |
-| --------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| **`identifier`**                  | <code>string</code>                                               | <a href="#product">Product</a> Id.                                       |
-| **`description`**                 | <code>string</code>                                               | Description of the product.                                              |
-| **`title`**                       | <code>string</code>                                               | Title of the product.                                                    |
-| **`price`**                       | <code>number</code>                                               | Price of the product in the local currency.                              |
-| **`priceString`**                 | <code>string</code>                                               | Formatted price of the item, including its currency sign, such as €3.99. |
-| **`currencyCode`**                | <code>string</code>                                               | Currency code for price and original price.                              |
-| **`currencySymbol`**              | <code>string</code>                                               | Currency symbol for price and original price.                            |
-| **`isFamilyShareable`**           | <code>boolean</code>                                              | Boolean indicating if the product is sharable with family                |
-| **`subscriptionGroupIdentifier`** | <code>string</code>                                               | Group identifier for the product.                                        |
-| **`subscriptionPeriod`**          | <code><a href="#subscriptionperiod">SubscriptionPeriod</a></code> | The <a href="#product">Product</a> subcription group identifier.         |
-| **`introductoryPrice`**           | <code><a href="#skproductdiscount">SKProductDiscount</a></code>   | The <a href="#product">Product</a> introductory Price.                   |
-| **`discounts`**                   | <code>SKProductDiscount[]</code>                                  | The <a href="#product">Product</a> discounts list.                       |
+| Prop                              | Type                                                                    | Description                                                              |
+| --------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| **`identifier`**                  | <code>string</code>                                                     | <a href="#product">Product</a> Id.                                       |
+| **`description`**                 | <code>string</code>                                                     | Description of the product.                                              |
+| **`title`**                       | <code>string</code>                                                     | Title of the product.                                                    |
+| **`price`**                       | <code>number</code>                                                     | Price of the product in the local currency.                              |
+| **`priceString`**                 | <code>string</code>                                                     | Formatted price of the item, including its currency sign, such as €3.99. |
+| **`currencyCode`**                | <code>string</code>                                                     | Currency code for price and original price.                              |
+| **`currencySymbol`**              | <code>string</code>                                                     | Currency symbol for price and original price.                            |
+| **`isFamilyShareable`**           | <code>boolean</code>                                                    | Boolean indicating if the product is sharable with family                |
+| **`subscriptionGroupIdentifier`** | <code>string</code>                                                     | Group identifier for the product.                                        |
+| **`subscriptionPeriod`**          | <code><a href="#subscriptionperiod">SubscriptionPeriod</a></code>       | The <a href="#product">Product</a> subcription group identifier.         |
+| **`introductoryPrice`**           | <code><a href="#skproductdiscount">SKProductDiscount</a> \| null</code> | The <a href="#product">Product</a> introductory Price.                   |
+| **`discounts`**                   | <code>SKProductDiscount[]</code>                                        | The <a href="#product">Product</a> discounts list.                       |
 
 
 #### SubscriptionPeriod
