@@ -3,6 +3,7 @@ package ee.forgr.plugin.capacitor_purchases;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
@@ -11,15 +12,15 @@ import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
 import com.google.common.base.CaseFormat;
-import com.revenuecat.purchases.PurchaserInfo;
+import com.revenuecat.purchases.CustomerInfo;
 import com.revenuecat.purchases.Purchases;
 
 import com.revenuecat.purchases.hybridcommon.CommonKt;
 import com.revenuecat.purchases.hybridcommon.ErrorContainer;
 import com.revenuecat.purchases.hybridcommon.OnResult;
 import com.revenuecat.purchases.common.PlatformInfo;
-import com.revenuecat.purchases.hybridcommon.mappers.PurchaserInfoMapperKt;
-import com.revenuecat.purchases.interfaces.UpdatedPurchaserInfoListener;
+import com.revenuecat.purchases.hybridcommon.mappers.CustomerInfoMapperKt;
+import com.revenuecat.purchases.interfaces.UpdatedCustomerInfoListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -33,21 +34,19 @@ public class CapacitorPurchasesPlugin extends Plugin {
 
     public static final String PLATFORM_NAME = "capacitor";
     public static final String PLUGIN_VERSION = "2.4.0";
-    public static String AppName = "";
 
     @PluginMethod
     public void setup(PluginCall call) {
         String apiKey = call.getString("apiKey");
-        String appUserID = call.getString("appUserID");
+        String appUserID = call.getString("appUserID", "titititi");
         PlatformInfo platformInfo = new PlatformInfo(PLATFORM_NAME, PLUGIN_VERSION);
-        AppName = this.bridge.getActivity().getString(R.string.app_name);
         CommonKt.configure(this.bridge.getActivity(), apiKey, appUserID, true, platformInfo);
-        Purchases.getSharedInstance().setUpdatedPurchaserInfoListener(new UpdatedPurchaserInfoListener() {
+        Purchases.getSharedInstance().setUpdatedCustomerInfoListener(new UpdatedCustomerInfoListener() {
             @Override
-            public void onReceived(@NonNull PurchaserInfo purchaserInfo) {
+            public void onReceived(@NonNull CustomerInfo purchaserInfo) {
                 JSObject ret = new JSObject();
                 ret.put("purchases", convertMapToJson(new HashMap<String, String>()));
-                ret.put("purchaserInfo", convertMapToJson(PurchaserInfoMapperKt.map(purchaserInfo)));
+                ret.put("purchaserInfo", convertMapToJson(CustomerInfoMapperKt.map(purchaserInfo)));
                 notifyListeners("purchasesUpdate", ret);
             }
         });
@@ -77,7 +76,7 @@ public class CapacitorPurchasesPlugin extends Plugin {
 
     @PluginMethod
     public void restoreTransactions(PluginCall call) {
-        CommonKt.restoreTransactions(getOnResult(call, "purchaserInfo"));
+        CommonKt.restorePurchases(getOnResult(call, "purchaserInfo"));
     }
 
     @PluginMethod
@@ -93,7 +92,7 @@ public class CapacitorPurchasesPlugin extends Plugin {
 
     @PluginMethod
     public void getPurchaserInfo(PluginCall call) {
-        CommonKt.getPurchaserInfo(getOnResult(call, "purchaserInfo"));
+        CommonKt.getCustomerInfo(getOnResult(call, "purchaserInfo"));
     }
 
     @PluginMethod
@@ -149,7 +148,8 @@ public class CapacitorPurchasesPlugin extends Plugin {
                     object.put("currencySymbol", currency_symbol);
                 }
                 if (camelKey == "title") {
-                    value = ((String) value).replace("(" + AppName + ")", "");
+                    //                    value = ((String) value).replace("(" + AppName + ")", "");
+                    value = ((String) value).replaceAll("\\((.*?)\\)", "$1");
                 }
                 object.put(camelKey, value);
             }
