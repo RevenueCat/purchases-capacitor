@@ -33,14 +33,12 @@ public class CapacitorPurchasesPlugin extends Plugin {
 
     public static final String PLATFORM_NAME = "capacitor";
     public static final String PLUGIN_VERSION = "2.4.0";
-    public static String AppName = "";
 
     @PluginMethod
     public void setup(PluginCall call) {
         String apiKey = call.getString("apiKey");
         String appUserID = call.getString("appUserID");
         PlatformInfo platformInfo = new PlatformInfo(PLATFORM_NAME, PLUGIN_VERSION);
-        AppName = this.bridge.getActivity().getString(R.string.app_name);
         CommonKt.configure(this.bridge.getActivity(), apiKey, appUserID, true, platformInfo);
         Purchases.getSharedInstance().setUpdatedPurchaserInfoListener(new UpdatedPurchaserInfoListener() {
             @Override
