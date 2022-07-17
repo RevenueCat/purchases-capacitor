@@ -147,8 +147,8 @@ public class CapacitorPurchasesPlugin extends Plugin {
                     object.put("currencySymbol", currency_symbol);
                 }
                 if (camelKey == "title") {
-                    //                    value = ((String) value).replace("(" + AppName + ")", "");
-                    value = ((String) value).replaceAll("\\((.*?)\\)", "$1");
+                    // value = ((String) value).replace("(" + AppName + ")", "");
+                    value = ((String) value).replaceAll("\\((.*?)\\)", ""); // TODO find better implementation
                 }
                 object.put(camelKey, value);
             }
