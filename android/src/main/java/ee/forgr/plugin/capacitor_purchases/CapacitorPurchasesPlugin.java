@@ -3,7 +3,6 @@ package ee.forgr.plugin.capacitor_purchases;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
@@ -38,7 +37,7 @@ public class CapacitorPurchasesPlugin extends Plugin {
     @PluginMethod
     public void setup(PluginCall call) {
         String apiKey = call.getString("apiKey");
-        String appUserID = call.getString("appUserID", "titititi");
+        String appUserID = call.getString("appUserID");
         PlatformInfo platformInfo = new PlatformInfo(PLATFORM_NAME, PLUGIN_VERSION);
         CommonKt.configure(this.bridge.getActivity(), apiKey, appUserID, true, platformInfo);
         Purchases.getSharedInstance().setUpdatedCustomerInfoListener(new UpdatedCustomerInfoListener() {
