@@ -4,12 +4,13 @@ on:
   push:
     branches:
       - main
+      - development
 
 jobs:
   bump-version:
-    if: "!startsWith(github.event.head_commit.message, 'bump:')"
+    if: "!startsWith(github.event.head_commit.message, 'chore(release):')"
     runs-on: ubuntu-latest
-    name: "Bump version and create changelog with commitizen"
+    name: "Bump version and create changelog with standard version"
     steps:
       - name: Check out
         uses: actions/checkout@v2
