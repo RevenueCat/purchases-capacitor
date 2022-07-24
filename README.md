@@ -7,7 +7,7 @@ Capacitor implementation with new RevenueCat swift SDK v4
 ## Install
 
 ```bash
-npm install capacitor-purchases
+npm install @capgo/capacitor-purchases
 npx cap sync
 ```
 
