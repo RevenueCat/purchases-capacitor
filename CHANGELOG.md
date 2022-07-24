@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.9](https://github.com/riderx/capacitor-purchases/compare/v1.3.8...v1.3.9) (2022-07-24)
+
+
+### Bug Fixes
+
+* CI loop ([9ad4ee4](https://github.com/riderx/capacitor-purchases/commit/9ad4ee42293af3f814db003ec133a02643ebdfad))
+
 ### [1.3.8](https://github.com/riderx/capacitor-purchases/compare/v1.3.7...v1.3.8) (2022-07-24)
 
 ### [1.3.7](https://github.com/riderx/capacitor-purchases/compare/v1.3.6...v1.3.7) (2022-07-24)
