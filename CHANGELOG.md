@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.10](https://github.com/riderx/capacitor-purchases/compare/v1.3.9...v1.3.10) (2022-07-28)
+
+
+### Bug Fixes
+
+* for rename ([c21c896](https://github.com/riderx/capacitor-purchases/commit/c21c896321a97eaf23a9897138e4d178779a5239))
+
 ### [1.3.9](https://github.com/riderx/capacitor-purchases/compare/v1.3.8...v1.3.9) (2022-07-24)
 
 
