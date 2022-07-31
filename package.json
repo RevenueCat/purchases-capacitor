@@ -11,7 +11,7 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "CapacitorPurchases.podspec"
+    "CapgoCapacitorPurchases.podspec"
   ],
   "author": "Martin Donadieu",
   "license": "MIT",
