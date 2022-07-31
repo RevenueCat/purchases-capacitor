@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.12](https://github.com/riderx/capacitor-purchases/compare/v1.3.11...v1.3.12) (2022-07-31)
+
+
+### Bug Fixes
+
+* missing file in npm ([5c40199](https://github.com/riderx/capacitor-purchases/commit/5c40199e96375067a916d4b602f553caada77260))
+
 ### [1.3.11](https://github.com/riderx/capacitor-purchases/compare/v1.3.10...v1.3.11) (2022-07-28)
 
 
