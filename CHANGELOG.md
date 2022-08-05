@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.13](https://github.com/riderx/capacitor-purchases/compare/v1.3.12...v1.3.13) (2022-08-05)
+
+
+### Bug Fixes
+
+* peer allow capacitor v4 ([d25db8d](https://github.com/riderx/capacitor-purchases/commit/d25db8d61657369e24f911e6394e53e9b34d6b88))
+
 ### [1.3.12](https://github.com/riderx/capacitor-purchases/compare/v1.3.11...v1.3.12) (2022-07-31)
 
 
