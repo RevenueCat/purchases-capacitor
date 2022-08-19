@@ -15,15 +15,18 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
+      - uses: pnpm/action-setup@v2.2.2
+        with:
+          version: latest
       - name: Install dependencies
         id: install_code
-        run: npm i        
+        run: pnpm i        
       # - name: Lint
       #   id: lint_code
       #   run: npm run lint
       - name: Build
         id: build_code
-        run: npm run build
+        run: pnpm run build
       - uses: JS-DevTools/npm-publish@v1
         with:
           access: public

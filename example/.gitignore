@@ -1,5 +1,7 @@
-node_modules
+.idea/
+node_modules/
+.vscode/
+*.map
 .DS_Store
-dist
-dist-ssr
-*.local
+.sourcemaps
+dist/
