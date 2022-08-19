@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.14](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.13...v1.3.14) (2022-08-19)
+
+
+### Bug Fixes
+
+* upgrade to latest plugin template ([65e5fc3](https://github.com/Cap-go/capacitor-purchases/commit/65e5fc337386e1b284547aa90116f7df6cfff739))
+
 ### [1.3.13](https://github.com/riderx/capacitor-purchases/compare/v1.3.12...v1.3.13) (2022-08-05)
 
 
