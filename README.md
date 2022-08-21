@@ -1,5 +1,5 @@
 # capacitor-purchases
-
+  <a href="https://capgo.app/"><img src='https://raw.githubusercontent.com/Cap-go/capgo/main/assets/capgo_banner.png' alt='Capgo - Instant updates for capacitor'/></a>
 In-app Subscriptions Made Easy with RevenueCat sdk
 
 Capacitor implementation with new RevenueCat swift SDK v4
