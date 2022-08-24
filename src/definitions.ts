@@ -530,9 +530,16 @@ export interface CapacitorPurchasesPlugin {
   /**
    * Sets up  with your API key and an app user id.
    * @param {string} apiKey RevenueCat API Key. Needs to be a string
+   * @param {string} [appUserID] The unique app user id for this user.
+   * This user id will allow users to share their purchases and subscriptions across devices.
+   * Leave empty if you want RevenueCat to generate this for you.
+   * @param {boolean} [observerMode = false] Set this to true if you have your own IAP implementation 
+   * and want to use only RevenueCat’s backend. Default is false.
    */
   setup(data: {
     apiKey: string,
+    appUserID?: string,
+    observerMode?: boolean,
   }): Promise<void>
 
   /**
