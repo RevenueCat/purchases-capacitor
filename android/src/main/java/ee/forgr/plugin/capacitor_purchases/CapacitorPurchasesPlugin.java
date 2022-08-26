@@ -38,7 +38,7 @@ public class CapacitorPurchasesPlugin extends Plugin {
     public void setup(PluginCall call) {
         String apiKey = call.getString("apiKey");
         String appUserID = call.getString("appUserID");
-        String observerMode = call.getBoolean("observerMode") != null ? call.getBoolean("observerMode") : false;
+        Boolean observerMode = call.getBoolean("observerMode") != null ? call.getBoolean("observerMode") : false;
         PlatformInfo platformInfo = new PlatformInfo(PLATFORM_NAME, PLUGIN_VERSION);
         CommonKt.configure(this.bridge.getActivity(), apiKey, appUserID, observerMode, platformInfo);
         Purchases.getSharedInstance().setUpdatedCustomerInfoListener(new UpdatedCustomerInfoListener() {
