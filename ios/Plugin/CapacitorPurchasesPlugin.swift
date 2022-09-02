@@ -215,9 +215,9 @@ public extension PackageType {
 public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
 
     @objc func setup(_ call: CAPPluginCall) {
-        let apiKey = call.getString("apiKey") ?? ""
-        let appUserID = call.getString("appUserID")
-        let observerMode = call.getBool("observerMode") ?? false
+        let apiKey = call.getString("apiKey", "")
+        let appUserID = call.getString("appUserID", "")
+        let observerMode = call.getBool("observerMode", false)
         let configuration = Configuration.Builder(withAPIKey: apiKey)
                                  .with(appUserID: appUserID)
                                  .with(observerMode: observerMode)
