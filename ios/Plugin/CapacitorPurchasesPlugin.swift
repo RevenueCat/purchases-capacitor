@@ -216,7 +216,13 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
 
     @objc func setup(_ call: CAPPluginCall) {
         let apiKey = call.getString("apiKey") ?? ""
-        Purchases.configure(withAPIKey: apiKey)
+        let appUserID = call.getString("appUserID")
+        let observerMode = call.getBool("observerMode") ?? false
+        let configuration = Configuration.Builder(withAPIKey: apiKey)
+                                 .with(appUserID: appUserID)
+                                 .with(observerMode: observerMode)
+                                 .build()
+        Purchases.configure(with: configuration)
         Purchases.shared.delegate = self
         call.resolve()
     }
