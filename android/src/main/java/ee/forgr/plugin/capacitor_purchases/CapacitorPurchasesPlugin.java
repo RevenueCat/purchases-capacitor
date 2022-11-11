@@ -1,32 +1,26 @@
 package ee.forgr.plugin.capacitor_purchases;
 
 import android.util.Log;
-
 import androidx.annotation.NonNull;
-
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
-
 import com.google.common.base.CaseFormat;
 import com.revenuecat.purchases.CustomerInfo;
 import com.revenuecat.purchases.Purchases;
-
+import com.revenuecat.purchases.common.PlatformInfo;
 import com.revenuecat.purchases.hybridcommon.CommonKt;
 import com.revenuecat.purchases.hybridcommon.ErrorContainer;
 import com.revenuecat.purchases.hybridcommon.OnResult;
-import com.revenuecat.purchases.common.PlatformInfo;
 import com.revenuecat.purchases.hybridcommon.mappers.CustomerInfoMapperKt;
 import com.revenuecat.purchases.interfaces.UpdatedCustomerInfoListener;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 @CapacitorPlugin(name = "CapacitorPurchases")
 public class CapacitorPurchasesPlugin extends Plugin {
@@ -41,15 +35,19 @@ public class CapacitorPurchasesPlugin extends Plugin {
         Boolean observerMode = call.getBoolean("observerMode", false);
         PlatformInfo platformInfo = new PlatformInfo(PLATFORM_NAME, PLUGIN_VERSION);
         CommonKt.configure(this.bridge.getActivity(), apiKey, appUserID, observerMode, platformInfo);
-        Purchases.getSharedInstance().setUpdatedCustomerInfoListener(new UpdatedCustomerInfoListener() {
-            @Override
-            public void onReceived(@NonNull CustomerInfo purchaserInfo) {
-                JSObject ret = new JSObject();
-                ret.put("purchases", convertMapToJson(new HashMap<String, String>()));
-                ret.put("purchaserInfo", convertMapToJson(CustomerInfoMapperKt.map(purchaserInfo)));
-                notifyListeners("purchasesUpdate", ret);
-            }
-        });
+        Purchases
+            .getSharedInstance()
+            .setUpdatedCustomerInfoListener(
+                new UpdatedCustomerInfoListener() {
+                    @Override
+                    public void onReceived(@NonNull CustomerInfo purchaserInfo) {
+                        JSObject ret = new JSObject();
+                        ret.put("purchases", convertMapToJson(new HashMap<String, String>()));
+                        ret.put("purchaserInfo", convertMapToJson(CustomerInfoMapperKt.map(purchaserInfo)));
+                        notifyListeners("purchasesUpdate", ret);
+                    }
+                }
+            );
     }
 
     @PluginMethod
@@ -61,17 +59,11 @@ public class CapacitorPurchasesPlugin extends Plugin {
     public void purchasePackage(PluginCall call) {
         String identifier = call.getString("identifier");
         String offeringIdentifier = call.getString("offeringIdentifier");
-        if(identifier == "" || offeringIdentifier == "") {
+        if (identifier == "" || offeringIdentifier == "") {
             call.reject("No package provided");
             return;
         }
-        CommonKt.purchasePackage(
-                this.bridge.getActivity(),
-                identifier,
-                offeringIdentifier,
-                null,
-                null,
-                getOnResult(call, ""));
+        CommonKt.purchasePackage(this.bridge.getActivity(), identifier, offeringIdentifier, null, null, getOnResult(call, ""));
     }
 
     @PluginMethod
@@ -132,7 +124,9 @@ public class CapacitorPurchasesPlugin extends Plugin {
         JSObject object = new JSObject();
 
         for (Map.Entry<String, ?> entry : readableMap.entrySet()) {
-            String camelKey = entry.getKey().contains("_") ? CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, entry.getKey()) : entry.getKey();
+            String camelKey = entry.getKey().contains("_")
+                ? CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, entry.getKey())
+                : entry.getKey();
             if (entry.getValue() == null) {
                 object.put(camelKey, JSONObject.NULL);
             } else if (entry.getValue() instanceof Map) {
@@ -144,7 +138,7 @@ public class CapacitorPurchasesPlugin extends Plugin {
             } else if (entry.getValue() != null) {
                 Object value = entry.getValue();
                 if (camelKey == "priceString") {
-                    String currency_symbol = ((String) value).replaceAll("\\d","").replace(".","").replace(",","");
+                    String currency_symbol = ((String) value).replaceAll("\\d", "").replace(".", "").replace(",", "");
                     object.put("currencySymbol", currency_symbol);
                 }
                 if (camelKey == "title") {
@@ -175,5 +169,4 @@ public class CapacitorPurchasesPlugin extends Plugin {
         }
         return writableArray;
     }
-
 }

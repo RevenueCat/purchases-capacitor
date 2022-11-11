@@ -24,7 +24,7 @@ extension String {
         return [
             "productId": productIdentifier,
             "revenueCatId": transactionIdentifier,
-            "purchaseDate": purchaseDate.iso8601withFractionalSeconds,
+            "purchaseDate": purchaseDate.iso8601withFractionalSeconds
         ]
     }
 }
@@ -93,17 +93,17 @@ extension String {
             "currencyCode": sk1Discount?.priceLocale.currencyCode as Any,
             "paymentMode": paymentMode.rawValue,
             "numberOfPeriods": subscriptionPeriod.value,
-            "subscriptionPeriod": subscriptionPeriod.toJson(),
+            "subscriptionPeriod": subscriptionPeriod.toJson()
         ]
     }
 }
 
 @objc public extension StoreProduct {
-    
+
     func toJson() -> [String: Any] {
         var isFamilyShareable = false
         var discounts: [Any] = []
-        var introPrice: Any? = nil
+        var introPrice: Any?
         if #available(iOS 14, *) {
             isFamilyShareable = self.isFamilyShareable
         }
@@ -125,13 +125,13 @@ extension String {
             "subscriptionGroupIdentifier": subscriptionGroupIdentifier as Any,
             "subscriptionPeriod": subscriptionPeriod?.toJson() as Any,
             "introductoryPrice": introPrice,
-            "discounts": discounts,
+            "discounts": discounts
         ]
     }
 }
 
 public extension PackageType {
-// copied from revenueCat sdk
+    // copied from revenueCat sdk
     var description: String? {
         switch self {
         case .unknown: return nil
@@ -189,7 +189,7 @@ public extension PackageType {
             "threeMonth": threeMonth?.toJson() as Any,
             "twoMonth": twoMonth?.toJson() as Any,
             "monthly": monthly?.toJson() as Any,
-            "weekly": weekly?.toJson() as Any,
+            "weekly": weekly?.toJson() as Any
         ]
     }
 }
@@ -219,25 +219,25 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
         let appUserID = call.getString("appUserID", "")
         let observerMode = call.getBool("observerMode", false)
         let configuration = Configuration.Builder(withAPIKey: apiKey)
-                                 .with(appUserID: appUserID)
-                                 .with(observerMode: observerMode)
-                                 .build()
+            .with(appUserID: appUserID)
+            .with(observerMode: observerMode)
+            .build()
         Purchases.configure(with: configuration)
         Purchases.shared.delegate = self
         call.resolve()
     }
-    
+
     public func purchases(_ purchases: Purchases, receivedUpdated purchaserInfo: CustomerInfo) {
         self.notifyListeners("purchasesUpdate", data: ["purchases": purchases, "purchaserInfo": purchaserInfo])
     }
 
     @objc func getOfferings(_ call: CAPPluginCall) {
         Purchases.shared.getOfferings { (offerings, error) in
-            if ((error) != nil) {
+            if (error) != nil {
                 call.reject("getOfferings failed")
             } else {
                 let offJson = offerings?.toJson()
-                if(offJson != nil) {
+                if offJson != nil {
                     call.resolve([
                         "offerings": offJson as Any
                     ])
@@ -251,22 +251,22 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
     @objc func purchasePackage(_ call: CAPPluginCall) {
         let identifier = call.getString("identifier") ?? ""
         let offeringIdentifier = call.getString("offeringIdentifier") ?? ""
-        if(identifier == "" || offeringIdentifier == "") {
+        if identifier == "" || offeringIdentifier == "" {
             call.reject("No package provided")
             return
         }
         Purchases.shared.getOfferings { (offerings, error) in
-            if ((error) != nil) {
+            if (error) != nil {
                 call.reject("getOfferings failed")
             } else {
                 let offering = offerings?.offering(identifier: offeringIdentifier)
                 let package = offering?.package(identifier: identifier)
-                if (package == nil) {
+                if package == nil {
                     call.reject("cannot found package in current offering")
                     return
                 }
-                Purchases.shared.purchase(package: package!) { (transaction, purchaserInfo, error, userCancelled) in
-                    if ((error) != nil) {
+                Purchases.shared.purchase(package: package!) { (_, purchaserInfo, error, _) in
+                    if (error) != nil {
                         call.reject("Restore failed")
                     } else {
                         call.resolve([
@@ -280,7 +280,7 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
 
     @objc func restoreTransactions(_ call: CAPPluginCall) {
         Purchases.shared.restorePurchases { purchaserInfo, error in
-            if ((error) != nil) {
+            if (error) != nil {
                 call.reject("Restore failed")
             } else {
                 call.resolve([
@@ -289,51 +289,51 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
             }
         }
     }
-    
+
     @objc func setAttributes(_ call: CAPPluginCall) {
         let attributes = call.getObject("attributes") ?? [:]
         Purchases.shared.setAttributes((attributes as? [String: String])!)
         call.resolve()
     }
-    
+
     @objc func logIn(_ call: CAPPluginCall) {
         let appUserID = call.getString("appUserID") ?? ""
         Purchases.shared.logIn(appUserID) { (purchaserInfo, created, error) in
-            if ((error) != nil) {
+            if (error) != nil {
                 call.reject("Login failed")
             } else {
                 call.resolve([
                     "purchaserInfo": purchaserInfo!,
-                        "created": created
+                    "created": created
                 ])
             }
         }
     }
-    
+
     @objc func logOut(_ call: CAPPluginCall) {
-        Purchases.shared.logOut() { (purchaserInfo, error) in
-            if ((error) != nil) {
+        Purchases.shared.logOut { (purchaserInfo, error) in
+            if (error) != nil {
                 call.reject("Logout failed")
             } else {
                 call.resolve([
-                        "purchaserInfo": purchaserInfo!
+                    "purchaserInfo": purchaserInfo!
                 ])
             }
         }
     }
-    
+
     @objc func getPurchaserInfo(_ call: CAPPluginCall) {
         Purchases.shared.getCustomerInfo { (purchaserInfo, error) in
-            if ((error) != nil) {
+            if (error) != nil {
                 call.reject("Get purchaser info failed")
             } else {
                 call.resolve([
-                    "purchaserInfo": purchaserInfo?.toJson() as Any,
+                    "purchaserInfo": purchaserInfo?.toJson() as Any
                 ])
             }
         }
     }
-    
+
     @objc func setDebugLogsEnabled(_ call: CAPPluginCall) {
         let enabled = call.getBool("enabled") ?? false
         Purchases.logLevel = enabled ? .debug : .error

@@ -41,14 +41,14 @@ npx cap sync
 ### setup(...)
 
 ```typescript
-setup(data: { apiKey: string; }) => Promise<void>
+setup(data: { apiKey: string; appUserID?: string; observerMode?: boolean; }) => Promise<void>
 ```
 
 Sets up  with your API key and an app user id.
 
-| Param      | Type                             |
-| ---------- | -------------------------------- |
-| **`data`** | <code>{ apiKey: string; }</code> |
+| Param      | Type                                                                         |
+| ---------- | ---------------------------------------------------------------------------- |
+| **`data`** | <code>{ apiKey: string; appUserID?: string; observerMode?: boolean; }</code> |
 
 --------------------
 
@@ -56,7 +56,7 @@ Sets up  with your API key and an app user id.
 ### addListener('purchasesUpdate', ...)
 
 ```typescript
-addListener(eventName: "purchasesUpdate", listenerFunc: (data: { purchases: Package; purchaserInfo: PurchaserInfo; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'purchasesUpdate', listenerFunc: (data: { purchases: Package; purchaserInfo: PurchaserInfo; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Called when partialResults set to true and result received
@@ -144,7 +144,7 @@ restrictions refer to our guide: https://docs.revenuecat.com/docs/subscriber-att
 logIn(data: { appUserID: string; }) => Promise<LogInResult>
 ```
 
-This function will logIn the current user with an appUserID. Typically this would be used after a log in 
+This function will logIn the current user with an appUserID. Typically this would be used after a log in
 to identify a user without calling configure.
 
 | Param      | Type                                |
@@ -366,15 +366,15 @@ Holds the logIn result
 
 | Members           | Value                      | Description                                                      |
 | ----------------- | -------------------------- | ---------------------------------------------------------------- |
-| **`UNKNOWN`**     | <code>"UNKNOWN"</code>     | A package that was defined with a custom identifier.             |
-| **`CUSTOM`**      | <code>"CUSTOM"</code>      | A package that was defined with a custom identifier.             |
-| **`LIFETIME`**    | <code>"LIFETIME"</code>    | A package configured with the predefined lifetime identifier.    |
-| **`ANNUAL`**      | <code>"ANNUAL"</code>      | A package configured with the predefined annual identifier.      |
-| **`SIX_MONTH`**   | <code>"SIX_MONTH"</code>   | A package configured with the predefined six month identifier.   |
-| **`THREE_MONTH`** | <code>"THREE_MONTH"</code> | A package configured with the predefined three month identifier. |
-| **`TWO_MONTH`**   | <code>"TWO_MONTH"</code>   | A package configured with the predefined two month identifier.   |
-| **`MONTHLY`**     | <code>"MONTHLY"</code>     | A package configured with the predefined monthly identifier.     |
-| **`WEEKLY`**      | <code>"WEEKLY"</code>      | A package configured with the predefined weekly identifier.      |
+| **`UNKNOWN`**     | <code>'UNKNOWN'</code>     | A package that was defined with a custom identifier.             |
+| **`CUSTOM`**      | <code>'CUSTOM'</code>      | A package that was defined with a custom identifier.             |
+| **`LIFETIME`**    | <code>'LIFETIME'</code>    | A package configured with the predefined lifetime identifier.    |
+| **`ANNUAL`**      | <code>'ANNUAL'</code>      | A package configured with the predefined annual identifier.      |
+| **`SIX_MONTH`**   | <code>'SIX_MONTH'</code>   | A package configured with the predefined six month identifier.   |
+| **`THREE_MONTH`** | <code>'THREE_MONTH'</code> | A package configured with the predefined three month identifier. |
+| **`TWO_MONTH`**   | <code>'TWO_MONTH'</code>   | A package configured with the predefined two month identifier.   |
+| **`MONTHLY`**     | <code>'MONTHLY'</code>     | A package configured with the predefined monthly identifier.     |
+| **`WEEKLY`**      | <code>'WEEKLY'</code>      | A package configured with the predefined weekly identifier.      |
 
 </docgen-api>
 

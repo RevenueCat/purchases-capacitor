@@ -1,4 +1,4 @@
-import type { PluginListenerHandle } from "@capacitor/core";
+import type { PluginListenerHandle } from '@capacitor/core';
 
 export enum ATTRIBUTION_NETWORK {
   APPLE_SEARCH_ADS = 0,
@@ -13,12 +13,12 @@ export enum PURCHASE_TYPE {
   /**
    * A type of SKU for in-app products.
    */
-  INAPP = "inapp",
+  INAPP = 'inapp',
 
   /**
    * A type of SKU for subscriptions.
    */
-  SUBS = "subs",
+  SUBS = 'subs',
 }
 
 /**
@@ -26,7 +26,7 @@ export enum PURCHASE_TYPE {
  * Currently, these are only relevant for Google Play Android users:
  * https://developer.android.com/reference/com/android/billingclient/api/BillingClient.FeatureType
  */
- export enum BILLING_FEATURE {
+export enum BILLING_FEATURE {
   /**
    * Purchase/query for subscriptions.
    */
@@ -82,51 +82,50 @@ export enum PRORATION_MODE {
 }
 
 export enum PACKAGE_TYPE {
+  /**
+   * A package that was defined with a custom identifier.
+   */
+  UNKNOWN = 'UNKNOWN',
 
   /**
    * A package that was defined with a custom identifier.
    */
-  UNKNOWN = "UNKNOWN",
-
-  /**
-   * A package that was defined with a custom identifier.
-   */
-  CUSTOM = "CUSTOM",
+  CUSTOM = 'CUSTOM',
 
   /**
    * A package configured with the predefined lifetime identifier.
    */
-  LIFETIME = "LIFETIME",
+  LIFETIME = 'LIFETIME',
 
   /**
    * A package configured with the predefined annual identifier.
    */
-  ANNUAL = "ANNUAL",
+  ANNUAL = 'ANNUAL',
 
   /**
    * A package configured with the predefined six month identifier.
    */
-  SIX_MONTH = "SIX_MONTH",
+  SIX_MONTH = 'SIX_MONTH',
 
   /**
    * A package configured with the predefined three month identifier.
    */
-  THREE_MONTH = "THREE_MONTH",
+  THREE_MONTH = 'THREE_MONTH',
 
   /**
    * A package configured with the predefined two month identifier.
    */
-  TWO_MONTH = "TWO_MONTH",
+  TWO_MONTH = 'TWO_MONTH',
 
   /**
    * A package configured with the predefined monthly identifier.
    */
-  MONTHLY = "MONTHLY",
+  MONTHLY = 'MONTHLY',
 
   /**
    * A package configured with the predefined weekly identifier.
    */
-  WEEKLY = "WEEKLY",
+  WEEKLY = 'WEEKLY',
 }
 
 export enum INTRO_ELIGIBILITY_STATUS {
@@ -141,7 +140,7 @@ export enum INTRO_ELIGIBILITY_STATUS {
   /**
    * The user is eligible for a free trial or intro pricing for this product.
    */
-  INTRO_ELIGIBILITY_STATUS_ELIGIBLE
+  INTRO_ELIGIBILITY_STATUS_ELIGIBLE,
 }
 
 /**
@@ -219,7 +218,7 @@ export interface EntitlementInfos {
   readonly active: { [key: string]: EntitlementInfo };
 }
 
-export interface Transaction { 
+export interface Transaction {
   /**
    * RevenueCat Id associated to the transaction.
    */
@@ -383,11 +382,11 @@ export interface Product {
   /**
    * The Product introductory Price.
    */
-  readonly introductoryPrice:  SKProductDiscount | null;
+  readonly introductoryPrice: SKProductDiscount | null;
   /**
    * The Product discounts list.
    */
-  readonly discounts:  SKProductDiscount[];
+  readonly discounts: SKProductDiscount[];
 }
 
 /**
@@ -533,14 +532,10 @@ export interface CapacitorPurchasesPlugin {
    * @param {string} [appUserID] The unique app user id for this user.
    * This user id will allow users to share their purchases and subscriptions across devices.
    * Leave empty if you want RevenueCat to generate this for you.
-   * @param {boolean} [observerMode = false] Set this to true if you have your own IAP implementation 
+   * @param {boolean} [observerMode = false] Set this to true if you have your own IAP implementation
    * and want to use only RevenueCat’s backend. Default is false.
    */
-  setup(data: {
-    apiKey: string,
-    appUserID?: string,
-    observerMode?: boolean,
-  }): Promise<void>
+  setup(data: { apiKey: string; appUserID?: string; observerMode?: boolean }): Promise<void>;
 
   /**
    * Called when partialResults set to true and result received
@@ -550,13 +545,13 @@ export interface CapacitorPurchasesPlugin {
    * @since 2.0.2
    */
   addListener(
-    eventName: "purchasesUpdate",
-    listenerFunc: (data: { purchases: Package, purchaserInfo: PurchaserInfo }) => void
+    eventName: 'purchasesUpdate',
+    listenerFunc: (data: { purchases: Package; purchaserInfo: PurchaserInfo }) => void
   ): Promise<PluginListenerHandle> & PluginListenerHandle;
   /**
    * Gets the Offerings configured in the RevenueCat dashboard
    */
-  getOfferings(): Promise<{offerings: Offerings}>
+  getOfferings(): Promise<{ offerings: Offerings }>;
 
   /**
    * Make a purchase
@@ -565,16 +560,15 @@ export interface CapacitorPurchasesPlugin {
    */
   purchasePackage(data: {
     // aPackage: Package,
-    identifier: string,
-    offeringIdentifier: string,
+    identifier: string;
+    offeringIdentifier: string;
     // upgradeInfo?: UpgradeInfo | null
-  }): Promise<{ purchaserInfo: PurchaserInfo; }>
+  }): Promise<{ purchaserInfo: PurchaserInfo }>;
 
   /**
    * Restores a user's previous  and links their appUserIDs to any user's also using those .
    */
-  restoreTransactions(
-  ): Promise<{ purchaserInfo: PurchaserInfo; }>
+  restoreTransactions(): Promise<{ purchaserInfo: PurchaserInfo }>;
 
   /**
    * Subscriber attributes are useful for storing additional, structured information on a user.
@@ -586,29 +580,26 @@ export interface CapacitorPurchasesPlugin {
    *
    * @param attributes Map of attributes by key. Set the value as an empty string to delete an attribute.
    */
-  setAttributes(data: {attributes: { [key: string]: string | null }}): Promise<void>
-  
+  setAttributes(data: { attributes: { [key: string]: string | null } }): Promise<void>;
+
   /**
-   * This function will logIn the current user with an appUserID. Typically this would be used after a log in 
+   * This function will logIn the current user with an appUserID. Typically this would be used after a log in
    * to identify a user without calling configure.
    * @param {String} appUserID The appUserID that should be linked to the currently user
-   * @param {function(LogInResult):void} callback Callback that will receive an object that contains the purchaserInfo after logging in, as well as a boolean indicating 
-   * whether the user has just been created for the first time in the RevenueCat backend. 
+   * @param {function(LogInResult):void} callback Callback that will receive an object that contains the purchaserInfo after logging in, as well as a boolean indicating
+   * whether the user has just been created for the first time in the RevenueCat backend.
    * @param {function(PurchasesError):void} errorCallback Callback that will be triggered whenever there is any problem logging in.
    */
-  logIn(data: {
-    appUserID: string, 
-  }): Promise<LogInResult>
+  logIn(data: { appUserID: string }): Promise<LogInResult>;
 
   /**
    * Logs out the  client clearing the saved appUserID. This will generate a random user id and save it in the cache.
    * If the current user is already anonymous, this will produce a Error.
    * @param {function(PurchaserInfo):void} callback Callback that will receive the new purchaser info after resetting
-   * @param {function(PurchasesError):void} errorCallback Callback that will be triggered whenever there is an error when logging out. 
+   * @param {function(PurchasesError):void} errorCallback Callback that will be triggered whenever there is an error when logging out.
    * This could happen for example if logOut is called but the current user is anonymous.
    */
-  logOut(
-  ): Promise<{ purchaserInfo: PurchaserInfo }>
+  logOut(): Promise<{ purchaserInfo: PurchaserInfo }>;
 
   /**
    * Gets the current purchaser info. This call will return the cached purchaser info unless the cache is stale, in which case,
@@ -616,12 +607,11 @@ export interface CapacitorPurchasesPlugin {
    * @param {function(PurchaserInfo):void} callback Callback that will receive the purchaser info
    * @param {function(PurchasesError, boolean):void} errorCallback Callback that will be triggered whenever there is any problem retrieving the purchaser info
    */
-  getPurchaserInfo(
-  ): Promise<{ purchaserInfo: PurchaserInfo }>
+  getPurchaserInfo(): Promise<{ purchaserInfo: PurchaserInfo }>;
 
   /**
    * Enables/Disables debugs logs
    * @param {boolean} enabled Enable or not debug logs
    */
-  setDebugLogsEnabled(data: {enabled: boolean}): Promise<void>
+  setDebugLogsEnabled(data: { enabled: boolean }): Promise<void>;
 }

@@ -23,8 +23,8 @@ export const mockPackA: Package = {
     introductoryPrice: null,
     discounts: [],
   },
-  offeringIdentifier: 'com.example.test.offering1'
-} 
+  offeringIdentifier: 'com.example.test.offering1',
+};
 
 export const mockPackM: Package = {
   identifier: 'com.example.test',
@@ -46,12 +46,12 @@ export const mockPackM: Package = {
     introductoryPrice: null,
     discounts: [],
   },
-  offeringIdentifier: 'com.example.test.offering1'
-} 
+  offeringIdentifier: 'com.example.test.offering1',
+};
 
 export const mockCurrent: Offering = {
   identifier: 'com.example.test.offering1',
-  serverDescription: "Test offering",
+  serverDescription: 'Test offering',
   availablePackages: [mockPackA, mockPackM],
   lifetime: null,
   annual: mockPackA,
@@ -76,77 +76,66 @@ export const mockPurchaserInfo: PurchaserInfo = {
   requestDate: '2020-01-01T00:00:00.000Z',
   originalApplicationVersion: '',
   originalPurchaseDate: null,
-  managementURL: null
-}
+  managementURL: null,
+};
 
-export const mockAll: {[key: string]: Offering} = {
-  "current": mockCurrent
-}
-
+export const mockAll: { [key: string]: Offering } = {
+  current: mockCurrent,
+};
 
 export const mockOffering: Offerings = {
   all: mockAll,
-  current: mockCurrent
-}
+  current: mockCurrent,
+};
 
-export class CapacitorPurchasesWeb
-  extends WebPlugin
-  implements CapacitorPurchasesPlugin {
-
-  setup(data: {
-    apiKey: string,
-  }): Promise<void> {
+export class CapacitorPurchasesWeb extends WebPlugin implements CapacitorPurchasesPlugin {
+  setup(data: { apiKey: string }): Promise<void> {
     console.error('setup only mocked in web', data);
     return Promise.resolve();
   }
 
-  async getOfferings(): Promise<{offerings: Offerings}> {
+  async getOfferings(): Promise<{ offerings: Offerings }> {
     console.error('getOfferings only mocked in web');
-    return {offerings: mockOffering};
+    return { offerings: mockOffering };
   }
 
   async purchasePackage(data: {
-    identifier: string,
-    offeringIdentifier: string,
-  }): Promise<{ purchaserInfo: PurchaserInfo; }> {
+    identifier: string;
+    offeringIdentifier: string;
+  }): Promise<{ purchaserInfo: PurchaserInfo }> {
     console.error('purchasePackage only mocked in web', data);
     return { purchaserInfo: mockPurchaserInfo };
   }
 
-  async restoreTransactions(
-  ): Promise<{ purchaserInfo: PurchaserInfo; }> {
+  async restoreTransactions(): Promise<{ purchaserInfo: PurchaserInfo }> {
     console.error('purchasePackage only mocked in web');
     return { purchaserInfo: mockPurchaserInfo };
   }
 
-  async setAttributes(data: {attributes: { [key: string]: string | null }}): Promise<void> {
+  async setAttributes(data: { attributes: { [key: string]: string | null } }): Promise<void> {
     console.error('setAttributes only mocked in web', data);
     return Promise.resolve();
   }
 
-  async logIn(data: {
-    appUserID: string, 
-  }): Promise<LogInResult> {
+  async logIn(data: { appUserID: string }): Promise<LogInResult> {
     console.error('logIn only mocked in web', data);
     return {
       purchaserInfo: mockPurchaserInfo,
       created: true,
-    }
+    };
   }
 
-  async logOut(
-  ): Promise<{ purchaserInfo: PurchaserInfo }> {
+  async logOut(): Promise<{ purchaserInfo: PurchaserInfo }> {
     console.error('logOut only mocked in web');
     return { purchaserInfo: mockPurchaserInfo };
   }
 
-  async getPurchaserInfo(
-  ): Promise<{ purchaserInfo: PurchaserInfo }> {
+  async getPurchaserInfo(): Promise<{ purchaserInfo: PurchaserInfo }> {
     console.error('getPurchaserInfo only mocked in web');
     return { purchaserInfo: mockPurchaserInfo };
   }
 
-  async setDebugLogsEnabled(data: {enabled: boolean}): Promise<void> {
+  async setDebugLogsEnabled(data: { enabled: boolean }): Promise<void> {
     console.error('setDebugLogsEnabled only mocked in web', data);
   }
 }
