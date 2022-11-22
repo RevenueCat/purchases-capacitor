@@ -61,7 +61,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation "androidx.core:core-ktx:$androidxCoreVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "com.google.guava:guava:31.1-android"
+    implementation "com.google.guava:guava:31.1-jre"
     implementation "com.revenuecat.purchases:purchases:5.3.0"
     implementation "com.revenuecat.purchases:purchases-hybrid-common:3.2.4"
 }
