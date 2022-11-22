@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.29](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.28...v1.3.29) (2022-11-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.revenuecat.purchases:purchases-hybrid-common to v3.3.0 ([7ac7dc2](https://github.com/Cap-go/capacitor-purchases/commit/7ac7dc22812a91b7e8aa8b2b58cb1981e99547d8))
+
 ### [1.3.28](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.27...v1.3.28) (2022-11-22)
 
 
