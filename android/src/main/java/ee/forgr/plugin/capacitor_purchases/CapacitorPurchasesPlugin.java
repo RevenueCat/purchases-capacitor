@@ -58,12 +58,13 @@ public class CapacitorPurchasesPlugin extends Plugin {
     @PluginMethod
     public void purchasePackage(PluginCall call) {
         String identifier = call.getString("identifier");
+        String oldSKU = call.getString("oldSKU");
         String offeringIdentifier = call.getString("offeringIdentifier");
         if (identifier == "" || offeringIdentifier == "") {
             call.reject("No package provided");
             return;
         }
-        CommonKt.purchasePackage(this.bridge.getActivity(), identifier, offeringIdentifier, null, null, getOnResult(call, ""));
+        CommonKt.purchasePackage(this.bridge.getActivity(), identifier, offeringIdentifier, oldSKU ? oldSKU : null, null, getOnResult(call, ""));
     }
 
     @PluginMethod

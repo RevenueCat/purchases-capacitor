@@ -249,8 +249,8 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
     }
 
     @objc func purchasePackage(_ call: CAPPluginCall) {
-        let identifier = call.getString("identifier") ?? ""
-        let offeringIdentifier = call.getString("offeringIdentifier") ?? ""
+        let identifier = call.getString("identifier", "")
+        let offeringIdentifier = call.getString("offeringIdentifier", "")
         if identifier == "" || offeringIdentifier == "" {
             call.reject("No package provided")
             return

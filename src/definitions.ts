@@ -562,7 +562,7 @@ export interface CapacitorPurchasesPlugin {
     // aPackage: Package,
     identifier: string;
     offeringIdentifier: string;
-    // upgradeInfo?: UpgradeInfo | null
+    oldSKU?: string | null
   }): Promise<{ purchaserInfo: PurchaserInfo }>;
 
   /**
