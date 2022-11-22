@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.24](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.23...v1.3.24) (2022-11-22)
+
+
+### Bug Fixes
+
+* allow oldSKU for android upgrade ([a35807a](https://github.com/Cap-go/capacitor-purchases/commit/a35807a98578e9af5beed4166c25aea570d16604))
+
 ### [1.3.23](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.22...v1.3.23) (2022-11-22)
 
 ### [1.3.22](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.21...v1.3.22) (2022-11-22)
