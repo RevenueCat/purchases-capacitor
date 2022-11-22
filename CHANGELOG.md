@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.26](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.25...v1.3.26) (2022-11-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.revenuecat.purchases:purchases to v5.6.4 ([79ce91f](https://github.com/Cap-go/capacitor-purchases/commit/79ce91f62cac43c1c8cc71c6bfb366bafa0770dd))
+
+### [1.3.25](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.24...v1.3.25) (2022-11-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.android.tools.build:gradle to v7.3.1 ([f16f19e](https://github.com/Cap-go/capacitor-purchases/commit/f16f19e993cae027796da9164289960cfb88c4ed))
+
+### [1.3.24](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.23...v1.3.24) (2022-11-22)
+
+
+### Bug Fixes
+
+* allow oldSKU for android upgrade ([a35807a](https://github.com/Cap-go/capacitor-purchases/commit/a35807a98578e9af5beed4166c25aea570d16604))
+
 ### [1.3.23](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.22...v1.3.23) (2022-11-22)
 
 ### [1.3.22](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.21...v1.3.22) (2022-11-22)
