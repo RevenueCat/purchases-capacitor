@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.30](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.29...v1.3.30) (2022-11-24)
+
+
+### Bug Fixes
+
+* kotlib version issue ([e35a5d6](https://github.com/Cap-go/capacitor-purchases/commit/e35a5d6ab2703a04a99bc0fb9447cbf11189043c))
+
 ### [1.3.29](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.28...v1.3.29) (2022-11-22)
 
 
