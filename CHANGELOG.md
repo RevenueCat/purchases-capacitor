@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.33](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.32...v1.3.33) (2022-11-24)
+
+
+### Bug Fixes
+
+* remove jcenter ([4f8e0ad](https://github.com/Cap-go/capacitor-purchases/commit/4f8e0adba31b8e626c1d84d0386960ac1500773f))
+
 ### [1.3.32](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.31...v1.3.32) (2022-11-24)
 
 
