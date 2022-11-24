@@ -9,8 +9,8 @@ ext {
 buildscript {
     ext.kotlin_version = project.hasProperty('kotlin_version') ? rootProject.ext.kotlin_version : '1.7.21'
     repositories {
-        mavenCentral()
         google()
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.3.1'
@@ -48,7 +48,6 @@ android {
 repositories {
     google()
     mavenCentral()
-    jcenter()
 }
 
 
