@@ -15,6 +15,16 @@ Capacitor implementation with new RevenueCat swift SDK v4
 npm install @capgo/capacitor-purchases
 npx cap sync
 ```
+## Android
+
+### Variables
+
+This plugin will use the following project variables (defined in your app's `variables.gradle` file):
+- `$kotlinVersion` version of `org.jetbrains.kotlin:kotlin-stdlib-jdk7` (default: `1.7.21`)
+
+## Configuration
+
+No configuration required for this plugin.
 
 ## API
 
