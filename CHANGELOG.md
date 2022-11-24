@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.36](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.35...v1.3.36) (2022-11-24)
+
+
+### Bug Fixes
+
+* min package version ([9ed57a3](https://github.com/Cap-go/capacitor-purchases/commit/9ed57a3b01580f23041342501f87505b8c1207ef))
+
 ### [1.3.35](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.34...v1.3.35) (2022-11-24)
 
 
