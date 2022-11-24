@@ -22,6 +22,21 @@ npx cap sync
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 - `$kotlinVersion` version of `org.jetbrains.kotlin:kotlin-stdlib-jdk7` (default: `1.7.21`)
 
+If you have compilation issue `Duplicate class androidx.lifecycle.ViewModelLazy`
+i found in this the solution who worked for me:
+https://stackoverflow.com/questions/73406969/duplicate-class-androidx-lifecycle-viewmodellazy-found-in-modules-lifecycle-view
+
+Add this
+```
+configurations {
+    all {
+        exclude group: 'androidx.lifecycle', module: 'lifecycle-runtime-ktx'
+        exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel-ktx'
+    }
+}
+an
+```
+line 2 in file `android/app/build.gradle`
 ## Configuration
 
 No configuration required for this plugin.
