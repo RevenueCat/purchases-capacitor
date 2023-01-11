@@ -228,7 +228,8 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
     }
 
     public func purchases(_ purchases: Purchases, receivedUpdated purchaserInfo: CustomerInfo) {
-        self.notifyListeners("purchasesUpdate", data: ["purchases": purchases, "purchaserInfo": purchaserInfo])
+        let purchase = purchaserInfo.toJson()
+        self.notifyListeners("purchasesUpdate", data: ["purchases": purchases, "purchaserInfo": purchase])
     }
 
     @objc func getOfferings(_ call: CAPPluginCall) {
@@ -269,9 +270,14 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
                     if (error) != nil {
                         call.reject("Restore failed")
                     } else {
-                        call.resolve([
-                            "purchaserInfo": purchaserInfo?.toJson() as Any
-                        ])
+                        let purchase = purchaserInfo?.toJson()
+                        if purchase != nil {
+                            call.resolve([
+                                "purchaserInfo": purchase as Any
+                            ])
+                        } else {
+                            call.reject("purchasePackage failed to convert in json")
+                        }
                     }
                 }
             }
@@ -283,9 +289,14 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
             if (error) != nil {
                 call.reject("Restore failed")
             } else {
-                call.resolve([
-                    "purchaserInfo": purchaserInfo?.toJson() as Any
-                ])
+                let purchase = purchaserInfo?.toJson()
+                if purchase != nil {
+                    call.resolve([
+                        "purchaserInfo": purchase as Any
+                    ])
+                } else {
+                    call.reject("listener failed to convert in json")
+                }
             }
         }
     }
@@ -302,10 +313,15 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
             if (error) != nil {
                 call.reject("Login failed")
             } else {
-                call.resolve([
-                    "purchaserInfo": purchaserInfo!,
-                    "created": created
-                ])
+                let purchase = purchaserInfo?.toJson()
+                if purchase != nil {
+                    call.resolve([
+                        "purchaserInfo": purchase as Any,
+                        "created": created
+                    ])
+                } else {
+                    call.reject("logIn failed to convert in json")
+                }
             }
         }
     }
@@ -315,9 +331,14 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
             if (error) != nil {
                 call.reject("Logout failed")
             } else {
-                call.resolve([
-                    "purchaserInfo": purchaserInfo!
-                ])
+                let purchase = purchaserInfo?.toJson()
+                if purchase != nil {
+                    call.resolve([
+                        "purchaserInfo": purchase as Any
+                    ])
+                } else {
+                    call.reject("logOut failed to convert in json")
+                }
             }
         }
     }
@@ -327,9 +348,14 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
             if (error) != nil {
                 call.reject("Get purchaser info failed")
             } else {
-                call.resolve([
-                    "purchaserInfo": purchaserInfo?.toJson() as Any
-                ])
+                let purchase = purchaserInfo?.toJson()
+                if purchase != nil {
+                    call.resolve([
+                        "purchaserInfo": purchase as Any
+                    ])
+                } else {
+                    call.reject("getPurchaserInfo failed to convert in json")
+                }
             }
         }
     }
