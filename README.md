@@ -16,7 +16,10 @@ npm install @capgo/capacitor-purchases
 npx cap sync
 ```
 ## Android
-
+Add this to your android manifest `android/app/src/main/AndroidManifest.xml`
+```xml
+<uses-permission android:name="com.android.vending.BILLING"/>
+```
 ### Variables
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
