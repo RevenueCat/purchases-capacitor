@@ -14,5 +14,6 @@ Pod::Spec.new do |s|
   s.ios.deployment_target  = '13.0'
   s.dependency 'Capacitor'
   s.dependency 'RevenueCat', '>= 4.16.0' 
+  s.dependency   "PurchasesHybridCommon", '4.8.0'
   s.swift_version = '5.1'
 end
