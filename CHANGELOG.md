@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.49...v2.0.0) (2023-01-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* use the new names of PurchaserInfo
+
+### Bug Fixes
+
+* ios build ([9ae6a6e](https://github.com/Cap-go/capacitor-purchases/commit/9ae6a6e5a5198588afa9568850afd3406d9f1723))
+* name productIdentifier ([d75a778](https://github.com/Cap-go/capacitor-purchases/commit/d75a7788cb4443421ab45e6fc0736d4f7a9f64b5))
+* use new restorePurchases name ([49633e4](https://github.com/Cap-go/capacitor-purchases/commit/49633e4d846520448b247958d79628ac5cb289b8))
+* use the new names of PurchaserInfo ([326bff5](https://github.com/Cap-go/capacitor-purchases/commit/326bff51358f06faa08d8a458d43ee966cd9b8f9))
+
 ### [1.3.49](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.48...v1.3.49) (2023-01-11)
 
 
