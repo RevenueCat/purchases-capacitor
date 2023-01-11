@@ -218,10 +218,17 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
         let apiKey = call.getString("apiKey", "")
         let appUserID = call.getString("appUserID", "")
         let observerMode = call.getBool("observerMode", false)
-        let configuration = Configuration.Builder(withAPIKey: apiKey)
-            .with(appUserID: appUserID)
-            .with(observerMode: observerMode)
-            .build()
+        let configuration: Configuration
+        if appUserID != "" {
+            configuration = Configuration.Builder(withAPIKey: apiKey)
+                .with(appUserID: appUserID)
+                .with(observerMode: observerMode)
+                .build()
+        } else {
+            configuration = Configuration.Builder(withAPIKey: apiKey)
+                .with(observerMode: observerMode)
+                .build()
+        }
         Purchases.configure(with: configuration)
         Purchases.shared.delegate = self
         call.resolve()
