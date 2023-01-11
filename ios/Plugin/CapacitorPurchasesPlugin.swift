@@ -120,7 +120,7 @@ extension String {
             "priceString": localizedPriceString,
             "currencySymbol": priceFormatter?.currencySymbol as Any,
             "currencyCode": priceFormatter?.currencyCode as Any,
-            "identifier": productIdentifierentifier,
+            "identifier": productIdentifier,
             "isFamilyShareable": isFamilyShareable,
             "subscriptionGroupIdentifier": subscriptionGroupIdentifier as Any,
             "subscriptionPeriod": subscriptionPeriod?.toJson() as Any,
