@@ -22,8 +22,8 @@ extension String {
 @objc public extension RevenueCat.StoreTransaction {
     func toJson() -> [String: Any] {
         return [
-            "productId": productIdentifier,
-            "revenueCatId": transactionIdentifier,
+            "productIdentifier": productIdentifier,
+            "transactionIdentifier": transactionIdentifier,
             "purchaseDate": purchaseDate.iso8601withFractionalSeconds
         ]
     }
@@ -120,7 +120,7 @@ extension String {
             "priceString": localizedPriceString,
             "currencySymbol": priceFormatter?.currencySymbol as Any,
             "currencyCode": priceFormatter?.currencyCode as Any,
-            "identifier": productIdentifier,
+            "identifier": productIdentifierentifier,
             "isFamilyShareable": isFamilyShareable,
             "subscriptionGroupIdentifier": subscriptionGroupIdentifier as Any,
             "subscriptionPeriod": subscriptionPeriod?.toJson() as Any,

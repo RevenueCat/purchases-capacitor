@@ -222,11 +222,11 @@ export interface Transaction {
   /**
    * RevenueCat Id associated to the transaction.
    */
-  readonly revenueCatId: string;
+  readonly transactionIdentifier: string;
   /**
    * Product Id associated with the transaction.
    */
-  readonly productId: string;
+  readonly productIdentifier: string;
   /**
    * Purchase date of the transaction in ISO 8601 format.
    */
