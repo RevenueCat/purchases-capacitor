@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.46](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.45...v1.3.46) (2023-01-11)
+
+
+### Bug Fixes
+
+* issue java pnpm ([a3ef050](https://github.com/Cap-go/capacitor-purchases/commit/a3ef050ebe97767519b2b88958fb728e1bc9f80f))
+
 ### [1.3.45](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.44...v1.3.45) (2023-01-11)
 
 
