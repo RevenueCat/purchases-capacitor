@@ -91,7 +91,7 @@ public class CapacitorPurchasesPlugin extends Plugin {
   }
 
   @PluginMethod
-  public void restoreTransactions(PluginCall call) {
+  public void restorePurchases(PluginCall call) {
     CommonKt.restorePurchases(getOnResult(call, "purchaserInfo"));
   }
 

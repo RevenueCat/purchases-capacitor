@@ -117,7 +117,7 @@ export class CapacitorPurchasesWeb
     return { purchaserInfo: mockCustomerInfo };
   }
 
-  async restoreTransactions(): Promise<{ purchaserInfo: CustomerInfo }> {
+  async restorePurchases(): Promise<{ purchaserInfo: CustomerInfo }> {
     console.error("purchasePackage only mocked in web");
     return { purchaserInfo: mockCustomerInfo };
   }

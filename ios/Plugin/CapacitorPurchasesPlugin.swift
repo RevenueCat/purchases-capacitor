@@ -291,7 +291,7 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
         }
     }
 
-    @objc func restoreTransactions(_ call: CAPPluginCall) {
+    @objc func restorePurchases(_ call: CAPPluginCall) {
         Purchases.shared.restorePurchases { purchaserInfo, error in
             if (error) != nil {
                 call.reject("Restore failed")

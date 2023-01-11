@@ -577,7 +577,7 @@ export interface CapacitorPurchasesPlugin {
   /**
    * Restores a user's previous  and links their appUserIDs to any user's also using those .
    */
-  restoreTransactions(): Promise<{ purchaserInfo: CustomerInfo }>;
+  restorePurchases(): Promise<{ purchaserInfo: CustomerInfo }>;
 
   /**
    * Subscriber attributes are useful for storing additional, structured information on a user.
