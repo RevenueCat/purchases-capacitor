@@ -350,7 +350,7 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
         }
     }
 
-    @objc func getPurchaserInfo(_ call: CAPPluginCall) {
+    @objc func getCustomerInfo(_ call: CAPPluginCall) {
         Purchases.shared.getCustomerInfo { (purchaserInfo, error) in
             if (error) != nil {
                 call.reject("Get purchaser info failed")
@@ -361,7 +361,7 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
                         "purchaserInfo": purchase as Any
                     ])
                 } else {
-                    call.reject("getPurchaserInfo failed to convert in json")
+                    call.reject("getCustomerInfo failed to convert in json")
                 }
             }
         }

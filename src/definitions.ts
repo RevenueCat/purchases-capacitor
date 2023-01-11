@@ -233,7 +233,7 @@ export interface Transaction {
   readonly purchaseDate: string;
 }
 
-export interface PurchaserInfo {
+export interface CustomerInfo {
   /**
    * Entitlements attached to this purchaser info
    */
@@ -516,7 +516,7 @@ export interface LogInResult {
   /**
    * The Purchaser Info for the user.
    */
-  readonly purchaserInfo: PurchaserInfo;
+  readonly purchaserInfo: CustomerInfo;
   /**
    * True if the call resulted in a new user getting created in the RevenueCat backend.
    */
@@ -554,7 +554,7 @@ export interface CapacitorPurchasesPlugin {
     eventName: "purchasesUpdate",
     listenerFunc: (data: {
       purchases: Package;
-      purchaserInfo: PurchaserInfo;
+      purchaserInfo: CustomerInfo;
     }) => void
   ): Promise<PluginListenerHandle> & PluginListenerHandle;
   /**
@@ -572,12 +572,12 @@ export interface CapacitorPurchasesPlugin {
     identifier: string;
     offeringIdentifier: string;
     oldSKU?: string | null;
-  }): Promise<{ purchaserInfo: PurchaserInfo }>;
+  }): Promise<{ purchaserInfo: CustomerInfo }>;
 
   /**
    * Restores a user's previous  and links their appUserIDs to any user's also using those .
    */
-  restoreTransactions(): Promise<{ purchaserInfo: PurchaserInfo }>;
+  restoreTransactions(): Promise<{ purchaserInfo: CustomerInfo }>;
 
   /**
    * Subscriber attributes are useful for storing additional, structured information on a user.
@@ -606,19 +606,19 @@ export interface CapacitorPurchasesPlugin {
   /**
    * Logs out the  client clearing the saved appUserID. This will generate a random user id and save it in the cache.
    * If the current user is already anonymous, this will produce a Error.
-   * @param {function(PurchaserInfo):void} callback Callback that will receive the new purchaser info after resetting
+   * @param {function(CustomerInfo):void} callback Callback that will receive the new purchaser info after resetting
    * @param {function(PurchasesError):void} errorCallback Callback that will be triggered whenever there is an error when logging out.
    * This could happen for example if logOut is called but the current user is anonymous.
    */
-  logOut(): Promise<{ purchaserInfo: PurchaserInfo }>;
+  logOut(): Promise<{ purchaserInfo: CustomerInfo }>;
 
   /**
    * Gets the current purchaser info. This call will return the cached purchaser info unless the cache is stale, in which case,
    * it will make a network call to retrieve it from the servers.
-   * @param {function(PurchaserInfo):void} callback Callback that will receive the purchaser info
+   * @param {function(CustomerInfo):void} callback Callback that will receive the purchaser info
    * @param {function(PurchasesError, boolean):void} errorCallback Callback that will be triggered whenever there is any problem retrieving the purchaser info
    */
-  getPurchaserInfo(): Promise<{ purchaserInfo: PurchaserInfo }>;
+  getCustomerInfo(): Promise<{ purchaserInfo: CustomerInfo }>;
 
   /**
    * Enables/Disables debugs logs

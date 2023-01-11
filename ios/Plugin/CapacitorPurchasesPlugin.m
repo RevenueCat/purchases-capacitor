@@ -14,6 +14,6 @@ CAP_PLUGIN(CapacitorPurchasesPlugin, "CapacitorPurchases",
         CAP_PLUGIN_METHOD(setAttributes, CAPPluginReturnPromise);
         CAP_PLUGIN_METHOD(logIn, CAPPluginReturnPromise);
         CAP_PLUGIN_METHOD(logOut, CAPPluginReturnPromise);
-        CAP_PLUGIN_METHOD(getPurchaserInfo, CAPPluginReturnPromise);
+        CAP_PLUGIN_METHOD(getCustomerInfo, CAPPluginReturnPromise);
         CAP_PLUGIN_METHOD(setDebugLogsEnabled, CAPPluginReturnPromise);
 )

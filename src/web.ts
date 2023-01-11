@@ -4,7 +4,7 @@ import { PACKAGE_TYPE } from "./definitions";
 import type {
   CapacitorPurchasesPlugin,
   LogInResult,
-  PurchaserInfo,
+  CustomerInfo,
   Offerings,
   Offering,
   Package,
@@ -69,7 +69,7 @@ export const mockCurrent: Offering = {
   weekly: null,
 };
 
-export const mockPurchaserInfo: PurchaserInfo = {
+export const mockCustomerInfo: CustomerInfo = {
   entitlements: {
     all: {},
     active: {},
@@ -112,14 +112,14 @@ export class CapacitorPurchasesWeb
   async purchasePackage(data: {
     identifier: string;
     offeringIdentifier: string;
-  }): Promise<{ purchaserInfo: PurchaserInfo }> {
+  }): Promise<{ purchaserInfo: CustomerInfo }> {
     console.error("purchasePackage only mocked in web", data);
-    return { purchaserInfo: mockPurchaserInfo };
+    return { purchaserInfo: mockCustomerInfo };
   }
 
-  async restoreTransactions(): Promise<{ purchaserInfo: PurchaserInfo }> {
+  async restoreTransactions(): Promise<{ purchaserInfo: CustomerInfo }> {
     console.error("purchasePackage only mocked in web");
-    return { purchaserInfo: mockPurchaserInfo };
+    return { purchaserInfo: mockCustomerInfo };
   }
 
   async setAttributes(data: {
@@ -132,19 +132,19 @@ export class CapacitorPurchasesWeb
   async logIn(data: { appUserID: string }): Promise<LogInResult> {
     console.error("logIn only mocked in web", data);
     return {
-      purchaserInfo: mockPurchaserInfo,
+      purchaserInfo: mockCustomerInfo,
       created: true,
     };
   }
 
-  async logOut(): Promise<{ purchaserInfo: PurchaserInfo }> {
+  async logOut(): Promise<{ purchaserInfo: CustomerInfo }> {
     console.error("logOut only mocked in web");
-    return { purchaserInfo: mockPurchaserInfo };
+    return { purchaserInfo: mockCustomerInfo };
   }
 
-  async getPurchaserInfo(): Promise<{ purchaserInfo: PurchaserInfo }> {
-    console.error("getPurchaserInfo only mocked in web");
-    return { purchaserInfo: mockPurchaserInfo };
+  async getCustomerInfo(): Promise<{ purchaserInfo: CustomerInfo }> {
+    console.error("getCustomerInfo only mocked in web");
+    return { purchaserInfo: mockCustomerInfo };
   }
 
   async setDebugLogsEnabled(data: { enabled: boolean }): Promise<void> {

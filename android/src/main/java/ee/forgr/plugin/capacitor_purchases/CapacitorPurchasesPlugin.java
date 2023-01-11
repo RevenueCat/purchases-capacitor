@@ -126,7 +126,7 @@ public class CapacitorPurchasesPlugin extends Plugin {
   }
 
   @PluginMethod
-  public void getPurchaserInfo(PluginCall call) {
+  public void getCustomerInfo(PluginCall call) {
     CommonKt.getCustomerInfo(getOnResult(call, "purchaserInfo"));
   }
 
