@@ -2,7 +2,7 @@
   <a href="https://capgo.app/"><img src='https://raw.githubusercontent.com/Cap-go/capgo/main/assets/capgo_banner.png' alt='Capgo - Instant updates for capacitor'/></a>
   
 <div align="center">
-<h2><a href="https://capgo.app/">Check out: Capgo — Instant updates for capacitor</a></h2>
+<h2><a href="https://capgo.app/">Check out: Capgo — live updates for capacitor</a></h2>
 </div>
 
 In-app Subscriptions Made Easy with RevenueCat sdk
@@ -43,6 +43,14 @@ line 2 in file `android/app/build.gradle`
 ## Configuration
 
 No configuration required for this plugin.
+
+## Migration v2
+
+getPurchaserInfo become getCustomerInfo
+PurchaserInfo become CustomerInfo
+restoreTransactions become restorePurchases
+
+Read more about it here: https://github.com/RevenueCat/purchases-android/blob/main/migrations/v5-MIGRATION.md
 
 ## API
 
