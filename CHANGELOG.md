@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.3](https://github.com/Cap-go/capacitor-purchases/compare/v2.0.2...v2.0.3) (2023-01-11)
+
+
+### Bug Fixes
+
+* add PurchasesHybridCommon in ios ([7370d55](https://github.com/Cap-go/capacitor-purchases/commit/7370d55b208fa553cd52b16cca0b46edd5c8d0b2))
+
 ### [2.0.2](https://github.com/Cap-go/capacitor-purchases/compare/v2.0.1...v2.0.2) (2023-01-11)
 
 
