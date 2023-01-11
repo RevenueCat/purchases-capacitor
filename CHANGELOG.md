@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.49](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.48...v1.3.49) (2023-01-11)
+
+
+### Bug Fixes
+
+* issue with init empty appUserID ([f7501b0](https://github.com/Cap-go/capacitor-purchases/commit/f7501b02c6aaf3a7cf18c616ae228b8e23198b95))
+
 ### [1.3.48](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.47...v1.3.48) (2023-01-11)
 
 
