@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.45](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.44...v1.3.45) (2023-01-11)
+
+
+### Bug Fixes
+
+* add back lockfile ([c303a34](https://github.com/Cap-go/capacitor-purchases/commit/c303a344931bd1ff80519cbc2b5b7c51c26e9daa))
+* add missing permission in doc ([de750b5](https://github.com/Cap-go/capacitor-purchases/commit/de750b5879cc416d526ba2ebefe209b35730ca20))
+* missing setAttribute ([8f48621](https://github.com/Cap-go/capacitor-purchases/commit/8f48621d64f47ff75197d31d5d9f809a4f0687c4))
+* remove old lock ([645d276](https://github.com/Cap-go/capacitor-purchases/commit/645d276870a5f86e50a03488d2cf33435bdd0abc))
+
 ### [1.3.44](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.43...v1.3.44) (2023-01-04)
 
 ### [1.3.43](https://github.com/Cap-go/capacitor-purchases/compare/v1.3.42...v1.3.43) (2023-01-02)
