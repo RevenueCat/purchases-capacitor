@@ -14,7 +14,7 @@ specifiers:
   eslint: ^8.27.0
   eslint-plugin-import: ^2.26.0
   husky: ^8.0.2
-  prettier: ^2.7.1
+  prettier: ^2.8.2
   prettier-plugin-java: ^2.0.0
   rimraf: ^3.0.2
   rollup: ^3.2.5

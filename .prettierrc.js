@@ -1,3 +1,3 @@
 module.exports = {
-  plugins: [require.resolve('prettier-plugin-java')],
+  plugins: [require.resolve("prettier-plugin-java")],
 };

@@ -1,4 +1,4 @@
-import type { PluginListenerHandle } from '@capacitor/core';
+import type { PluginListenerHandle } from "@capacitor/core";
 
 export enum ATTRIBUTION_NETWORK {
   APPLE_SEARCH_ADS = 0,
@@ -13,12 +13,12 @@ export enum PURCHASE_TYPE {
   /**
    * A type of SKU for in-app products.
    */
-  INAPP = 'inapp',
+  INAPP = "inapp",
 
   /**
    * A type of SKU for subscriptions.
    */
-  SUBS = 'subs',
+  SUBS = "subs",
 }
 
 /**
@@ -85,47 +85,47 @@ export enum PACKAGE_TYPE {
   /**
    * A package that was defined with a custom identifier.
    */
-  UNKNOWN = 'UNKNOWN',
+  UNKNOWN = "UNKNOWN",
 
   /**
    * A package that was defined with a custom identifier.
    */
-  CUSTOM = 'CUSTOM',
+  CUSTOM = "CUSTOM",
 
   /**
    * A package configured with the predefined lifetime identifier.
    */
-  LIFETIME = 'LIFETIME',
+  LIFETIME = "LIFETIME",
 
   /**
    * A package configured with the predefined annual identifier.
    */
-  ANNUAL = 'ANNUAL',
+  ANNUAL = "ANNUAL",
 
   /**
    * A package configured with the predefined six month identifier.
    */
-  SIX_MONTH = 'SIX_MONTH',
+  SIX_MONTH = "SIX_MONTH",
 
   /**
    * A package configured with the predefined three month identifier.
    */
-  THREE_MONTH = 'THREE_MONTH',
+  THREE_MONTH = "THREE_MONTH",
 
   /**
    * A package configured with the predefined two month identifier.
    */
-  TWO_MONTH = 'TWO_MONTH',
+  TWO_MONTH = "TWO_MONTH",
 
   /**
    * A package configured with the predefined monthly identifier.
    */
-  MONTHLY = 'MONTHLY',
+  MONTHLY = "MONTHLY",
 
   /**
    * A package configured with the predefined weekly identifier.
    */
-  WEEKLY = 'WEEKLY',
+  WEEKLY = "WEEKLY",
 }
 
 export enum INTRO_ELIGIBILITY_STATUS {
@@ -523,7 +523,9 @@ export interface LogInResult {
   readonly created: boolean;
 }
 
-export type ShouldPurchasePromoProductListener = (deferredPurchase: () => void) => void;
+export type ShouldPurchasePromoProductListener = (
+  deferredPurchase: () => void
+) => void;
 
 export interface CapacitorPurchasesPlugin {
   /**
@@ -535,7 +537,11 @@ export interface CapacitorPurchasesPlugin {
    * @param {boolean} [observerMode = false] Set this to true if you have your own IAP implementation
    * and want to use only RevenueCat’s backend. Default is false.
    */
-  setup(data: { apiKey: string; appUserID?: string; observerMode?: boolean }): Promise<void>;
+  setup(data: {
+    apiKey: string;
+    appUserID?: string;
+    observerMode?: boolean;
+  }): Promise<void>;
 
   /**
    * Called when partialResults set to true and result received
@@ -545,8 +551,11 @@ export interface CapacitorPurchasesPlugin {
    * @since 2.0.2
    */
   addListener(
-    eventName: 'purchasesUpdate',
-    listenerFunc: (data: { purchases: Package; purchaserInfo: PurchaserInfo }) => void
+    eventName: "purchasesUpdate",
+    listenerFunc: (data: {
+      purchases: Package;
+      purchaserInfo: PurchaserInfo;
+    }) => void
   ): Promise<PluginListenerHandle> & PluginListenerHandle;
   /**
    * Gets the Offerings configured in the RevenueCat dashboard
@@ -580,7 +589,9 @@ export interface CapacitorPurchasesPlugin {
    *
    * @param attributes Map of attributes by key. Set the value as an empty string to delete an attribute.
    */
-  setAttributes(data: { attributes: { [key: string]: string | null } }): Promise<void>;
+  setAttributes(data: {
+    attributes: { [key: string]: string | null };
+  }): Promise<void>;
 
   /**
    * This function will logIn the current user with an appUserID. Typically this would be used after a log in
