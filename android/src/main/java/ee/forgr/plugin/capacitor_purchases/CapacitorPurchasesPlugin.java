@@ -16,10 +16,14 @@ import com.revenuecat.purchases.hybridcommon.ErrorContainer;
 import com.revenuecat.purchases.hybridcommon.OnResult;
 import com.revenuecat.purchases.hybridcommon.mappers.CustomerInfoMapperKt;
 import com.revenuecat.purchases.interfaces.UpdatedCustomerInfoListener;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 @CapacitorPlugin(name = "CapacitorPurchases")
@@ -48,6 +52,7 @@ public class CapacitorPurchasesPlugin extends Plugin {
                     }
                 }
             );
+        call.resolve();
     }
 
     @PluginMethod
@@ -70,6 +75,24 @@ public class CapacitorPurchasesPlugin extends Plugin {
     @PluginMethod
     public void restoreTransactions(PluginCall call) {
         CommonKt.restorePurchases(getOnResult(call, "purchaserInfo"));
+    }
+
+
+    @PluginMethod
+    public void setAttributes(PluginCall call) throws JSONException {
+        JSObject attributes = call.getObject("attributes", new JSObject());
+        Purchases.getSharedInstance().setAttributes(convertJsonToMap(attributes));
+        call.resolve();
+    }
+
+    public static Map<String, String> convertJsonToMap(JSONObject jsonobj)  throws JSONException {
+        Map<String, String> map = new HashMap<String, String>();
+        Iterator<String> keys = jsonobj.keys();
+        while(keys.hasNext()) {
+            String key = keys.next();
+            String value = jsonobj.getString(key);
+            map.put(key, value);
+        }   return map;
     }
 
     @PluginMethod
