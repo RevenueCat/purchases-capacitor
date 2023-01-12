@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.9](https://github.com/Cap-go/capacitor-purchases/compare/2.0.7...2.0.9) (2023-01-12)
+
+
+### Bug Fixes
+
+* switch to pnpm dlx ([5eda928](https://github.com/Cap-go/capacitor-purchases/commit/5eda928df6eb77e10c22d5832dd1ed974b38c4b7))
+
 ### [2.0.8](https://github.com/Cap-go/capacitor-purchases/compare/2.0.7...2.0.8) (2023-01-12)
 
 ### [2.0.7](https://github.com/Cap-go/capacitor-purchases/compare/2.0.6...2.0.7) (2023-01-12)
