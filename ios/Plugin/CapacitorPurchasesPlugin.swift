@@ -11,7 +11,7 @@ import StoreKit
 @objc(CapacitorPurchasesPlugin)
 public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
 
-    public let PLUGIN_VERSION: String = "2.4.0"
+    public let PLUGIN_VERSION = "2.0.10"
 
     @objc func setup(_ call: CAPPluginCall) {
         let apiKey = call.getString("apiKey", "")

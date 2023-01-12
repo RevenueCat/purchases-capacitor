@@ -29,7 +29,7 @@ import org.json.JSONObject;
 public class CapacitorPurchasesPlugin extends Plugin {
 
   public static final String PLATFORM_NAME = "capacitor";
-  public static final String PLUGIN_VERSION = "2.0.5";
+  public static final String PLUGIN_VERSION = "2.0.10";
 
   @PluginMethod
   public void setup(PluginCall call) {
