@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.5](https://github.com/Cap-go/capacitor-purchases/compare/2.0.4...2.0.5) (2023-01-12)
+
+
+### Bug Fixes
+
+* lint issue ([402c04e](https://github.com/Cap-go/capacitor-purchases/commit/402c04ea10f89e84723ceeaa3ccb30b079ba76fe))
+
 ### [2.0.4](https://github.com/Cap-go/capacitor-purchases/compare/v2.0.3...v2.0.4) (2023-01-12)
 
 
