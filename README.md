@@ -13,7 +13,7 @@ Capacitor implementation with new RevenueCat swift SDK v4
 
 ```bash
 npm install @capgo/capacitor-purchases
-npx cap sync
+pnpm dlx cap sync
 ```
 ## Android
 Add this to your android manifest `android/app/src/main/AndroidManifest.xml`
