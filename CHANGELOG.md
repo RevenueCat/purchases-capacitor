@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.14](https://github.com/Cap-go/capacitor-purchases/compare/2.0.13...2.0.14) (2023-01-12)
+
+
+### Bug Fixes
+
+* enforce typing for script ([e15b36d](https://github.com/Cap-go/capacitor-purchases/commit/e15b36ddc9e26b969f899c67ccd044e6f70bd20b))
+
 ### [2.0.13](https://github.com/Cap-go/capacitor-purchases/compare/2.0.12...2.0.13) (2023-01-12)
 
 
