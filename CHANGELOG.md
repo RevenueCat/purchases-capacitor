@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.11](https://github.com/Cap-go/capacitor-purchases/compare/2.0.10...2.0.11) (2023-01-12)
+
+
+### Bug Fixes
+
+* add dlx to cache ([ce149b8](https://github.com/Cap-go/capacitor-purchases/commit/ce149b80aa698aebdc984ec6249459e091296843))
+
 ### [2.0.10](https://github.com/Cap-go/capacitor-purchases/compare/2.0.9...2.0.10) (2023-01-12)
 
 ### [2.0.9](https://github.com/Cap-go/capacitor-purchases/compare/2.0.7...2.0.9) (2023-01-12)
