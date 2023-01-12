@@ -6,6 +6,7 @@ def capacitor_pods
   pod 'Capacitor', :path => '../node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../node_modules/@capacitor/ios'
   pod 'RevenueCat'
+  pod 'PurchasesHybridCommon'
 end
 
 target 'Plugin' do
