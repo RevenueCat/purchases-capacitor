@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.13](https://github.com/Cap-go/capacitor-purchases/compare/2.0.12...2.0.13) (2023-01-12)
+
+
+### Bug Fixes
+
+* trigger ci ([4e3204f](https://github.com/Cap-go/capacitor-purchases/commit/4e3204f95a8a3ae65d38f0a00b11833dd22caa1b))
+
 ### [2.0.12](https://github.com/Cap-go/capacitor-purchases/compare/2.0.11...2.0.12) (2023-01-12)
 
 
