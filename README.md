@@ -5,9 +5,14 @@
 <h2><a href="https://capgo.app/">Check out: Capgo — live updates for capacitor</a></h2>
 </div>
 
-In-app Subscriptions Made Easy with RevenueCat sdk
+In-app Subscriptions Made Easy with RevenueCat SDK
 
-Capacitor implementation with new RevenueCat swift SDK v4
+Capacitor implementation with lastes RevenueCat SDK v4
+
+RevenueCat:
+<a href="https://www.appbrain.com/stats/libraries/details/revenuecat/revenuecat">
+  <img src="https://www.appbrain.com/stats/libraries/shield/revenuecat.svg">
+</a>
 
 ## Install
 
