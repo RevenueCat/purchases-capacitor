@@ -14,6 +14,10 @@ RevenueCat:
   <img src="https://www.appbrain.com/stats/libraries/shield/revenuecat.svg">
 </a>
 
+## Tutorial step by step
+
+https://capgo.app/blog/in-app-purchases-capacitor/
+
 ## Install
 
 ```bash
