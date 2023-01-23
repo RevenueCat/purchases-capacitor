@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.19](https://github.com/Cap-go/capacitor-purchases/compare/2.0.18...2.0.19) (2023-01-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.revenuecat.purchases:purchases to v5.6.7 ([027130a](https://github.com/Cap-go/capacitor-purchases/commit/027130afdaa53ac0afa72acc040515555e81316f))
+
 ### [2.0.18](https://github.com/Cap-go/capacitor-purchases/compare/2.0.17...2.0.18) (2023-01-19)
 
 ### [2.0.17](https://github.com/Cap-go/capacitor-purchases/compare/2.0.16...2.0.17) (2023-01-18)
