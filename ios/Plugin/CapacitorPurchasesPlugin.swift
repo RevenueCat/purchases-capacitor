@@ -36,9 +36,9 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
         call.resolve()
     }
 
-    public func purchases(_ purchases: Purchases, receivedUpdated purchaserInfo: CustomerInfo) {
-        let purchaserJson = purchaserInfo.dictionary
-        self.notifyListeners("purchasesUpdate", data: ["purchaserInfo": purchaserJson])
+    public func purchases(_ purchases: Purchases, receivedUpdated customerInfo: CustomerInfo) {
+        let purchaserJson = customerInfo.dictionary
+        self.notifyListeners("purchasesUpdate", data: ["customerInfo": purchaserJson])
     }
 
     @objc func getOfferings(_ call: CAPPluginCall) {
@@ -75,14 +75,14 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
                     call.reject("cannot found package in current offering")
                     return
                 }
-                Purchases.shared.purchase(package: package!) { (_, purchaserInfo, error, _) in
+                Purchases.shared.purchase(package: package!) { (_, customerInfo, error, _) in
                     if (error) != nil {
                         call.reject("Restore failed")
                     } else {
-                        let purchase = purchaserInfo?.dictionary
+                        let purchase = customerInfo?.dictionary
                         if purchase != nil {
                             call.resolve([
-                                "purchaserInfo": purchase as Any
+                                "customerInfo": purchase as Any
                             ])
                         } else {
                             call.reject("purchasePackage failed to convert in json")
@@ -94,14 +94,14 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
     }
 
     @objc func restorePurchases(_ call: CAPPluginCall) {
-        Purchases.shared.restorePurchases { purchaserInfo, error in
+        Purchases.shared.restorePurchases { customerInfo, error in
             if (error) != nil {
                 call.reject("Restore failed")
             } else {
-                let purchase = purchaserInfo?.dictionary
+                let purchase = customerInfo?.dictionary
                 if purchase != nil {
                     call.resolve([
-                        "purchaserInfo": purchase as Any
+                        "customerInfo": purchase as Any
                     ])
                 } else {
                     call.reject("listener failed to convert in json")
@@ -118,14 +118,14 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
 
     @objc func logIn(_ call: CAPPluginCall) {
         let appUserID = call.getString("appUserID") ?? ""
-        Purchases.shared.logIn(appUserID) { (purchaserInfo, created, error) in
+        Purchases.shared.logIn(appUserID) { (customerInfo, created, error) in
             if (error) != nil {
                 call.reject("Login failed")
             } else {
-                let purchase = purchaserInfo?.dictionary
+                let purchase = customerInfo?.dictionary
                 if purchase != nil {
                     call.resolve([
-                        "purchaserInfo": purchase as Any,
+                        "customerInfo": purchase as Any,
                         "created": created
                     ])
                 } else {
@@ -136,14 +136,14 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
     }
 
     @objc func logOut(_ call: CAPPluginCall) {
-        Purchases.shared.logOut { (purchaserInfo, error) in
+        Purchases.shared.logOut { (customerInfo, error) in
             if (error) != nil {
                 call.reject("Logout failed")
             } else {
-                let purchase = purchaserInfo?.dictionary
+                let purchase = customerInfo?.dictionary
                 if purchase != nil {
                     call.resolve([
-                        "purchaserInfo": purchase as Any
+                        "customerInfo": purchase as Any
                     ])
                 } else {
                     call.reject("logOut failed to convert in json")
@@ -153,14 +153,14 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
     }
 
     @objc func getCustomerInfo(_ call: CAPPluginCall) {
-        Purchases.shared.getCustomerInfo { (purchaserInfo, error) in
+        Purchases.shared.getCustomerInfo { (customerInfo, error) in
             if (error) != nil {
                 call.reject("Get purchaser info failed")
             } else {
-                let purchase = purchaserInfo?.dictionary
+                let purchase = customerInfo?.dictionary
                 if purchase != nil {
                     call.resolve([
-                        "purchaserInfo": purchase as Any
+                        "customerInfo": purchase as Any
                     ])
                 } else {
                     call.reject("getCustomerInfo failed to convert in json")

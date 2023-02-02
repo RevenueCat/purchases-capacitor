@@ -49,15 +49,15 @@ public class CapacitorPurchasesPlugin extends Plugin {
       .setUpdatedCustomerInfoListener(
         new UpdatedCustomerInfoListener() {
           @Override
-          public void onReceived(@NonNull CustomerInfo purchaserInfo) {
+          public void onReceived(@NonNull CustomerInfo customerInfo) {
             JSObject ret = new JSObject();
             ret.put(
               "purchases",
               convertMapToJson(new HashMap<String, String>())
             );
             ret.put(
-              "purchaserInfo",
-              convertMapToJson(CustomerInfoMapperKt.map(purchaserInfo))
+              "purchasecustomerInforInfo",
+              convertMapToJson(CustomerInfoMapperKt.map(customerInfo))
             );
             notifyListeners("purchasesUpdate", ret);
           }
@@ -92,7 +92,7 @@ public class CapacitorPurchasesPlugin extends Plugin {
 
   @PluginMethod
   public void restorePurchases(PluginCall call) {
-    CommonKt.restorePurchases(getOnResult(call, "purchaserInfo"));
+    CommonKt.restorePurchases(getOnResult(call, "customerInfo"));
   }
 
   @PluginMethod
@@ -122,12 +122,12 @@ public class CapacitorPurchasesPlugin extends Plugin {
 
   @PluginMethod
   public void logOut(PluginCall call) {
-    CommonKt.logOut(getOnResult(call, "purchaserInfo"));
+    CommonKt.logOut(getOnResult(call, "customerInfo"));
   }
 
   @PluginMethod
   public void getCustomerInfo(PluginCall call) {
-    CommonKt.getCustomerInfo(getOnResult(call, "purchaserInfo"));
+    CommonKt.getCustomerInfo(getOnResult(call, "customerInfo"));
   }
 
   @PluginMethod

@@ -112,14 +112,14 @@ export class CapacitorPurchasesWeb
   async purchasePackage(data: {
     identifier: string;
     offeringIdentifier: string;
-  }): Promise<{ purchaserInfo: CustomerInfo }> {
+  }): Promise<{ customerInfo: CustomerInfo }> {
     console.error("purchasePackage only mocked in web", data);
-    return { purchaserInfo: mockCustomerInfo };
+    return { customerInfo: mockCustomerInfo };
   }
 
-  async restorePurchases(): Promise<{ purchaserInfo: CustomerInfo }> {
+  async restorePurchases(): Promise<{ customerInfo: CustomerInfo }> {
     console.error("purchasePackage only mocked in web");
-    return { purchaserInfo: mockCustomerInfo };
+    return { customerInfo: mockCustomerInfo };
   }
 
   async setAttributes(data: {
@@ -132,19 +132,19 @@ export class CapacitorPurchasesWeb
   async logIn(data: { appUserID: string }): Promise<LogInResult> {
     console.error("logIn only mocked in web", data);
     return {
-      purchaserInfo: mockCustomerInfo,
+      customerInfo: mockCustomerInfo,
       created: true,
     };
   }
 
-  async logOut(): Promise<{ purchaserInfo: CustomerInfo }> {
+  async logOut(): Promise<{ customerInfo: CustomerInfo }> {
     console.error("logOut only mocked in web");
-    return { purchaserInfo: mockCustomerInfo };
+    return { customerInfo: mockCustomerInfo };
   }
 
-  async getCustomerInfo(): Promise<{ purchaserInfo: CustomerInfo }> {
+  async getCustomerInfo(): Promise<{ customerInfo: CustomerInfo }> {
     console.error("getCustomerInfo only mocked in web");
-    return { purchaserInfo: mockCustomerInfo };
+    return { customerInfo: mockCustomerInfo };
   }
 
   async setDebugLogsEnabled(data: { enabled: boolean }): Promise<void> {

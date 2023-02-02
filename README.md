@@ -103,17 +103,17 @@ Sets up  with your API key and an app user id.
 ### addListener('purchasesUpdate', ...)
 
 ```typescript
-addListener(eventName: "purchasesUpdate", listenerFunc: (data: { purchases: Package; purchaserInfo: CustomerInfo; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: "purchasesUpdate", listenerFunc: (data: { purchases: Package; customerInfo: CustomerInfo; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
 Called when partialResults set to true and result received
 
 Provides partial result.
 
-| Param              | Type                                                                                                                                    |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>'purchasesUpdate'</code>                                                                                                          |
-| **`listenerFunc`** | <code>(data: { purchases: <a href="#package">Package</a>; purchaserInfo: <a href="#customerinfo">CustomerInfo</a>; }) =&gt; void</code> |
+| Param              | Type                                                                                                                                   |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'purchasesUpdate'</code>                                                                                                         |
+| **`listenerFunc`** | <code>(data: { purchases: <a href="#package">Package</a>; customerInfo: <a href="#customerinfo">CustomerInfo</a>; }) =&gt; void</code> |
 
 **Returns:** <code>any</code>
 
@@ -404,10 +404,10 @@ For more info see https://docs.revenuecat.com/docs/entitlements
 
 Holds the logIn result
 
-| Prop                | Type                                                  | Description                                                                        |
-| ------------------- | ----------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| **`purchaserInfo`** | <code><a href="#customerinfo">CustomerInfo</a></code> | The Purchaser Info for the user.                                                   |
-| **`created`**       | <code>boolean</code>                                  | True if the call resulted in a new user getting created in the RevenueCat backend. |
+| Prop               | Type                                                  | Description                                                                        |
+| ------------------ | ----------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| **`customerInfo`** | <code><a href="#customerinfo">CustomerInfo</a></code> | The Purchaser Info for the user.                                                   |
+| **`created`**      | <code>boolean</code>                                  | True if the call resulted in a new user getting created in the RevenueCat backend. |
 
 
 ### Enums
@@ -428,7 +428,3 @@ Holds the logIn result
 | **`WEEKLY`**      | <code>"WEEKLY"</code>      | A package configured with the predefined weekly identifier.      |
 
 </docgen-api>
-
-### TODO
-
-Prepare android migration to v5

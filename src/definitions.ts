@@ -516,7 +516,7 @@ export interface LogInResult {
   /**
    * The Purchaser Info for the user.
    */
-  readonly purchaserInfo: CustomerInfo;
+  readonly customerInfo: CustomerInfo;
   /**
    * True if the call resulted in a new user getting created in the RevenueCat backend.
    */
@@ -554,7 +554,7 @@ export interface CapacitorPurchasesPlugin {
     eventName: "purchasesUpdate",
     listenerFunc: (data: {
       purchases: Package;
-      purchaserInfo: CustomerInfo;
+      customerInfo: CustomerInfo;
     }) => void
   ): Promise<PluginListenerHandle> & PluginListenerHandle;
   /**
@@ -572,12 +572,12 @@ export interface CapacitorPurchasesPlugin {
     identifier: string;
     offeringIdentifier: string;
     oldSKU?: string | null;
-  }): Promise<{ purchaserInfo: CustomerInfo }>;
+  }): Promise<{ customerInfo: CustomerInfo }>;
 
   /**
    * Restores a user's previous  and links their appUserIDs to any user's also using those .
    */
-  restorePurchases(): Promise<{ purchaserInfo: CustomerInfo }>;
+  restorePurchases(): Promise<{ customerInfo: CustomerInfo }>;
 
   /**
    * Subscriber attributes are useful for storing additional, structured information on a user.
@@ -597,7 +597,7 @@ export interface CapacitorPurchasesPlugin {
    * This function will logIn the current user with an appUserID. Typically this would be used after a log in
    * to identify a user without calling configure.
    * @param {String} appUserID The appUserID that should be linked to the currently user
-   * @param {function(LogInResult):void} callback Callback that will receive an object that contains the purchaserInfo after logging in, as well as a boolean indicating
+   * @param {function(LogInResult):void} callback Callback that will receive an object that contains the customerInfo after logging in, as well as a boolean indicating
    * whether the user has just been created for the first time in the RevenueCat backend.
    * @param {function(PurchasesError):void} errorCallback Callback that will be triggered whenever there is any problem logging in.
    */
@@ -610,7 +610,7 @@ export interface CapacitorPurchasesPlugin {
    * @param {function(PurchasesError):void} errorCallback Callback that will be triggered whenever there is an error when logging out.
    * This could happen for example if logOut is called but the current user is anonymous.
    */
-  logOut(): Promise<{ purchaserInfo: CustomerInfo }>;
+  logOut(): Promise<{ customerInfo: CustomerInfo }>;
 
   /**
    * Gets the current purchaser info. This call will return the cached purchaser info unless the cache is stale, in which case,
@@ -618,7 +618,7 @@ export interface CapacitorPurchasesPlugin {
    * @param {function(CustomerInfo):void} callback Callback that will receive the purchaser info
    * @param {function(PurchasesError, boolean):void} errorCallback Callback that will be triggered whenever there is any problem retrieving the purchaser info
    */
-  getCustomerInfo(): Promise<{ purchaserInfo: CustomerInfo }>;
+  getCustomerInfo(): Promise<{ customerInfo: CustomerInfo }>;
 
   /**
    * Enables/Disables debugs logs
