@@ -7,6 +7,8 @@
 
 In-app Subscriptions Made Easy with RevenueCat SDK
 
+RevenueCat is a third-party tool, who handle all difficulty for us is Free until $10,000 Revenue by month
+
 Capacitor implementation with lastes RevenueCat SDK v4
 
 RevenueCat:
