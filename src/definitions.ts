@@ -535,12 +535,16 @@ export interface CapacitorPurchasesPlugin {
    * This user id will allow users to share their purchases and subscriptions across devices.
    * Leave empty if you want RevenueCat to generate this for you.
    * @param {boolean} [observerMode = false] Set this to true if you have your own IAP implementation
+   * @param {boolean} [enableAdServicesAttribution = false] Set this to true if you want to use Apple's Search Ads attribution collection.
+   * @param {boolean} [collectDeviceIdentifiers = false] Set this to true if you want to collect the device identifiers.
    * and want to use only RevenueCat’s backend. Default is false.
    */
   setup(data: {
     apiKey: string;
     appUserID?: string;
     observerMode?: boolean;
+    enableAdServicesAttribution?: boolean;
+    collectDeviceIdentifiers?: boolean;
   }): Promise<void>;
 
   /**

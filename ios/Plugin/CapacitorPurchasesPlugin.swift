@@ -32,6 +32,14 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
                 .build()
         }
         Purchases.configure(with: configuration)
+        if call.getBool("enableAdServicesAttribution", false) {
+            if #available(iOS 14.3, *) {
+                Purchases.shared.attribution.enableAdServicesAttributionTokenCollection()
+            }
+        }
+        if call.getBool("collectDeviceIdentifiers", false) {
+            Purchases.shared.attribution.collectDeviceIdentifiers()
+        }
         Purchases.shared.delegate = self
         call.resolve()
     }

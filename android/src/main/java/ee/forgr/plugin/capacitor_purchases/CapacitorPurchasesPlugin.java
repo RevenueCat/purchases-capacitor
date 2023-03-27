@@ -44,6 +44,9 @@ public class CapacitorPurchasesPlugin extends Plugin {
       observerMode,
       platformInfo
     );
+    if (call.getBoolean("collectDeviceIdentifiers", false)) {
+      Purchases.getSharedInstance().collectDeviceIdentifiers();
+    }
     Purchases
       .getSharedInstance()
       .setUpdatedCustomerInfoListener(
