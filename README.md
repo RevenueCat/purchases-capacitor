@@ -88,14 +88,14 @@ Read more about it here: https://github.com/RevenueCat/purchases-android/blob/ma
 ### setup(...)
 
 ```typescript
-setup(data: { apiKey: string; appUserID?: string; observerMode?: boolean; }) => any
+setup(data: { apiKey: string; appUserID?: string; observerMode?: boolean; enableAdServicesAttribution?: boolean; collectDeviceIdentifiers?: boolean; }) => any
 ```
 
 Sets up  with your API key and an app user id.
 
-| Param      | Type                                                                         |
-| ---------- | ---------------------------------------------------------------------------- |
-| **`data`** | <code>{ apiKey: string; appUserID?: string; observerMode?: boolean; }</code> |
+| Param      | Type                                                                                                                                                    |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`data`** | <code>{ apiKey: string; appUserID?: string; observerMode?: boolean; enableAdServicesAttribution?: boolean; collectDeviceIdentifiers?: boolean; }</code> |
 
 **Returns:** <code>any</code>
 
