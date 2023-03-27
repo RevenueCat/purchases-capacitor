@@ -42,7 +42,7 @@ jobs:
         run: pnpm docgen
       - name: Add doc to github
         run: |
-          git add README.md api.md
+          git add README.md
           git commit --amend --no-edit
       - name: Push to origin
         run: |
