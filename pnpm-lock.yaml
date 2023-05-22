@@ -2,20 +2,20 @@ lockfileVersion: '6.0'
 
 devDependencies:
   '@capacitor/android':
-    specifier: ^4.4.0
-    version: 4.4.0(@capacitor/core@4.4.0)
+    specifier: ^5.0.0
+    version: 5.0.0(@capacitor/core@5.0.0)
   '@capacitor/cli':
-    specifier: ^4.4.0
-    version: 4.4.0
+    specifier: ^5.0.0
+    version: 5.0.0
   '@capacitor/core':
-    specifier: ^4.4.0
-    version: 4.4.0
+    specifier: ^5.0.0
+    version: 5.0.0
   '@capacitor/docgen':
     specifier: ^0.2.0
     version: 0.2.0
   '@capacitor/ios':
-    specifier: ^4.4.0
-    version: 4.4.0(@capacitor/core@4.4.0)
+    specifier: ^5.0.0
+    version: 5.0.0(@capacitor/core@5.0.0)
   '@ionic/eslint-config':
     specifier: ^0.3.0
     version: 0.3.0(eslint@8.27.0)(typescript@4.8.4)
@@ -82,17 +82,17 @@ packages:
       js-tokens: 4.0.0
     dev: true
 
-  /@capacitor/android@4.4.0(@capacitor/core@4.4.0):
-    resolution: {integrity: sha512-vPoUcoJ1CZ5pxjceN/HVnq5FuNo+V1/kBj/NH48nAiMzBbZPEDmplguGC8Dj2qbKjhkJ+LMSL26VTfnsyHMJbA==}
+  /@capacitor/android@5.0.0(@capacitor/core@5.0.0):
+    resolution: {integrity: sha512-jEhx0OW8uypxlW94bXn7Q6YtwBOg3MH49DxH+jSrroRPr8Xb55w3puVSof9O2BQaxOq1mXKTjwz6TOIargGHwQ==}
     peerDependencies:
-      '@capacitor/core': ^4.3.0
+      '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 4.4.0
+      '@capacitor/core': 5.0.0
     dev: true
 
-  /@capacitor/cli@4.4.0:
-    resolution: {integrity: sha512-BB/gbUtZ2PVrUSoqkQAOCvOtEP/5IDG3aZvlqT53RAzmt/rIbcOi7qimOoLsS9iCtNtAIN+UgCqb+f62GdvV5Q==}
-    engines: {node: '>=12.4.0'}
+  /@capacitor/cli@5.0.0:
+    resolution: {integrity: sha512-d11L9xnnxmjyTHD3vjhOGnr7zN+uIzIeW4QrQC131rovP1cdFYVjG1DrmQa/mx6s49d2Bv7myNLHtl0j+dQIow==}
+    engines: {node: '>=16.0.0'}
     hasBin: true
     dependencies:
       '@ionic/cli-framework-output': 2.2.6
@@ -107,17 +107,17 @@ packages:
       open: 8.4.2
       plist: 3.0.6
       prompts: 2.4.2
-      rimraf: 3.0.2
+      rimraf: 4.4.1
       semver: 7.5.1
       tar: 6.1.14
       tslib: 2.5.0
-      xml2js: 0.4.23
+      xml2js: 0.5.0
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /@capacitor/core@4.4.0:
-    resolution: {integrity: sha512-9k6EJTCMlHhr6g2oGo2FJM2byRyX5GEfB24Bv2e4fnemiiHrQEeAKdg++6Hj7jNNZtI1q+5EImTrcpXzPkiX7Q==}
+  /@capacitor/core@5.0.0:
+    resolution: {integrity: sha512-Fm8jNUPpCBPQVKLEwMt7D+w/7sh1AGiLVpL+D6Xc7iRdrPU/3NI9bgzca3uzDA1SOV8O+tVxk7bjZGXPbiTRAA==}
     dependencies:
       tslib: 2.5.0
     dev: true
@@ -134,12 +134,12 @@ packages:
       typescript: 4.2.4
     dev: true
 
-  /@capacitor/ios@4.4.0(@capacitor/core@4.4.0):
-    resolution: {integrity: sha512-x1i9WgaeUANBgXmCHcXoMrqZC49Ef0eu+kaRmcQ0/UkI2r31/PMGr3BVTlHRJLeBsodzwR4TiEeKRK044WX+Hw==}
+  /@capacitor/ios@5.0.0(@capacitor/core@5.0.0):
+    resolution: {integrity: sha512-b1edQNe1cKiqnxoIR5WxbVjDlf3RWr2ZjaDxwEuBzwBAvvrFcweKdbw1ij45DWHKODaIymWoyAlAUN+vFOF5sw==}
     peerDependencies:
-      '@capacitor/core': ^4.3.0
+      '@capacitor/core': ^5.0.0
     dependencies:
-      '@capacitor/core': 4.4.0
+      '@capacitor/core': 5.0.0
     dev: true
 
   /@eslint/eslintrc@1.4.1:
@@ -717,6 +717,12 @@ packages:
     dependencies:
       balanced-match: 1.0.2
       concat-map: 0.0.1
+    dev: true
+
+  /brace-expansion@2.0.1:
+    resolution: {integrity: sha512-XnAIvQ8eM+kC6aULx6wuQiwVsnzsi9d3WxzV3FpWTGA19F621kwdbsAcFKXgKUHZWsy+mY6iL1sHTxWEFCytDA==}
+    dependencies:
+      balanced-match: 1.0.2
     dev: true
 
   /braces@3.0.2:
@@ -1431,6 +1437,16 @@ packages:
       path-is-absolute: 1.0.1
     dev: true
 
+  /glob@9.3.5:
+    resolution: {integrity: sha512-e1LleDykUz2Iu+MTYdkSsuWX8lvAjAcs0Xef0lNIu0S2wOAzuTxCJtcd9S3cijlwYF18EsU3rzb8jPVobxDh9Q==}
+    engines: {node: '>=16 || 14 >=14.17'}
+    dependencies:
+      fs.realpath: 1.0.0
+      minimatch: 8.0.4
+      minipass: 4.2.8
+      path-scurry: 1.9.2
+    dev: true
+
   /globals@13.20.0:
     resolution: {integrity: sha512-Qg5QtVkCy/kv3FUSlu4ukeZDVf9ee0iXLAUYX13gbR17bnejFTzr4iS9bY7kwCf1NztRNm1t91fjOiyx4CSwPQ==}
     engines: {node: '>=8'}
@@ -1802,6 +1818,11 @@ packages:
       yallist: 4.0.0
     dev: true
 
+  /lru-cache@9.1.1:
+    resolution: {integrity: sha512-65/Jky17UwSb0BuB9V+MyDpsOtXKmYwzhyl+cOa9XUiI4uV2Ouy/2voFP3+al0BjZbJgMBD8FojMpAf+Z+qn4A==}
+    engines: {node: 14 || >=16.14}
+    dev: true
+
   /merge2@1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
@@ -1821,6 +1842,13 @@ packages:
       brace-expansion: 1.1.11
     dev: true
 
+  /minimatch@8.0.4:
+    resolution: {integrity: sha512-W0Wvr9HyFXZRGIDgCicunpQ299OKXs9RgZfaukz4qAW/pJhcpUfupc9c+OObPOFueNy8VSrZgEmDtk6Kh4WzDA==}
+    engines: {node: '>=16 || 14 >=14.17'}
+    dependencies:
+      brace-expansion: 2.0.1
+    dev: true
+
   /minimist@1.2.8:
     resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
     dev: true
@@ -1830,6 +1858,11 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       yallist: 4.0.0
+    dev: true
+
+  /minipass@4.2.8:
+    resolution: {integrity: sha512-fNzuVyifolSLFL4NzpF+wEF4qrgqaaKX0haXPQEdQ7NKAN+WecoKMHV09YcuL/DHxrUsYQOK3MiuDf7Ip2OXfQ==}
+    engines: {node: '>=8'}
     dev: true
 
   /minipass@5.0.0:
@@ -1996,6 +2029,14 @@ packages:
     resolution: {integrity: sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==}
     dev: true
 
+  /path-scurry@1.9.2:
+    resolution: {integrity: sha512-qSDLy2aGFPm8i4rsbHd4MNyTcrzHFsLQykrtbuGRknZZCBBVXSv2tSCDN2Cg6Rt/GFRw8GoW9y9Ecw5rIPG1sg==}
+    engines: {node: '>=16 || 14 >=14.17'}
+    dependencies:
+      lru-cache: 9.1.1
+      minipass: 5.0.0
+    dev: true
+
   /path-type@4.0.0:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
@@ -2118,6 +2159,14 @@ packages:
     engines: {node: '>=14'}
     deprecated: Please upgrade to 4.3.1 or higher to fix a potentially damaging issue regarding symbolic link following. See https://github.com/isaacs/rimraf/issues/259 for details.
     hasBin: true
+    dev: true
+
+  /rimraf@4.4.1:
+    resolution: {integrity: sha512-Gk8NlF062+T9CqNGn6h4tls3k6T1+/nXdOcSZVikNVtlRdYpA7wRJJMoXmuvOnLW844rPjdQ7JgXCYM6PPC/og==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dependencies:
+      glob: 9.3.5
     dev: true
 
   /rollup@3.2.5:
@@ -2467,8 +2516,8 @@ packages:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
     dev: true
 
-  /xml2js@0.4.23:
-    resolution: {integrity: sha512-ySPiMjM0+pLDftHgXY4By0uswI3SPKLDw/i3UXbnO8M/p28zqexCUoPmQFrYD+/1BzhGJSs2i1ERWKJAtiLrug==}
+  /xml2js@0.5.0:
+    resolution: {integrity: sha512-drPFnkQJik/O+uPKpqSgr22mpuFHqKdbS835iAQrUC73L2F5WkboIRd63ai/2Yg6I1jzifPFKH2NTK+cfglkIA==}
     engines: {node: '>=4.0.0'}
     dependencies:
       sax: 1.2.4
