@@ -48,7 +48,6 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
         let purchaserJson = customerInfo.dictionary
         self.notifyListeners("purchasesUpdate", data: ["customerInfo": purchaserJson])
     }
-
     @objc func getOfferings(_ call: CAPPluginCall) {
         Purchases.shared.getOfferings { (offerings, error) in
             if (error) != nil {

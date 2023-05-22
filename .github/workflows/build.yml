@@ -1,9 +1,9 @@
-name: Build source code and send to Capgo
+name: Build source code and send to NPM
 
 on:
   push:
     tags:
-      - "*"
+      - '*'
 
 jobs:
   build_android:
@@ -26,7 +26,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '11'
+          java-version: '17'
       - name: Build
         id: build_code
         run: npm run verify:android
@@ -52,7 +52,7 @@ jobs:
   deploy:
     needs: [build_android, build_ios]
     runs-on: ubuntu-latest
-    name: "Build code and release"
+    name: 'Build code and release'
     steps:
       - name: Check out
         uses: actions/checkout@v3

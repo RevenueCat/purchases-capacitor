@@ -88,16 +88,14 @@ Read more about it here: https://github.com/RevenueCat/purchases-android/blob/ma
 ### setup(...)
 
 ```typescript
-setup(data: { apiKey: string; appUserID?: string; observerMode?: boolean; }) => any
+setup(data: { apiKey: string; appUserID?: string; observerMode?: boolean; enableAdServicesAttribution?: boolean; collectDeviceIdentifiers?: boolean; }) => Promise<void>
 ```
 
 Sets up  with your API key and an app user id.
 
-| Param      | Type                                                                         |
-| ---------- | ---------------------------------------------------------------------------- |
-| **`data`** | <code>{ apiKey: string; appUserID?: string; observerMode?: boolean; }</code> |
-
-**Returns:** <code>any</code>
+| Param      | Type                                                                                                                                                    |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`data`** | <code>{ apiKey: string; appUserID?: string; observerMode?: boolean; enableAdServicesAttribution?: boolean; collectDeviceIdentifiers?: boolean; }</code> |
 
 --------------------
 
@@ -117,7 +115,7 @@ Provides partial result.
 | **`eventName`**    | <code>'purchasesUpdate'</code>                                                                                                         |
 | **`listenerFunc`** | <code>(data: { purchases: <a href="#package">Package</a>; customerInfo: <a href="#customerinfo">CustomerInfo</a>; }) =&gt; void</code> |
 
-**Returns:** <code>any</code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
 
 **Since:** 2.0.2
 
@@ -127,12 +125,12 @@ Provides partial result.
 ### getOfferings()
 
 ```typescript
-getOfferings() => any
+getOfferings() => Promise<{ offerings: Offerings; }>
 ```
 
 Gets the <a href="#offerings">Offerings</a> configured in the RevenueCat dashboard
 
-**Returns:** <code>any</code>
+**Returns:** <code>Promise&lt;{ offerings: <a href="#offerings">Offerings</a>; }&gt;</code>
 
 --------------------
 
@@ -140,7 +138,7 @@ Gets the <a href="#offerings">Offerings</a> configured in the RevenueCat dashboa
 ### purchasePackage(...)
 
 ```typescript
-purchasePackage(data: { identifier: string; offeringIdentifier: string; oldSKU?: string | null; }) => any
+purchasePackage(data: { identifier: string; offeringIdentifier: string; oldSKU?: string | null; }) => Promise<{ customerInfo: CustomerInfo; }>
 ```
 
 Make a purchase
@@ -149,7 +147,7 @@ Make a purchase
 | ---------- | ----------------------------------------------------------------------------------------- |
 | **`data`** | <code>{ identifier: string; offeringIdentifier: string; oldSKU?: string \| null; }</code> |
 
-**Returns:** <code>any</code>
+**Returns:** <code>Promise&lt;{ customerInfo: <a href="#customerinfo">CustomerInfo</a>; }&gt;</code>
 
 --------------------
 
@@ -157,12 +155,12 @@ Make a purchase
 ### restorePurchases()
 
 ```typescript
-restorePurchases() => any
+restorePurchases() => Promise<{ customerInfo: CustomerInfo; }>
 ```
 
 Restores a user's previous  and links their appUserIDs to any user's also using those .
 
-**Returns:** <code>any</code>
+**Returns:** <code>Promise&lt;{ customerInfo: <a href="#customerinfo">CustomerInfo</a>; }&gt;</code>
 
 --------------------
 
@@ -170,7 +168,7 @@ Restores a user's previous  and links their appUserIDs to any user's also using 
 ### setAttributes(...)
 
 ```typescript
-setAttributes(data: { attributes: { [key: string]: string | null; }; }) => any
+setAttributes(data: { attributes: { [key: string]: string | null; }; }) => Promise<void>
 ```
 
 Subscriber attributes are useful for storing additional, structured information on a user.
@@ -184,15 +182,13 @@ restrictions refer to our guide: https://docs.revenuecat.com/docs/subscriber-att
 | ---------- | ---------------------------------------------------------------- |
 | **`data`** | <code>{ attributes: { [key: string]: string \| null; }; }</code> |
 
-**Returns:** <code>any</code>
-
 --------------------
 
 
 ### logIn(...)
 
 ```typescript
-logIn(data: { appUserID: string; }) => any
+logIn(data: { appUserID: string; }) => Promise<LogInResult>
 ```
 
 This function will logIn the current user with an appUserID. Typically this would be used after a log in
@@ -202,7 +198,7 @@ to identify a user without calling configure.
 | ---------- | ----------------------------------- |
 | **`data`** | <code>{ appUserID: string; }</code> |
 
-**Returns:** <code>any</code>
+**Returns:** <code>Promise&lt;<a href="#loginresult">LogInResult</a>&gt;</code>
 
 --------------------
 
@@ -210,13 +206,13 @@ to identify a user without calling configure.
 ### logOut()
 
 ```typescript
-logOut() => any
+logOut() => Promise<{ customerInfo: CustomerInfo; }>
 ```
 
 Logs out the  client clearing the saved appUserID. This will generate a random user id and save it in the cache.
 If the current user is already anonymous, this will produce a Error.
 
-**Returns:** <code>any</code>
+**Returns:** <code>Promise&lt;{ customerInfo: <a href="#customerinfo">CustomerInfo</a>; }&gt;</code>
 
 --------------------
 
@@ -224,13 +220,13 @@ If the current user is already anonymous, this will produce a Error.
 ### getCustomerInfo()
 
 ```typescript
-getCustomerInfo() => any
+getCustomerInfo() => Promise<{ customerInfo: CustomerInfo; }>
 ```
 
 Gets the current purchaser info. This call will return the cached purchaser info unless the cache is stale, in which case,
 it will make a network call to retrieve it from the servers.
 
-**Returns:** <code>any</code>
+**Returns:** <code>Promise&lt;{ customerInfo: <a href="#customerinfo">CustomerInfo</a>; }&gt;</code>
 
 --------------------
 
@@ -238,7 +234,7 @@ it will make a network call to retrieve it from the servers.
 ### setDebugLogsEnabled(...)
 
 ```typescript
-setDebugLogsEnabled(data: { enabled: boolean; }) => any
+setDebugLogsEnabled(data: { enabled: boolean; }) => Promise<void>
 ```
 
 Enables/Disables debugs logs
@@ -247,12 +243,17 @@ Enables/Disables debugs logs
 | ---------- | ---------------------------------- |
 | **`data`** | <code>{ enabled: boolean; }</code> |
 
-**Returns:** <code>any</code>
-
 --------------------
 
 
 ### Interfaces
+
+
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 
 #### Package
@@ -283,7 +284,7 @@ For more info see https://docs.revenuecat.com/docs/entitlements
 | **`subscriptionGroupIdentifier`** | <code>string</code>                                                     | Group identifier for the product.                                        |
 | **`subscriptionPeriod`**          | <code><a href="#subscriptionperiod">SubscriptionPeriod</a></code>       | The <a href="#product">Product</a> subcription group identifier.         |
 | **`introductoryPrice`**           | <code><a href="#skproductdiscount">SKProductDiscount</a> \| null</code> | The <a href="#product">Product</a> introductory Price.                   |
-| **`discounts`**                   | <code>{}</code>                                                         | The <a href="#product">Product</a> discounts list.                       |
+| **`discounts`**                   | <code>SKProductDiscount[]</code>                                        | The <a href="#product">Product</a> discounts list.                       |
 
 
 #### SubscriptionPeriod
@@ -316,7 +317,7 @@ For more info see https://docs.revenuecat.com/docs/entitlements
 | **`entitlements`**                   | <code><a href="#entitlementinfos">EntitlementInfos</a></code> | Entitlements attached to this purchaser info                                                                                                                                                                                                                                                                                                     |
 | **`activeSubscriptions`**            | <code>[string]</code>                                         | Set of active subscription skus                                                                                                                                                                                                                                                                                                                  |
 | **`allPurchasedProductIdentifiers`** | <code>[string]</code>                                         | Set of purchased skus, active and inactive                                                                                                                                                                                                                                                                                                       |
-| **`nonSubscriptionTransactions`**    | <code>{}</code>                                               | Returns all the non-subscription a user has made. The are ordered by purchase date in ascending order.                                                                                                                                                                                                                                           |
+| **`nonSubscriptionTransactions`**    | <code>Transaction[]</code>                                    | Returns all the non-subscription a user has made. The are ordered by purchase date in ascending order.                                                                                                                                                                                                                                           |
 | **`latestExpirationDate`**           | <code>string \| null</code>                                   | The latest expiration date of all purchased skus                                                                                                                                                                                                                                                                                                 |
 | **`firstSeen`**                      | <code>string</code>                                           | The date this user was first seen in RevenueCat.                                                                                                                                                                                                                                                                                                 |
 | **`originalAppUserId`**              | <code>string</code>                                           | The original App User Id recorded for this user.                                                                                                                                                                                                                                                                                                 |
@@ -365,13 +366,6 @@ The <a href="#entitlementinfo">EntitlementInfo</a> object gives you access to al
 | **`purchaseDate`**          | <code>string</code> | Purchase date of the transaction in ISO 8601 format.               |
 
 
-#### PluginListenerHandle
-
-| Prop         | Type                      |
-| ------------ | ------------------------- |
-| **`remove`** | <code>() =&gt; any</code> |
-
-
 #### Offerings
 
 Contains all the offerings configured in RevenueCat dashboard.
@@ -392,7 +386,7 @@ For more info see https://docs.revenuecat.com/docs/entitlements
 | ----------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------ |
 | **`identifier`**        | <code>string</code>                                 | Unique identifier defined in RevenueCat dashboard.                             |
 | **`serverDescription`** | <code>string</code>                                 | <a href="#offering">Offering</a> description defined in RevenueCat dashboard.  |
-| **`availablePackages`** | <code>{}</code>                                     | Array of <a href="#package">`Package`</a> objects available for purchase.      |
+| **`availablePackages`** | <code>Package[]</code>                              | Array of <a href="#package">`Package`</a> objects available for purchase.      |
 | **`lifetime`**          | <code><a href="#package">Package</a> \| null</code> | Lifetime package type configured in the RevenueCat dashboard, if available.    |
 | **`annual`**            | <code><a href="#package">Package</a> \| null</code> | Annual package type configured in the RevenueCat dashboard, if available.      |
 | **`sixMonth`**          | <code><a href="#package">Package</a> \| null</code> | Six month package type configured in the RevenueCat dashboard, if available.   |
