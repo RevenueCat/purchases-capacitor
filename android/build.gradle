@@ -64,5 +64,5 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "com.google.guava:guava:31.1-android"
     implementation "com.revenuecat.purchases:purchases:5.8.2"
-    implementation "com.revenuecat.purchases:purchases-hybrid-common:4.15.0"
+    implementation "com.revenuecat.purchases:purchases-hybrid-common:4.16.0"
 }
