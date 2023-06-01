@@ -26,6 +26,7 @@ https://capgo.app/blog/in-app-purchases-capacitor/
 npm install @capgo/capacitor-purchases
 pnpm dlx cap sync
 ```
+
 ## Android
 Add this to your android manifest `android/app/src/main/AndroidManifest.xml`
 ```xml
