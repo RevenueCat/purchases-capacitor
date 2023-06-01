@@ -2,6 +2,40 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.0](https://github.com/Cap-go/capacitor-purchases/compare/2.0.24...5.0.0) (2023-06-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* capacitor 5 update
+
+### Features
+
+* add collectDeviceIdentifiers and enableAdServicesAttributionTokenCollection ([14e07c0](https://github.com/Cap-go/capacitor-purchases/commit/14e07c06ea3f70fbaecb8204ddd995cfaca74ff3))
+* capacitor 5 update ([33f0f53](https://github.com/Cap-go/capacitor-purchases/commit/33f0f53f5c72a549158a6c40f6a640e10dfcba93))
+
+
+### Bug Fixes
+
+* build script ([921f631](https://github.com/Cap-go/capacitor-purchases/commit/921f63178e694e21e8fc9e4baaec328f0ac55ab2))
+* capacitor 5 build ([01afc34](https://github.com/Cap-go/capacitor-purchases/commit/01afc34e1bbba1991f4bb7c38c93b081ec5ae933))
+* **deps:** update dependency com.android.tools.build:gradle to v8.0.1 ([d257919](https://github.com/Cap-go/capacitor-purchases/commit/d25791993f4f8ef86bcc821ed6f981450bca6379))
+* **deps:** update dependency com.android.tools.build:gradle to v8.0.2 ([44ea4cd](https://github.com/Cap-go/capacitor-purchases/commit/44ea4cd1dceb78893555638aeb33f7120b9f8b2b))
+* **deps:** update dependency com.revenuecat.purchases:purchases to v5.7.1 ([2f5b3eb](https://github.com/Cap-go/capacitor-purchases/commit/2f5b3eb3b31433a665e39814da8b5e952b45cceb))
+* **deps:** update dependency com.revenuecat.purchases:purchases to v5.8.2 ([c67fb7c](https://github.com/Cap-go/capacitor-purchases/commit/c67fb7c86abeddeaddaa951bdff81dece67c8bbd))
+* **deps:** update dependency com.revenuecat.purchases:purchases-hybrid-common to v4.13.0 ([33fb5e7](https://github.com/Cap-go/capacitor-purchases/commit/33fb5e7f3da181ab6d30b739b4c4c49a7ac383e0))
+* **deps:** update dependency com.revenuecat.purchases:purchases-hybrid-common to v4.13.5 ([92a8cda](https://github.com/Cap-go/capacitor-purchases/commit/92a8cdac3d35108a5403135923767e1f711080a1))
+* **deps:** update dependency com.revenuecat.purchases:purchases-hybrid-common to v4.14.0 ([5135101](https://github.com/Cap-go/capacitor-purchases/commit/5135101a2f0d5de97834f7c3537fe43ba90bb554))
+* **deps:** update dependency com.revenuecat.purchases:purchases-hybrid-common to v4.14.1 ([55e833b](https://github.com/Cap-go/capacitor-purchases/commit/55e833b8c5bddedad3bb85de16526c41277ef346))
+* **deps:** update dependency com.revenuecat.purchases:purchases-hybrid-common to v4.14.2 ([fa47a65](https://github.com/Cap-go/capacitor-purchases/commit/fa47a65d5078a01f46dfce0b6497ab8ad4438147))
+* **deps:** update dependency com.revenuecat.purchases:purchases-hybrid-common to v4.14.3 ([f65a3a4](https://github.com/Cap-go/capacitor-purchases/commit/f65a3a4fe4b200cc7c7097bedab563d4651a94c2))
+* **deps:** update dependency com.revenuecat.purchases:purchases-hybrid-common to v4.15.0 ([24dc0ad](https://github.com/Cap-go/capacitor-purchases/commit/24dc0ad1fab8a0143c22980046516d9c0198e844))
+* **deps:** update dependency com.revenuecat.purchases:purchases-hybrid-common to v4.16.0 ([46ee161](https://github.com/Cap-go/capacitor-purchases/commit/46ee1611e08bee33fdb99180dca77587eca983f2))
+* isssue docgen ([a8fb90e](https://github.com/Cap-go/capacitor-purchases/commit/a8fb90e4148c68841b9868463ba9a730ea96dc35))
+* readme ([f93260a](https://github.com/Cap-go/capacitor-purchases/commit/f93260ae44657d320018f884a36fe6d28221880d))
+* ts v5 ([80ab44d](https://github.com/Cap-go/capacitor-purchases/commit/80ab44dba9fda0847d308e1a279040ebe31594b8))
+* Update package.json ([ecde0eb](https://github.com/Cap-go/capacitor-purchases/commit/ecde0ebee49f2c49903441c61086f95ab6c4ca09))
+
 ## [6.0.0](https://github.com/Cap-go/capacitor-purchases/compare/2.0.24...6.0.0) (2023-06-01)
 
 
