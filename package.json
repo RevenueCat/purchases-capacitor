@@ -1,6 +1,6 @@
 {
   "name": "@capgo/capacitor-purchases",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "In-app Subscriptions Made Easy with RevenueCat sdk",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
