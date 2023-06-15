@@ -59,7 +59,7 @@ public class CapacitorPurchasesPlugin extends Plugin {
               convertMapToJson(new HashMap<String, String>())
             );
             ret.put(
-              "purchasecustomerInforInfo",
+              "customerInfo",
               convertMapToJson(CustomerInfoMapperKt.map(customerInfo))
             );
             notifyListeners("purchasesUpdate", ret);
