@@ -57,7 +57,7 @@
     "eslint": "^8.41.0",
     "eslint-plugin-import": "^2.27.5",
     "husky": "^8.0.3",
-    "prettier": "^2.8.8",
+    "prettier": "^3.0.0",
     "prettier-plugin-java": "^2.1.0",
     "rimraf": "^5.0.1",
     "rollup": "^3.23.0",
