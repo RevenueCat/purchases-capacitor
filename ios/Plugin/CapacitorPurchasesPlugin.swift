@@ -176,6 +176,19 @@ public class CapacitorPurchasesPlugin: CAPPlugin, PurchasesDelegate {
         }
     }
 
+    @objc func getProducts(_ call: CAPPluginCall) {
+        let productIdentifiers = call.getArray("productIdentifiers", String.self) ?? []
+
+        Purchases.shared.getProducts(Array(productIdentifiers), completion: { (products) in
+            let productsJson = products.map { (product) -> [String: Any] in
+                return product.rc_dictionary
+            }
+            call.resolve([
+                "products": productsJson
+            ])
+        })
+    }
+
     @objc func setDebugLogsEnabled(_ call: CAPPluginCall) {
         let enabled = call.getBool("enabled") ?? false
         Purchases.logLevel = enabled ? .debug : .error

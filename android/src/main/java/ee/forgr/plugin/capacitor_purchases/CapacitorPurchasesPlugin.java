@@ -105,6 +105,25 @@ public class CapacitorPurchasesPlugin extends Plugin {
     call.resolve();
   }
 
+  @PluginMethod
+  public void getProducts(PluginCall call) {
+    List<String> productIdentifiers = new ArrayList<String>();
+    JSONArray productIdentifiersArray = call.getArray("productIdentifiers");
+    for (int i = 0; i < productIdentifiersArray.length(); i++) {
+      try {
+        productIdentifiers.add(productIdentifiersArray.getString(i));
+      } catch (JSONException e) {
+        call.reject("Error parsing product identifiers");
+        return;
+      }
+    }
+    CommonKt.getProducts(
+      this.bridge.getActivity(),
+      productIdentifiers,
+      getOnResult(call, "products")
+    );
+  }
+
   public static Map<String, String> convertJsonToMap(JSONObject jsonobj)
     throws JSONException {
     Map<String, String> map = new HashMap<String, String>();
