@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.1.0](https://github.com/Cap-go/capacitor-purchases/compare/5.0.8...5.1.0) (2023-08-01)
+
+
+### Features
+
+* add missing getProducts ([9d6871b](https://github.com/Cap-go/capacitor-purchases/commit/9d6871b1d718702e9894e9c969f51bb0cc591055))
+
 ### [5.0.8](https://github.com/Cap-go/capacitor-purchases/compare/5.0.7...5.0.8) (2023-07-31)
 
 
