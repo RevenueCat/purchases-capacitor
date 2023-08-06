@@ -12,7 +12,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.0'
+        classpath 'com.android.tools.build:gradle:8.0.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -63,6 +63,6 @@ dependencies {
     implementation "androidx.core:core-ktx:$androidxCoreVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "com.google.guava:guava:31.1-android"
-    implementation "com.revenuecat.purchases:purchases:5.8.2"
-    implementation "com.revenuecat.purchases:purchases-hybrid-common:4.18.0"
+    implementation "com.revenuecat.purchases:purchases:6.9.0"
+    implementation "com.revenuecat.purchases:purchases-hybrid-common:5.6.0"
 }

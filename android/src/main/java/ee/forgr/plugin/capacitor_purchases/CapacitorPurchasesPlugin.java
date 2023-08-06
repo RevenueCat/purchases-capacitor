@@ -89,6 +89,7 @@ public class CapacitorPurchasesPlugin extends Plugin {
       offeringIdentifier,
       oldSKU,
       null,
+      false,
       getOnResult(call, "")
     );
   }
@@ -103,25 +104,6 @@ public class CapacitorPurchasesPlugin extends Plugin {
     JSObject attributes = call.getObject("attributes", new JSObject());
     Purchases.getSharedInstance().setAttributes(convertJsonToMap(attributes));
     call.resolve();
-  }
-
-  @PluginMethod
-  public void getProducts(PluginCall call) {
-    List<String> productIdentifiers = new ArrayList<String>();
-    JSONArray productIdentifiersArray = call.getArray("productIdentifiers");
-    for (int i = 0; i < productIdentifiersArray.length(); i++) {
-      try {
-        productIdentifiers.add(productIdentifiersArray.getString(i));
-      } catch (JSONException e) {
-        call.reject("Error parsing product identifiers");
-        return;
-      }
-    }
-    CommonKt.getProducts(
-      this.bridge.getActivity(),
-      productIdentifiers,
-      getOnResult(call, "products")
-    );
   }
 
   public static Map<String, String> convertJsonToMap(JSONObject jsonobj)
