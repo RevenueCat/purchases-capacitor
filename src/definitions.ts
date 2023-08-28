@@ -28,121 +28,121 @@ export interface GetProductOptions {
   /**
    * Array of product identifiers to obtain
    */
-  productIdentifiers: string[],
+  productIdentifiers: string[];
   /**
    * Optional type of products to fetch, can be SUBSCRIPTION or NON_SUBSCRIPTION. SUBSCRIPTION by default. Ignored in iOS.
    */
-  type?: PRODUCT_CATEGORY,
+  type?: PRODUCT_CATEGORY;
 }
 
 export interface PurchaseStoreProductOptions {
   /**
    * The product you want to purchase
    */
-  product: PurchasesStoreProduct,
+  product: PurchasesStoreProduct;
   /**
    * Android only. Optional GoogleProductChangeInfo you
    * wish to upgrade from containing the oldProductIdentifier and the optional prorationMode.
    */
-  googleProductChangeInfo?: GoogleProductChangeInfo | null,
+  googleProductChangeInfo?: GoogleProductChangeInfo | null;
   /**
    * Android and Google only. Optional boolean indicates personalized pricing on products available for purchase in the EU.
    * For compliance with EU regulations. User will see "This price has been customized for you" in the purchase dialog when true.
    * See https://developer.android.com/google/play/billing/integrate#personalized-price for more info.
    */
-  googleIsPersonalizedPrice?: boolean | null,
+  googleIsPersonalizedPrice?: boolean | null;
 }
 
 export interface PurchaseDiscountedProductOptions {
   /**
    * The product you want to purchase
    */
-  product: PurchasesStoreProduct,
+  product: PurchasesStoreProduct;
   /**
    * Discount to apply to this package. Retrieve this discount using getPromotionalOffer.
    */
-  discount: PurchasesPromotionalOffer,
+  discount: PurchasesPromotionalOffer;
 }
 
 export interface PurchasePackageOptions {
   /**
    * The Package you wish to purchase. You can get the Packages by calling getOfferings
    */
-  aPackage: PurchasesPackage,
+  aPackage: PurchasesPackage;
   /**
    * Android only. Optional GoogleProductChangeInfo you
    * wish to upgrade from containing the oldProductIdentifier and the optional prorationMode.
    */
-  googleProductChangeInfo?: GoogleProductChangeInfo | null,
+  googleProductChangeInfo?: GoogleProductChangeInfo | null;
   /**
    * Android and Google only. Optional boolean indicates personalized pricing on products available for purchase in the EU.
    * For compliance with EU regulations. User will see "This price has been customized for you" in the purchase dialog when true.
    * See https://developer.android.com/google/play/billing/integrate#personalized-price for more info.
    */
-  googleIsPersonalizedPrice?: boolean | null,
+  googleIsPersonalizedPrice?: boolean | null;
 }
 
 export interface PurchaseSubscriptionOptionOptions {
   /**
    * The SubscriptionOption you wish to purchase. You can get the SubscriptionOption from StoreProducts by calling getOfferings
    */
-  subscriptionOption: SubscriptionOption,
+  subscriptionOption: SubscriptionOption;
   /**
    * Android only. Optional GoogleProductChangeInfo you
    * wish to upgrade from containing the oldProductIdentifier and the optional prorationMode.
    */
-  googleProductChangeInfo?: GoogleProductChangeInfo | null,
+  googleProductChangeInfo?: GoogleProductChangeInfo | null;
   /**
    * Android and Google only. Optional boolean indicates personalized pricing on products available for purchase in the EU.
    * For compliance with EU regulations. User will see "This price has been customized for you" in the purchase dialog when true.
    * See https://developer.android.com/google/play/billing/integrate#personalized-price for more info.
    */
-  googleIsPersonalizedPrice?: boolean | null,
+  googleIsPersonalizedPrice?: boolean | null;
 }
 
 export interface PurchaseDiscountedPackageOptions {
   /**
    * The Package you wish to purchase. You can get the Packages by calling getOfferings
    */
-  aPackage: PurchasesPackage,
+  aPackage: PurchasesPackage;
   /**
    * Discount to apply to this package. Retrieve this discount using getPromotionalOffer.
    */
-  discount: PurchasesPromotionalOffer,
+  discount: PurchasesPromotionalOffer;
 }
 
 export interface SyncObserverModeAmazonPurchaseOptions {
   /**
    * Product ID associated to the purchase.
    */
-  productID: string,
+  productID: string;
   /**
    * ReceiptId that represents the Amazon purchase.
    */
-  receiptID: string,
+  receiptID: string;
   /**
    * Amazon's userID. This parameter will be ignored when syncing a Google purchase.
    */
-  amazonUserID: string,
+  amazonUserID: string;
   /**
    * Product's currency code in ISO 4217 format.
    */
-  isoCurrencyCode?: string | null,
+  isoCurrencyCode?: string | null;
   /**
    * Product's price.
    */
-  price?: number | null,
+  price?: number | null;
 }
 
 export interface GetPromotionalOfferOptions {
   /**
    * The `PurchasesStoreProduct` the user intends to purchase.
    */
-  product: PurchasesStoreProduct,
+  product: PurchasesStoreProduct;
   /**
    * The `PurchasesStoreProductDiscount` to apply to the product.
    */
-  discount: PurchasesStoreProductDiscount,
+  discount: PurchasesStoreProductDiscount;
 }
 
 export interface PurchasesPlugin {
@@ -157,7 +157,9 @@ export interface PurchasesPlugin {
    * make the purchase
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet.
    */
-  setFinishTransactions(options: { finishTransactions: boolean }): Promise<void>;
+  setFinishTransactions(options: {
+    finishTransactions: boolean;
+  }): Promise<void>;
 
   /**
    * iOS only.
@@ -165,9 +167,9 @@ export interface PurchasesPlugin {
    * purchases flow. More information: http://errors.rev.cat/ask-to-buy
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet.
    */
-  setSimulatesAskToBuyInSandbox(
-    options: { simulatesAskToBuyInSandbox: boolean },
-  ): Promise<void>;
+  setSimulatesAskToBuyInSandbox(options: {
+    simulatesAskToBuyInSandbox: boolean;
+  }): Promise<void>;
 
   /**
    * Sets a function to be called on updated customer info
@@ -260,9 +262,7 @@ export interface PurchasesPlugin {
    * user cancelled the purchase, and an object with more information. The promise will be also be rejected if configure
    * has not been called yet.
    */
-  purchasePackage(
-    options: PurchasePackageOptions,
-  ): Promise<MakePurchaseResult>;
+  purchasePackage(options: PurchasePackageOptions): Promise<MakePurchaseResult>;
 
   /**
    * Google only. Make a purchase of a subscriptionOption
@@ -393,9 +393,9 @@ export interface PurchasesPlugin {
    * @returns { Promise<[productId: string]: IntroEligibility> } A map of IntroEligility per productId. The promise
    * will be rejected if configure has not been called yet or if there's in an error checking eligibility.
    */
-  checkTrialOrIntroductoryPriceEligibility(
-    options: { productIdentifiers: string[] },
-  ): Promise<{ [productId: string]: IntroEligibility }>;
+  checkTrialOrIntroductoryPriceEligibility(options: {
+    productIdentifiers: string[];
+  }): Promise<{ [productId: string]: IntroEligibility }>;
 
   /**
    * iOS only. Use this function to retrieve the `PurchasesPromotionalOffer` for a given `PurchasesPackage`.
@@ -405,7 +405,7 @@ export interface PurchasesPlugin {
    * called yet or if there's an error getting the payment discount.
    */
   getPromotionalOffer(
-    options: GetPromotionalOfferOptions
+    options: GetPromotionalOfferOptions,
   ): Promise<PurchasesPromotionalOffer | undefined>;
 
   /**
@@ -554,7 +554,9 @@ export interface PurchasesPlugin {
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet or if there's an error
    * setting the Mixpanel Distinct ID.
    */
-  setMixpanelDistinctID(options: { mixpanelDistinctID: string | null }): Promise<void>;
+  setMixpanelDistinctID(options: {
+    mixpanelDistinctID: string | null;
+  }): Promise<void>;
 
   /**
    * Subscriber attribute associated with the Firebase App Instance ID for the user
@@ -564,7 +566,9 @@ export interface PurchasesPlugin {
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet or if there's an error
    * setting the Firebase App Instance ID.
    */
-  setFirebaseAppInstanceID(options: { firebaseAppInstanceID: string | null }): Promise<void>;
+  setFirebaseAppInstanceID(options: {
+    firebaseAppInstanceID: string | null;
+  }): Promise<void>;
 
   /**
    * Subscriber attribute associated with the OneSignal Player ID for the user
@@ -584,7 +588,9 @@ export interface PurchasesPlugin {
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet or if there's an error
    * setting the Airship Channel ID.
    */
-  setAirshipChannelID(options: { airshipChannelID: string | null }): Promise<void>;
+  setAirshipChannelID(options: {
+    airshipChannelID: string | null;
+  }): Promise<void>;
 
   /**
    * Subscriber attribute associated with the install media source for the user
@@ -651,9 +657,9 @@ export interface PurchasesPlugin {
    *       [BILLING_FEATURE]. By default, is an empty list and no specific feature support will be checked.
    * @returns promise with boolean response. True if billing is supported, false otherwise.
    */
-  canMakePayments(
-    options?: { features?: BILLING_FEATURE[] },
-  ): Promise<{ canMakePayments: boolean }>;
+  canMakePayments(options?: {
+    features?: BILLING_FEATURE[];
+  }): Promise<{ canMakePayments: boolean }>;
 
   /**
    * iOS 15+ only. Presents a refund request sheet in the current window scene for
@@ -685,9 +691,9 @@ export interface PurchasesPlugin {
    * @returns Returns refundRequestStatus: The status of the
    *  refund request. Keep in mind the status could be REFUND_REQUEST_STATUS.USER_CANCELLED
    */
-  beginRefundRequestForEntitlement(
-    options: { entitlementInfo: PurchasesEntitlementInfo },
-  ): Promise<{ refundRequestStatus: REFUND_REQUEST_STATUS }>;
+  beginRefundRequestForEntitlement(options: {
+    entitlementInfo: PurchasesEntitlementInfo;
+  }): Promise<{ refundRequestStatus: REFUND_REQUEST_STATUS }>;
 
   /**
    * iOS 15+ only. Presents a refund request sheet in the current window scene for
@@ -700,9 +706,9 @@ export interface PurchasesPlugin {
    * @returns {Promise<REFUND_REQUEST_STATUS>} Returns a REFUND_REQUEST_STATUS: The status of the
    *  refund request. Keep in mind the status could be REFUND_REQUEST_STATUS.USER_CANCELLED
    */
-  beginRefundRequestForProduct(
-    options: { storeProduct: PurchasesStoreProduct },
-  ): Promise<{ refundRequestStatus: REFUND_REQUEST_STATUS }>;
+  beginRefundRequestForProduct(options: {
+    storeProduct: PurchasesStoreProduct;
+  }): Promise<{ refundRequestStatus: REFUND_REQUEST_STATUS }>;
 
   /**
    * Check if configure has finished and Purchases has been configured.

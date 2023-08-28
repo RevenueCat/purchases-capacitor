@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import {WebPlugin} from '@capacitor/core';
+import { WebPlugin } from '@capacitor/core';
 import type {
   BILLING_FEATURE,
   CustomerInfo,
@@ -28,7 +28,7 @@ import type {
   PurchasesPlugin,
   PurchaseStoreProductOptions,
   PurchaseSubscriptionOptionOptions,
-  SyncObserverModeAmazonPurchaseOptions
+  SyncObserverModeAmazonPurchaseOptions,
 } from './definitions';
 
 export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
@@ -37,12 +37,14 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
   configure(_configuration: PurchasesConfiguration): Promise<void> {
     return Promise.reject(this.webNotSupportedErrorMessage);
   }
-  setFinishTransactions(_finishTransactions: { finishTransactions: boolean }): Promise<void> {
+  setFinishTransactions(_finishTransactions: {
+    finishTransactions: boolean;
+  }): Promise<void> {
     return Promise.reject(this.webNotSupportedErrorMessage);
   }
-  setSimulatesAskToBuyInSandbox(
-    _simulatesAskToBuyInSandbox: { simulatesAskToBuyInSandbox: boolean },
-  ): Promise<void> {
+  setSimulatesAskToBuyInSandbox(_simulatesAskToBuyInSandbox: {
+    simulatesAskToBuyInSandbox: boolean;
+  }): Promise<void> {
     return Promise.reject(this.webNotSupportedErrorMessage);
   }
   addCustomerInfoUpdateListener(
@@ -133,9 +135,9 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
   isAnonymous(): Promise<{ isAnonymous: boolean }> {
     return Promise.reject(this.webNotSupportedErrorMessage);
   }
-  checkTrialOrIntroductoryPriceEligibility(
-    _productIdentifiers: { productIdentifiers: string[] },
-  ): Promise<{ [productId: string]: IntroEligibility }> {
+  checkTrialOrIntroductoryPriceEligibility(_productIdentifiers: {
+    productIdentifiers: string[];
+  }): Promise<{ [productId: string]: IntroEligibility }> {
     return Promise.reject(this.webNotSupportedErrorMessage);
   }
   getPromotionalOffer(
@@ -176,7 +178,9 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
   setAppsflyerID(_appsflyerID: { appsflyerID: string | null }): Promise<void> {
     return Promise.reject(this.webNotSupportedErrorMessage);
   }
-  setFBAnonymousID(_fbAnonymousID: { fbAnonymousID: string | null }): Promise<void> {
+  setFBAnonymousID(_fbAnonymousID: {
+    fbAnonymousID: string | null;
+  }): Promise<void> {
     return Promise.reject(this.webNotSupportedErrorMessage);
   }
   setMparticleID(_mparticleID: { mparticleID: string | null }): Promise<void> {
@@ -185,18 +189,22 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
   setCleverTapID(_cleverTapID: { cleverTapID: string | null }): Promise<void> {
     return Promise.reject(this.webNotSupportedErrorMessage);
   }
-  setMixpanelDistinctID(_mixpanelDistinctID: { mixpanelDistinctID: string | null }): Promise<void> {
+  setMixpanelDistinctID(_mixpanelDistinctID: {
+    mixpanelDistinctID: string | null;
+  }): Promise<void> {
     return Promise.reject(this.webNotSupportedErrorMessage);
   }
-  setFirebaseAppInstanceID(
-    _firebaseAppInstanceID: { firebaseAppInstanceID: string | null },
-  ): Promise<void> {
+  setFirebaseAppInstanceID(_firebaseAppInstanceID: {
+    firebaseAppInstanceID: string | null;
+  }): Promise<void> {
     return Promise.reject(this.webNotSupportedErrorMessage);
   }
   setOnesignalID(_onesignalID: { onesignalID: string | null }): Promise<void> {
     return Promise.reject(this.webNotSupportedErrorMessage);
   }
-  setAirshipChannelID(_airshipChannelID: { airshipChannelID: string | null }): Promise<void> {
+  setAirshipChannelID(_airshipChannelID: {
+    airshipChannelID: string | null;
+  }): Promise<void> {
     return Promise.reject(this.webNotSupportedErrorMessage);
   }
   setMediaSource(_mediaSource: { mediaSource: string | null }): Promise<void> {
@@ -217,9 +225,9 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
   setCreative(_creative: { creative: string | null }): Promise<void> {
     return Promise.reject(this.webNotSupportedErrorMessage);
   }
-  canMakePayments(
-    _features?: { features?: BILLING_FEATURE[] },
-  ): Promise<{ canMakePayments: boolean }> {
+  canMakePayments(_features?: {
+    features?: BILLING_FEATURE[];
+  }): Promise<{ canMakePayments: boolean }> {
     return Promise.reject(this.webNotSupportedErrorMessage);
   }
   beginRefundRequestForActiveEntitlement(): Promise<{
@@ -227,14 +235,14 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
   }> {
     return Promise.reject(this.webNotSupportedErrorMessage);
   }
-  beginRefundRequestForEntitlement(
-    _entitlementInfo: { entitlementInfo: PurchasesEntitlementInfo },
-  ): Promise<{ refundRequestStatus: REFUND_REQUEST_STATUS }> {
+  beginRefundRequestForEntitlement(_entitlementInfo: {
+    entitlementInfo: PurchasesEntitlementInfo;
+  }): Promise<{ refundRequestStatus: REFUND_REQUEST_STATUS }> {
     return Promise.reject(this.webNotSupportedErrorMessage);
   }
-  beginRefundRequestForProduct(
-    _storeProduct: { storeProduct: PurchasesStoreProduct },
-  ): Promise<{ refundRequestStatus: REFUND_REQUEST_STATUS }> {
+  beginRefundRequestForProduct(_storeProduct: {
+    storeProduct: PurchasesStoreProduct;
+  }): Promise<{ refundRequestStatus: REFUND_REQUEST_STATUS }> {
     return Promise.reject(this.webNotSupportedErrorMessage);
   }
   isConfigured(): Promise<{ isConfigured: boolean }> {
