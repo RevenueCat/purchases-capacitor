@@ -1,0 +1,7 @@
+{
+  "name": "purchase-tester",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}

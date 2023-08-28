@@ -1,0 +1,212 @@
+files_with_version_number = {
+    './.version' => ['{x}'],
+    './package.json' => ['"version": "{x}"'],
+    './ios/Plugin/PurchasesPlugin.swift' => ['platformVersion = "{x}"'],
+    './android/src/main/java/com/revenuecat/purchases/capacitor/PurchasesPlugin.kt' => ['PLUGIN_VERSION = "{x}"']
+}
+files_to_update_phc_version = {
+    'RevenueCatPurchasesCapacitor.podspec' => ['"PurchasesHybridCommon", \'{x}\''],
+    'android/build.gradle' => ['com.revenuecat.purchases:purchases-hybrid-common:{x}'],
+    'package.json' => ['"@revenuecat/purchases-typescript-internal": "{x}"']
+}
+repo_name = 'purchases-capacitor'
+changelog_latest_path = './CHANGELOG.latest.md'
+changelog_path = './CHANGELOG.md'
+versions_path = './VERSIONS.md'
+
+before_all do
+  setup_circle_ci
+end
+
+desc "Bump version, edit changelog, and create pull request"
+lane :bump do |options|
+  phc_version = get_phc_version
+  bump_version_update_changelog_create_pr(
+    current_version: current_version_number,
+    changelog_latest_path: changelog_latest_path,
+    changelog_path: changelog_path,
+    files_to_update: files_with_version_number,
+    files_to_update_without_prerelease_modifiers: {},
+    repo_name: repo_name,
+    github_rate_limit: options[:github_rate_limit],
+    editor: options[:editor],
+    next_version: options[:next_version],
+    automatic_release: options[:automatic_release],
+    hybrid_common_version: phc_version,
+    versions_file_path: versions_path,
+    is_prerelease: options[:is_prerelease]
+  )
+  update_hybrids_versions_file(
+    versions_file_path: versions_path,
+    new_sdk_version: current_version_number,
+    hybrid_common_version: phc_version
+  )
+  commit_current_changes(commit_message: 'Update VERSIONS.md')
+  sh("yarn && yarn build")
+  git_status = sh("git status --porcelain", log: true, error_callback: ->(_) {})
+  dirty_repo = git_status.lines.length > 0
+  if dirty_repo
+    commit_current_changes(commit_message: 'Update README.md with latest docs')
+  end
+  push_to_git_remote(set_upstream: true)
+end
+
+desc "Automatically bumps version, edit changelog, and create pull request"
+lane :automatic_bump do |options|
+  next_version, type_of_bump = determine_next_version_using_labels(
+    repo_name: repo_name,
+    github_rate_limit: options[:github_rate_limit]
+  )
+  options[:next_version] = next_version
+  options[:automatic_release] = true
+  if type_of_bump == :skip
+    UI.message('Skipping automatic bump since the next version doesn\'t include public facing changes')
+    next
+  elsif type_of_bump == :major
+    UI.message('Skipping automatic bump since the next version is a major release')
+    next
+  end
+  bump(options)
+end
+
+desc "Make github release"
+lane :github_release do |options|
+  create_github_release(
+    version: options[:version],
+    repo_name: repo_name,
+    github_api_token: ENV["GITHUB_TOKEN"],
+    changelog_latest_path: changelog_latest_path,
+    upload_assets: []
+  )
+end
+
+desc "Creates PR changing version to next minor adding a -SNAPSHOT suffix"
+lane :prepare_next_version do |options|
+  create_next_snapshot_version(
+    current_version: current_version_number,
+    repo_name: repo_name,
+    github_pr_token: ENV["GITHUB_PULL_REQUEST_API_TOKEN"],
+    files_to_update: files_with_version_number,
+    files_to_update_without_prerelease_modifiers: {}
+  )
+end
+
+desc "Creates GitHub release and publishes package"
+lane :release do |options|
+  version_number = current_version_number
+  is_prerelease = Gem::Version.new(version_number).prerelease?
+
+  args = [
+    'npm',
+    'publish',
+    is_prerelease ? '--tag next' : nil
+  ].compact
+
+  Dir.chdir(get_root_folder) do
+    sh(args)
+  end
+  github_release(version: version_number)
+end
+
+desc "Change purchase tester API key"
+lane :change_purchase_tester_api_key do |options|
+  new_api_key = options[:api_key] || ENV["REVENUECAT_API_KEY"]
+  if new_api_key.nil?
+    UI.user_error!("Missing api_key parameter or REVENUECAT_API_KEY environment variable")
+  end
+  replace_text_in_files(
+    previous_text: "CHANGE_API_KEY_HERE",
+    new_text: ENV["REVENUECAT_API_KEY"],
+    paths_of_files_to_update: ['./example/purchase-tester/src/constants.ts']
+  )
+end
+
+desc "Build purchase tester"
+lane :build_purchase_tester do |options|
+  Dir.chdir(get_root_folder) do
+    sh("yarn && yarn build")
+  end
+  Dir.chdir(File.expand_path('example/purchase-tester', get_root_folder)) do
+    sh("yarn && yarn build")
+  end
+end
+
+desc "Build purchase tester and opens it in Xcode to run in iOS"
+lane :build_and_open_purchase_tester_xcode do |options|
+  build_purchase_tester
+  Dir.chdir(File.expand_path('example/purchase-tester', get_root_folder)) do
+    sh("ionic capacitor run ios --open")
+  end
+end
+
+desc "Build purchase tester and opens it in Android Studio to run in Android"
+lane :build_and_open_purchase_tester_android_studio do |options|
+  build_purchase_tester
+  Dir.chdir(File.expand_path('example/purchase-tester', get_root_folder)) do
+    sh("ionic capacitor run android --open")
+  end
+end
+
+desc "Update purchases-hybrid-common version, pushes changes to a new branch if open_pr option is true"
+lane :update_hybrid_common do |options|
+  if options[:dry_run]
+    dry_run = true
+  end
+  if options[:version]
+    new_version_number = options[:version]
+  else
+    UI.user_error!("Missing `version` argument")
+  end
+
+  current_phc_version = get_phc_version
+
+  UI.message("ℹ️  Current Purchases Hybrid Common version: #{current_phc_version}")
+  UI.message("ℹ️  Setting Purchases Hybrid Common version: #{new_version_number}")
+
+  if dry_run
+    UI.message("ℹ️  Nothing more to do, dry_run: true")
+    next
+  end
+
+  bump_phc_version(
+    repo_name: repo_name,
+    files_to_update: files_to_update_phc_version,
+    current_version: current_phc_version,
+    next_version: new_version_number,
+    open_pr: options[:open_pr] || false,
+    automatic_release: options[:automatic_release] || false
+  )
+end
+
+desc "Tag current branch with current version number"
+lane :tag_current_branch do |options|
+  version_number = current_version_number
+  check_no_git_tag_exists(version_number)
+
+  add_git_tag(tag: version_number)
+  push_git_tags(tag: version_number)
+end
+
+###############################################################################
+# Helper functions 🤜🤛                                                      #
+###############################################################################
+
+def get_phc_version
+  Dir.chdir(get_root_folder) do
+    return (sh "cat RevenueCatPurchasesCapacitor.podspec | grep \'\"PurchasesHybridCommon\", \' | awk \'{print($3)}\' | sed \"s/\'//g\"").strip
+  end
+end
+
+def get_root_folder
+  return File.expand_path('../../', __FILE__)
+end
+
+def current_version_number
+  File.read("../.version").strip
+end
+
+def check_no_git_tag_exists(version_number)
+  if git_tag_exists(tag: version_number, remote: true, remote_name: 'origin')
+    raise "git tag with version #{version_number} already exists!"
+  end
+end
