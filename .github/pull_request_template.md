@@ -1,4 +1,4 @@
-Thank you for contributing to XXXXX. Before pressing the "Create Pull Request" button, please provide the following:
+Thank you for contributing to RevenueCat/purchases-capacitor. Before pressing the "Create Pull Request" button, please provide the following:
 
   - [ ] A description about what and why you are contributing, even if it's trivial.
 
