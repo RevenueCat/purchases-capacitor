@@ -2,9 +2,16 @@ version: 2.1
 orbs:
   macos: circleci/macos@2.3.6
   android: circleci/android@2.3.0
+  node: circleci/node@5.1.0
   revenuecat: revenuecat/sdks-common-config@2.2.0
 
 aliases:
+  base-mac-job: &base-mac-job
+    resource_class: macos.x86.medium.gen2
+    macos:
+      xcode: '14.3.0'
+    shell: /bin/bash --login -o pipefail
+
   release-tags: &release-tags
     filters:
       tags:
@@ -42,34 +49,32 @@ commands:
 
   install-nvm:
     steps:
-      - run:
-          name: Install node 20.3.1
-          command: |
-            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
-            echo 'export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"' >> $BASH_ENV
-            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
-      - run: nvm install 20.3.1
-      - run: nvm use 20.3.1
-      - run: echo 'nvm use 20.3.1' >> $BASH_ENV
-      - run: node -v
+      - node/install:
+          install-yarn: true
 
-  npm-dependencies:
-    description: "Install all global and local npm dependencies"
-    steps:
-      - run: npm install -g yarn
-
-  yarn-dependencies:
+  yarn-dependencies-unix:
     description: "Install yarn dependencies"
     steps:
       - install-nvm
-      - npm-dependencies
       - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v2-unix-dependencies-{{ checksum "package.json" }}
       - run: yarn
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v2-unix-dependencies-{{ checksum "package.json" }}
+
+  yarn-dependencies-mac:
+    description: "Install yarn dependencies"
+    steps:
+      - install-nvm
+      - restore_cache:
+          key: v2-mac-dependencies-{{ checksum "package.json" }}
+      - run: yarn
+      - save_cache:
+          paths:
+            - node_modules
+          key: v2-mac-dependencies-{{ checksum "package.json" }}
 
   install-sdkman:
     description: Install SDKMAN
@@ -93,21 +98,35 @@ commands:
           command: cp .npmrc.SAMPLE .npmrc
 
 jobs:
-  run-tests:
-    docker:
-      - image: cimg/ruby:3.1.2
+  run-tests-ios:
+    <<: *base-mac-job
     steps:
       - checkout
-      - yarn-dependencies
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - yarn-dependencies-mac
       - run: yarn build
-      - run: yarn verify
+      - run: yarn verify:ios
+
+  run-tests-android:
+    executor:
+      name: android/android-machine
+      resource-class: large
+      tag: 2023.06.1
+    steps:
+      - checkout
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
+      - yarn-dependencies-unix
+      - run: yarn build
+      - run: yarn verify:android
 
   run-lint:
     docker:
       - image: cimg/ruby:3.1.2
     steps:
       - checkout
-      - yarn-dependencies
+      - yarn-dependencies-unix
       - run: yarn build
       - run: yarn lint
 
@@ -127,11 +146,9 @@ jobs:
 
   make-release:
     description: "Publishes the new version and creates a github release"
-    macos:
-      xcode: 14.3.1
+    <<: *base-mac-job
     steps:
       - checkout
-      - npm-dependencies
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
       - revenuecat/trust-github-key
@@ -142,11 +159,9 @@ jobs:
 
   update-hybrid-common-versions:
     description: "Creates a PR updating purchases-hybrid-common to latest release"
-    macos:
-      xcode: 14.3.1
+    <<: *base-mac-job
     steps:
       - checkout
-      - npm-dependencies
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
       - revenuecat/trust-github-key
@@ -166,7 +181,8 @@ workflows:
       not:
         equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
-      - run-tests
+      - run-tests-ios
+      - run-tests-android
       - run-lint
 
   deploy:
@@ -174,14 +190,17 @@ workflows:
       not:
         equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
-      - run-tests:
+      - run-tests-ios:
+          <<: *release-branches
+      - run-tests-android:
           <<: *release-branches
       - run-lint:
           <<: *release-branches
       - hold:
           type: approval
           requires:
-            - run-tests
+            - run-tests-ios
+            - run-tests-android
             - run-lint
           <<: *release-branches
       - revenuecat/tag-current-branch:
