@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">purchase-tester</string>
+    <string name="title_activity_main">purchase-tester</string>
+    <string name="package_name">com.revenuecat.purchases_sample</string>
+    <string name="custom_url_scheme">com.revenuecat.purchases_sample</string>
+</resources>

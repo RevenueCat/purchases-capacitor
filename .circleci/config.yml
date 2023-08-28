@@ -1,0 +1,224 @@
+version: 2.1
+orbs:
+  macos: circleci/macos@2.3.6
+  android: circleci/android@2.3.0
+  revenuecat: revenuecat/sdks-common-config@2.2.0
+
+aliases:
+  release-tags: &release-tags
+    filters:
+      tags:
+        ignore: /^.*-SNAPSHOT/
+      branches:
+        ignore: /.*/
+
+  release-branches: &release-branches
+    filters:
+      tags:
+        ignore: /.*/
+      branches:
+        only: /^release\/.*/
+
+  only-main-branch: &only-main-branch
+    filters:
+      tags:
+        ignore: /.*/
+      branches:
+        only: main
+
+parameters:
+  action:
+    type: enum
+    enum: [build, upgrade-hybrid-common, bump]
+    default: build
+  version:
+    type: string
+    default: ''
+  automatic:
+    type: boolean
+    default: false
+
+commands:
+
+  install-nvm:
+    steps:
+      - run:
+          name: Install node 20.3.1
+          command: |
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+            echo 'export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"' >> $BASH_ENV
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+      - run: nvm install 20.3.1
+      - run: nvm use 20.3.1
+      - run: echo 'nvm use 20.3.1' >> $BASH_ENV
+      - run: node -v
+
+  npm-dependencies:
+    description: "Install all global and local npm dependencies"
+    steps:
+      - run: npm install -g yarn
+
+  yarn-dependencies:
+    description: "Install yarn dependencies"
+    steps:
+      - install-nvm
+      - npm-dependencies
+      - restore_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+      - run: yarn
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+  install-sdkman:
+    description: Install SDKMAN
+    steps:
+      - run:
+          name: Installing SDKMAN
+          command: |
+            curl -s "https://get.sdkman.io?rcupdate=false" | bash
+            echo -e '\nsource "/home/circleci/.sdkman/bin/sdkman-init.sh"' >> $BASH_ENV
+            source $BASH_ENV
+      - run:
+          name: Setup Java environment
+          command: |
+            sdk env install
+            echo -e '\nexport JAVA_HOME="/home/circleci/.sdkman/candidates/java/current"' >> $BASH_ENV
+
+  copy-npm-rc:
+    steps:
+      - run:
+          name: Copy npmrc sample file to final location
+          command: cp .npmrc.SAMPLE .npmrc
+
+jobs:
+  run-tests:
+    docker:
+      - image: cimg/ruby:3.1.2
+    steps:
+      - checkout
+      - yarn-dependencies
+      - run: yarn build
+      - run: yarn verify
+
+  run-lint:
+    docker:
+      - image: cimg/ruby:3.1.2
+    steps:
+      - checkout
+      - yarn-dependencies
+      - run: yarn build
+      - run: yarn lint
+
+  prepare-next-version:
+    description: "Creates a PR with the new snapshot version"
+    docker:
+      - image: cimg/ruby:3.1.2
+    steps:
+      - checkout
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
+      - revenuecat/trust-github-key
+      - revenuecat/setup-git-credentials
+      - run:
+          name: Prepare next version
+          command: bundle exec fastlane prepare_next_version
+
+  make-release:
+    description: "Publishes the new version and creates a github release"
+    macos:
+      xcode: 14.3.1
+    steps:
+      - checkout
+      - npm-dependencies
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - revenuecat/trust-github-key
+      - copy-npm-rc
+      - run:
+          name: release
+          command: bundle exec fastlane release
+
+  update-hybrid-common-versions:
+    description: "Creates a PR updating purchases-hybrid-common to latest release"
+    macos:
+      xcode: 14.3.1
+    steps:
+      - checkout
+      - npm-dependencies
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - revenuecat/trust-github-key
+      - revenuecat/setup-git-credentials
+      - run:
+          name: Updating to next version of phc
+          command: |
+            bundle exec fastlane update_hybrid_common \
+            version:<< pipeline.parameters.version >> \
+            open_pr:true \
+            automatic_release:<< pipeline.parameters.automatic >>
+
+workflows:
+  version: 2
+  build-test:
+    when:
+      not:
+        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+    jobs:
+      - run-tests
+      - run-lint
+
+  deploy:
+    when:
+      not:
+        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+    jobs:
+      - run-tests:
+          <<: *release-branches
+      - run-lint:
+          <<: *release-branches
+      - hold:
+          type: approval
+          requires:
+            - run-tests
+            - run-lint
+          <<: *release-branches
+      - revenuecat/tag-current-branch:
+          requires:
+            - hold
+          <<: *release-branches
+      - make-release:
+          <<: *release-tags
+
+  danger:
+    jobs:
+      - revenuecat/danger
+
+  snapshot-bump:
+    when:
+      not:
+        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+    jobs:
+      - prepare-next-version:
+          <<: *only-main-branch
+
+  weekly-run-workflow:
+    when:
+      and:
+        - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+        - equal: [ "release-train", << pipeline.schedule.name >> ]
+    jobs:
+      - revenuecat/automatic-bump
+
+  manual-trigger-bump:
+    when:
+      equal: [ bump, << pipeline.parameters.action >> ]
+    jobs:
+      - revenuecat/automatic-bump
+
+  update-hybrid-common-versions:
+    when:
+      equal: [ upgrade-hybrid-common, << pipeline.parameters.action >> ]
+    jobs:
+      - update-hybrid-common-versions
