@@ -391,7 +391,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
 
   const beginRefundRequestForEntitlement = async () => {
     const customerInfo = await Purchases.getCustomerInfo();
-    const activeEntitlements = customerInfo.entitlements.active
+    const activeEntitlements = customerInfo.customerInfo.entitlements.active
     const activeEntitlementKeys = Object.keys(activeEntitlements)
     if (activeEntitlementKeys.length == 0) {
       updateLastFunction("beginRefundRequestForEntitlement", "No active entitlement to refund");
@@ -405,7 +405,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
 
   const beginRefundRequestForProduct = async () => {
     const customerInfo = await Purchases.getCustomerInfo();
-    const activeEntitlements = customerInfo.entitlements.active
+    const activeEntitlements = customerInfo.customerInfo.entitlements.active
     const activeEntitlementKeys = Object.keys(activeEntitlements)
     if (activeEntitlementKeys.length == 0) {
       updateLastFunction("beginRefundRequestForProduct", "No active entitlement to refund");
