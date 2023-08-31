@@ -60,7 +60,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
         call.keepAlive = true
         self.customerInfoUpdateListeners.append(call.callbackId)
         if let lastReceivedCustomerInfo {
-            call.resolve(lastReceivedCustomerInfo.dictionary)
+            call.resolve(CommonFunctionality.encode(customerInfo: lastReceivedCustomerInfo))
         }
     }
 
@@ -345,7 +345,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
 
     public func purchases(_ purchases: Purchases, receivedUpdated customerInfo: CustomerInfo) {
         self.customerInfoUpdateListeners.forEach { [weak self] callbackId in
-            self?.bridge?.savedCall(withID: callbackId)?.resolve(customerInfo.dictionary)
+            self?.bridge?.savedCall(withID: callbackId)?.resolve(CommonFunctionality.encode(customerInfo: customerInfo))
         }
         self.lastReceivedCustomerInfo = customerInfo
     }
