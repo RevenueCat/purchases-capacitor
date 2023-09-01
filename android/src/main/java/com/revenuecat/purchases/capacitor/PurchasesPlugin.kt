@@ -100,6 +100,15 @@ class PurchasesPlugin : Plugin() {
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    fun setMockWebResults(call: PluginCall) {
+        Log.e(
+            "PurchasesCapacitor",
+            "Cannot enable mock web results in Android."
+        )
+        call.resolve()
+    }
+
+    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
     fun setFinishTransactions(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val finishTransactions = call.getBooleanOrReject("finishTransactions") ?: return

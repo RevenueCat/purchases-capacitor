@@ -5,6 +5,7 @@
 // each method the plugin supports using the CAP_PLUGIN_METHOD macro.
 CAP_PLUGIN(PurchasesPlugin, "Purchases",
            CAP_PLUGIN_METHOD(configure, CAPPluginReturnNone);
+           CAP_PLUGIN_METHOD(setMockWebResults, CAPPluginReturnNone);
            CAP_PLUGIN_METHOD(setFinishTransactions, CAPPluginReturnNone);
            CAP_PLUGIN_METHOD(setSimulatesAskToBuyInSandbox, CAPPluginReturnNone);
            CAP_PLUGIN_METHOD(getOfferings, CAPPluginReturnPromise);
