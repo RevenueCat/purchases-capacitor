@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import {WebPlugin} from '@capacitor/core';
+import { WebPlugin } from '@capacitor/core';
 import type {
   BILLING_FEATURE,
   CustomerInfo,
@@ -17,7 +17,7 @@ import type {
   PurchasesStoreProduct,
   ShouldPurchasePromoProductListener,
 } from '@revenuecat/purchases-typescript-internal';
-import {REFUND_REQUEST_STATUS} from '@revenuecat/purchases-typescript-internal'
+import { REFUND_REQUEST_STATUS } from '@revenuecat/purchases-typescript-internal';
 
 import type {
   GetProductOptions,
@@ -52,33 +52,47 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
   setSimulatesAskToBuyInSandbox(_simulatesAskToBuyInSandbox: {
     simulatesAskToBuyInSandbox: boolean;
   }): Promise<void> {
-    return this.mockNonReturningFunctionIfEnabled('setSimulatesAskToBuyInSandbox');
+    return this.mockNonReturningFunctionIfEnabled(
+      'setSimulatesAskToBuyInSandbox',
+    );
   }
   addCustomerInfoUpdateListener(
     _customerInfoUpdateListener: CustomerInfoUpdateListener,
   ): Promise<string> {
-    return this.mockReturningFunctionIfEnabled('addCustomerInfoUpdateListener', 'mock-callback-id');
+    return this.mockReturningFunctionIfEnabled(
+      'addCustomerInfoUpdateListener',
+      'mock-callback-id',
+    );
   }
   removeCustomerInfoUpdateListener(
     _listenerToRemove: string,
   ): Promise<{ wasRemoved: boolean }> {
-    return this.mockReturningFunctionIfEnabled('removeCustomerInfoUpdateListener', { wasRemoved: false});
+    return this.mockReturningFunctionIfEnabled(
+      'removeCustomerInfoUpdateListener',
+      { wasRemoved: false },
+    );
   }
   addShouldPurchasePromoProductListener(
     _shouldPurchasePromoProductListener: ShouldPurchasePromoProductListener,
   ): Promise<string> {
-    return this.mockReturningFunctionIfEnabled('addShouldPurchasePromoProductListener', 'mock-callback-id');
+    return this.mockReturningFunctionIfEnabled(
+      'addShouldPurchasePromoProductListener',
+      'mock-callback-id',
+    );
   }
   removeShouldPurchasePromoProductListener(
     _listenerToRemove: string,
   ): Promise<{ wasRemoved: boolean }> {
-    return this.mockReturningFunctionIfEnabled('removeShouldPurchasePromoProductListener', { wasRemoved: false});
+    return this.mockReturningFunctionIfEnabled(
+      'removeShouldPurchasePromoProductListener',
+      { wasRemoved: false },
+    );
   }
   getOfferings(): Promise<PurchasesOfferings> {
     const mockOfferings: PurchasesOfferings = {
       all: {},
-      current: null
-    }
+      current: null,
+    };
     return this.mockReturningFunctionIfEnabled('getOfferings', mockOfferings);
   }
   getProducts(
@@ -94,7 +108,10 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
       productIdentifier: _options.product.identifier,
       customerInfo: this.mockEmptyCustomerInfo,
     };
-    return this.mockReturningFunctionIfEnabled('purchaseStoreProduct', mockPurchaseResult);
+    return this.mockReturningFunctionIfEnabled(
+      'purchaseStoreProduct',
+      mockPurchaseResult,
+    );
   }
   purchaseDiscountedProduct(
     _options: PurchaseDiscountedProductOptions,
@@ -103,7 +120,10 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
       productIdentifier: _options.product.identifier,
       customerInfo: this.mockEmptyCustomerInfo,
     };
-    return this.mockReturningFunctionIfEnabled('purchaseDiscountedProduct', mockPurchaseResult);
+    return this.mockReturningFunctionIfEnabled(
+      'purchaseDiscountedProduct',
+      mockPurchaseResult,
+    );
   }
   purchasePackage(
     _options: PurchasePackageOptions,
@@ -112,7 +132,10 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
       productIdentifier: _options.aPackage.product.identifier,
       customerInfo: this.mockEmptyCustomerInfo,
     };
-    return this.mockReturningFunctionIfEnabled('purchasePackage', mockPurchaseResult);
+    return this.mockReturningFunctionIfEnabled(
+      'purchasePackage',
+      mockPurchaseResult,
+    );
   }
   purchaseSubscriptionOption(
     _options: PurchaseSubscriptionOptionOptions,
@@ -121,7 +144,10 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
       productIdentifier: _options.subscriptionOption.productId,
       customerInfo: this.mockEmptyCustomerInfo,
     };
-    return this.mockReturningFunctionIfEnabled('purchaseSubscriptionOption', mockPurchaseResult);
+    return this.mockReturningFunctionIfEnabled(
+      'purchaseSubscriptionOption',
+      mockPurchaseResult,
+    );
   }
   purchaseDiscountedPackage(
     _options: PurchaseDiscountedPackageOptions,
@@ -130,24 +156,32 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
       productIdentifier: _options.aPackage.product.identifier,
       customerInfo: this.mockEmptyCustomerInfo,
     };
-    return this.mockReturningFunctionIfEnabled('purchaseDiscountedPackage', mockPurchaseResult);
+    return this.mockReturningFunctionIfEnabled(
+      'purchaseDiscountedPackage',
+      mockPurchaseResult,
+    );
   }
   restorePurchases(): Promise<{ customerInfo: CustomerInfo }> {
-    const mockResponse = { customerInfo: this.mockEmptyCustomerInfo }
-    return this.mockReturningFunctionIfEnabled('restorePurchases', mockResponse);
+    const mockResponse = { customerInfo: this.mockEmptyCustomerInfo };
+    return this.mockReturningFunctionIfEnabled(
+      'restorePurchases',
+      mockResponse,
+    );
   }
   getAppUserID(): Promise<{ appUserID: string }> {
-    return this.mockReturningFunctionIfEnabled('getAppUserID', { appUserID: 'test-web-user-id'});
+    return this.mockReturningFunctionIfEnabled('getAppUserID', {
+      appUserID: 'test-web-user-id',
+    });
   }
   logIn(_appUserID: { appUserID: string }): Promise<LogInResult> {
     const mockLogInResult: LogInResult = {
       customerInfo: this.mockEmptyCustomerInfo,
       created: false,
-    }
+    };
     return this.mockReturningFunctionIfEnabled('logIn', mockLogInResult);
   }
   logOut(): Promise<{ customerInfo: CustomerInfo }> {
-    const mockResponse = { customerInfo: this.mockEmptyCustomerInfo }
+    const mockResponse = { customerInfo: this.mockEmptyCustomerInfo };
     return this.mockReturningFunctionIfEnabled('logOut', mockResponse);
   }
   setLogLevel(_level: { level: LOG_LEVEL }): Promise<void> {
@@ -157,7 +191,7 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     return this.mockNonReturningFunctionIfEnabled('setLogHandler');
   }
   getCustomerInfo(): Promise<{ customerInfo: CustomerInfo }> {
-    const mockResponse = { customerInfo: this.mockEmptyCustomerInfo }
+    const mockResponse = { customerInfo: this.mockEmptyCustomerInfo };
     return this.mockReturningFunctionIfEnabled('getCustomerInfo', mockResponse);
   }
   syncPurchases(): Promise<void> {
@@ -166,27 +200,39 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
   syncObserverModeAmazonPurchase(
     _options: SyncObserverModeAmazonPurchaseOptions,
   ): Promise<void> {
-    return this.mockNonReturningFunctionIfEnabled('syncObserverModeAmazonPurchase');
+    return this.mockNonReturningFunctionIfEnabled(
+      'syncObserverModeAmazonPurchase',
+    );
   }
   enableAdServicesAttributionTokenCollection(): Promise<void> {
-    return this.mockNonReturningFunctionIfEnabled('enableAdServicesAttributionTokenCollection');
+    return this.mockNonReturningFunctionIfEnabled(
+      'enableAdServicesAttributionTokenCollection',
+    );
   }
   isAnonymous(): Promise<{ isAnonymous: boolean }> {
-    const mockResponse = { isAnonymous: false }
+    const mockResponse = { isAnonymous: false };
     return this.mockReturningFunctionIfEnabled('isAnonymous', mockResponse);
   }
   checkTrialOrIntroductoryPriceEligibility(_productIdentifiers: {
     productIdentifiers: string[];
   }): Promise<{ [productId: string]: IntroEligibility }> {
-    return this.mockReturningFunctionIfEnabled('checkTrialOrIntroductoryPriceEligibility', {});
+    return this.mockReturningFunctionIfEnabled(
+      'checkTrialOrIntroductoryPriceEligibility',
+      {},
+    );
   }
   getPromotionalOffer(
     _options: GetPromotionalOfferOptions,
   ): Promise<PurchasesPromotionalOffer | undefined> {
-    return this.mockReturningFunctionIfEnabled('getPromotionalOffer', undefined);
+    return this.mockReturningFunctionIfEnabled(
+      'getPromotionalOffer',
+      undefined,
+    );
   }
   invalidateCustomerInfoCache(): Promise<void> {
-    return this.mockNonReturningFunctionIfEnabled('invalidateCustomerInfoCache');
+    return this.mockNonReturningFunctionIfEnabled(
+      'invalidateCustomerInfoCache',
+    );
   }
   presentCodeRedemptionSheet(): Promise<void> {
     return this.mockNonReturningFunctionIfEnabled('presentCodeRedemptionSheet');
@@ -268,35 +314,52 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
   canMakePayments(_features?: {
     features?: BILLING_FEATURE[];
   }): Promise<{ canMakePayments: boolean }> {
-    return this.mockReturningFunctionIfEnabled('canMakePayments', { canMakePayments: true});
+    return this.mockReturningFunctionIfEnabled('canMakePayments', {
+      canMakePayments: true,
+    });
   }
   beginRefundRequestForActiveEntitlement(): Promise<{
     refundRequestStatus: REFUND_REQUEST_STATUS;
   }> {
-    const mockResult = { refundRequestStatus: REFUND_REQUEST_STATUS.USER_CANCELLED}
-    return this.mockReturningFunctionIfEnabled('beginRefundRequestForActiveEntitlement', mockResult);
+    const mockResult = {
+      refundRequestStatus: REFUND_REQUEST_STATUS.USER_CANCELLED,
+    };
+    return this.mockReturningFunctionIfEnabled(
+      'beginRefundRequestForActiveEntitlement',
+      mockResult,
+    );
   }
   beginRefundRequestForEntitlement(_entitlementInfo: {
     entitlementInfo: PurchasesEntitlementInfo;
   }): Promise<{ refundRequestStatus: REFUND_REQUEST_STATUS }> {
-    const mockResult = { refundRequestStatus: REFUND_REQUEST_STATUS.USER_CANCELLED}
-    return this.mockReturningFunctionIfEnabled('beginRefundRequestForEntitlement', mockResult);
+    const mockResult = {
+      refundRequestStatus: REFUND_REQUEST_STATUS.USER_CANCELLED,
+    };
+    return this.mockReturningFunctionIfEnabled(
+      'beginRefundRequestForEntitlement',
+      mockResult,
+    );
   }
   beginRefundRequestForProduct(_storeProduct: {
     storeProduct: PurchasesStoreProduct;
   }): Promise<{ refundRequestStatus: REFUND_REQUEST_STATUS }> {
-    const mockResult = { refundRequestStatus: REFUND_REQUEST_STATUS.USER_CANCELLED}
-    return this.mockReturningFunctionIfEnabled('beginRefundRequestForProduct', mockResult);
+    const mockResult = {
+      refundRequestStatus: REFUND_REQUEST_STATUS.USER_CANCELLED,
+    };
+    return this.mockReturningFunctionIfEnabled(
+      'beginRefundRequestForProduct',
+      mockResult,
+    );
   }
   isConfigured(): Promise<{ isConfigured: boolean }> {
-    const mockResult = { isConfigured: true }
+    const mockResult = { isConfigured: true };
     return this.mockReturningFunctionIfEnabled('isConfigured', mockResult);
   }
 
   // Mock helpers
 
   private mockEmptyCustomerInfo: CustomerInfo = {
-    entitlements: { all: {}, active: {}},
+    entitlements: { all: {}, active: {} },
     activeSubscriptions: [],
     allPurchasedProductIdentifiers: [],
     latestExpirationDate: null,
@@ -308,10 +371,12 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     originalApplicationVersion: null,
     originalPurchaseDate: null,
     managementURL: null,
-    nonSubscriptionTransactions: []
-  }
+    nonSubscriptionTransactions: [],
+  };
 
-  private mockNonReturningFunctionIfEnabled(functionName: string): Promise<void> {
+  private mockNonReturningFunctionIfEnabled(
+    functionName: string,
+  ): Promise<void> {
     if (!this.shouldMockWebResults) {
       return Promise.reject(this.webNotSupportedErrorMessage);
     }
@@ -319,11 +384,16 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     return Promise.resolve();
   }
 
-  private mockReturningFunctionIfEnabled<T>(functionName: string, returnValue: T): Promise<T> {
+  private mockReturningFunctionIfEnabled<T>(
+    functionName: string,
+    returnValue: T,
+  ): Promise<T> {
     if (!this.shouldMockWebResults) {
       return Promise.reject(this.webNotSupportedErrorMessage);
     }
-    console.log(`${functionName} called on web with mocking enabled. Returning mocked value`);
+    console.log(
+      `${functionName} called on web with mocking enabled. Returning mocked value`,
+    );
     return Promise.resolve(returnValue);
   }
 }
