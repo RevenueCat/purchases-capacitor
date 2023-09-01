@@ -44,6 +44,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
     }
 
     @objc func setMockWebResults(_ call: CAPPluginCall) {
+        NSLog("Cannot enable mock web results in iOS.")
         call.resolve()
     }
 
