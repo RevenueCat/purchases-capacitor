@@ -54,6 +54,7 @@ This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package
 <docgen-index>
 
 * [`configure(...)`](#configure)
+* [`setMockWebResults(...)`](#setmockwebresults)
 * [`setFinishTransactions(...)`](#setfinishtransactions)
 * [`setSimulatesAskToBuyInSandbox(...)`](#setsimulatesasktobuyinsandbox)
 * [`addCustomerInfoUpdateListener(...)`](#addcustomerinfoupdatelistener)
@@ -127,6 +128,23 @@ Sets up Purchases with your API key and an app user id.
 | Param               | Type                                                                      | Description                                                                                                                                                   |
 | ------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **`configuration`** | <code><a href="#purchasesconfiguration">PurchasesConfiguration</a></code> | RevenueCat configuration object including the API key and other optional parameters. See {@link <a href="#purchasesconfiguration">PurchasesConfiguration</a>} |
+
+--------------------
+
+
+### setMockWebResults(...)
+
+```typescript
+setMockWebResults(options: { shouldMockWebResults: boolean; }) => Promise<void>
+```
+
+Sets whether the SDK should return mocked results in the web version.
+This won't affect the iOS and Android versions of the implementation.
+Default is false
+
+| Param         | Type                                            | Description                                                                             |
+| ------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------- |
+| **`options`** | <code>{ shouldMockWebResults: boolean; }</code> | Set shouldMockWebResults to true if you want the plugin methods to return mocked values |
 
 --------------------
 

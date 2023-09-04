@@ -43,6 +43,11 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
         call.resolve()
     }
 
+    @objc func setMockWebResults(_ call: CAPPluginCall) {
+        NSLog("Cannot enable mock web results in iOS.")
+        call.resolve()
+    }
+
     @objc func setFinishTransactions(_ call: CAPPluginCall) {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
         guard let finishTransactions = call.getOrRejectBool("finishTransactions") else { return }

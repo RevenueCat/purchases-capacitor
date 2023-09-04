@@ -153,6 +153,14 @@ export interface PurchasesPlugin {
   configure(configuration: PurchasesConfiguration): Promise<void>;
 
   /**
+   * Sets whether the SDK should return mocked results in the web version.
+   * This won't affect the iOS and Android versions of the implementation.
+   * Default is false
+   * @param options Set shouldMockWebResults to true if you want the plugin methods to return mocked values
+   */
+  setMockWebResults(options: { shouldMockWebResults: boolean }): Promise<void>;
+
+  /**
    * @param options Set finishTransactions to false if you aren't using Purchases SDK to
    * make the purchase
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet.
