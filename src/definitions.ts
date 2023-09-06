@@ -18,9 +18,9 @@ import type {
   LOG_LEVEL,
   PRODUCT_CATEGORY,
   REFUND_REQUEST_STATUS,
-} from '@revenuecat/purchases-typescript-internal';
+} from '@revenuecat/purchases-typescript-internal-esm';
 
-export * from '@revenuecat/purchases-typescript-internal';
+export * from '@revenuecat/purchases-typescript-internal-esm';
 
 export type PurchasesCallbackId = string;
 
