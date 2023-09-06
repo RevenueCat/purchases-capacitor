@@ -16,8 +16,8 @@ import type {
   PurchasesPromotionalOffer,
   PurchasesStoreProduct,
   ShouldPurchasePromoProductListener,
-} from '@revenuecat/purchases-typescript-internal';
-import { REFUND_REQUEST_STATUS } from '@revenuecat/purchases-typescript-internal';
+} from '@revenuecat/purchases-typescript-internal-esm';
+import { REFUND_REQUEST_STATUS } from '@revenuecat/purchases-typescript-internal-esm';
 
 import type {
   GetProductOptions,

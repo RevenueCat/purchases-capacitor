@@ -2,12 +2,13 @@ import './FunctionTesterContainer.css';
 import {IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle} from "@ionic/react";
 import React, {useEffect, useState} from "react";
 import {
+  LOG_LEVEL,
+  PRODUCT_CATEGORY,
   PurchaseDiscountedPackageOptions,
   Purchases
 } from "@revenuecat/purchases-capacitor";
 
 import {REVENUECAT_API_KEY} from "../constants";
-import {LOG_LEVEL, PRODUCT_CATEGORY} from "@revenuecat/purchases-typescript-internal";
 
 interface ContainerProps { }
 
