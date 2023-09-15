@@ -151,6 +151,7 @@ jobs:
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
+      - yarn-dependencies-mac
       - revenuecat/trust-github-key
       - copy-npm-rc
       - run:
