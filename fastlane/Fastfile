@@ -193,7 +193,7 @@ end
 
 def get_phc_version
   Dir.chdir(get_root_folder) do
-    return (sh "cat RevenueCatPurchasesCapacitor.podspec | grep \"\'PurchasesHybridCommon\', \'\" | awk \'{print($3)}\' | sed \"s/\'//g\"").strip
+    return (sh "cat RevenueCatPurchasesCapacitor.podspec | grep \"'PurchasesHybridCommon', '\" | awk '{print($3)}' | sed \"s/\'//g\"").strip
   end
 end
 
