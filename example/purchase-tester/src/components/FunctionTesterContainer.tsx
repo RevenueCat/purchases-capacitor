@@ -9,6 +9,7 @@ import {
 } from "@revenuecat/purchases-capacitor";
 
 import {REVENUECAT_API_KEY} from "../constants";
+import {IN_APP_MESSAGE_TYPE} from "@revenuecat/purchases-typescript-internal-esm";
 
 interface ContainerProps { }
 
@@ -426,6 +427,13 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     }
   };
 
+  const showInAppMessages = async () => {
+    await Purchases.showInAppMessages({ messageTypes:
+        [IN_APP_MESSAGE_TYPE.BILLING_ISSUE, IN_APP_MESSAGE_TYPE.PRICE_INCREASE_CONSENT, IN_APP_MESSAGE_TYPE.GENERIC]
+    });
+    updateLastFunctionWithoutContent("showInAppMessages");
+  };
+
   const isConfigured = async () => {
     const isConfiguredResult = await Purchases.isConfigured();
     updateLastFunction("isConfigured", isConfiguredResult);
@@ -490,6 +498,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         <IonButton size="small" onClick={ beginRefundRequestForActiveEntitlement }>Begin refund for active entitlement</IonButton>
         <IonButton size="small" onClick={ beginRefundRequestForEntitlement }>Begin refund for entitlement</IonButton>
         <IonButton size="small" onClick={ beginRefundRequestForProduct }>Begin refund for product</IonButton>
+        <IonButton size="small" onClick={ showInAppMessages }>Show In-app messages</IonButton>
         <IonButton size="small" onClick={ isConfigured }>Is configured?</IonButton>
       </div>
     </div>

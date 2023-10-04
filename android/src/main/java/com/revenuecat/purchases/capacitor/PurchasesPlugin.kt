@@ -21,7 +21,9 @@ import com.revenuecat.purchases.hybridcommon.getProductInfo
 import com.revenuecat.purchases.hybridcommon.mappers.convertToMap
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.purchaseProduct
+import com.revenuecat.purchases.hybridcommon.showInAppMessagesIfNeeded
 import com.revenuecat.purchases.interfaces.UpdatedCustomerInfoListener
+import com.revenuecat.purchases.models.InAppMessageType
 import com.revenuecat.purchases.hybridcommon.canMakePayments as canMakePaymentsCommon
 import com.revenuecat.purchases.hybridcommon.checkTrialOrIntroductoryPriceEligibility as checkTrialOrIntroductoryPriceEligibilityCommon
 import com.revenuecat.purchases.hybridcommon.collectDeviceIdentifiers as collectDeviceIdentifiersCommon
@@ -83,6 +85,7 @@ class PurchasesPlugin : Plugin() {
         val useAmazon = call.getBoolean("useAmazon")
         val store = if (useAmazon == true) Store.AMAZON else Store.PLAY_STORE
         val platformInfo = PlatformInfo(PLATFORM_NAME, PLUGIN_VERSION)
+        val shouldShowInAppMessages = call.getBoolean("shouldShowInAppMessagesAutomatically")
         configure(
             context.applicationContext,
             apiKey,
@@ -90,6 +93,7 @@ class PurchasesPlugin : Plugin() {
             observerMode,
             platformInfo,
             store,
+            shouldShowInAppMessagesAutomatically = shouldShowInAppMessages,
         )
         Purchases.sharedInstance.updatedCustomerInfoListener = UpdatedCustomerInfoListener { customerInfo ->
             for (callbackId in customerInfoListeners) {
@@ -553,6 +557,16 @@ class PurchasesPlugin : Plugin() {
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun beginRefundRequestForProduct(call: PluginCall) {
         rejectNotSupportedInAndroid(call, "beginRefundRequestForProduct")
+    }
+
+    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    fun showInAppMessages(call: PluginCall) {
+        if (rejectIfNotConfigured(call)) return
+        val messageTypes = call.getArray("messageTypes")?.toList<Int>()?.mapNotNull {
+            InAppMessageType.values().getOrNull(it)
+        }
+        showInAppMessagesIfNeeded(activity, messageTypes)
+        call.resolve()
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
