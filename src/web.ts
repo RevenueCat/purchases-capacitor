@@ -4,7 +4,8 @@ import { WebPlugin } from '@capacitor/core';
 import type {
   BILLING_FEATURE,
   CustomerInfo,
-  CustomerInfoUpdateListener, IN_APP_MESSAGE_TYPE,
+  CustomerInfoUpdateListener,
+  IN_APP_MESSAGE_TYPE,
   IntroEligibility,
   LOG_LEVEL,
   LogHandler,
@@ -353,7 +354,7 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
   }
 
   showInAppMessages(_options?: {
-    messageTypes?: IN_APP_MESSAGE_TYPE[]
+    messageTypes?: IN_APP_MESSAGE_TYPE[];
   }): Promise<void> {
     return this.mockNonReturningFunctionIfEnabled('showInAppMessages');
   }

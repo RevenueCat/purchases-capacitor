@@ -18,8 +18,8 @@ import type {
   LOG_LEVEL,
   PRODUCT_CATEGORY,
   REFUND_REQUEST_STATUS,
+  IN_APP_MESSAGE_TYPE,
 } from '@revenuecat/purchases-typescript-internal-esm';
-import {IN_APP_MESSAGE_TYPE} from "@revenuecat/purchases-typescript-internal-esm";
 
 export * from '@revenuecat/purchases-typescript-internal-esm';
 
@@ -731,7 +731,7 @@ export interface PurchasesPlugin {
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet.
    */
   showInAppMessages(options?: {
-    messageTypes?: IN_APP_MESSAGE_TYPE[]
+    messageTypes?: IN_APP_MESSAGE_TYPE[];
   }): Promise<void>;
 
   /**
