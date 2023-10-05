@@ -362,9 +362,11 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
                 }
             }
         } else {
+            NSLog("[Purchases] Warning: tried to show in app messages, but it's only available on iOS 16.0+")
             call.resolve()
         }
         #else
+        NSLog("[Purchases] Warning: tried to show in app messages, but it's only available on iOS or macCatalyst")
         call.resolve()
         #endif
     }
