@@ -55,6 +55,7 @@ CAP_PLUGIN(PurchasesPlugin, "Purchases",
            CAP_PLUGIN_METHOD(beginRefundRequestForActiveEntitlement, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(beginRefundRequestForEntitlement, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(beginRefundRequestForProduct, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(showInAppMessages, CAPPluginReturnNone);
            CAP_PLUGIN_METHOD(isConfigured, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(setLogHandler, CAPPluginReturnCallback);
            CAP_PLUGIN_METHOD(addCustomerInfoUpdateListener, CAPPluginReturnCallback);

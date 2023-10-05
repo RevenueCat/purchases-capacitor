@@ -18,6 +18,7 @@ import type {
   LOG_LEVEL,
   PRODUCT_CATEGORY,
   REFUND_REQUEST_STATUS,
+  IN_APP_MESSAGE_TYPE,
 } from '@revenuecat/purchases-typescript-internal-esm';
 
 export * from '@revenuecat/purchases-typescript-internal-esm';
@@ -717,6 +718,21 @@ export interface PurchasesPlugin {
   beginRefundRequestForProduct(options: {
     storeProduct: PurchasesStoreProduct;
   }): Promise<{ refundRequestStatus: REFUND_REQUEST_STATUS }>;
+
+  /**
+   * Shows in-app messages available from the App Store or Google Play. You need to disable messages from showing
+   * automatically using [PurchasesConfiguration.shouldShowInAppMessagesAutomatically].
+   *
+   * Note: In iOS, this requires version 16+. In older versions the promise will be resolved successfully
+   * immediately.
+   *
+   * @param options An array of message types that the stores can display inside your app. Values must be one of
+   *       [IN_APP_MESSAGE_TYPE]. By default, is undefined and all message types will be shown.
+   * @returns {Promise<void>} The promise will be rejected if configure has not been called yet.
+   */
+  showInAppMessages(options?: {
+    messageTypes?: IN_APP_MESSAGE_TYPE[];
+  }): Promise<void>;
 
   /**
    * Check if configure has finished and Purchases has been configured.

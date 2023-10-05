@@ -107,6 +107,7 @@ This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package
 * [`beginRefundRequestForActiveEntitlement()`](#beginrefundrequestforactiveentitlement)
 * [`beginRefundRequestForEntitlement(...)`](#beginrefundrequestforentitlement)
 * [`beginRefundRequestForProduct(...)`](#beginrefundrequestforproduct)
+* [`showInAppMessages(...)`](#showinappmessages)
 * [`isConfigured()`](#isconfigured)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -976,6 +977,25 @@ If called in an unsupported platform (Android or iOS &lt; 15), an `UnsupportedPl
 --------------------
 
 
+### showInAppMessages(...)
+
+```typescript
+showInAppMessages(options?: { messageTypes?: IN_APP_MESSAGE_TYPE[] | undefined; } | undefined) => Promise<void>
+```
+
+Shows in-app messages available from the App Store or Google Play. You need to disable messages from showing
+automatically using [PurchasesConfiguration.shouldShowInAppMessagesAutomatically].
+
+Note: In iOS, this requires version 16+. In older versions the promise will be resolved successfully
+immediately.
+
+| Param         | Type                                                   | Description                                                                                                                                                                       |
+| ------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`options`** | <code>{ messageTypes?: IN_APP_MESSAGE_TYPE[]; }</code> | An array of message types that the stores can display inside your app. Values must be one of [IN_APP_MESSAGE_TYPE]. By default, is undefined and all message types will be shown. |
+
+--------------------
+
+
 ### isConfigured()
 
 ```typescript
@@ -996,14 +1016,15 @@ Check if configure has finished and Purchases has been configured.
 
 Holds parameters to initialize the SDK.
 
-| Prop                           | Type                        | Description                                                                                                                                                                                                                                                                           |
-| ------------------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`apiKey`**                   | <code>string</code>         | RevenueCat API Key. Needs to be a string                                                                                                                                                                                                                                              |
-| **`appUserID`**                | <code>string \| null</code> | A unique id for identifying the user                                                                                                                                                                                                                                                  |
-| **`observerMode`**             | <code>boolean</code>        | An optional boolean. Set this to TRUE if you have your own IAP implementation and want to use only RevenueCat's backend. Default is FALSE. If you are on Android and setting this to ON, you will have to acknowledge the purchases yourself.                                         |
-| **`userDefaultsSuiteName`**    | <code>string</code>         | An optional string. iOS-only, will be ignored for Android. Set this if you would like the RevenueCat SDK to store its preferences in a different NSUserDefaults suite, otherwise it will use standardUserDefaults. Default is null, which will make the SDK use standardUserDefaults. |
-| **`usesStoreKit2IfAvailable`** | <code>boolean</code>        | iOS-only, will be ignored for Android. Set this to TRUE to enable StoreKit2. Default is FALSE.                                                                                                                                                                                        |
-| **`useAmazon`**                | <code>boolean</code>        | An optional boolean. Android only. Required to configure the plugin to be used in the Amazon Appstore.                                                                                                                                                                                |
+| Prop                                       | Type                        | Description                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| ------------------------------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`apiKey`**                               | <code>string</code>         | RevenueCat API Key. Needs to be a string                                                                                                                                                                                                                                                                                                                                                                                        |
+| **`appUserID`**                            | <code>string \| null</code> | A unique id for identifying the user                                                                                                                                                                                                                                                                                                                                                                                            |
+| **`observerMode`**                         | <code>boolean</code>        | An optional boolean. Set this to TRUE if you have your own IAP implementation and want to use only RevenueCat's backend. Default is FALSE. If you are on Android and setting this to ON, you will have to acknowledge the purchases yourself.                                                                                                                                                                                   |
+| **`userDefaultsSuiteName`**                | <code>string</code>         | An optional string. iOS-only, will be ignored for Android. Set this if you would like the RevenueCat SDK to store its preferences in a different NSUserDefaults suite, otherwise it will use standardUserDefaults. Default is null, which will make the SDK use standardUserDefaults.                                                                                                                                           |
+| **`usesStoreKit2IfAvailable`**             | <code>boolean</code>        | iOS-only, will be ignored for Android. Set this to TRUE to enable StoreKit2. Default is FALSE.                                                                                                                                                                                                                                                                                                                                  |
+| **`useAmazon`**                            | <code>boolean</code>        | An optional boolean. Android only. Required to configure the plugin to be used in the Amazon Appstore.                                                                                                                                                                                                                                                                                                                          |
+| **`shouldShowInAppMessagesAutomatically`** | <code>boolean</code>        | Whether we should show store in-app messages automatically. Both Google Play and the App Store provide in-app messages for some situations like billing issues. By default, those messages will be shown automatically. This allows to disable that behavior, so you can display those messages at your convenience. For more information, check: https://rev.cat/storekit-message and https://rev.cat/googleplayinappmessaging |
 
 
 #### CustomerInfo
@@ -1131,7 +1152,7 @@ For more info see https://docs.revenuecat.com/docs/entitlements
 | **`introPrice`**                  | <code><a href="#purchasesintroprice">PurchasesIntroPrice</a> \| null</code> | Introductory price.                                                                                                                                                                                                                     |
 | **`discounts`**                   | <code>PurchasesStoreProductDiscount[] \| null</code>                        | Collection of discount offers for a product. Null for Android.                                                                                                                                                                          |
 | **`productCategory`**             | <code><a href="#product_category">PRODUCT_CATEGORY</a> \| null</code>       | Product category.                                                                                                                                                                                                                       |
-| **`productType`**                 | <code><a href="#product_type">PRODUCT_TYPE</a></code>                       | The specific type of subscription or one time purchase this product represents                                                                                                                                                          |
+| **`productType`**                 | <code><a href="#product_type">PRODUCT_TYPE</a></code>                       | The specific type of subscription or one time purchase this product represents. Important: In iOS, if using StoreKit 1, we cannot determine the type.                                                                                   |
 | **`subscriptionPeriod`**          | <code>string \| null</code>                                                 | Subscription period, specified in ISO 8601 format. For example, P1W equates to one week, P1M equates to one month, P3M equates to three months, P6M equates to six months, and P1Y equates to one year. Note: Not available for Amazon. |
 | **`defaultOption`**               | <code><a href="#subscriptionoption">SubscriptionOption</a> \| null</code>   | Default subscription option for a product. Google Play only.                                                                                                                                                                            |
 | **`subscriptionOptions`**         | <code>SubscriptionOption[] \| null</code>                                   | Collection of subscription options for a product. Google Play only.                                                                                                                                                                     |
@@ -1431,7 +1452,6 @@ Listener used on updated customer info
 | **`IMMEDIATE_WITH_TIME_PRORATION`**                 | <code>1</code> | Replacement takes effect immediately, and the remaining time will be prorated and credited to the user. This is the current default behavior.                                             |
 | **`IMMEDIATE_AND_CHARGE_PRORATED_PRICE`**           | <code>2</code> | Replacement takes effect immediately, and the billing cycle remains the same. The price for the remaining period will be charged. This option is only available for subscription upgrade. |
 | **`IMMEDIATE_WITHOUT_PRORATION`**                   | <code>3</code> | Replacement takes effect immediately, and the new price will be charged on next recurrence time. The billing cycle stays the same.                                                        |
-| **`DEFERRED`**                                      | <code>4</code> | Replacement takes effect when the old plan expires, and the new price will be charged at the same time.                                                                                   |
 | **`IMMEDIATE_AND_CHARGE_FULL_PRICE`**               | <code>5</code> | Replacement takes effect immediately, and the user is charged full price of new plan and is given a full billing cycle of subscription, plus remaining prorated time from the old plan.   |
 
 
@@ -1474,5 +1494,14 @@ Listener used on updated customer info
 | **`SUCCESS`**        | <code>0</code> | Apple has received the refund request.                             |
 | **`USER_CANCELLED`** | <code>1</code> | User canceled submission of the refund request.                    |
 | **`ERROR`**          | <code>2</code> | There was an error with the request. See message for more details. |
+
+
+#### IN_APP_MESSAGE_TYPE
+
+| Members                      | Value          | Description                                                                                                                |
+| ---------------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| **`BILLING_ISSUE`**          | <code>0</code> | In-app messages to indicate there has been a billing issue charging the user.                                              |
+| **`PRICE_INCREASE_CONSENT`** | <code>1</code> | iOS-only. This message will show if you increase the price of a subscription and the user needs to opt-in to the increase. |
+| **`GENERIC`**                | <code>2</code> | iOS-only. StoreKit generic messages.                                                                                       |
 
 </docgen-api>

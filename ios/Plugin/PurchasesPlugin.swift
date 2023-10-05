@@ -32,13 +32,15 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
         let observerMode = call.getBool("observerMode") ?? false
         let userDefaultsSuiteName = call.getString("userDefaultsSuiteName")
         let usesStoreKit2IfAvailable = call.getBool("usesStoreKit2IfAvailable") ?? false
+        let shouldShowInAppMessagesAutomatically = call.getBool("shouldShowInAppMessagesAutomatically") ?? true
         let purchases = Purchases.configure(apiKey: apiKey,
                                             appUserID: appUserID,
                                             observerMode: observerMode,
                                             userDefaultsSuiteName: userDefaultsSuiteName,
                                             platformFlavor: self.platformFlavor,
                                             platformFlavorVersion: self.platformVersion,
-                                            dangerousSettings: DangerousSettings())
+                                            dangerousSettings: DangerousSettings(),
+                                            shouldShowInAppMessagesAutomatically: shouldShowInAppMessagesAutomatically)
         purchases.delegate = self
         call.resolve()
     }
@@ -340,6 +342,33 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
         } else {
             call.unavailable()
         }
+    }
+
+    @objc func showInAppMessages(_ call: CAPPluginCall) {
+        guard self.rejectIfPurchasesNotConfigured(call) else { return }
+        let intMessageTypes = call.getArray("messageTypes") as? [Int]
+        #if os(iOS) || targetEnvironment(macCatalyst) || VISION_OS
+        if #available(iOS 16.0, *) {
+            if let intMessageTypes {
+                let messageTypes = intMessageTypes.map({ intNumber in
+                    NSNumber(integerLiteral: intNumber)
+                })
+                CommonFunctionality.showStoreMessages(forRawValues: Set(messageTypes)) {
+                    call.resolve()
+                }
+            } else {
+                CommonFunctionality.showStoreMessages {
+                    call.resolve()
+                }
+            }
+        } else {
+            NSLog("[Purchases] Warning: tried to show in app messages, but it's only available on iOS 16.0+")
+            call.resolve()
+        }
+        #else
+        NSLog("[Purchases] Warning: tried to show in app messages, but it's only available on iOS or macCatalyst")
+        call.resolve()
+        #endif
     }
 
     @objc func isConfigured(_ call: CAPPluginCall) {
