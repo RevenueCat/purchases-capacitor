@@ -175,6 +175,24 @@ jobs:
             open_pr:true \
             automatic_release:<< pipeline.parameters.automatic >>
 
+  # Note this is not using the orb's automatic-bump job since we need to install yarn to update docs here.
+  bump:
+    description: >
+      Runs automatic bump
+    docker:
+      - image: cimg/ruby:3.1.2
+    shell: /bin/bash --login -o pipefail
+    steps:
+      - checkout
+      - revenuecat/trust-github-key
+      - revenuecat/setup-git-credentials
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
+      - yarn-dependencies-unix
+      - run:
+          name: Create automatic PR
+          command: bundle exec fastlane automatic_bump github_rate_limit:10
+
 workflows:
   version: 2
   build-test:
@@ -229,13 +247,13 @@ workflows:
         - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
         - equal: [ "release-train", << pipeline.schedule.name >> ]
     jobs:
-      - revenuecat/automatic-bump
+      - bump
 
   manual-trigger-bump:
     when:
       equal: [ bump, << pipeline.parameters.action >> ]
     jobs:
-      - revenuecat/automatic-bump
+      - bump
 
   update-hybrid-common-versions:
     when:
