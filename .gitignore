@@ -67,3 +67,6 @@ yarn.lock
 # fastlane
 report.xml
 fastlane/.env
+
+# CI dependencies
+vendor
