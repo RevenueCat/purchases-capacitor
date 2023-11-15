@@ -1,3 +1,27 @@
+## 7.1.1
+### Dependency Updates
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 7.3.3 (#150) via RevenueCat Git Bot (@RCGitBot)
+  * [Android 7.2.3](https://github.com/RevenueCat/purchases-android/releases/tag/7.2.3)
+  * [Android 7.2.2](https://github.com/RevenueCat/purchases-android/releases/tag/7.2.2)
+  * [Android 7.2.1](https://github.com/RevenueCat/purchases-android/releases/tag/7.2.1)
+  * [iOS 4.30.5](https://github.com/RevenueCat/purchases-ios/releases/tag/4.30.5)
+  * [iOS 4.30.4](https://github.com/RevenueCat/purchases-ios/releases/tag/4.30.4)
+  * [iOS 4.30.3](https://github.com/RevenueCat/purchases-ios/releases/tag/4.30.3)
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 7.3.2 (#149) via RevenueCat Git Bot (@RCGitBot)
+  * [Android 7.2.3](https://github.com/RevenueCat/purchases-android/releases/tag/7.2.3)
+  * [Android 7.2.2](https://github.com/RevenueCat/purchases-android/releases/tag/7.2.2)
+  * [Android 7.2.1](https://github.com/RevenueCat/purchases-android/releases/tag/7.2.1)
+  * [iOS 4.30.5](https://github.com/RevenueCat/purchases-ios/releases/tag/4.30.5)
+  * [iOS 4.30.4](https://github.com/RevenueCat/purchases-ios/releases/tag/4.30.4)
+  * [iOS 4.30.3](https://github.com/RevenueCat/purchases-ios/releases/tag/4.30.3)
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 7.3.1 (#144) via RevenueCat Git Bot (@RCGitBot)
+  * [Android 7.2.3](https://github.com/RevenueCat/purchases-android/releases/tag/7.2.3)
+  * [Android 7.2.2](https://github.com/RevenueCat/purchases-android/releases/tag/7.2.2)
+  * [Android 7.2.1](https://github.com/RevenueCat/purchases-android/releases/tag/7.2.1)
+  * [iOS 4.30.5](https://github.com/RevenueCat/purchases-ios/releases/tag/4.30.5)
+  * [iOS 4.30.4](https://github.com/RevenueCat/purchases-ios/releases/tag/4.30.4)
+  * [iOS 4.30.3](https://github.com/RevenueCat/purchases-ios/releases/tag/4.30.3)
+
 ## 7.1.0
 ### Other Changes
 * Fix missing gitignore causing release process errors via Toni Rico (@tonidero)
