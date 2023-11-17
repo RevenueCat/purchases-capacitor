@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import {WebPlugin} from '@capacitor/core';
+import { WebPlugin } from '@capacitor/core';
 import type {
   BILLING_FEATURE,
   CustomerInfo,
@@ -18,7 +18,10 @@ import type {
   PurchasesStoreProduct,
   ShouldPurchasePromoProductListener,
 } from '@revenuecat/purchases-typescript-internal-esm';
-import {REFUND_REQUEST_STATUS, VERIFICATION_RESULT} from '@revenuecat/purchases-typescript-internal-esm';
+import {
+  REFUND_REQUEST_STATUS,
+  VERIFICATION_RESULT,
+} from '@revenuecat/purchases-typescript-internal-esm';
 
 import type {
   GetProductOptions,
@@ -367,7 +370,11 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
   // Mock helpers
 
   private mockEmptyCustomerInfo: CustomerInfo = {
-    entitlements: { all: {}, active: {}, verification: VERIFICATION_RESULT.NOT_REQUESTED },
+    entitlements: {
+      all: {},
+      active: {},
+      verification: VERIFICATION_RESULT.NOT_REQUESTED,
+    },
     activeSubscriptions: [],
     allPurchasedProductIdentifiers: [],
     latestExpirationDate: null,
