@@ -86,6 +86,7 @@ class PurchasesPlugin : Plugin() {
         val store = if (useAmazon == true) Store.AMAZON else Store.PLAY_STORE
         val platformInfo = PlatformInfo(PLATFORM_NAME, PLUGIN_VERSION)
         val shouldShowInAppMessages = call.getBoolean("shouldShowInAppMessagesAutomatically")
+        val entitlementVerificationMode = call.getString("entitlementVerificationMode")
         configure(
             context.applicationContext,
             apiKey,
@@ -94,6 +95,7 @@ class PurchasesPlugin : Plugin() {
             platformInfo,
             store,
             shouldShowInAppMessagesAutomatically = shouldShowInAppMessages,
+            verificationMode = entitlementVerificationMode,
         )
         Purchases.sharedInstance.updatedCustomerInfoListener = UpdatedCustomerInfoListener { customerInfo ->
             for (callbackId in customerInfoListeners) {

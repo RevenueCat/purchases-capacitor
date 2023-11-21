@@ -33,6 +33,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
         let userDefaultsSuiteName = call.getString("userDefaultsSuiteName")
         let usesStoreKit2IfAvailable = call.getBool("usesStoreKit2IfAvailable") ?? false
         let shouldShowInAppMessagesAutomatically = call.getBool("shouldShowInAppMessagesAutomatically") ?? true
+        let entitlementVerificationMode = call.getString("entitlementVerificationMode")
         let purchases = Purchases.configure(apiKey: apiKey,
                                             appUserID: appUserID,
                                             observerMode: observerMode,
@@ -40,7 +41,8 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
                                             platformFlavor: self.platformFlavor,
                                             platformFlavorVersion: self.platformVersion,
                                             dangerousSettings: DangerousSettings(),
-                                            shouldShowInAppMessagesAutomatically: shouldShowInAppMessagesAutomatically)
+                                            shouldShowInAppMessagesAutomatically: shouldShowInAppMessagesAutomatically,
+                                            verificationMode: entitlementVerificationMode)
         purchases.delegate = self
         call.resolve()
     }
