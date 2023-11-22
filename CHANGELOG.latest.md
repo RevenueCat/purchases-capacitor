@@ -1,10 +1,9 @@
+### New Features
+* Trusted entitlements: Add trusted entitlements support (#157) via Toni Rico (@tonidero)
 ### Dependency Updates
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 7.3.3 (#150) via RevenueCat Git Bot (@RCGitBot)
-  * [Android 7.2.3](https://github.com/RevenueCat/purchases-android/releases/tag/7.2.3)
-  * [Android 7.2.2](https://github.com/RevenueCat/purchases-android/releases/tag/7.2.2)
-  * [Android 7.2.1](https://github.com/RevenueCat/purchases-android/releases/tag/7.2.1)
-  * [iOS 4.30.5](https://github.com/RevenueCat/purchases-ios/releases/tag/4.30.5)
-  * [iOS 4.30.4](https://github.com/RevenueCat/purchases-ios/releases/tag/4.30.4)
-  * [iOS 4.30.3](https://github.com/RevenueCat/purchases-ios/releases/tag/4.30.3)
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 7.3.2 (#149) via RevenueCat Git Bot (@RCGitBot)
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 7.3.1 (#144) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 8.0.0 (#156) via RevenueCat Git Bot (@RCGitBot)
+  * [Android 7.2.4](https://github.com/RevenueCat/purchases-android/releases/tag/7.2.4)
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 7.4.0 (#155) via RevenueCat Git Bot (@RCGitBot)
+  * [Android 7.2.4](https://github.com/RevenueCat/purchases-android/releases/tag/7.2.4)
+### Other Changes
+* `CI`: disable `prepare-next-version` (#153) via NachoSoto (@NachoSoto)
