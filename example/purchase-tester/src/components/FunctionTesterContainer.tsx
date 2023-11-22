@@ -9,7 +9,7 @@ import {
 } from "@revenuecat/purchases-capacitor";
 
 import {REVENUECAT_API_KEY} from "../constants";
-import {IN_APP_MESSAGE_TYPE} from "@revenuecat/purchases-typescript-internal-esm";
+import {ENTITLEMENT_VERIFICATION_MODE, IN_APP_MESSAGE_TYPE} from "@revenuecat/purchases-typescript-internal-esm";
 
 interface ContainerProps { }
 
@@ -69,7 +69,8 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
 
   const configure = async () => {
     await Purchases.configure({
-      apiKey: REVENUECAT_API_KEY
+      apiKey: REVENUECAT_API_KEY,
+      entitlementVerificationMode: ENTITLEMENT_VERIFICATION_MODE.INFORMATIONAL
     });
     await Purchases.addCustomerInfoUpdateListener((customerInfo) => {
       console.log(`Received customer info in listener: ${prettifyJson(customerInfo)}`);
