@@ -1,3 +1,11 @@
+## 7.3.0
+### Dependency Updates
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 8.1.0 (#161) via RevenueCat Git Bot (@RCGitBot)
+  * [Android 7.2.6](https://github.com/RevenueCat/purchases-android/releases/tag/7.2.6)
+  * [Android 7.2.5](https://github.com/RevenueCat/purchases-android/releases/tag/7.2.5)
+  * [iOS 4.31.1](https://github.com/RevenueCat/purchases-ios/releases/tag/4.31.1)
+  * [iOS 4.31.0](https://github.com/RevenueCat/purchases-ios/releases/tag/4.31.0)
+
 ## 7.2.0
 ### New Features
 * Trusted entitlements: Add trusted entitlements support (#157) via Toni Rico (@tonidero)
