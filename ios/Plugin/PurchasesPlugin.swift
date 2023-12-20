@@ -122,12 +122,12 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
             return
         }
         guard let discount = call.getOrRejectObject("discount") else { return }
-        guard let signedDiscounTimestamp = discount["timestamp"] as? String else {
+        guard let signedDiscountTimestamp = discount["timestamp"] as? Int else {
             call.reject("Discount parameter did not have timestamp key")
             return
         }
         CommonFunctionality.purchase(product: productId,
-                                     signedDiscountTimestamp: signedDiscounTimestamp,
+                                     signedDiscountTimestamp: String(signedDiscountTimestamp),
                                      completion: self.getCompletionBlockHandler(call))
     }
 
@@ -164,13 +164,13 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
             return
         }
         guard let discount = call.getOrRejectObject("discount") else { return }
-        guard let signedDiscounTimestamp = discount["timestamp"] as? String else {
+        guard let signedDiscountTimestamp = discount["timestamp"] as? Int else {
             call.reject("Discount parameter did not have timestamp key")
             return
         }
         CommonFunctionality.purchase(package: packageId,
                                      offeringIdentifier: offeringIdentifier,
-                                     signedDiscountTimestamp: signedDiscounTimestamp,
+                                     signedDiscountTimestamp: String(signedDiscountTimestamp),
                                      completion: self.getCompletionBlockHandler(call))
     }
 
