@@ -16,7 +16,7 @@ Whether you are building a new app or already have millions of customers, you ca
 
 Sign up to [get started for free](https://app.revenuecat.com/signup).
 
-## @revenucat/purchases-capacitor
+## @revenuecat/purchases-capacitor
 
 *@revenuecat/purchases-capacitor* is the client for the [RevenueCat](https://www.revenuecat.com/) subscription and purchase tracking system. It is an open source framework that provides a wrapper around StoreKit, Google Play Billing and the RevenueCat backend to make implementing in-app purchases in Capacitor easy.
 
