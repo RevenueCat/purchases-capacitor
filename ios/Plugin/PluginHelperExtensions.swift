@@ -17,7 +17,7 @@ internal extension PurchasesPlugin {
     }
 
     func rejectWithErrorContainer(_ call: CAPPluginCall, error: ErrorContainer) {
-        call.reject("Error \(error.code), \(error.message)", "\(error.code)", error.error)
+        call.reject("\(error.message)", "\(error.code)", error.error)
     }
 
     func getCompletionBlockHandler(_ call: CAPPluginCall,
