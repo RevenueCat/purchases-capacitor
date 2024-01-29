@@ -112,7 +112,7 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     const mockPurchaseResult: MakePurchaseResult = {
       productIdentifier: _options.product.identifier,
       customerInfo: this.mockEmptyCustomerInfo,
-      transaction: this.mockTransaction(_options.product.identifier)
+      transaction: this.mockTransaction(_options.product.identifier),
     };
     return this.mockReturningFunctionIfEnabled(
       'purchaseStoreProduct',
@@ -125,7 +125,7 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     const mockPurchaseResult: MakePurchaseResult = {
       productIdentifier: _options.product.identifier,
       customerInfo: this.mockEmptyCustomerInfo,
-      transaction: this.mockTransaction(_options.product.identifier)
+      transaction: this.mockTransaction(_options.product.identifier),
     };
     return this.mockReturningFunctionIfEnabled(
       'purchaseDiscountedProduct',
@@ -138,7 +138,7 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     const mockPurchaseResult: MakePurchaseResult = {
       productIdentifier: _options.aPackage.product.identifier,
       customerInfo: this.mockEmptyCustomerInfo,
-      transaction: this.mockTransaction(_options.aPackage.product.identifier)
+      transaction: this.mockTransaction(_options.aPackage.product.identifier),
     };
     return this.mockReturningFunctionIfEnabled(
       'purchasePackage',
@@ -151,7 +151,7 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     const mockPurchaseResult: MakePurchaseResult = {
       productIdentifier: _options.subscriptionOption.productId,
       customerInfo: this.mockEmptyCustomerInfo,
-      transaction: this.mockTransaction(_options.subscriptionOption.productId)
+      transaction: this.mockTransaction(_options.subscriptionOption.productId),
     };
     return this.mockReturningFunctionIfEnabled(
       'purchaseSubscriptionOption',
@@ -164,7 +164,7 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     const mockPurchaseResult: MakePurchaseResult = {
       productIdentifier: _options.aPackage.product.identifier,
       customerInfo: this.mockEmptyCustomerInfo,
-      transaction: this.mockTransaction(_options.aPackage.product.identifier)
+      transaction: this.mockTransaction(_options.aPackage.product.identifier),
     };
     return this.mockReturningFunctionIfEnabled(
       'purchaseDiscountedPackage',
@@ -395,11 +395,13 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     nonSubscriptionTransactions: [],
   };
 
-  private mockTransaction(productIdentifier: string): PurchasesStoreTransaction {
+  private mockTransaction(
+    productIdentifier: string,
+  ): PurchasesStoreTransaction {
     return {
       productIdentifier: productIdentifier,
       purchaseDate: new Date().toISOString(),
-      transactionIdentifier: ''
+      transactionIdentifier: '',
     };
   }
 
