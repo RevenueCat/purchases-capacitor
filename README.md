@@ -1371,7 +1371,7 @@ Listener used on updated customer info
 
 #### MakePurchaseResult
 
-<code>{ productIdentifier: string; customerInfo: <a href="#customerinfo">CustomerInfo</a>; }</code>
+<code>{ productIdentifier: string; customerInfo: <a href="#customerinfo">CustomerInfo</a>; transaction: <a href="#purchasesstoretransaction">PurchasesStoreTransaction</a>; }</code>
 
 
 #### LogHandler
