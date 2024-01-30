@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/RevenueCat/fastlane-plugin-revenuecat_internal
-  revision: b2108fb8a2cb357b05f8c5ccaa6cfb02e6050d64
+  revision: 9c82c7ab8dab77383245907fd6e5184a61398cae
   specs:
     fastlane-plugin-revenuecat_internal (0.1.0)
 
@@ -316,6 +316,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-22
+  arm64-darwin-23
 
 DEPENDENCIES
   cocoapods
@@ -324,4 +325,4 @@ DEPENDENCIES
   fastlane-plugin-revenuecat_internal!
 
 BUNDLED WITH
-   2.3.14
+   2.4.13
