@@ -138,6 +138,11 @@ InApp Messages are shown by default in both platforms. If you want to disable th
   * [iOS 4.27.0](https://github.com/RevenueCat/purchases-ios/releases/tag/4.27.0)
   * [iOS 4.26.2](https://github.com/RevenueCat/purchases-ios/releases/tag/4.26.2)
 
+## 6.1.1
+### Dependency Updates
+* Updates purchases-hybrid-common to 6.3.1 (#965)
+  * [Android 6.9.6](https://github.com/RevenueCat/purchases-android/releases/tag/6.9.6)
+
 ## 6.1.0
 ### Dependency Updates
 * [AUTOMATIC BUMP] Updates purchases-hybrid-common to 6.3.0 (#126) via RevenueCat Git Bot (@RCGitBot)
