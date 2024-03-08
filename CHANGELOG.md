@@ -1,3 +1,8 @@
+## 6.1.2
+### Dependency Updates
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 6.3.2 (#933) via RevenueCat Git Bot (@RCGitBot)
+  * [Android 6.9.7](https://github.com/RevenueCat/purchases-android/releases/tag/6.9.7)
+
 ## 6.1.1
 ### Dependency Updates
 * Bump PHC 6.3.1 (#199) via Toni Rico (@tonidero)
