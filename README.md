@@ -60,6 +60,8 @@ This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package
 * [`addCustomerInfoUpdateListener(...)`](#addcustomerinfoupdatelistener)
 * [`removeCustomerInfoUpdateListener(...)`](#removecustomerinfoupdatelistener)
 * [`getOfferings()`](#getofferings)
+* [`getCurrentOfferingForPlacement(...)`](#getcurrentofferingforplacement)
+* [`syncAttributesAndOfferingsIfNeeded()`](#syncattributesandofferingsifneeded)
 * [`getProducts(...)`](#getproducts)
 * [`purchaseStoreProduct(...)`](#purchasestoreproduct)
 * [`purchaseDiscountedProduct(...)`](#purchasediscountedproduct)
@@ -219,6 +221,36 @@ getOfferings() => Promise<PurchasesOfferings>
 ```
 
 Gets the map of entitlements -&gt; offerings -&gt; products
+
+**Returns:** <code>Promise&lt;<a href="#purchasesofferings">PurchasesOfferings</a>&gt;</code>
+
+--------------------
+
+
+### getCurrentOfferingForPlacement(...)
+
+```typescript
+getCurrentOfferingForPlacement(placementIdentifier: string) => Promise<PurchasesOffering | null>
+```
+
+WORDS
+
+| Param                     | Type                |
+| ------------------------- | ------------------- |
+| **`placementIdentifier`** | <code>string</code> |
+
+**Returns:** <code>Promise&lt;<a href="#purchasesoffering">PurchasesOffering</a> | null&gt;</code>
+
+--------------------
+
+
+### syncAttributesAndOfferingsIfNeeded()
+
+```typescript
+syncAttributesAndOfferingsIfNeeded() => Promise<PurchasesOfferings>
+```
+
+WORDS
 
 **Returns:** <code>Promise&lt;<a href="#purchasesofferings">PurchasesOfferings</a>&gt;</code>
 
@@ -1134,32 +1166,34 @@ For more info see https://docs.revenuecat.com/docs/entitlements
 Contains information about the product available for the user to purchase.
 For more info see https://docs.revenuecat.com/docs/entitlements
 
-| Prop                     | Type                                                                    | Description                                                                               |
-| ------------------------ | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| **`identifier`**         | <code>string</code>                                                     | Unique identifier for this package. Can be one a predefined package type or a custom one. |
-| **`packageType`**        | <code><a href="#package_type">PACKAGE_TYPE</a></code>                   | Package type for the product. Will be one of [PACKAGE_TYPE].                              |
-| **`product`**            | <code><a href="#purchasesstoreproduct">PurchasesStoreProduct</a></code> | Product assigned to this package.                                                         |
-| **`offeringIdentifier`** | <code>string</code>                                                     | Offering this package belongs to.                                                         |
+| Prop                           | Type                                                                          | Description                                                                                                              |
+| ------------------------------ | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| **`identifier`**               | <code>string</code>                                                           | Unique identifier for this package. Can be one a predefined package type or a custom one.                                |
+| **`packageType`**              | <code><a href="#package_type">PACKAGE_TYPE</a></code>                         | Package type for the product. Will be one of [PACKAGE_TYPE].                                                             |
+| **`product`**                  | <code><a href="#purchasesstoreproduct">PurchasesStoreProduct</a></code>       | Product assigned to this package.                                                                                        |
+| **`offeringIdentifier`**       | <code>string</code>                                                           | Offering this package belongs to.                                                                                        |
+| **`presentedOfferingContext`** | <code><a href="#presentedofferingcontext">PresentedOfferingContext</a></code> | Offering context this package belongs to. Null if not using offerings or if fetched directly from store via getProducts. |
 
 
 #### PurchasesStoreProduct
 
-| Prop                              | Type                                                                        | Description                                                                                                                                                                                                                             |
-| --------------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`identifier`**                  | <code>string</code>                                                         | Product Id.                                                                                                                                                                                                                             |
-| **`description`**                 | <code>string</code>                                                         | Description of the product.                                                                                                                                                                                                             |
-| **`title`**                       | <code>string</code>                                                         | Title of the product.                                                                                                                                                                                                                   |
-| **`price`**                       | <code>number</code>                                                         | <a href="#price">Price</a> of the product in the local currency. Contains the price value of defaultOption for Google Play.                                                                                                             |
-| **`priceString`**                 | <code>string</code>                                                         | Formatted price of the item, including its currency sign. Contains the formatted price value of defaultOption for Google Play.                                                                                                          |
-| **`currencyCode`**                | <code>string</code>                                                         | Currency code for price and original price. Contains the currency code value of defaultOption for Google Play.                                                                                                                          |
-| **`introPrice`**                  | <code><a href="#purchasesintroprice">PurchasesIntroPrice</a> \| null</code> | Introductory price.                                                                                                                                                                                                                     |
-| **`discounts`**                   | <code>PurchasesStoreProductDiscount[] \| null</code>                        | Collection of discount offers for a product. Null for Android.                                                                                                                                                                          |
-| **`productCategory`**             | <code><a href="#product_category">PRODUCT_CATEGORY</a> \| null</code>       | Product category.                                                                                                                                                                                                                       |
-| **`productType`**                 | <code><a href="#product_type">PRODUCT_TYPE</a></code>                       | The specific type of subscription or one time purchase this product represents. Important: In iOS, if using StoreKit 1, we cannot determine the type.                                                                                   |
-| **`subscriptionPeriod`**          | <code>string \| null</code>                                                 | Subscription period, specified in ISO 8601 format. For example, P1W equates to one week, P1M equates to one month, P3M equates to three months, P6M equates to six months, and P1Y equates to one year. Note: Not available for Amazon. |
-| **`defaultOption`**               | <code><a href="#subscriptionoption">SubscriptionOption</a> \| null</code>   | Default subscription option for a product. Google Play only.                                                                                                                                                                            |
-| **`subscriptionOptions`**         | <code>SubscriptionOption[] \| null</code>                                   | Collection of subscription options for a product. Google Play only.                                                                                                                                                                     |
-| **`presentedOfferingIdentifier`** | <code>string \| null</code>                                                 | Offering identifier the store product was presented from. Null if not using offerings or if fetched directly from store via getProducts.                                                                                                |
+| Prop                              | Type                                                                                  | Description                                                                                                                                                                                                                             |
+| --------------------------------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`identifier`**                  | <code>string</code>                                                                   | Product Id.                                                                                                                                                                                                                             |
+| **`description`**                 | <code>string</code>                                                                   | Description of the product.                                                                                                                                                                                                             |
+| **`title`**                       | <code>string</code>                                                                   | Title of the product.                                                                                                                                                                                                                   |
+| **`price`**                       | <code>number</code>                                                                   | <a href="#price">Price</a> of the product in the local currency. Contains the price value of defaultOption for Google Play.                                                                                                             |
+| **`priceString`**                 | <code>string</code>                                                                   | Formatted price of the item, including its currency sign. Contains the formatted price value of defaultOption for Google Play.                                                                                                          |
+| **`currencyCode`**                | <code>string</code>                                                                   | Currency code for price and original price. Contains the currency code value of defaultOption for Google Play.                                                                                                                          |
+| **`introPrice`**                  | <code><a href="#purchasesintroprice">PurchasesIntroPrice</a> \| null</code>           | Introductory price.                                                                                                                                                                                                                     |
+| **`discounts`**                   | <code>PurchasesStoreProductDiscount[] \| null</code>                                  | Collection of discount offers for a product. Null for Android.                                                                                                                                                                          |
+| **`productCategory`**             | <code><a href="#product_category">PRODUCT_CATEGORY</a> \| null</code>                 | Product category.                                                                                                                                                                                                                       |
+| **`productType`**                 | <code><a href="#product_type">PRODUCT_TYPE</a></code>                                 | The specific type of subscription or one time purchase this product represents. Important: In iOS, if using StoreKit 1, we cannot determine the type.                                                                                   |
+| **`subscriptionPeriod`**          | <code>string \| null</code>                                                           | Subscription period, specified in ISO 8601 format. For example, P1W equates to one week, P1M equates to one month, P3M equates to three months, P6M equates to six months, and P1Y equates to one year. Note: Not available for Amazon. |
+| **`defaultOption`**               | <code><a href="#subscriptionoption">SubscriptionOption</a> \| null</code>             | Default subscription option for a product. Google Play only.                                                                                                                                                                            |
+| **`subscriptionOptions`**         | <code>SubscriptionOption[] \| null</code>                                             | Collection of subscription options for a product. Google Play only.                                                                                                                                                                     |
+| **`presentedOfferingIdentifier`** | <code>string \| null</code>                                                           | Offering identifier the store product was presented from. Null if not using offerings or if fetched directly from store via getProducts.                                                                                                |
+| **`presentedOfferingContext`**    | <code><a href="#presentedofferingcontext">PresentedOfferingContext</a> \| null</code> | Offering context this package belongs to. Null if not using offerings or if fetched directly from store via getProducts.                                                                                                                |
 
 
 #### PurchasesIntroPrice
@@ -1192,20 +1226,21 @@ For more info see https://docs.revenuecat.com/docs/entitlements
 Contains all details associated with a SubscriptionOption
 Used only for Google
 
-| Prop                              | Type                                                          | Description                                                                                                                                                                                                                                                                                                                                |
-| --------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **`id`**                          | <code>string</code>                                           | Identifier of the subscription option If this <a href="#subscriptionoption">SubscriptionOption</a> represents a base plan, this will be the basePlanId. If it represents an offer, it will be {basePlanId}:{offerId}                                                                                                                       |
-| **`storeProductId`**              | <code>string</code>                                           | Identifier of the StoreProduct associated with this SubscriptionOption This will be {subId}:{basePlanId}                                                                                                                                                                                                                                   |
-| **`productId`**                   | <code>string</code>                                           | Identifer of the subscription associated with this SubscriptionOption This will be {subId}                                                                                                                                                                                                                                                 |
-| **`pricingPhases`**               | <code>PricingPhase[]</code>                                   | Pricing phases defining a user's payment plan for the product over time.                                                                                                                                                                                                                                                                   |
-| **`tags`**                        | <code>string[]</code>                                         | Tags defined on the base plan or offer. Empty for Amazon.                                                                                                                                                                                                                                                                                  |
-| **`isBasePlan`**                  | <code>boolean</code>                                          | True if this <a href="#subscriptionoption">SubscriptionOption</a> represents a subscription base plan (rather than an offer).                                                                                                                                                                                                              |
-| **`billingPeriod`**               | <code><a href="#period">Period</a> \| null</code>             | The subscription period of fullPricePhase (after free and intro trials).                                                                                                                                                                                                                                                                   |
-| **`isPrepaid`**                   | <code>boolean</code>                                          | True if the subscription is pre-paid.                                                                                                                                                                                                                                                                                                      |
-| **`fullPricePhase`**              | <code><a href="#pricingphase">PricingPhase</a> \| null</code> | The full price <a href="#pricingphase">PricingPhase</a> of the subscription. Looks for the last price phase of the <a href="#subscriptionoption">SubscriptionOption</a>.                                                                                                                                                                   |
-| **`freePhase`**                   | <code><a href="#pricingphase">PricingPhase</a> \| null</code> | The free trial <a href="#pricingphase">PricingPhase</a> of the subscription. Looks for the first pricing phase of the <a href="#subscriptionoption">SubscriptionOption</a> where amountMicros is 0. There can be a freeTrialPhase and an introductoryPhase in the same <a href="#subscriptionoption">SubscriptionOption</a>.               |
-| **`introPhase`**                  | <code><a href="#pricingphase">PricingPhase</a> \| null</code> | The intro trial <a href="#pricingphase">PricingPhase</a> of the subscription. Looks for the first pricing phase of the <a href="#subscriptionoption">SubscriptionOption</a> where amountMicros is greater than 0. There can be a freeTrialPhase and an introductoryPhase in the same <a href="#subscriptionoption">SubscriptionOption</a>. |
-| **`presentedOfferingIdentifier`** | <code>string \| null</code>                                   | Offering identifier the subscription option was presented from                                                                                                                                                                                                                                                                             |
+| Prop                              | Type                                                                                  | Description                                                                                                                                                                                                                                                                                                                                |
+| --------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **`id`**                          | <code>string</code>                                                                   | Identifier of the subscription option If this <a href="#subscriptionoption">SubscriptionOption</a> represents a base plan, this will be the basePlanId. If it represents an offer, it will be {basePlanId}:{offerId}                                                                                                                       |
+| **`storeProductId`**              | <code>string</code>                                                                   | Identifier of the StoreProduct associated with this SubscriptionOption This will be {subId}:{basePlanId}                                                                                                                                                                                                                                   |
+| **`productId`**                   | <code>string</code>                                                                   | Identifer of the subscription associated with this SubscriptionOption This will be {subId}                                                                                                                                                                                                                                                 |
+| **`pricingPhases`**               | <code>PricingPhase[]</code>                                                           | Pricing phases defining a user's payment plan for the product over time.                                                                                                                                                                                                                                                                   |
+| **`tags`**                        | <code>string[]</code>                                                                 | Tags defined on the base plan or offer. Empty for Amazon.                                                                                                                                                                                                                                                                                  |
+| **`isBasePlan`**                  | <code>boolean</code>                                                                  | True if this <a href="#subscriptionoption">SubscriptionOption</a> represents a subscription base plan (rather than an offer).                                                                                                                                                                                                              |
+| **`billingPeriod`**               | <code><a href="#period">Period</a> \| null</code>                                     | The subscription period of fullPricePhase (after free and intro trials).                                                                                                                                                                                                                                                                   |
+| **`isPrepaid`**                   | <code>boolean</code>                                                                  | True if the subscription is pre-paid.                                                                                                                                                                                                                                                                                                      |
+| **`fullPricePhase`**              | <code><a href="#pricingphase">PricingPhase</a> \| null</code>                         | The full price <a href="#pricingphase">PricingPhase</a> of the subscription. Looks for the last price phase of the <a href="#subscriptionoption">SubscriptionOption</a>.                                                                                                                                                                   |
+| **`freePhase`**                   | <code><a href="#pricingphase">PricingPhase</a> \| null</code>                         | The free trial <a href="#pricingphase">PricingPhase</a> of the subscription. Looks for the first pricing phase of the <a href="#subscriptionoption">SubscriptionOption</a> where amountMicros is 0. There can be a freeTrialPhase and an introductoryPhase in the same <a href="#subscriptionoption">SubscriptionOption</a>.               |
+| **`introPhase`**                  | <code><a href="#pricingphase">PricingPhase</a> \| null</code>                         | The intro trial <a href="#pricingphase">PricingPhase</a> of the subscription. Looks for the first pricing phase of the <a href="#subscriptionoption">SubscriptionOption</a> where amountMicros is greater than 0. There can be a freeTrialPhase and an introductoryPhase in the same <a href="#subscriptionoption">SubscriptionOption</a>. |
+| **`presentedOfferingIdentifier`** | <code>string \| null</code>                                                           | Offering identifier the subscription option was presented from                                                                                                                                                                                                                                                                             |
+| **`presentedOfferingContext`**    | <code><a href="#presentedofferingcontext">PresentedOfferingContext</a> \| null</code> | Offering context this package belongs to. Null if not using offerings or if fetched directly from store via getProducts.                                                                                                                                                                                                                   |
 
 
 #### PricingPhase
@@ -1241,6 +1276,27 @@ Contains all the details associated with a <a href="#price">Price</a>
 | **`formatted`**    | <code>string</code> | Formatted price of the item, including its currency sign. For example $3.00                                                                                                                                                                              |
 | **`amountMicros`** | <code>number</code> | <a href="#price">Price</a> in micro-units, where 1,000,000 micro-units equal one unit of the currency. For example, if price is "€7.99", price_amount_micros is 7,990,000. This value represents the localized, rounded price for a particular currency. |
 | **`currencyCode`** | <code>string</code> | Returns ISO 4217 currency code for price and original price. For example, if price is specified in British pounds sterling, price_currency_code is "GBP". If currency code cannot be determined, currency symbol is returned.                            |
+
+
+#### PresentedOfferingContext
+
+Contains data about the context in which an offering was presented.
+
+| Prop                      | Type                                                                                                    | Description                                                 |
+| ------------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| **`offeringIdentifier`**  | <code>string</code>                                                                                     | The identifier of the offering used to obtain this object.  |
+| **`placementIdentifier`** | <code>string \| null</code>                                                                             | The identifier of the placement used to obtain this object. |
+| **`targetingContext`**    | <code><a href="#presentedofferingtargetingcontext">PresentedOfferingTargetingContext</a> \| null</code> | The revision of the targeting used to obtain this object.   |
+
+
+#### PresentedOfferingTargetingContext
+
+Contains data about the context in which an offering was presented.
+
+| Prop           | Type                | Description                                                |
+| -------------- | ------------------- | ---------------------------------------------------------- |
+| **`revision`** | <code>number</code> | The revision of the targeting used to obtain this object.  |
+| **`ruleId`**   | <code>string</code> | The rule id from the targeting used to obtain this object. |
 
 
 #### GetProductOptions

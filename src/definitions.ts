@@ -19,6 +19,7 @@ import type {
   PRODUCT_CATEGORY,
   REFUND_REQUEST_STATUS,
   IN_APP_MESSAGE_TYPE,
+  PurchasesOffering,
 } from '@revenuecat/purchases-typescript-internal-esm';
 
 export * from '@revenuecat/purchases-typescript-internal-esm';
@@ -227,6 +228,22 @@ export interface PurchasesPlugin {
    * has not been called yet.
    */
   getOfferings(): Promise<PurchasesOfferings>;
+
+  /**
+   * WORDS
+   * @returns {Promise<PurchasesOffering | null>} WORDS. The promise will be rejected if configure
+   * has not been called yet.
+   */
+  getCurrentOfferingForPlacement(
+    placementIdentifier: string,
+  ): Promise<PurchasesOffering | null>;
+
+  /**
+   * WORDS
+   * @returns {Promise<PurchasesOfferings>} WORDS. The promise will be rejected if configure
+   * has not been called yet.
+   */
+  syncAttributesAndOfferingsIfNeeded(): Promise<PurchasesOfferings>;
 
   /**
    * Fetch the product info

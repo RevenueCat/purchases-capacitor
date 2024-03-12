@@ -13,6 +13,7 @@ import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.ErrorContainer
+import com.revenuecat.purchases.hybridcommon.OnNullableResult
 import com.revenuecat.purchases.hybridcommon.OnResult
 import com.revenuecat.purchases.hybridcommon.OnResultAny
 import com.revenuecat.purchases.hybridcommon.OnResultList
@@ -24,10 +25,12 @@ import com.revenuecat.purchases.hybridcommon.purchaseProduct
 import com.revenuecat.purchases.hybridcommon.showInAppMessagesIfNeeded
 import com.revenuecat.purchases.interfaces.UpdatedCustomerInfoListener
 import com.revenuecat.purchases.models.InAppMessageType
+import org.json.JSONObject
 import com.revenuecat.purchases.hybridcommon.canMakePayments as canMakePaymentsCommon
 import com.revenuecat.purchases.hybridcommon.checkTrialOrIntroductoryPriceEligibility as checkTrialOrIntroductoryPriceEligibilityCommon
 import com.revenuecat.purchases.hybridcommon.collectDeviceIdentifiers as collectDeviceIdentifiersCommon
 import com.revenuecat.purchases.hybridcommon.getAppUserID as getAppUserIDCommon
+import com.revenuecat.purchases.hybridcommon.getCurrentOfferingForPlacement as getCurrentOfferingForPlacementCommon
 import com.revenuecat.purchases.hybridcommon.getCustomerInfo as getCustomerInfoCommon
 import com.revenuecat.purchases.hybridcommon.getOfferings as getOfferingsCommon
 import com.revenuecat.purchases.hybridcommon.invalidateCustomerInfoCache as invalidateCustomerInfoCacheCommon
@@ -61,6 +64,7 @@ import com.revenuecat.purchases.hybridcommon.setOnesignalID as setOnesignalIDCom
 import com.revenuecat.purchases.hybridcommon.setPhoneNumber as setPhoneNumberCommon
 import com.revenuecat.purchases.hybridcommon.setProxyURLString as setProxyURLStringCommon
 import com.revenuecat.purchases.hybridcommon.setPushToken as setPushTokenCommon
+import com.revenuecat.purchases.hybridcommon.syncAttributesAndOfferingsIfNeeded as syncAttributesAndOfferingsIfNeededCommon
 import com.revenuecat.purchases.hybridcommon.syncPurchases as syncPurchasesCommon
 
 @Suppress("unused")
@@ -152,6 +156,19 @@ class PurchasesPlugin : Plugin() {
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
+    fun getCurrentOfferingForPlacement(call: PluginCall) {
+        if (rejectIfNotConfigured(call)) return
+        val placementIdentifier = call.getStringOrReject("placementIdentifier") ?: return
+        getCurrentOfferingForPlacementCommon(placementIdentifier, getOnNullableResult(call))
+    }
+
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
+    fun syncAttributesAndOfferingsIfNeeded(call: PluginCall) {
+        if (rejectIfNotConfigured(call)) return
+        syncAttributesAndOfferingsIfNeededCommon(getOnResult(call))
+    }
+
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun getProducts(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val productIdentifiers = call.getArrayOrReject("productIdentifiers") ?: return
@@ -175,7 +192,7 @@ class PurchasesPlugin : Plugin() {
         val storeProduct = call.getObjectOrReject("product") ?: return
         val productIdentifier = storeProduct.getStringOrReject(call, "identifier") ?: return
         val type = storeProduct.getStringOrReject(call, "productCategory") ?: return
-        val presentedOfferingIdentifier = storeProduct.getString("presentedOfferingIdentifier")
+        val presentedOfferingContext = storeProduct.optJSONObject("presentedOfferingContext")
         val optionalPurchaseParams = PurchaseOptionalInfoParams.fromCall(call)
         purchaseProduct(
             activity,
@@ -185,7 +202,7 @@ class PurchasesPlugin : Plugin() {
             optionalPurchaseParams.oldProductIdentifier,
             optionalPurchaseParams.prorationMode,
             optionalPurchaseParams.isPersonalizedPrice,
-            presentedOfferingIdentifier,
+            presentedOfferingContext?.convertToAnyMap(),
             getOnResult(call),
         )
     }
@@ -205,13 +222,13 @@ class PurchasesPlugin : Plugin() {
         if (rejectIfNotConfigured(call)) return
         val packageToPurchase = call.getObjectOrReject("aPackage") ?: return
         val packageIdentifier = packageToPurchase.getStringOrReject(call, "identifier") ?: return
-        val offeringIdentifier = packageToPurchase.getStringOrReject(call, "offeringIdentifier") ?: return
+        val presentedOfferingContext = packageToPurchase.getObjectOrReject(call, "presentedOfferingContext") ?: return
         val optionalPurchaseParams = PurchaseOptionalInfoParams.fromCall(call)
 
         purchasePackageCommon(
             activity,
             packageIdentifier,
-            offeringIdentifier,
+            presentedOfferingContext.convertToAnyMap(),
             optionalPurchaseParams.oldProductIdentifier,
             optionalPurchaseParams.prorationMode,
             optionalPurchaseParams.isPersonalizedPrice,
@@ -225,7 +242,7 @@ class PurchasesPlugin : Plugin() {
         val subscriptionOption = call.getObjectOrReject("subscriptionOption") ?: return
         val productId = subscriptionOption.getStringOrReject(call, "productId") ?: return
         val subscriptionOptionId = subscriptionOption.getStringOrReject(call, "id") ?: return
-        val presentedOfferingIdentifier = subscriptionOption.getString("presentedOfferingIdentifier")
+        val presentedOfferingContext = subscriptionOption.optJSONObject("presentedOfferingContext")
         val optionalPurchaseParams = PurchaseOptionalInfoParams.fromCall(call)
 
         purchaseSubscriptionOptionCommon(
@@ -235,7 +252,7 @@ class PurchasesPlugin : Plugin() {
             optionalPurchaseParams.oldProductIdentifier,
             optionalPurchaseParams.prorationMode,
             optionalPurchaseParams.isPersonalizedPrice,
-            presentedOfferingIdentifier,
+            presentedOfferingContext?.convertToAnyMap(),
             getOnResult(call),
         )
     }
@@ -596,6 +613,23 @@ class PurchasesPlugin : Plugin() {
         }
     }
 
+    private fun getOnNullableResult(call: PluginCall, wrapperKey: String? = null): OnNullableResult {
+        return object : OnNullableResult {
+            override fun onReceived(map: Map<String, *>?) {
+                val mapToConvert = wrapperKey?.let { mapOf(wrapperKey to map) } ?: map
+                if (mapToConvert != null) {
+                    call.resolve(convertMapToJSObject(mapToConvert))
+                } else {
+                    call.resolve(null)
+                }
+            }
+
+            override fun onError(errorContainer: ErrorContainer) {
+                rejectWithErrorContainer(call, errorContainer)
+            }
+        }
+    }
+
     @Suppress("UNCHECKED_CAST")
     private fun convertMapToJSObject(readableMap: Map<String, Any?>): JSObject {
         val jsObject = JSObject()
@@ -677,6 +711,15 @@ class PurchasesPlugin : Plugin() {
         return value
     }
 
+    private fun JSObject.getObjectOrReject(call: PluginCall, key: String): JSONObject? {
+        val value = optJSONObject(key)
+        if (value == null) {
+            call.reject("Missing $key parameter in $this")
+            return null
+        }
+        return value
+    }
+
     private fun PluginCall.getArrayOrReject(key: String): JSArray? {
         val value = getArray(key)
         if (value == null) {
@@ -722,3 +765,19 @@ class PurchasesPlugin : Plugin() {
         }
     }
 }
+
+private fun JSONObject.convertToAnyMap(): Map<String, Any?> =
+    this.keys().asSequence<String>().associate { key ->
+        when (val value = this[key]) {
+            is JSONObject -> {
+                key to value.convertToAnyMap()
+            }
+            else -> {
+                if (this.isNull(key)) {
+                    key to null
+                } else {
+                    key to value
+                }
+            }
+        }
+    }

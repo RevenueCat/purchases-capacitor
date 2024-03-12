@@ -13,6 +13,7 @@ import type {
   MakePurchaseResult,
   PurchasesConfiguration,
   PurchasesEntitlementInfo,
+  PurchasesOffering,
   PurchasesOfferings,
   PurchasesPromotionalOffer,
   PurchasesStoreProduct,
@@ -99,6 +100,25 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
       current: null,
     };
     return this.mockReturningFunctionIfEnabled('getOfferings', mockOfferings);
+  }
+  getCurrentOfferingForPlacement(
+    _placementIdentifier: string,
+  ): Promise<PurchasesOffering | null> {
+    const mockOffering: PurchasesOffering | null = null;
+    return this.mockReturningFunctionIfEnabled(
+      'getCurrentOfferingForPlacement',
+      mockOffering,
+    );
+  }
+  syncAttributesAndOfferingsIfNeeded(): Promise<PurchasesOfferings> {
+    const mockOfferings: PurchasesOfferings = {
+      all: {},
+      current: null,
+    };
+    return this.mockReturningFunctionIfEnabled(
+      'syncAttributesAndOfferingsIfNeeded',
+      mockOfferings,
+    );
   }
   getProducts(
     _options: GetProductOptions,
