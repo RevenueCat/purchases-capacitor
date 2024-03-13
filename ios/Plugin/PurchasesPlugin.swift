@@ -92,6 +92,17 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
         CommonFunctionality.getOfferings(completion: self.getCompletionBlockHandler(call))
     }
 
+    @objc func getCurrentOfferingForPlacement(_ call: CAPPluginCall) {
+        guard self.rejectIfPurchasesNotConfigured(call) else { return }
+        guard let placementIdentifier = call.getOrRejectString("placementIdentifier") else { return }
+        CommonFunctionality.getCurrentOffering(forPlacement: placementIdentifier, completion: self.getCompletionBlockHandler(call))
+    }
+
+    @objc func syncAttributesAndOfferingsIfNeeded(_ call: CAPPluginCall) {
+        guard self.rejectIfPurchasesNotConfigured(call) else { return }
+        CommonFunctionality.syncAttributesAndOfferingsIfNeeded(completion: self.getCompletionBlockHandler(call))
+    }
+
     @objc func getProducts(_ call: CAPPluginCall) {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
         guard let productIds = call.getOrRejectStringArray("productIdentifiers") else { return }
@@ -138,12 +149,12 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
             call.reject("aPackage parameter did not have identifier key")
             return
         }
-        guard let offeringIdentifier = package["offeringIdentifier"] as? String else {
-            call.reject("aPackage parameter did not have offeringIdentifier key")
+        guard let presentedOfferingContext = package["presentedOfferingContext"] as? [String: Any] else {
+            call.reject("aPackage parameter did not have presentedOfferingContext key")
             return
         }
         CommonFunctionality.purchase(package: packageId,
-                                     offeringIdentifier: offeringIdentifier,
+                                     presentedOfferingContext: presentedOfferingContext,
                                      signedDiscountTimestamp: nil,
                                      completion: self.getCompletionBlockHandler(call))
     }
@@ -159,8 +170,8 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
             call.reject("aPackage parameter did not have identifier key")
             return
         }
-        guard let offeringIdentifier = package["offeringIdentifier"] as? String else {
-            call.reject("aPackage parameter did not have offeringIdentifier key")
+        guard let presentedOfferingContext = package["presentedOfferingContext"] as? [String: Any] else {
+            call.reject("aPackage parameter did not have presentedOfferingContext key")
             return
         }
         guard let discount = call.getOrRejectObject("discount") else { return }
@@ -169,7 +180,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
             return
         }
         CommonFunctionality.purchase(package: packageId,
-                                     offeringIdentifier: offeringIdentifier,
+                                     presentedOfferingContext: presentedOfferingContext,
                                      signedDiscountTimestamp: String(signedDiscountTimestamp),
                                      completion: self.getCompletionBlockHandler(call))
     }
