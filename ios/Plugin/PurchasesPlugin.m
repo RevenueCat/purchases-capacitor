@@ -9,6 +9,8 @@ CAP_PLUGIN(PurchasesPlugin, "Purchases",
            CAP_PLUGIN_METHOD(setFinishTransactions, CAPPluginReturnNone);
            CAP_PLUGIN_METHOD(setSimulatesAskToBuyInSandbox, CAPPluginReturnNone);
            CAP_PLUGIN_METHOD(getOfferings, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(getCurrentOfferingForPlacement, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(syncAttributesAndOfferingsIfNeeded, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getProducts, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(purchaseStoreProduct, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(purchaseDiscountedProduct, CAPPluginReturnPromise);
