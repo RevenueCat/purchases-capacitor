@@ -232,7 +232,7 @@ export interface PurchasesPlugin {
   /**
    * Retrieves a current offering for a placement identifier, use this to access offerings defined by targeting
    * placements configured in the RevenueCat dashboard.
-   * @returns {Promise<PurchasesOffering | null>} WORDS. The promise will be rejected if configure
+   * @returns {Promise<PurchasesOffering | null>} Promise of optional offering. The promise will be rejected if configure
    * has not been called yet.
    */
   getCurrentOfferingForPlacement(
@@ -243,7 +243,7 @@ export interface PurchasesPlugin {
    * Syncs subscriber attributes and then fetches the configured offerings for this user. This method is intended to
    * be called when using Targeting Rules with Custom Attributes. Any subscriber attributes should be set before
    * calling this method to ensure the returned offerings are applied with the latest subscriber attributes.
-   * @returns {Promise<PurchasesOfferings>} WORDS. The promise will be rejected if configure
+   * @returns {Promise<PurchasesOfferings>} Promise of entitlements structure. The promise will be rejected if configure
    * has not been called yet.
    */
   syncAttributesAndOfferingsIfNeeded(): Promise<PurchasesOfferings>;
