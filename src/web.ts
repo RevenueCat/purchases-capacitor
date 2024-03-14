@@ -101,9 +101,9 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     };
     return this.mockReturningFunctionIfEnabled('getOfferings', mockOfferings);
   }
-  getCurrentOfferingForPlacement(
-    _options: { placementIdentifier: string },
-  ): Promise<PurchasesOffering | null> {
+  getCurrentOfferingForPlacement(_options: {
+    placementIdentifier: string;
+  }): Promise<PurchasesOffering | null> {
     const mockOffering: PurchasesOffering | null = null;
     return this.mockReturningFunctionIfEnabled(
       'getCurrentOfferingForPlacement',
