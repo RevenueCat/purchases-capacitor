@@ -121,6 +121,18 @@ jobs:
       - run: yarn build
       - run: yarn verify:android
 
+  build-purchase-tester:
+    <<: *base-mac-job
+    steps:
+      - checkout
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - yarn-dependencies-mac
+      - run:
+          name: Build purchase tester
+          command: bundle exec fastlane build_purchase_tester
+
+
   run-lint:
     docker:
       - image: cimg/ruby:3.1.2
@@ -189,6 +201,7 @@ workflows:
       - run-tests-ios
       - run-tests-android
       - run-lint
+      - build-purchase-tester
 
   deploy:
     when:

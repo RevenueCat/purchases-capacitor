@@ -235,9 +235,9 @@ export interface PurchasesPlugin {
    * @returns {Promise<PurchasesOffering | null>} Promise of optional offering. The promise will be rejected if configure
    * has not been called yet.
    */
-  getCurrentOfferingForPlacement(
-    placementIdentifier: string,
-  ): Promise<PurchasesOffering | null>;
+  getCurrentOfferingForPlacement(options: {
+    placementIdentifier: string;
+  }): Promise<PurchasesOffering | null>;
 
   /**
    * Syncs subscriber attributes and then fetches the configured offerings for this user. This method is intended to
