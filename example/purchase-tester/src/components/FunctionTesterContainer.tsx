@@ -130,7 +130,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     const offering = await Purchases.getCurrentOfferingForPlacement({
       placementIdentifier: placementIdentifier,
     });
-    updateLastFunction('getCurrentOfferingForPlacement', offering);
+    updateLastFunction('getCurrentOfferingForPlacement', offering || 'null');
   };
 
   const syncAttributesAndOfferingsIfNeeded = async () => {

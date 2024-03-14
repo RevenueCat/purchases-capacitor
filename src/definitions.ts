@@ -236,7 +236,7 @@ export interface PurchasesPlugin {
    * has not been called yet.
    */
   getCurrentOfferingForPlacement(
-    placementIdentifier: string,
+    options: { placementIdentifier: string },
   ): Promise<PurchasesOffering | null>;
 
   /**

@@ -230,14 +230,15 @@ Gets the map of entitlements -&gt; offerings -&gt; products
 ### getCurrentOfferingForPlacement(...)
 
 ```typescript
-getCurrentOfferingForPlacement(placementIdentifier: string) => Promise<PurchasesOffering | null>
+getCurrentOfferingForPlacement(options: { placementIdentifier: string; }) => Promise<PurchasesOffering | null>
 ```
 
-WORDS
+Retrieves a current offering for a placement identifier, use this to access offerings defined by targeting
+placements configured in the RevenueCat dashboard.
 
-| Param                     | Type                |
-| ------------------------- | ------------------- |
-| **`placementIdentifier`** | <code>string</code> |
+| Param         | Type                                          |
+| ------------- | --------------------------------------------- |
+| **`options`** | <code>{ placementIdentifier: string; }</code> |
 
 **Returns:** <code>Promise&lt;<a href="#purchasesoffering">PurchasesOffering</a> | null&gt;</code>
 
@@ -250,7 +251,9 @@ WORDS
 syncAttributesAndOfferingsIfNeeded() => Promise<PurchasesOfferings>
 ```
 
-WORDS
+Syncs subscriber attributes and then fetches the configured offerings for this user. This method is intended to
+be called when using Targeting Rules with Custom Attributes. Any subscriber attributes should be set before
+calling this method to ensure the returned offerings are applied with the latest subscriber attributes.
 
 **Returns:** <code>Promise&lt;<a href="#purchasesofferings">PurchasesOfferings</a>&gt;</code>
 
