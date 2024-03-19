@@ -112,7 +112,7 @@ jobs:
     executor:
       name: android/android-machine
       resource-class: large
-      tag: 2023.06.1
+      tag: 2024.01.1
     steps:
       - checkout
       - revenuecat/install-gem-unix-dependencies:
