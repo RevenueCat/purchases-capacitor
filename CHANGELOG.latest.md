@@ -1,9 +1,9 @@
 ### Dependency Updates
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 10.2.0 (#226) via RevenueCat Git Bot (@RCGitBot)
-  * [Android 7.7.2](https://github.com/RevenueCat/purchases-android/releases/tag/7.7.2)
-  * [iOS 4.39.0](https://github.com/RevenueCat/purchases-ios/releases/tag/4.39.0)
-  * [iOS 4.38.1](https://github.com/RevenueCat/purchases-ios/releases/tag/4.38.1)
-  * [iOS 4.38.0](https://github.com/RevenueCat/purchases-ios/releases/tag/4.38.0)
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 10.3.2 (#234) via RevenueCat Git Bot (@RCGitBot)
+  * [Android 7.8.1](https://github.com/RevenueCat/purchases-android/releases/tag/7.8.1)
+  * [Android 7.8.0](https://github.com/RevenueCat/purchases-android/releases/tag/7.8.0)
+  * [Android 7.7.3](https://github.com/RevenueCat/purchases-android/releases/tag/7.7.3)
+  * [iOS 4.39.1](https://github.com/RevenueCat/purchases-ios/releases/tag/4.39.1)
 ### Other Changes
-* Add 6.1.2 to changelog (#219) via Cesar de la Vega (@vegaro)
-* Fix iOS PHC version when running tests (#217) via Toni Rico (@tonidero)
+* Update CircleCI android machine tag (#229) via Toni Rico (@tonidero)
+* Create RELEASING.md (#220) via Cesar de la Vega (@vegaro)
