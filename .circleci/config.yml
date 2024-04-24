@@ -7,9 +7,9 @@ orbs:
 
 aliases:
   base-mac-job: &base-mac-job
-    resource_class: macos.x86.medium.gen2
+    resource_class: macos.m1.medium.gen1
     macos:
-      xcode: '14.3.0'
+      xcode: '15.2'
     shell: /bin/bash --login -o pipefail
 
   release-tags: &release-tags
