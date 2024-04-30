@@ -1065,6 +1065,8 @@ Holds parameters to initialize the SDK.
 
 #### CustomerInfo
 
+Type containing all information regarding the customer
+
 | Prop                                 | Type                                                                            | Description                                                                                                                                                                                                                                                                                                                                      |
 | ------------------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **`entitlements`**                   | <code><a href="#purchasesentitlementinfos">PurchasesEntitlementInfos</a></code> | Entitlements attached to this customer info                                                                                                                                                                                                                                                                                                      |
@@ -1079,7 +1081,7 @@ Holds parameters to initialize the SDK.
 | **`originalApplicationVersion`**     | <code>string \| null</code>                                                     | Returns the version number for the version of the application when the user bought the app. Use this for grandfathering users when migrating to subscriptions. This corresponds to the value of CFBundleVersion (in iOS) in the Info.plist file when the purchase was originally made. This is always null in Android                            |
 | **`originalPurchaseDate`**           | <code>string \| null</code>                                                     | Returns the purchase date for the version of the application when the user bought the app. Use this for grandfathering users when migrating to subscriptions.                                                                                                                                                                                    |
 | **`managementURL`**                  | <code>string \| null</code>                                                     | URL to manage the active subscription of the user. If this user has an active iOS subscription, this will point to the App Store, if the user has an active Play Store subscription it will point there. If there are no active subscriptions it will be null. If there are multiple for different platforms, it will point to the device store. |
-| **`nonSubscriptionTransactions`**    | <code>PurchasesStoreTransaction[]</code>                                        |                                                                                                                                                                                                                                                                                                                                                  |
+| **`nonSubscriptionTransactions`**    | <code>PurchasesStoreTransaction[]</code>                                        | List of all non subscription transactions. Use this to fetch the history of non-subscription purchases                                                                                                                                                                                                                                           |
 
 
 #### PurchasesEntitlementInfos
@@ -1113,18 +1115,17 @@ The EntitlementInfo object gives you access to all of the information about the 
 | **`productIdentifier`**            | <code>string</code>                                                                                                                                   | The product identifier that unlocked this entitlement                                                                                                                                                                                               |
 | **`productPlanIdentifier`**        | <code>string \| null</code>                                                                                                                           | The product plan identifier that unlocked this entitlement. Android subscriptions only, null on consumables and iOS.                                                                                                                                |
 | **`isSandbox`**                    | <code>boolean</code>                                                                                                                                  | False if this entitlement is unlocked via a production purchase                                                                                                                                                                                     |
-| **`unsubscribeDetectedAt`**        | <code>string \| null</code>                                                                                                                           | The date an unsubscribe was detected in ISO8601 format. Can be `null`.                                                                                                                                                                              |
-| **`unsubscribeDetectedAtMillis`**  | <code>number \| null</code>                                                                                                                           | The date an unsubscribe was detected in milliseconds. Can be `null`.                                                                                                                                                                                |
-| **`billingIssueDetectedAt`**       | <code>string \| null</code>                                                                                                                           | The date a billing issue was detected in ISO8601 format. Can be `null` if there is no billing issue or an issue has been resolved                                                                                                                   |
-| **`billingIssueDetectedAtMillis`** | <code>number \| null</code>                                                                                                                           | The date a billing issue was detected in milliseconds. Can be `null` if there is no billing issue or an issue has been resolved                                                                                                                     |
+| **`unsubscribeDetectedAt`**        | <code>string \| null</code>                                                                                                                           | The date an unsubscribe was detected in ISO8601 format. Can be `null`. Entitlement may still be active even if user has unsubscribed. Check the `isActive` property.                                                                                |
+| **`unsubscribeDetectedAtMillis`**  | <code>number \| null</code>                                                                                                                           | The date an unsubscribe was detected in milliseconds. Can be `null`. Entitlement may still be active even if user has unsubscribed. Check the `isActive` property.                                                                                  |
+| **`billingIssueDetectedAt`**       | <code>string \| null</code>                                                                                                                           | The date a billing issue was detected in ISO8601 format. Can be `null` if there is no billing issue or an issue has been resolved Entitlement may still be active even if there is a billing issue. Check the `isActive` property.                  |
+| **`billingIssueDetectedAtMillis`** | <code>number \| null</code>                                                                                                                           | The date a billing issue was detected in milliseconds. Can be `null` if there is no billing issue or an issue has been resolved Entitlement may still be active even if there is a billing issue. Check the `isActive` property.                    |
 | **`ownershipType`**                | <code>'FAMILY_SHARED' \| 'PURCHASED' \| 'UNKNOWN'</code>                                                                                              | Supported ownership types for an entitlement. PURCHASED if the purchase was made directly by this user. FAMILY_SHARED if the purchase has been shared to this user by a family member. UNKNOWN if the purchase has no or an unknown ownership type. |
 | **`verification`**                 | <code><a href="#verification_result">VERIFICATION_RESULT</a></code>                                                                                   | If entitlement verification was enabled, the result of that verification. If not, VerificationResult.NOT_REQUESTED                                                                                                                                  |
 
 
 #### PurchasesStoreTransaction
 
-List of all non subscription transactions. Use this to fetch the history of
-non-subscription purchases
+Represents a non-subscription transaction in the Store.
 
 | Prop                        | Type                | Description                                          |
 | --------------------------- | ------------------- | ---------------------------------------------------- |
@@ -1180,6 +1181,8 @@ For more info see https://docs.revenuecat.com/docs/entitlements
 
 #### PurchasesStoreProduct
 
+Type representing a product from the Store.
+
 | Prop                              | Type                                                                                  | Description                                                                                                                                                                                                                             |
 | --------------------------------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **`identifier`**                  | <code>string</code>                                                                   | Product Id.                                                                                                                                                                                                                             |
@@ -1201,6 +1204,8 @@ For more info see https://docs.revenuecat.com/docs/entitlements
 
 #### PurchasesIntroPrice
 
+Contains information about the introductory price for a product
+
 | Prop                      | Type                | Description                                                                                      |
 | ------------------------- | ------------------- | ------------------------------------------------------------------------------------------------ |
 | **`price`**               | <code>number</code> | <a href="#price">Price</a> in the local currency.                                                |
@@ -1212,6 +1217,8 @@ For more info see https://docs.revenuecat.com/docs/entitlements
 
 
 #### PurchasesStoreProductDiscount
+
+Contains information about a discount offer for a product
 
 | Prop                      | Type                | Description                                                                                      |
 | ------------------------- | ------------------- | ------------------------------------------------------------------------------------------------ |
@@ -1231,9 +1238,9 @@ Used only for Google
 
 | Prop                              | Type                                                                                  | Description                                                                                                                                                                                                                                                                                                                                |
 | --------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **`id`**                          | <code>string</code>                                                                   | Identifier of the subscription option If this <a href="#subscriptionoption">SubscriptionOption</a> represents a base plan, this will be the basePlanId. If it represents an offer, it will be {basePlanId}:{offerId}                                                                                                                       |
-| **`storeProductId`**              | <code>string</code>                                                                   | Identifier of the StoreProduct associated with this SubscriptionOption This will be {subId}:{basePlanId}                                                                                                                                                                                                                                   |
-| **`productId`**                   | <code>string</code>                                                                   | Identifer of the subscription associated with this SubscriptionOption This will be {subId}                                                                                                                                                                                                                                                 |
+| **`id`**                          | <code>string</code>                                                                   | Identifier of the subscription option If this <a href="#subscriptionoption">SubscriptionOption</a> represents a base plan, this will be the basePlanId. If it represents an offer, it will be basePlanId:offerId                                                                                                                           |
+| **`storeProductId`**              | <code>string</code>                                                                   | Identifier of the StoreProduct associated with this SubscriptionOption This will be subId:basePlanId                                                                                                                                                                                                                                       |
+| **`productId`**                   | <code>string</code>                                                                   | Identifer of the subscription associated with this SubscriptionOption This will be subId                                                                                                                                                                                                                                                   |
 | **`pricingPhases`**               | <code>PricingPhase[]</code>                                                           | Pricing phases defining a user's payment plan for the product over time.                                                                                                                                                                                                                                                                   |
 | **`tags`**                        | <code>string[]</code>                                                                 | Tags defined on the base plan or offer. Empty for Amazon.                                                                                                                                                                                                                                                                                  |
 | **`isBasePlan`**                  | <code>boolean</code>                                                                  | True if this <a href="#subscriptionoption">SubscriptionOption</a> represents a subscription base plan (rather than an offer).                                                                                                                                                                                                              |
@@ -1339,6 +1346,8 @@ Holds the information used when upgrading from another sku. For Android use only
 
 #### PurchasesPromotionalOffer
 
+Holds the information about a PromotionalOffer in Apple's App Store.
+
 | Prop                | Type                |
 | ------------------- | ------------------- |
 | **`identifier`**    | <code>string</code> |
@@ -1430,10 +1439,14 @@ Listener used on updated customer info
 
 #### MakePurchaseResult
 
-<code>{ productIdentifier: string; customerInfo: <a href="#customerinfo">CustomerInfo</a>; transaction: <a href="#purchasesstoretransaction">PurchasesStoreTransaction</a>; }</code>
+Result of a successful purchase
+
+<code>{ /** * The product identifier of the purchased product */ productIdentifier: string; /** * The Customer Info for the user. */ customerInfo: <a href="#customerinfo">CustomerInfo</a>; /** * The transaction object for the purchase */ transaction: <a href="#purchasesstoretransaction">PurchasesStoreTransaction</a>; }</code>
 
 
 #### LogHandler
+
+Listener used to receive log messages from the SDK.
 
 <code>(logLevel: <a href="#log_level">LOG_LEVEL</a>, message: string): void</code>
 
