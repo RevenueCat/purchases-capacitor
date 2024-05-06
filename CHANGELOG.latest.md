@@ -1,25 +1,7 @@
-### Dependency Updates
-* BillingClient has been updated to version 6.2.1
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 10.6.1 (#257) via RevenueCat Git Bot (@RCGitBot)
-  * [Android 7.10.1](https://github.com/RevenueCat/purchases-android/releases/tag/7.10.1)
-  * [Android 7.10.0](https://github.com/RevenueCat/purchases-android/releases/tag/7.10.0)
-  * [Android 7.9.0](https://github.com/RevenueCat/purchases-android/releases/tag/7.9.0)
-  * [iOS 4.41.2](https://github.com/RevenueCat/purchases-ios/releases/tag/4.41.2)
-  * [iOS 4.41.1](https://github.com/RevenueCat/purchases-ios/releases/tag/4.41.1)
-  * [iOS 4.41.0](https://github.com/RevenueCat/purchases-ios/releases/tag/4.41.0)
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 10.5.1 (#255) via RevenueCat Git Bot (@RCGitBot)
-  * [Android 7.10.1](https://github.com/RevenueCat/purchases-android/releases/tag/7.10.1)
-  * [Android 7.10.0](https://github.com/RevenueCat/purchases-android/releases/tag/7.10.0)
-  * [Android 7.9.0](https://github.com/RevenueCat/purchases-android/releases/tag/7.9.0)
-  * [iOS 4.41.2](https://github.com/RevenueCat/purchases-ios/releases/tag/4.41.2)
-  * [iOS 4.41.1](https://github.com/RevenueCat/purchases-ios/releases/tag/4.41.1)
-  * [iOS 4.41.0](https://github.com/RevenueCat/purchases-ios/releases/tag/4.41.0)
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 10.4.2 (#249) via RevenueCat Git Bot (@RCGitBot)
-  * [Android 7.10.1](https://github.com/RevenueCat/purchases-android/releases/tag/7.10.1)
-  * [Android 7.10.0](https://github.com/RevenueCat/purchases-android/releases/tag/7.10.0)
-  * [Android 7.9.0](https://github.com/RevenueCat/purchases-android/releases/tag/7.9.0)
-  * [iOS 4.41.2](https://github.com/RevenueCat/purchases-ios/releases/tag/4.41.2)
-  * [iOS 4.41.1](https://github.com/RevenueCat/purchases-ios/releases/tag/4.41.1)
-  * [iOS 4.41.0](https://github.com/RevenueCat/purchases-ios/releases/tag/4.41.0)
 ### Other Changes
-* Update to use M1 CircleCI machines (#252) via Cesar de la Vega (@vegaro)
+* Support capacitor V6 (#246)
+
+This PR updates the SDK and sample app to Capacitor V6. Some people
+might find this a breaking change depending on their android
+configuration, since it bumps the android target/compile SDK versions.
+For this reason, we are shipping it with a new major.
