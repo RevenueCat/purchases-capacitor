@@ -12,7 +12,7 @@ import RevenueCat
 @objc(PurchasesPlugin)
 public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
     private let platformFlavor = "capacitor"
-    private let platformVersion = "7.5.9"
+    private let platformVersion = "7.5.10"
 
     private let customerInfoKey = "customerInfo"
 

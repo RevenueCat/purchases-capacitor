@@ -1,3 +1,7 @@
+## 7.5.10
+### Dependency Updates
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 10.6.2 (#260) via RevenueCat Git Bot (@RCGitBot)
+
 ## 7.5.9
 ### Dependency Updates
 * BillingClient has been updated to version 6.2.1
