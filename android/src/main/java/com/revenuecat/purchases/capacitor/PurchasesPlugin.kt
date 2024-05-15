@@ -371,7 +371,7 @@ class PurchasesPlugin : Plugin() {
     @PluginMethod(returnType = PluginMethod.RETURN_NONE)
     fun setAttributes(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
-        val attributes = call.getObject("attributes")?.convertToMap() ?: emptyMap()
+        val attributes = call.data.convertToMap()
         setAttributesCommon(attributes)
         call.resolve()
     }

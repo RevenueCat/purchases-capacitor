@@ -6,7 +6,11 @@ public extension PurchasesPlugin {
 
     @objc func setAttributes(_ call: CAPPluginCall) {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
-        guard let attributes = call.getOrRejectObject("attributes") else { return }
+        let attributes = call.jsObjectRepresentation
+        if attributes.isEmpty {
+            call.resolve()
+            return
+        }
         CommonFunctionality.setAttributes(attributes)
         call.resolve()
     }
