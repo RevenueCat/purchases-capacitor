@@ -617,7 +617,9 @@ export interface PurchasesPlugin {
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet or if there's an error
    * setting the OneSignal user ID.
    */
-  setOnesignalUserID(options: { onesignalUserID: string | null }): Promise<void>;
+  setOnesignalUserID(options: {
+    onesignalUserID: string | null;
+  }): Promise<void>;
 
   /**
    * Subscriber attribute associated with the Airship Channel ID for the user
