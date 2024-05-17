@@ -61,6 +61,7 @@ import com.revenuecat.purchases.hybridcommon.setMediaSource as setMediaSourceCom
 import com.revenuecat.purchases.hybridcommon.setMixpanelDistinctID as setMixpanelDistinctIDCommon
 import com.revenuecat.purchases.hybridcommon.setMparticleID as setMparticleIDCommon
 import com.revenuecat.purchases.hybridcommon.setOnesignalID as setOnesignalIDCommon
+import com.revenuecat.purchases.hybridcommon.setOnesignalUserID as setOnesignalUserIDCommon
 import com.revenuecat.purchases.hybridcommon.setPhoneNumber as setPhoneNumberCommon
 import com.revenuecat.purchases.hybridcommon.setProxyURLString as setProxyURLStringCommon
 import com.revenuecat.purchases.hybridcommon.setPushToken as setPushTokenCommon
@@ -484,6 +485,14 @@ class PurchasesPlugin : Plugin() {
         if (rejectIfNotConfigured(call)) return
         val onesignalID = call.getString("onesignalID")
         setOnesignalIDCommon(onesignalID)
+        call.resolve()
+    }
+
+    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    fun setOnesignalUserID(call: PluginCall) {
+        if (rejectIfNotConfigured(call)) return
+        val onesignalUserID = call.getString("onesignalUserID")
+        setOnesignalUserIDCommon(onesignalUserID)
         call.resolve()
     }
 

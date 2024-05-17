@@ -601,13 +601,23 @@ export interface PurchasesPlugin {
 
   /**
    * Subscriber attribute associated with the OneSignal Player ID for the user
-   * Required for the RevenueCat OneSignal integration
+   * Required for the RevenueCat OneSignal integration. Deprecated for OneSignal versions above v9.0.
    *
    * @param options OneSignal Player ID to use in OneSignal integration. Empty String or null will delete the subscriber attribute.
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet or if there's an error
    * setting the OneSignal ID.
    */
   setOnesignalID(options: { onesignalID: string | null }): Promise<void>;
+
+  /**
+   * Subscriber attribute associated with the OneSignal User ID for the user
+   * Required for the RevenueCat OneSignal integration with versions v11.0 and above.
+   *
+   * @param options OneSignal UserId to use in OneSignal integration. Empty String or null will delete the subscriber attribute.
+   * @returns {Promise<void>} The promise will be rejected if configure has not been called yet or if there's an error
+   * setting the OneSignal user ID.
+   */
+  setOnesignalUserID(options: { onesignalUserID: string | null }): Promise<void>;
 
   /**
    * Subscriber attribute associated with the Airship Channel ID for the user
