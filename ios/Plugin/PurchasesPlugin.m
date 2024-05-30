@@ -46,6 +46,7 @@ CAP_PLUGIN(PurchasesPlugin, "Purchases",
            CAP_PLUGIN_METHOD(setMixpanelDistinctID, CAPPluginReturnNone);
            CAP_PLUGIN_METHOD(setFirebaseAppInstanceID, CAPPluginReturnNone);
            CAP_PLUGIN_METHOD(setOnesignalID, CAPPluginReturnNone);
+           CAP_PLUGIN_METHOD(setOnesignalUserID, CAPPluginReturnNone);
            CAP_PLUGIN_METHOD(setAirshipChannelID, CAPPluginReturnNone);
            CAP_PLUGIN_METHOD(setMediaSource, CAPPluginReturnNone);
            CAP_PLUGIN_METHOD(setCampaign, CAPPluginReturnNone);

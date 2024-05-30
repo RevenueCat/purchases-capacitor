@@ -410,6 +410,11 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     updateLastFunctionWithoutContent('setOnesignalID');
   };
 
+  const setOnesignalUserID = async () => {
+    await Purchases.setOnesignalUserID({ onesignalUserID: 'test-onesignal-user-id' });
+    updateLastFunctionWithoutContent('setOnesignalUserID');
+  };
+
   const setAirshipChannelID = async () => {
     await Purchases.setAirshipChannelID({
       airshipChannelID: 'test-airship-channel-id',
@@ -674,6 +679,9 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         </IonButton>
         <IonButton size="small" onClick={setOnesignalID}>
           Set onesignalID
+        </IonButton>
+        <IonButton size="small" onClick={setOnesignalUserID}>
+          Set onesignalUserID
         </IonButton>
         <IonButton size="small" onClick={setAirshipChannelID}>
           Set airshipChannelID

@@ -318,6 +318,11 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
   setOnesignalID(_onesignalID: { onesignalID: string | null }): Promise<void> {
     return this.mockNonReturningFunctionIfEnabled('setOnesignalID');
   }
+  setOnesignalUserID(_onesignalUserID: {
+    onesignalUserID: string | null;
+  }): Promise<void> {
+    return this.mockNonReturningFunctionIfEnabled('setOnesignalUserID');
+  }
   setAirshipChannelID(_airshipChannelID: {
     airshipChannelID: string | null;
   }): Promise<void> {

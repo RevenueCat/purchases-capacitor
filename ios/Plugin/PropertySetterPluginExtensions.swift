@@ -99,6 +99,13 @@ public extension PurchasesPlugin {
         call.resolve()
     }
 
+    @objc func setOnesignalUserID(_ call: CAPPluginCall) {
+        guard self.rejectIfPurchasesNotConfigured(call) else { return }
+        let onesignalUserID = call.getString("onesignalUserID")
+        CommonFunctionality.setOnesignalUserID(onesignalUserID)
+        call.resolve()
+    }
+
     @objc func setAirshipChannelID(_ call: CAPPluginCall) {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
         let airshipChannelID = call.getString("airshipChannelID")

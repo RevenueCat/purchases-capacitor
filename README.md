@@ -98,6 +98,7 @@ This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package
 * [`setMixpanelDistinctID(...)`](#setmixpaneldistinctid)
 * [`setFirebaseAppInstanceID(...)`](#setfirebaseappinstanceid)
 * [`setOnesignalID(...)`](#setonesignalid)
+* [`setOnesignalUserID(...)`](#setonesignaluserid)
 * [`setAirshipChannelID(...)`](#setairshipchannelid)
 * [`setMediaSource(...)`](#setmediasource)
 * [`setCampaign(...)`](#setcampaign)
@@ -812,11 +813,27 @@ setOnesignalID(options: { onesignalID: string | null; }) => Promise<void>
 ```
 
 Subscriber attribute associated with the OneSignal Player ID for the user
-Required for the RevenueCat OneSignal integration
+Required for the RevenueCat OneSignal integration. Deprecated for OneSignal versions above v9.0.
 
 | Param         | Type                                          | Description                                                                                                     |
 | ------------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | **`options`** | <code>{ onesignalID: string \| null; }</code> | OneSignal Player ID to use in OneSignal integration. Empty String or null will delete the subscriber attribute. |
+
+--------------------
+
+
+### setOnesignalUserID(...)
+
+```typescript
+setOnesignalUserID(options: { onesignalUserID: string | null; }) => Promise<void>
+```
+
+Subscriber attribute associated with the OneSignal User ID for the user
+Required for the RevenueCat OneSignal integration with versions v11.0 and above.
+
+| Param         | Type                                              | Description                                                                                                  |
+| ------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| **`options`** | <code>{ onesignalUserID: string \| null; }</code> | OneSignal UserId to use in OneSignal integration. Empty String or null will delete the subscriber attribute. |
 
 --------------------
 
