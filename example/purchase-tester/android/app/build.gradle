@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     namespace "com.revenuecat.purchase_tester"
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.revenuecat.purchases_sample"
         minSdkVersion rootProject.ext.minSdkVersion
