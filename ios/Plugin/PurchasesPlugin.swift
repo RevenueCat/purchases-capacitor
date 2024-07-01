@@ -36,7 +36,8 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
         let entitlementVerificationMode = call.getString("entitlementVerificationMode")
         let purchases = Purchases.configure(apiKey: apiKey,
                                             appUserID: appUserID,
-                                            observerMode: observerMode,
+                                            purchasesAreCompletedBy: observerMode ? PurchasesAreCompletedBy.myApp:
+                                                PurchasesAreCompletedBy.revenueCat,
                                             userDefaultsSuiteName: userDefaultsSuiteName,
                                             platformFlavor: self.platformFlavor,
                                             platformFlavorVersion: self.platformVersion,
@@ -55,7 +56,11 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
     @objc func setFinishTransactions(_ call: CAPPluginCall) {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
         guard let finishTransactions = call.getOrRejectBool("finishTransactions") else { return }
-        CommonFunctionality.setFinishTransactions(finishTransactions)
+        if (finishTransactions) {
+            CommonFunctionality.setPurchasesAreCompletedBy(.revenueCat)
+        } else {
+            CommonFunctionality.setPurchasesAreCompletedBy(.myApp)
+        }
         call.resolve()
     }
 

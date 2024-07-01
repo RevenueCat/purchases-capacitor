@@ -11,6 +11,7 @@ import com.getcapacitor.annotation.CapacitorPlugin
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.Store
+import com.revenuecat.purchases.PurchasesAreCompletedBy
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.ErrorContainer
 import com.revenuecat.purchases.hybridcommon.OnNullableResult
@@ -22,6 +23,7 @@ import com.revenuecat.purchases.hybridcommon.getProductInfo
 import com.revenuecat.purchases.hybridcommon.mappers.convertToMap
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.purchaseProduct
+import com.revenuecat.purchases.hybridcommon.setPurchasesAreCompletedBy
 import com.revenuecat.purchases.hybridcommon.showInAppMessagesIfNeeded
 import com.revenuecat.purchases.interfaces.UpdatedCustomerInfoListener
 import com.revenuecat.purchases.models.InAppMessageType
@@ -52,7 +54,6 @@ import com.revenuecat.purchases.hybridcommon.setCreative as setCreativeCommon
 import com.revenuecat.purchases.hybridcommon.setDisplayName as setDisplayNameCommon
 import com.revenuecat.purchases.hybridcommon.setEmail as setEmailCommon
 import com.revenuecat.purchases.hybridcommon.setFBAnonymousID as setFBAnonymousIDCommon
-import com.revenuecat.purchases.hybridcommon.setFinishTransactions as setFinishTransactionsCommon
 import com.revenuecat.purchases.hybridcommon.setFirebaseAppInstanceID as setFirebaseAppInstanceIDCommon
 import com.revenuecat.purchases.hybridcommon.setKeyword as setKeywordCommon
 import com.revenuecat.purchases.hybridcommon.setLogHandler as setLogHandlerCommon
@@ -96,7 +97,8 @@ class PurchasesPlugin : Plugin() {
             context.applicationContext,
             apiKey,
             appUserID,
-            observerMode,
+            if (observerMode == true) PurchasesAreCompletedBy.MY_APP
+            else PurchasesAreCompletedBy.REVENUECAT,
             platformInfo,
             store,
             shouldShowInAppMessagesAutomatically = shouldShowInAppMessages,
@@ -123,7 +125,10 @@ class PurchasesPlugin : Plugin() {
     fun setFinishTransactions(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val finishTransactions = call.getBooleanOrReject("finishTransactions") ?: return
-        setFinishTransactionsCommon(finishTransactions)
+        setPurchasesAreCompletedBy(
+            if (finishTransactions) PurchasesAreCompletedBy.REVENUECAT
+            else PurchasesAreCompletedBy.MY_APP
+        )
         call.resolve()
     }
 
