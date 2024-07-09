@@ -416,7 +416,6 @@ class PurchasesPlugin : Plugin() {
 
     @PluginMethod(returnType = PluginMethod.RETURN_NONE)
     fun setProxyURL(call: PluginCall) {
-        if (rejectIfNotConfigured(call)) return
         val urlString = call.getString("url")
         setProxyURLStringCommon(urlString)
         call.resolve()
