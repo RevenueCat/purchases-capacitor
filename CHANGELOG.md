@@ -1,3 +1,7 @@
+## 7.7.1
+### Bugfixes
+* Setting `proxyUrl` should not require SDK to be configured (#288) via Toni Rico (@tonidero)
+
 ## 7.7.0
 ### New Features
 * Add support for `DEFERRED` upgrades and updates purchases-hybrid-common to 11.1.1 (#284) via RevenueCat Git Bot (@RCGitBot)
