@@ -166,6 +166,7 @@ export interface PurchasesPlugin {
    * @param options Set finishTransactions to false if you aren't using Purchases SDK to
    * make the purchase
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet.
+   * @deprecated Set purchasesAreCompletedBy when configuring the SDK instead.
    */
   setFinishTransactions(options: {
     finishTransactions: boolean;

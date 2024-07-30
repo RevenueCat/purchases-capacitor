@@ -92,6 +92,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     await Purchases.configure({
       apiKey: REVENUECAT_API_KEY,
       entitlementVerificationMode: ENTITLEMENT_VERIFICATION_MODE.INFORMATIONAL,
+      pendingTransactionsForPrepaidPlansEnabled: true,
     });
     await Purchases.addCustomerInfoUpdateListener(customerInfo => {
       console.log(

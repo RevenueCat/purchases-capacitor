@@ -29,18 +29,26 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
     @objc func configure(_ call: CAPPluginCall) {
         guard let apiKey = call.getOrRejectString("apiKey") else { return }
         let appUserID = call.getString("appUserID")
-        let observerMode = call.getBool("observerMode") ?? false
+        let purchasesAreCompletedBy = call.getString("purchasesAreCompletedBy")
+        let observerMode = call.getBool("observerMode")
         let userDefaultsSuiteName = call.getString("userDefaultsSuiteName")
-        let usesStoreKit2IfAvailable = call.getBool("usesStoreKit2IfAvailable") ?? false
+        let storeKitVersion = call.getString("storeKitVersion") ?? StoreKitVersion.default.name
         let shouldShowInAppMessagesAutomatically = call.getBool("shouldShowInAppMessagesAutomatically") ?? true
         let entitlementVerificationMode = call.getString("entitlementVerificationMode")
+        var purchasesAreCompletedByToUse: String? = purchasesAreCompletedBy
+        if purchasesAreCompletedByToUse == nil && observerMode == true {
+            purchasesAreCompletedByToUse = PurchasesAreCompletedBy.myApp.name
+        } else if purchasesAreCompletedByToUse == nil && observerMode == false {
+            purchasesAreCompletedByToUse = PurchasesAreCompletedBy.revenueCat.name
+        }
+
         let purchases = Purchases.configure(apiKey: apiKey,
                                             appUserID: appUserID,
-                                            purchasesAreCompletedBy: observerMode ? PurchasesAreCompletedBy.myApp:
-                                                PurchasesAreCompletedBy.revenueCat,
+                                            purchasesAreCompletedBy: purchasesAreCompletedByToUse,
                                             userDefaultsSuiteName: userDefaultsSuiteName,
                                             platformFlavor: self.platformFlavor,
                                             platformFlavorVersion: self.platformVersion,
+                                            storeKitVersion: storeKitVersion,
                                             dangerousSettings: DangerousSettings(),
                                             shouldShowInAppMessagesAutomatically: shouldShowInAppMessagesAutomatically,
                                             verificationMode: entitlementVerificationMode)
@@ -57,9 +65,9 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
         guard let finishTransactions = call.getOrRejectBool("finishTransactions") else { return }
         if (finishTransactions) {
-            CommonFunctionality.setPurchasesAreCompletedBy(.revenueCat)
+            CommonFunctionality.setPurchasesAreCompletedBy(PurchasesAreCompletedBy.revenueCat.name)
         } else {
-            CommonFunctionality.setPurchasesAreCompletedBy(.myApp)
+            CommonFunctionality.setPurchasesAreCompletedBy(PurchasesAreCompletedBy.myApp.name)
         }
         call.resolve()
     }

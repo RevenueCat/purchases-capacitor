@@ -88,21 +88,30 @@ class PurchasesPlugin : Plugin() {
         val apiKey = call.getStringOrReject("apiKey") ?: return
         val appUserID = call.getString("appUserID")
         val observerMode = call.getBoolean("observerMode")
+        val purchasesAreCompletedBy = call.getString("purchasesAreCompletedBy")
         val useAmazon = call.getBoolean("useAmazon")
         val store = if (useAmazon == true) Store.AMAZON else Store.PLAY_STORE
         val platformInfo = PlatformInfo(PLATFORM_NAME, PLUGIN_VERSION)
         val shouldShowInAppMessages = call.getBoolean("shouldShowInAppMessagesAutomatically")
         val entitlementVerificationMode = call.getString("entitlementVerificationMode")
+        val pendingTransactionsForPrepaidPlansEnabled = call.getBoolean("pendingTransactionsForPrepaidPlansEnabled")
+        val purchasesAreCompletedByToUse = when {
+            purchasesAreCompletedBy != null -> purchasesAreCompletedBy
+            observerMode == true -> "MY_APP"
+            observerMode == false -> "REVENUECAT"
+            else -> null
+        }
+
         configure(
             context.applicationContext,
             apiKey,
             appUserID,
-            if (observerMode == true) PurchasesAreCompletedBy.MY_APP
-            else PurchasesAreCompletedBy.REVENUECAT,
+            purchasesAreCompletedByToUse,
             platformInfo,
             store,
             shouldShowInAppMessagesAutomatically = shouldShowInAppMessages,
             verificationMode = entitlementVerificationMode,
+            pendingTransactionsForPrepaidPlansEnabled = pendingTransactionsForPrepaidPlansEnabled,
         )
         Purchases.sharedInstance.updatedCustomerInfoListener = UpdatedCustomerInfoListener { customerInfo ->
             for (callbackId in customerInfoListeners) {
@@ -126,8 +135,8 @@ class PurchasesPlugin : Plugin() {
         if (rejectIfNotConfigured(call)) return
         val finishTransactions = call.getBooleanOrReject("finishTransactions") ?: return
         setPurchasesAreCompletedBy(
-            if (finishTransactions) PurchasesAreCompletedBy.REVENUECAT
-            else PurchasesAreCompletedBy.MY_APP
+            if (finishTransactions) "REVENUECAT"
+            else "MY_APP"
         )
         call.resolve()
     }
