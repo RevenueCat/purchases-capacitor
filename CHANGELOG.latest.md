@@ -1,2 +1,2 @@
-### Bugfixes
-* Setting `proxyUrl` should not require SDK to be configured (#288) via Toni Rico (@tonidero)
+### Breaking Changes
+* Support capacitor V6 (#295) via Toni Rico (@tonidero)
