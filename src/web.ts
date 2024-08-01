@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { WebPlugin } from '@capacitor/core';
+import {WebPlugin} from '@capacitor/core';
 import type {
   BILLING_FEATURE,
   CustomerInfo,
@@ -20,10 +20,7 @@ import type {
   PurchasesStoreTransaction,
   ShouldPurchasePromoProductListener,
 } from '@revenuecat/purchases-typescript-internal-esm';
-import {
-  REFUND_REQUEST_STATUS,
-  VERIFICATION_RESULT,
-} from '@revenuecat/purchases-typescript-internal-esm';
+import {REFUND_REQUEST_STATUS, VERIFICATION_RESULT,} from '@revenuecat/purchases-typescript-internal-esm';
 
 import type {
   GetProductOptions,
@@ -34,6 +31,7 @@ import type {
   PurchasesPlugin,
   PurchaseStoreProductOptions,
   PurchaseSubscriptionOptionOptions,
+  SyncAmazonPurchaseOptions,
   SyncObserverModeAmazonPurchaseOptions,
 } from './definitions';
 
@@ -50,11 +48,6 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     return Promise.resolve();
   }
 
-  setFinishTransactions(_finishTransactions: {
-    finishTransactions: boolean;
-  }): Promise<void> {
-    return this.mockNonReturningFunctionIfEnabled('setFinishTransactions');
-  }
   setSimulatesAskToBuyInSandbox(_simulatesAskToBuyInSandbox: {
     simulatesAskToBuyInSandbox: boolean;
   }): Promise<void> {
@@ -232,6 +225,13 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
   ): Promise<void> {
     return this.mockNonReturningFunctionIfEnabled(
       'syncObserverModeAmazonPurchase',
+    );
+  }
+  syncAmazonPurchase(
+    _options: SyncAmazonPurchaseOptions,
+  ): Promise<void> {
+    return this.mockNonReturningFunctionIfEnabled(
+      'syncAmazonPurchase',
     );
   }
   enableAdServicesAttributionTokenCollection(): Promise<void> {

@@ -10,8 +10,8 @@ import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Purchases
-import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.PurchasesAreCompletedBy
+import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.ErrorContainer
 import com.revenuecat.purchases.hybridcommon.OnNullableResult
@@ -23,7 +23,6 @@ import com.revenuecat.purchases.hybridcommon.getProductInfo
 import com.revenuecat.purchases.hybridcommon.mappers.convertToMap
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.purchaseProduct
-import com.revenuecat.purchases.hybridcommon.setPurchasesAreCompletedBy
 import com.revenuecat.purchases.hybridcommon.showInAppMessagesIfNeeded
 import com.revenuecat.purchases.interfaces.UpdatedCustomerInfoListener
 import com.revenuecat.purchases.models.InAppMessageType
@@ -87,26 +86,24 @@ class PurchasesPlugin : Plugin() {
     fun configure(call: PluginCall) {
         val apiKey = call.getStringOrReject("apiKey") ?: return
         val appUserID = call.getString("appUserID")
-        val observerMode = call.getBoolean("observerMode")
-        val purchasesAreCompletedBy = call.getString("purchasesAreCompletedBy")
+        val purchasesAreCompletedByString = call.getString("purchasesAreCompletedBy")
+        val purchasesAreCompletedBy = if (purchasesAreCompletedByString == PurchasesAreCompletedBy.REVENUECAT.name) {
+            PurchasesAreCompletedBy.REVENUECAT.name
+        } else {
+            call.getObject("purchasesAreCompletedBy")?.getString("type")
+        }
         val useAmazon = call.getBoolean("useAmazon")
         val store = if (useAmazon == true) Store.AMAZON else Store.PLAY_STORE
         val platformInfo = PlatformInfo(PLATFORM_NAME, PLUGIN_VERSION)
         val shouldShowInAppMessages = call.getBoolean("shouldShowInAppMessagesAutomatically")
         val entitlementVerificationMode = call.getString("entitlementVerificationMode")
         val pendingTransactionsForPrepaidPlansEnabled = call.getBoolean("pendingTransactionsForPrepaidPlansEnabled")
-        val purchasesAreCompletedByToUse = when {
-            purchasesAreCompletedBy != null -> purchasesAreCompletedBy
-            observerMode == true -> "MY_APP"
-            observerMode == false -> "REVENUECAT"
-            else -> null
-        }
 
         configure(
             context.applicationContext,
             apiKey,
             appUserID,
-            purchasesAreCompletedByToUse,
+            purchasesAreCompletedBy,
             platformInfo,
             store,
             shouldShowInAppMessagesAutomatically = shouldShowInAppMessages,
@@ -126,17 +123,6 @@ class PurchasesPlugin : Plugin() {
         Log.e(
             "PurchasesCapacitor",
             "Cannot enable mock web results in Android."
-        )
-        call.resolve()
-    }
-
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
-    fun setFinishTransactions(call: PluginCall) {
-        if (rejectIfNotConfigured(call)) return
-        val finishTransactions = call.getBooleanOrReject("finishTransactions") ?: return
-        setPurchasesAreCompletedBy(
-            if (finishTransactions) "REVENUECAT"
-            else "MY_APP"
         )
         call.resolve()
     }
@@ -328,13 +314,18 @@ class PurchasesPlugin : Plugin() {
 
     @PluginMethod(returnType = PluginMethod.RETURN_NONE)
     fun syncObserverModeAmazonPurchase(call: PluginCall) {
+        syncAmazonPurchase(call)
+    }
+
+    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    fun syncAmazonPurchase(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val productID = call.getStringOrReject("productID") ?: return
         val receiptID = call.getStringOrReject("receiptID") ?: return
         val amazonUserID = call.getStringOrReject("amazonUserID") ?: return
         val isoCurrencyCode = call.getString("isoCurrencyCode")
         val price = call.getDouble("price")
-        Purchases.sharedInstance.syncObserverModeAmazonPurchase(
+        Purchases.sharedInstance.syncAmazonPurchase(
             productID,
             receiptID,
             amazonUserID,

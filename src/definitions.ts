@@ -113,7 +113,7 @@ export interface PurchaseDiscountedPackageOptions {
   discount: PurchasesPromotionalOffer;
 }
 
-export interface SyncObserverModeAmazonPurchaseOptions {
+export interface SyncAmazonPurchaseOptions {
   /**
    * Product ID associated to the purchase.
    */
@@ -135,6 +135,11 @@ export interface SyncObserverModeAmazonPurchaseOptions {
    */
   price?: number | null;
 }
+
+/**
+ * @deprecated - Use SyncAmazonPurchaseOptions instead
+ */
+export type SyncObserverModeAmazonPurchaseOptions = SyncAmazonPurchaseOptions
 
 export interface GetPromotionalOfferOptions {
   /**
@@ -161,16 +166,6 @@ export interface PurchasesPlugin {
    * @param options Set shouldMockWebResults to true if you want the plugin methods to return mocked values
    */
   setMockWebResults(options: { shouldMockWebResults: boolean }): Promise<void>;
-
-  /**
-   * @param options Set finishTransactions to false if you aren't using Purchases SDK to
-   * make the purchase
-   * @returns {Promise<void>} The promise will be rejected if configure has not been called yet.
-   * @deprecated Set purchasesAreCompletedBy when configuring the SDK instead.
-   */
-  setFinishTransactions(options: {
-    finishTransactions: boolean;
-  }): Promise<void>;
 
   /**
    * iOS only.
@@ -384,6 +379,7 @@ export interface PurchasesPlugin {
   syncPurchases(): Promise<void>;
 
   /**
+   * @deprecated - Use syncAmazonPurchase instead
    * This method will send a purchase to the RevenueCat backend. This function should only be called if you are
    * in Amazon observer mode or performing a client side migration of your current users to RevenueCat.
    *
@@ -395,6 +391,20 @@ export interface PurchasesPlugin {
   syncObserverModeAmazonPurchase(
     options: SyncObserverModeAmazonPurchaseOptions,
   ): Promise<void>;
+
+  /**
+   * This method will send a purchase to the RevenueCat backend. This function should only be called if you are
+   * in Amazon observer mode or performing a client side migration of your current users to RevenueCat.
+   *
+   * The receipt IDs are cached if successfully posted, so they are not posted more than once.
+   *
+   * @returns {Promise<void>} The promise will be rejected if configure has not been called yet or if there's an error
+   * syncing purchases.
+   */
+  syncAmazonPurchase(
+    options: SyncAmazonPurchaseOptions,
+  ): Promise<void>;
+
 
   /**
    * Enable automatic collection of Apple Search Ad attribution on iOS. Disabled by default. Supported in iOS 14.3+ only

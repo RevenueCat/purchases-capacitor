@@ -55,7 +55,6 @@ This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package
 
 * [`configure(...)`](#configure)
 * [`setMockWebResults(...)`](#setmockwebresults)
-* [`setFinishTransactions(...)`](#setfinishtransactions)
 * [`setSimulatesAskToBuyInSandbox(...)`](#setsimulatesasktobuyinsandbox)
 * [`addCustomerInfoUpdateListener(...)`](#addcustomerinfoupdatelistener)
 * [`removeCustomerInfoUpdateListener(...)`](#removecustomerinfoupdatelistener)
@@ -77,6 +76,7 @@ This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package
 * [`getCustomerInfo()`](#getcustomerinfo)
 * [`syncPurchases()`](#syncpurchases)
 * [`syncObserverModeAmazonPurchase(...)`](#syncobservermodeamazonpurchase)
+* [`syncAmazonPurchase(...)`](#syncamazonpurchase)
 * [`enableAdServicesAttributionTokenCollection()`](#enableadservicesattributiontokencollection)
 * [`isAnonymous()`](#isanonymous)
 * [`checkTrialOrIntroductoryPriceEligibility(...)`](#checktrialorintroductorypriceeligibility)
@@ -149,19 +149,6 @@ Default is false
 | Param         | Type                                            | Description                                                                             |
 | ------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------- |
 | **`options`** | <code>{ shouldMockWebResults: boolean; }</code> | Set shouldMockWebResults to true if you want the plugin methods to return mocked values |
-
---------------------
-
-
-### setFinishTransactions(...)
-
-```typescript
-setFinishTransactions(options: { finishTransactions: boolean; }) => Promise<void>
-```
-
-| Param         | Type                                          | Description                                                                            |
-| ------------- | --------------------------------------------- | -------------------------------------------------------------------------------------- |
-| **`options`** | <code>{ finishTransactions: boolean; }</code> | Set finishTransactions to false if you aren't using Purchases SDK to make the purchase |
 
 --------------------
 
@@ -484,14 +471,27 @@ for subscriptions anytime a sync is needed, like after a successful purchase.
 syncObserverModeAmazonPurchase(options: SyncObserverModeAmazonPurchaseOptions) => Promise<void>
 ```
 
+| Param         | Type                                                                            |
+| ------------- | ------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#syncamazonpurchaseoptions">SyncAmazonPurchaseOptions</a></code> |
+
+--------------------
+
+
+### syncAmazonPurchase(...)
+
+```typescript
+syncAmazonPurchase(options: SyncAmazonPurchaseOptions) => Promise<void>
+```
+
 This method will send a purchase to the RevenueCat backend. This function should only be called if you are
 in Amazon observer mode or performing a client side migration of your current users to RevenueCat.
 
 The receipt IDs are cached if successfully posted, so they are not posted more than once.
 
-| Param         | Type                                                                                                    |
-| ------------- | ------------------------------------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#syncobservermodeamazonpurchaseoptions">SyncObserverModeAmazonPurchaseOptions</a></code> |
+| Param         | Type                                                                            |
+| ------------- | ------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#syncamazonpurchaseoptions">SyncAmazonPurchaseOptions</a></code> |
 
 --------------------
 
@@ -1068,18 +1068,17 @@ Check if configure has finished and Purchases has been configured.
 
 Holds parameters to initialize the SDK.
 
-| Prop                                            | Type                                                                                    | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| ----------------------------------------------- | --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`apiKey`**                                    | <code>string</code>                                                                     | RevenueCat API Key. Needs to be a string                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| **`appUserID`**                                 | <code>string \| null</code>                                                             | A unique id for identifying the user                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| **`observerMode`**                              | <code>boolean</code>                                                                    | An optional boolean. Set this to TRUE if you have your own IAP implementation and want to use only RevenueCat's backend. Default is FALSE. If you are on Android and setting this to ON, you will have to acknowledge the purchases yourself.                                                                                                                                                                                                                                |
-| **`purchasesAreCompletedBy`**                   | <code><a href="#purchases_are_completed_by">PURCHASES_ARE_COMPLETED_BY</a></code>       | Set this to MY_APP if you have your own IAP implementation and want to use only RevenueCat's backend. Default is REVENUECAT. If you are on Android and setting this to MY_APP, you will have to acknowledge the purchases yourself.                                                                                                                                                                                                                                          |
-| **`userDefaultsSuiteName`**                     | <code>string</code>                                                                     | An optional string. iOS-only, will be ignored for Android. Set this if you would like the RevenueCat SDK to store its preferences in a different NSUserDefaults suite, otherwise it will use standardUserDefaults. Default is null, which will make the SDK use standardUserDefaults.                                                                                                                                                                                        |
-| **`storeKitVersion`**                           | <code><a href="#storekit_version">STOREKIT_VERSION</a></code>                           | iOS-only, will be ignored for Android. By selecting the DEFAULT value, RevenueCat will automatically select the most appropriate StoreKit version for the app's runtime environment. - Warning: Make sure you have an In-App Purchase Key configured in your app. Please see https://rev.cat/in-app-purchase-key-configuration for more info. - Note: StoreKit 2 is only available on iOS 16+. StoreKit 1 will be used for previous iOS versions regardless of this setting. |
-| **`useAmazon`**                                 | <code>boolean</code>                                                                    | An optional boolean. Android only. Required to configure the plugin to be used in the Amazon Appstore.                                                                                                                                                                                                                                                                                                                                                                       |
-| **`shouldShowInAppMessagesAutomatically`**      | <code>boolean</code>                                                                    | Whether we should show store in-app messages automatically. Both Google Play and the App Store provide in-app messages for some situations like billing issues. By default, those messages will be shown automatically. This allows to disable that behavior, so you can display those messages at your convenience. For more information, check: https://rev.cat/storekit-message and https://rev.cat/googleplayinappmessaging                                              |
-| **`entitlementVerificationMode`**               | <code><a href="#entitlement_verification_mode">ENTITLEMENT_VERIFICATION_MODE</a></code> | Verification strictness levels for [EntitlementInfo]. See https://rev.cat/trusted-entitlements for more info.                                                                                                                                                                                                                                                                                                                                                                |
-| **`pendingTransactionsForPrepaidPlansEnabled`** | <code>boolean</code>                                                                    | Enable this setting if you want to allow pending purchases for prepaid subscriptions (only supported in Google Play). Note that entitlements are not granted until payment is done. Disabled by default.                                                                                                                                                                                                                                                                     |
+| Prop                                            | Type                                                                                    | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`apiKey`**                                    | <code>string</code>                                                                     | RevenueCat API Key. Needs to be a string                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| **`appUserID`**                                 | <code>string \| null</code>                                                             | A unique id for identifying the user                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| **`purchasesAreCompletedBy`**                   | <code><a href="#purchasesarecompletedby">PurchasesAreCompletedBy</a></code>             | Set this to MY_APP and provide a <a href="#storekit_version">STOREKIT_VERSION</a> if you have your own IAP implementation and want to only use RevenueCat's backend. Defaults to <a href="#purchases_are_completed_by_type">PURCHASES_ARE_COMPLETED_BY_TYPE.REVENUECAT</a>. If you are on Android and setting this to MY_APP, will have to acknowledge the purchases yourself. If your app is only on Android, you may specify any StoreKit version, as it is ignored by the Android SDK. |
+| **`userDefaultsSuiteName`**                     | <code>string</code>                                                                     | An optional string. iOS-only, will be ignored for Android. Set this if you would like the RevenueCat SDK to store its preferences in a different NSUserDefaults suite, otherwise it will use standardUserDefaults. Default is null, which will make the SDK use standardUserDefaults.                                                                                                                                                                                                     |
+| **`storeKitVersion`**                           | <code><a href="#storekit_version">STOREKIT_VERSION</a></code>                           | iOS-only, will be ignored for Android. By selecting the DEFAULT value, RevenueCat will automatically select the most appropriate StoreKit version for the app's runtime environment. - Warning: Make sure you have an In-App Purchase Key configured in your app. Please see https://rev.cat/in-app-purchase-key-configuration for more info. - Note: StoreKit 2 is only available on iOS 16+. StoreKit 1 will be used for previous iOS versions regardless of this setting.              |
+| **`useAmazon`**                                 | <code>boolean</code>                                                                    | An optional boolean. Android only. Required to configure the plugin to be used in the Amazon Appstore.                                                                                                                                                                                                                                                                                                                                                                                    |
+| **`shouldShowInAppMessagesAutomatically`**      | <code>boolean</code>                                                                    | Whether we should show store in-app messages automatically. Both Google Play and the App Store provide in-app messages for some situations like billing issues. By default, those messages will be shown automatically. This allows to disable that behavior, so you can display those messages at your convenience. For more information, check: https://rev.cat/storekit-message and https://rev.cat/googleplayinappmessaging                                                           |
+| **`entitlementVerificationMode`**               | <code><a href="#entitlement_verification_mode">ENTITLEMENT_VERIFICATION_MODE</a></code> | Verification strictness levels for [EntitlementInfo]. See https://rev.cat/trusted-entitlements for more info.                                                                                                                                                                                                                                                                                                                                                                             |
+| **`pendingTransactionsForPrepaidPlansEnabled`** | <code>boolean</code>                                                                    | Enable this setting if you want to allow pending purchases for prepaid subscriptions (only supported in Google Play). Note that entitlements are not granted until payment is done. Disabled by default.                                                                                                                                                                                                                                                                                  |
 
 
 #### CustomerInfo
@@ -1429,7 +1428,7 @@ Holds the logIn result
 | **`created`**      | <code>boolean</code>                                  | True if the call resulted in a new user getting created in the RevenueCat backend. |
 
 
-#### SyncObserverModeAmazonPurchaseOptions
+#### SyncAmazonPurchaseOptions
 
 | Prop                  | Type                        | Description                                                                     |
 | --------------------- | --------------------------- | ------------------------------------------------------------------------------- |
@@ -1461,6 +1460,40 @@ Holds the introductory price status
 ### Type Aliases
 
 
+#### PurchasesAreCompletedBy
+
+Allows you to specify whether you want RevenueCat to complete your app's purchases
+or if your app will do so.
+
+You can configure RevenueCat to complete your purchases like so:
+```typescript
+Purchases.configure({
+ apiKey: "123",
+ purchasesAreCompletedBy: PURCHASES_ARE_COMPLETED_BY.REVENUECAT,
+});
+```
+
+You can specify that purchase are completed by your app like so:
+```typescript
+Purchases.configure({
+ apiKey: "123",
+ purchasesAreCompletedBy: {
+   type: PURCHASES_ARE_COMPLETED_BY.MY_APP,
+   storeKitVersion: <a href="#storekit_version">STOREKIT_VERSION</a>.STOREKIT_1
+ },
+});
+```
+
+<code><a href="#purchases_are_completed_by_type">PURCHASES_ARE_COMPLETED_BY_TYPE.REVENUECAT</a> | <a href="#purchasesarecompletedbymyapp">PurchasesAreCompletedByMyApp</a></code>
+
+
+#### PurchasesAreCompletedByMyApp
+
+Configuration option that specifies that your app will complete purchases.
+
+<code>{ type: <a href="#purchases_are_completed_by_type">PURCHASES_ARE_COMPLETED_BY_TYPE.MY_APP</a>; /** * The version of StoreKit that your app is using to make purchases. This value is ignored * on Android, so if your app is Android-only, you may provide any value. */ storeKitVersion: <a href="#storekit_version">STOREKIT_VERSION</a>; }</code>
+
+
 #### CustomerInfoUpdateListener
 
 Listener used on updated customer info
@@ -1487,10 +1520,15 @@ Listener used to receive log messages from the SDK.
 <code>(logLevel: <a href="#log_level">LOG_LEVEL</a>, message: string): void</code>
 
 
+#### SyncObserverModeAmazonPurchaseOptions
+
+<code><a href="#syncamazonpurchaseoptions">SyncAmazonPurchaseOptions</a></code>
+
+
 ### Enums
 
 
-#### PURCHASES_ARE_COMPLETED_BY
+#### PURCHASES_ARE_COMPLETED_BY_TYPE
 
 | Members          | Value                     | Description                                                                                                                                                                                                                                                                                                                                |
 | ---------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
