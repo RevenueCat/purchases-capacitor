@@ -139,7 +139,7 @@ export interface SyncAmazonPurchaseOptions {
 /**
  * @deprecated - Use SyncAmazonPurchaseOptions instead
  */
-export type SyncObserverModeAmazonPurchaseOptions = SyncAmazonPurchaseOptions
+export type SyncObserverModeAmazonPurchaseOptions = SyncAmazonPurchaseOptions;
 
 export interface GetPromotionalOfferOptions {
   /**
@@ -401,10 +401,7 @@ export interface PurchasesPlugin {
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet or if there's an error
    * syncing purchases.
    */
-  syncAmazonPurchase(
-    options: SyncAmazonPurchaseOptions,
-  ): Promise<void>;
-
+  syncAmazonPurchase(options: SyncAmazonPurchaseOptions): Promise<void>;
 
   /**
    * Enable automatic collection of Apple Search Ad attribution on iOS. Disabled by default. Supported in iOS 14.3+ only

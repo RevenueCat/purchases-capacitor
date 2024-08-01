@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import {WebPlugin} from '@capacitor/core';
+import { WebPlugin } from '@capacitor/core';
 import type {
   BILLING_FEATURE,
   CustomerInfo,
@@ -20,7 +20,10 @@ import type {
   PurchasesStoreTransaction,
   ShouldPurchasePromoProductListener,
 } from '@revenuecat/purchases-typescript-internal-esm';
-import {REFUND_REQUEST_STATUS, VERIFICATION_RESULT,} from '@revenuecat/purchases-typescript-internal-esm';
+import {
+  REFUND_REQUEST_STATUS,
+  VERIFICATION_RESULT,
+} from '@revenuecat/purchases-typescript-internal-esm';
 
 import type {
   GetProductOptions,
@@ -227,12 +230,8 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
       'syncObserverModeAmazonPurchase',
     );
   }
-  syncAmazonPurchase(
-    _options: SyncAmazonPurchaseOptions,
-  ): Promise<void> {
-    return this.mockNonReturningFunctionIfEnabled(
-      'syncAmazonPurchase',
-    );
+  syncAmazonPurchase(_options: SyncAmazonPurchaseOptions): Promise<void> {
+    return this.mockNonReturningFunctionIfEnabled('syncAmazonPurchase');
   }
   enableAdServicesAttributionTokenCollection(): Promise<void> {
     return this.mockNonReturningFunctionIfEnabled(
