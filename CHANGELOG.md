@@ -1,3 +1,7 @@
+## 8.0.0
+### Breaking Changes
+* Support capacitor V6 (#295) via Toni Rico (@tonidero)
+
 ## 7.7.1
 ### Bugfixes
 * Setting `proxyUrl` should not require SDK to be configured (#288) via Toni Rico (@tonidero)
