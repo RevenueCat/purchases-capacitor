@@ -15,6 +15,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
     private let platformVersion = "8.0.0"
 
     private let customerInfoKey = "customerInfo"
+    private let transactionKey = "transaction"
 
     private enum RefundRequestStatus: Int {
         case success = 0
@@ -41,7 +42,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
                    newStoreKitVersion != storeKitVersion {
                     NSLog("""
                           [PurchasesCapacitor] Warning: storeKitVersion in purchasesAreCompletedBy object is
-                          different from storeKitVersion in configure call. Using storeKitVersion from 
+                          different from storeKitVersion in configure call. Using storeKitVersion from
                           purchasesAreCompletedBy object.
                           """)
                     storeKitVersion = newStoreKitVersion
@@ -201,6 +202,19 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
         CommonFunctionality.restorePurchases(completion:
                                                 self.getCompletionBlockHandler(call, wrapperKey: self.customerInfoKey))
+    }
+
+    @objc func recordPurchase(_ call: CAPPluginCall) {
+        guard self.rejectIfPurchasesNotConfigured(call) else { return }
+        guard let productID = call.getOrRejectString("productID") else { return }
+        if #available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *) {
+            CommonFunctionality.recordPurchase(productID: productID,
+                                               completion: self.getCompletionBlockHandler(call,
+                                                                                          wrapperKey: self.transactionKey))
+        } else {
+            NSLog("[Purchases] Warning: tried to record purchase, but it's only available on iOS 15.0+")
+            call.unavailable()
+        }
     }
 
     @objc func getAppUserID(_ call: CAPPluginCall) {

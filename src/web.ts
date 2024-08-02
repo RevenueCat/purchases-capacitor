@@ -194,6 +194,14 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
       mockResponse,
     );
   }
+  recordPurchase(options: {
+    productID: string;
+  }): Promise<{ transaction: PurchasesStoreTransaction }> {
+    const mockResponse = {
+      transaction: this.mockTransaction(options.productID),
+    };
+    return this.mockReturningFunctionIfEnabled('recordPurchase', mockResponse);
+  }
   getAppUserID(): Promise<{ appUserID: string }> {
     return this.mockReturningFunctionIfEnabled('getAppUserID', {
       appUserID: 'test-web-user-id',

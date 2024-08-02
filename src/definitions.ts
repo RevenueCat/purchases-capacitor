@@ -20,6 +20,7 @@ import type {
   REFUND_REQUEST_STATUS,
   IN_APP_MESSAGE_TYPE,
   PurchasesOffering,
+  PurchasesStoreTransaction,
 } from '@revenuecat/purchases-typescript-internal-esm';
 
 export * from '@revenuecat/purchases-typescript-internal-esm';
@@ -319,6 +320,17 @@ export interface PurchasesPlugin {
    * userInfo object with more information. The promise will be also be rejected if configure has not been called yet.
    */
   restorePurchases(): Promise<{ customerInfo: CustomerInfo }>;
+
+  /**
+   * Use this method only if you already have your own IAP implementation using StoreKit 2 and want to use
+   * RevenueCat's backend. If you are using StoreKit 1 for your implementation, you do not need this method.
+   *
+   * You only need to use this method with *new* purchases. Subscription updates are observed automatically.
+   * @param options The productID that was purchased that needs to be synced with RevenueCat's backend.
+   */
+  recordPurchase(options: {
+    productID: string;
+  }): Promise<{ transaction: PurchasesStoreTransaction }>;
 
   /**
    * Get the appUserID

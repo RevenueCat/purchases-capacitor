@@ -229,6 +229,12 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     updateLastFunction('restorePurchases', customerInfo);
   };
 
+  const recordPurchase = async () => {
+    const productIDToUse = "test-product-id";
+    const recordPurchaseResult = await Purchases.recordPurchase({ productID: productIDToUse });
+    updateLastFunction('recordPurchase', recordPurchaseResult);
+  };
+
   const getAppUserID = async () => {
     const appUserID = await Purchases.getAppUserID();
     updateLastFunction('getAppUserID', appUserID);
@@ -575,6 +581,9 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         </IonButton>
         <IonButton size="small" onClick={restorePurchases}>
           Restore purchases
+        </IonButton>
+        <IonButton size="small" onClick={recordPurchase}>
+          Record purchase
         </IonButton>
         <IonButton size="small" onClick={getAppUserID}>
           Get current user id

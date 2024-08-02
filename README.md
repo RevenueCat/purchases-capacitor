@@ -68,6 +68,7 @@ This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package
 * [`purchaseSubscriptionOption(...)`](#purchasesubscriptionoption)
 * [`purchaseDiscountedPackage(...)`](#purchasediscountedpackage)
 * [`restorePurchases()`](#restorepurchases)
+* [`recordPurchase(...)`](#recordpurchase)
 * [`getAppUserID()`](#getappuserid)
 * [`logIn(...)`](#login)
 * [`logOut()`](#logout)
@@ -359,6 +360,26 @@ restorePurchases() => Promise<{ customerInfo: CustomerInfo; }>
 Restores a user's previous purchases and links their appUserIDs to any user's also using those purchases.
 
 **Returns:** <code>Promise&lt;{ customerInfo: <a href="#customerinfo">CustomerInfo</a>; }&gt;</code>
+
+--------------------
+
+
+### recordPurchase(...)
+
+```typescript
+recordPurchase(options: { productID: string; }) => Promise<{ transaction: PurchasesStoreTransaction; }>
+```
+
+Use this method only if you already have your own IAP implementation using StoreKit 2 and want to use
+RevenueCat's backend. If you are using StoreKit 1 for your implementation, you do not need this method.
+
+You only need to use this method with *new* purchases. Subscription updates are observed automatically.
+
+| Param         | Type                                | Description                                                                         |
+| ------------- | ----------------------------------- | ----------------------------------------------------------------------------------- |
+| **`options`** | <code>{ productID: string; }</code> | The productID that was purchased that needs to be synced with RevenueCat's backend. |
+
+**Returns:** <code>Promise&lt;{ transaction: <a href="#purchasesstoretransaction">PurchasesStoreTransaction</a>; }&gt;</code>
 
 --------------------
 

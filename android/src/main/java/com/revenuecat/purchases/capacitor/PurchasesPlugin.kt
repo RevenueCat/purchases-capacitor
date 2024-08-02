@@ -265,6 +265,11 @@ class PurchasesPlugin : Plugin() {
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
+    fun recordPurchase(call: PluginCall) {
+        rejectNotSupportedInAndroid(call, "recordPurchase")
+    }
+
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun getAppUserID(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         call.resolveWithMap(mapOf("appUserID" to getAppUserIDCommon()))
