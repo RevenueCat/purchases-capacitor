@@ -86,6 +86,8 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         type: PURCHASES_ARE_COMPLETED_BY_TYPE.MY_APP,
         storeKitVersion: STOREKIT_VERSION.STOREKIT_2,
       },
+      entitlementVerificationMode: ENTITLEMENT_VERIFICATION_MODE.INFORMATIONAL,
+      pendingTransactionsForPrepaidPlansEnabled: true,
     });
     await Purchases.addCustomerInfoUpdateListener(customerInfo => {
       console.log(
