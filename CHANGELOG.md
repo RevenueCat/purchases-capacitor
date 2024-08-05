@@ -70,6 +70,8 @@ await Purchases.configure({
 });
 ```
 
+Full migration guide to V9: [Capacitor - V9 API Migration Guide](migrations/v9-MIGRATION.md)
+
 ## 8.0.0
 ### Breaking Changes
 * Support capacitor V6 (#295) via Toni Rico (@tonidero)
