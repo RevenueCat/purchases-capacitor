@@ -73,4 +73,4 @@ await Purchases.configure({
 
 ### Reporting undocumented issues:
 
-Feel free to file an issue! [New RevenueCat Issue](https://github.com/RevenueCat/purchases-flutter/issues/new/).
+Feel free to file an issue! [New RevenueCat Issue](https://github.com/RevenueCat/purchases-capacitor/issues/new/).
