@@ -15,6 +15,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
     private let platformVersion = "8.0.0"
 
     private let customerInfoKey = "customerInfo"
+    private let transactionKey = "transaction"
 
     private enum RefundRequestStatus: Int {
         case success = 0
@@ -29,18 +30,36 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
     @objc func configure(_ call: CAPPluginCall) {
         guard let apiKey = call.getOrRejectString("apiKey") else { return }
         let appUserID = call.getString("appUserID")
-        let observerMode = call.getBool("observerMode") ?? false
+        var storeKitVersion = call.getString("storeKitVersion") ?? StoreKitVersion.default.name
+        let purchasesAreCompletedByString = call.getString("purchasesAreCompletedBy")
+        var purchasesAreCompletedBy: String? = nil
+        if purchasesAreCompletedByString == PurchasesAreCompletedBy.revenueCat.name {
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.revenueCat.name
+        } else {
+            if let purchasesAreCompletedByObject = call.getObject("purchasesAreCompletedBy") {
+                purchasesAreCompletedBy = purchasesAreCompletedByObject["type"] as? String
+                if let newStoreKitVersion = purchasesAreCompletedByObject["storeKitVersion"] as? String,
+                   newStoreKitVersion != storeKitVersion {
+                    NSLog("""
+                          [PurchasesCapacitor] Warning: storeKitVersion in purchasesAreCompletedBy object is
+                          different from storeKitVersion in configure call. Using storeKitVersion from
+                          purchasesAreCompletedBy object.
+                          """)
+                    storeKitVersion = newStoreKitVersion
+                }
+            }
+        }
         let userDefaultsSuiteName = call.getString("userDefaultsSuiteName")
-        let usesStoreKit2IfAvailable = call.getBool("usesStoreKit2IfAvailable") ?? false
         let shouldShowInAppMessagesAutomatically = call.getBool("shouldShowInAppMessagesAutomatically") ?? true
         let entitlementVerificationMode = call.getString("entitlementVerificationMode")
+
         let purchases = Purchases.configure(apiKey: apiKey,
                                             appUserID: appUserID,
-                                            purchasesAreCompletedBy: observerMode ? PurchasesAreCompletedBy.myApp:
-                                                PurchasesAreCompletedBy.revenueCat,
+                                            purchasesAreCompletedBy: purchasesAreCompletedBy,
                                             userDefaultsSuiteName: userDefaultsSuiteName,
                                             platformFlavor: self.platformFlavor,
                                             platformFlavorVersion: self.platformVersion,
+                                            storeKitVersion: storeKitVersion,
                                             dangerousSettings: DangerousSettings(),
                                             shouldShowInAppMessagesAutomatically: shouldShowInAppMessagesAutomatically,
                                             verificationMode: entitlementVerificationMode)
@@ -50,17 +69,6 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
 
     @objc func setMockWebResults(_ call: CAPPluginCall) {
         NSLog("Cannot enable mock web results in iOS.")
-        call.resolve()
-    }
-
-    @objc func setFinishTransactions(_ call: CAPPluginCall) {
-        guard self.rejectIfPurchasesNotConfigured(call) else { return }
-        guard let finishTransactions = call.getOrRejectBool("finishTransactions") else { return }
-        if (finishTransactions) {
-            CommonFunctionality.setPurchasesAreCompletedBy(.revenueCat)
-        } else {
-            CommonFunctionality.setPurchasesAreCompletedBy(.myApp)
-        }
         call.resolve()
     }
 
@@ -196,6 +204,19 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
                                                 self.getCompletionBlockHandler(call, wrapperKey: self.customerInfoKey))
     }
 
+    @objc func recordPurchase(_ call: CAPPluginCall) {
+        guard self.rejectIfPurchasesNotConfigured(call) else { return }
+        guard let productID = call.getOrRejectString("productID") else { return }
+        if #available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *) {
+            CommonFunctionality.recordPurchase(productID: productID,
+                                               completion: self.getCompletionBlockHandler(call,
+                                                                                          wrapperKey: self.transactionKey))
+        } else {
+            NSLog("[Purchases] Warning: tried to record purchase, but it's only available on iOS 15.0+")
+            call.unavailable()
+        }
+    }
+
     @objc func getAppUserID(_ call: CAPPluginCall) {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
         call.resolve([
@@ -240,6 +261,10 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
     }
 
     @objc func syncObserverModeAmazonPurchase(_ call: CAPPluginCall) {
+        self.rejectUnsupportedInIOS(call)
+    }
+
+    @objc func syncAmazonPurchase(_ call: CAPPluginCall) {
         self.rejectUnsupportedInIOS(call)
     }
 

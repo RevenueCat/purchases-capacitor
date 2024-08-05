@@ -1,25 +1,17 @@
 import './FunctionTesterContainer.css';
-import {
-  IonButton,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
-} from '@ionic/react';
-import React, { useEffect, useState } from 'react';
+import {IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,} from '@ionic/react';
+import React, {useEffect, useState} from 'react';
 import {
   LOG_LEVEL,
   PRODUCT_CATEGORY,
   PurchaseDiscountedPackageOptions,
   Purchases,
+  PURCHASES_ARE_COMPLETED_BY_TYPE,
+  STOREKIT_VERSION,
 } from '@revenuecat/purchases-capacitor';
 
-import { REVENUECAT_API_KEY } from '../constants';
-import {
-  ENTITLEMENT_VERIFICATION_MODE,
-  IN_APP_MESSAGE_TYPE,
-} from '@revenuecat/purchases-typescript-internal-esm';
+import {REVENUECAT_API_KEY} from '../constants';
+import {ENTITLEMENT_VERIFICATION_MODE, IN_APP_MESSAGE_TYPE,} from '@revenuecat/purchases-typescript-internal-esm';
 
 interface ContainerProps {}
 
@@ -35,7 +27,6 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     'No RC function with result executed',
   );
   const [lastFunctionContent, setLastFunctionContent] = useState('No content');
-  const [finishTransactions, setFinishTransactions] = useState(true);
   const [simulatesAskToBuyInSandbox, setSimulatesAskToBuyInSandbox] =
     useState(false);
 
@@ -91,7 +82,12 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
   const configure = async () => {
     await Purchases.configure({
       apiKey: REVENUECAT_API_KEY,
+      purchasesAreCompletedBy: {
+        type: PURCHASES_ARE_COMPLETED_BY_TYPE.MY_APP,
+        storeKitVersion: STOREKIT_VERSION.STOREKIT_2,
+      },
       entitlementVerificationMode: ENTITLEMENT_VERIFICATION_MODE.INFORMATIONAL,
+      pendingTransactionsForPrepaidPlansEnabled: true,
     });
     await Purchases.addCustomerInfoUpdateListener(customerInfo => {
       console.log(
@@ -99,15 +95,6 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
       );
     });
     updateLastFunctionWithoutContent('configure');
-  };
-
-  const changeFinishTransactions = async () => {
-    const newFinishTransactions = !finishTransactions;
-    await Purchases.setFinishTransactions({
-      finishTransactions: newFinishTransactions,
-    });
-    setFinishTransactions(newFinishTransactions);
-    updateLastFunctionWithoutContent('setFinishTransactions');
   };
 
   const changeSimulatesAskToBuyInSandbox = async () => {
@@ -242,6 +229,12 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     updateLastFunction('restorePurchases', customerInfo);
   };
 
+  const recordPurchase = async () => {
+    const productIDToUse = "test-product-id";
+    const recordPurchaseResult = await Purchases.recordPurchase({ productID: productIDToUse });
+    updateLastFunction('recordPurchase', recordPurchaseResult);
+  };
+
   const getAppUserID = async () => {
     const appUserID = await Purchases.getAppUserID();
     updateLastFunction('getAppUserID', appUserID);
@@ -268,16 +261,16 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     updateLastFunctionWithoutContent('syncPurchases');
   };
 
-  const syncObserverModeAmazonPurchase = async () => {
+  const syncAmazonPurchase = async () => {
     const productIDToSync = 'test-amazon-product-id';
     const receiptIDToSync = 'test-amazon-receipt-id';
     const amazonUserIDToSync = 'test-amazon-user-id';
-    await Purchases.syncObserverModeAmazonPurchase({
+    await Purchases.syncAmazonPurchase({
       productID: productIDToSync,
       receiptID: receiptIDToSync,
       amazonUserID: amazonUserIDToSync,
     });
-    updateLastFunctionWithoutContent('syncObserverModeAmazonPurchase');
+    updateLastFunctionWithoutContent('syncAmazonPurchase');
   };
 
   const enableAdServicesAttributionTokenCollection = async () => {
@@ -555,10 +548,6 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         </IonButton>
         <IonButton
           size="small"
-          onClick={changeFinishTransactions}
-        >{`Set finishTransactions to ${!finishTransactions}`}</IonButton>
-        <IonButton
-          size="small"
           onClick={changeSimulatesAskToBuyInSandbox}
         >{`Set simulatesAskToBuyInSandbox to ${!simulatesAskToBuyInSandbox}`}</IonButton>
         <IonButton size="small" onClick={getOfferings}>
@@ -593,6 +582,9 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         <IonButton size="small" onClick={restorePurchases}>
           Restore purchases
         </IonButton>
+        <IonButton size="small" onClick={recordPurchase}>
+          Record purchase
+        </IonButton>
         <IonButton size="small" onClick={getAppUserID}>
           Get current user id
         </IonButton>
@@ -608,8 +600,8 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         <IonButton size="small" onClick={syncPurchases}>
           Sync purchases
         </IonButton>
-        <IonButton size="small" onClick={syncObserverModeAmazonPurchase}>
-          Sync observer mode amazon purchase
+        <IonButton size="small" onClick={syncAmazonPurchase}>
+          Sync amazon purchase
         </IonButton>
         <IonButton size="small" onClick={isAnonymous}>
           Is anonymous?

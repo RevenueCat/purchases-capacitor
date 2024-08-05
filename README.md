@@ -55,7 +55,6 @@ This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package
 
 * [`configure(...)`](#configure)
 * [`setMockWebResults(...)`](#setmockwebresults)
-* [`setFinishTransactions(...)`](#setfinishtransactions)
 * [`setSimulatesAskToBuyInSandbox(...)`](#setsimulatesasktobuyinsandbox)
 * [`addCustomerInfoUpdateListener(...)`](#addcustomerinfoupdatelistener)
 * [`removeCustomerInfoUpdateListener(...)`](#removecustomerinfoupdatelistener)
@@ -69,6 +68,7 @@ This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package
 * [`purchaseSubscriptionOption(...)`](#purchasesubscriptionoption)
 * [`purchaseDiscountedPackage(...)`](#purchasediscountedpackage)
 * [`restorePurchases()`](#restorepurchases)
+* [`recordPurchase(...)`](#recordpurchase)
 * [`getAppUserID()`](#getappuserid)
 * [`logIn(...)`](#login)
 * [`logOut()`](#logout)
@@ -77,6 +77,7 @@ This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package
 * [`getCustomerInfo()`](#getcustomerinfo)
 * [`syncPurchases()`](#syncpurchases)
 * [`syncObserverModeAmazonPurchase(...)`](#syncobservermodeamazonpurchase)
+* [`syncAmazonPurchase(...)`](#syncamazonpurchase)
 * [`enableAdServicesAttributionTokenCollection()`](#enableadservicesattributiontokencollection)
 * [`isAnonymous()`](#isanonymous)
 * [`checkTrialOrIntroductoryPriceEligibility(...)`](#checktrialorintroductorypriceeligibility)
@@ -149,19 +150,6 @@ Default is false
 | Param         | Type                                            | Description                                                                             |
 | ------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------- |
 | **`options`** | <code>{ shouldMockWebResults: boolean; }</code> | Set shouldMockWebResults to true if you want the plugin methods to return mocked values |
-
---------------------
-
-
-### setFinishTransactions(...)
-
-```typescript
-setFinishTransactions(options: { finishTransactions: boolean; }) => Promise<void>
-```
-
-| Param         | Type                                          | Description                                                                            |
-| ------------- | --------------------------------------------- | -------------------------------------------------------------------------------------- |
-| **`options`** | <code>{ finishTransactions: boolean; }</code> | Set finishTransactions to false if you aren't using Purchases SDK to make the purchase |
 
 --------------------
 
@@ -376,6 +364,26 @@ Restores a user's previous purchases and links their appUserIDs to any user's al
 --------------------
 
 
+### recordPurchase(...)
+
+```typescript
+recordPurchase(options: { productID: string; }) => Promise<{ transaction: PurchasesStoreTransaction; }>
+```
+
+Use this method only if you already have your own IAP implementation using StoreKit 2 and want to use
+RevenueCat's backend. If you are using StoreKit 1 for your implementation, you do not need this method.
+
+You only need to use this method with *new* purchases. Subscription updates are observed automatically.
+
+| Param         | Type                                | Description                                                                         |
+| ------------- | ----------------------------------- | ----------------------------------------------------------------------------------- |
+| **`options`** | <code>{ productID: string; }</code> | The productID that was purchased that needs to be synced with RevenueCat's backend. |
+
+**Returns:** <code>Promise&lt;{ transaction: <a href="#purchasesstoretransaction">PurchasesStoreTransaction</a>; }&gt;</code>
+
+--------------------
+
+
 ### getAppUserID()
 
 ```typescript
@@ -484,14 +492,27 @@ for subscriptions anytime a sync is needed, like after a successful purchase.
 syncObserverModeAmazonPurchase(options: SyncObserverModeAmazonPurchaseOptions) => Promise<void>
 ```
 
+| Param         | Type                                                                            |
+| ------------- | ------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#syncamazonpurchaseoptions">SyncAmazonPurchaseOptions</a></code> |
+
+--------------------
+
+
+### syncAmazonPurchase(...)
+
+```typescript
+syncAmazonPurchase(options: SyncAmazonPurchaseOptions) => Promise<void>
+```
+
 This method will send a purchase to the RevenueCat backend. This function should only be called if you are
 in Amazon observer mode or performing a client side migration of your current users to RevenueCat.
 
 The receipt IDs are cached if successfully posted, so they are not posted more than once.
 
-| Param         | Type                                                                                                    |
-| ------------- | ------------------------------------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#syncobservermodeamazonpurchaseoptions">SyncObserverModeAmazonPurchaseOptions</a></code> |
+| Param         | Type                                                                            |
+| ------------- | ------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#syncamazonpurchaseoptions">SyncAmazonPurchaseOptions</a></code> |
 
 --------------------
 
@@ -1068,16 +1089,17 @@ Check if configure has finished and Purchases has been configured.
 
 Holds parameters to initialize the SDK.
 
-| Prop                                       | Type                                                                                    | Description                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| ------------------------------------------ | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`apiKey`**                               | <code>string</code>                                                                     | RevenueCat API Key. Needs to be a string                                                                                                                                                                                                                                                                                                                                                                                        |
-| **`appUserID`**                            | <code>string \| null</code>                                                             | A unique id for identifying the user                                                                                                                                                                                                                                                                                                                                                                                            |
-| **`observerMode`**                         | <code>boolean</code>                                                                    | An optional boolean. Set this to TRUE if you have your own IAP implementation and want to use only RevenueCat's backend. Default is FALSE. If you are on Android and setting this to ON, you will have to acknowledge the purchases yourself.                                                                                                                                                                                   |
-| **`userDefaultsSuiteName`**                | <code>string</code>                                                                     | An optional string. iOS-only, will be ignored for Android. Set this if you would like the RevenueCat SDK to store its preferences in a different NSUserDefaults suite, otherwise it will use standardUserDefaults. Default is null, which will make the SDK use standardUserDefaults.                                                                                                                                           |
-| **`usesStoreKit2IfAvailable`**             | <code>boolean</code>                                                                    | iOS-only, will be ignored for Android. Set this to TRUE to enable StoreKit2. Default is FALSE.                                                                                                                                                                                                                                                                                                                                  |
-| **`useAmazon`**                            | <code>boolean</code>                                                                    | An optional boolean. Android only. Required to configure the plugin to be used in the Amazon Appstore.                                                                                                                                                                                                                                                                                                                          |
-| **`shouldShowInAppMessagesAutomatically`** | <code>boolean</code>                                                                    | Whether we should show store in-app messages automatically. Both Google Play and the App Store provide in-app messages for some situations like billing issues. By default, those messages will be shown automatically. This allows to disable that behavior, so you can display those messages at your convenience. For more information, check: https://rev.cat/storekit-message and https://rev.cat/googleplayinappmessaging |
-| **`entitlementVerificationMode`**          | <code><a href="#entitlement_verification_mode">ENTITLEMENT_VERIFICATION_MODE</a></code> | Verification strictness levels for [EntitlementInfo]. See https://rev.cat/trusted-entitlements for more info.                                                                                                                                                                                                                                                                                                                   |
+| Prop                                            | Type                                                                                    | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`apiKey`**                                    | <code>string</code>                                                                     | RevenueCat API Key. Needs to be a string                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| **`appUserID`**                                 | <code>string \| null</code>                                                             | A unique id for identifying the user                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| **`purchasesAreCompletedBy`**                   | <code><a href="#purchasesarecompletedby">PurchasesAreCompletedBy</a></code>             | Set this to MY_APP and provide a <a href="#storekit_version">STOREKIT_VERSION</a> if you have your own IAP implementation and want to only use RevenueCat's backend. Defaults to <a href="#purchases_are_completed_by_type">PURCHASES_ARE_COMPLETED_BY_TYPE.REVENUECAT</a>. If you are on Android and setting this to MY_APP, will have to acknowledge the purchases yourself. If your app is only on Android, you may specify any StoreKit version, as it is ignored by the Android SDK. |
+| **`userDefaultsSuiteName`**                     | <code>string</code>                                                                     | An optional string. iOS-only, will be ignored for Android. Set this if you would like the RevenueCat SDK to store its preferences in a different NSUserDefaults suite, otherwise it will use standardUserDefaults. Default is null, which will make the SDK use standardUserDefaults.                                                                                                                                                                                                     |
+| **`storeKitVersion`**                           | <code><a href="#storekit_version">STOREKIT_VERSION</a></code>                           | iOS-only, will be ignored for Android. By selecting the DEFAULT value, RevenueCat will automatically select the most appropriate StoreKit version for the app's runtime environment. - Warning: Make sure you have an In-App Purchase Key configured in your app. Please see https://rev.cat/in-app-purchase-key-configuration for more info. - Note: StoreKit 2 is only available on iOS 16+. StoreKit 1 will be used for previous iOS versions regardless of this setting.              |
+| **`useAmazon`**                                 | <code>boolean</code>                                                                    | An optional boolean. Android only. Required to configure the plugin to be used in the Amazon Appstore.                                                                                                                                                                                                                                                                                                                                                                                    |
+| **`shouldShowInAppMessagesAutomatically`**      | <code>boolean</code>                                                                    | Whether we should show store in-app messages automatically. Both Google Play and the App Store provide in-app messages for some situations like billing issues. By default, those messages will be shown automatically. This allows to disable that behavior, so you can display those messages at your convenience. For more information, check: https://rev.cat/storekit-message and https://rev.cat/googleplayinappmessaging                                                           |
+| **`entitlementVerificationMode`**               | <code><a href="#entitlement_verification_mode">ENTITLEMENT_VERIFICATION_MODE</a></code> | Verification strictness levels for [EntitlementInfo]. See https://rev.cat/trusted-entitlements for more info.                                                                                                                                                                                                                                                                                                                                                                             |
+| **`pendingTransactionsForPrepaidPlansEnabled`** | <code>boolean</code>                                                                    | Enable this setting if you want to allow pending purchases for prepaid subscriptions (only supported in Google Play). Note that entitlements are not granted until payment is done. Disabled by default.                                                                                                                                                                                                                                                                                  |
 
 
 #### CustomerInfo
@@ -1200,23 +1222,29 @@ For more info see https://docs.revenuecat.com/docs/entitlements
 
 Type representing a product from the Store.
 
-| Prop                              | Type                                                                                  | Description                                                                                                                                                                                                                             |
-| --------------------------------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`identifier`**                  | <code>string</code>                                                                   | Product Id.                                                                                                                                                                                                                             |
-| **`description`**                 | <code>string</code>                                                                   | Description of the product.                                                                                                                                                                                                             |
-| **`title`**                       | <code>string</code>                                                                   | Title of the product.                                                                                                                                                                                                                   |
-| **`price`**                       | <code>number</code>                                                                   | <a href="#price">Price</a> of the product in the local currency. Contains the price value of defaultOption for Google Play.                                                                                                             |
-| **`priceString`**                 | <code>string</code>                                                                   | Formatted price of the item, including its currency sign. Contains the formatted price value of defaultOption for Google Play.                                                                                                          |
-| **`currencyCode`**                | <code>string</code>                                                                   | Currency code for price and original price. Contains the currency code value of defaultOption for Google Play.                                                                                                                          |
-| **`introPrice`**                  | <code><a href="#purchasesintroprice">PurchasesIntroPrice</a> \| null</code>           | Introductory price.                                                                                                                                                                                                                     |
-| **`discounts`**                   | <code>PurchasesStoreProductDiscount[] \| null</code>                                  | Collection of discount offers for a product. Null for Android.                                                                                                                                                                          |
-| **`productCategory`**             | <code><a href="#product_category">PRODUCT_CATEGORY</a> \| null</code>                 | Product category.                                                                                                                                                                                                                       |
-| **`productType`**                 | <code><a href="#product_type">PRODUCT_TYPE</a></code>                                 | The specific type of subscription or one time purchase this product represents. Important: In iOS, if using StoreKit 1, we cannot determine the type.                                                                                   |
-| **`subscriptionPeriod`**          | <code>string \| null</code>                                                           | Subscription period, specified in ISO 8601 format. For example, P1W equates to one week, P1M equates to one month, P3M equates to three months, P6M equates to six months, and P1Y equates to one year. Note: Not available for Amazon. |
-| **`defaultOption`**               | <code><a href="#subscriptionoption">SubscriptionOption</a> \| null</code>             | Default subscription option for a product. Google Play only.                                                                                                                                                                            |
-| **`subscriptionOptions`**         | <code>SubscriptionOption[] \| null</code>                                             | Collection of subscription options for a product. Google Play only.                                                                                                                                                                     |
-| **`presentedOfferingIdentifier`** | <code>string \| null</code>                                                           | Offering identifier the store product was presented from. Null if not using offerings or if fetched directly from store via getProducts.                                                                                                |
-| **`presentedOfferingContext`**    | <code><a href="#presentedofferingcontext">PresentedOfferingContext</a> \| null</code> | Offering context this package belongs to. Null if not using offerings or if fetched directly from store via getProducts.                                                                                                                |
+| Prop                              | Type                                                                                  | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| --------------------------------- | ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`identifier`**                  | <code>string</code>                                                                   | Product Id.                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| **`description`**                 | <code>string</code>                                                                   | Description of the product.                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| **`title`**                       | <code>string</code>                                                                   | Title of the product.                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| **`price`**                       | <code>number</code>                                                                   | <a href="#price">Price</a> of the product in the local currency. Contains the price value of defaultOption for Google Play.                                                                                                                                                                                                                                                                                                                                      |
+| **`priceString`**                 | <code>string</code>                                                                   | Formatted price of the item, including its currency sign. Contains the formatted price value of defaultOption for Google Play.                                                                                                                                                                                                                                                                                                                                   |
+| **`pricePerWeek`**                | <code>number</code>                                                                   | Null for INAPP products. The price of the <a href="#purchasesstoreproduct">PurchasesStoreProduct</a> in a weekly recurrence. This means that, for example, if the period is monthly, the price will be divided by 4. Note that this value may be an approximation. For Google subscriptions, this value will use the basePlan to calculate the value.                                                                                                            |
+| **`pricePerMonth`**               | <code>number</code>                                                                   | Null for INAPP products. The price of the <a href="#purchasesstoreproduct">PurchasesStoreProduct</a> in a monthly recurrence. This means that, for example, if the period is annual, the price will be divided by 12. Note that this value may be an approximation. For Google subscriptions, this value will use the basePlan to calculate the value.                                                                                                           |
+| **`pricePerYear`**                | <code>number</code>                                                                   | Null for INAPP products. The price of the <a href="#purchasesstoreproduct">PurchasesStoreProduct</a> in a yearly recurrence. This means that, for example, if the period is monthly, the price will be multiplied by 12. Note that this value may be an approximation. For Google subscriptions, this value will use the basePlan to calculate the value.                                                                                                        |
+| **`pricePerWeekString`**          | <code>string</code>                                                                   | Null for INAPP products. The price of the <a href="#purchasesstoreproduct">PurchasesStoreProduct</a> formatted for the current locale in a weekly recurrence. This means that, for example, if the period is monthly, the price will be divided by 4. It uses a currency formatter to format the price in the given locale. Note that this value may be an approximation. For Google subscriptions, this value will use the basePlan to calculate the value.     |
+| **`pricePerMonthString`**         | <code>string</code>                                                                   | Null for INAPP products. The price of the <a href="#purchasesstoreproduct">PurchasesStoreProduct</a> formatted for the current locale in a monthly recurrence. This means that, for example, if the period is annual, the price will be divided by 12. It uses a currency formatter to format the price in the given locale. Note that this value may be an approximation. For Google subscriptions, this value will use the basePlan to calculate the value.    |
+| **`pricePerYearString`**          | <code>string</code>                                                                   | Null for INAPP products. The price of the <a href="#purchasesstoreproduct">PurchasesStoreProduct</a> formatted for the current locale in a yearly recurrence. This means that, for example, if the period is monthly, the price will be multiplied by 12. It uses a currency formatter to format the price in the given locale. Note that this value may be an approximation. For Google subscriptions, this value will use the basePlan to calculate the value. |
+| **`currencyCode`**                | <code>string</code>                                                                   | Currency code for price and original price. Contains the currency code value of defaultOption for Google Play.                                                                                                                                                                                                                                                                                                                                                   |
+| **`introPrice`**                  | <code><a href="#purchasesintroprice">PurchasesIntroPrice</a> \| null</code>           | Introductory price.                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| **`discounts`**                   | <code>PurchasesStoreProductDiscount[] \| null</code>                                  | Collection of discount offers for a product. Null for Android.                                                                                                                                                                                                                                                                                                                                                                                                   |
+| **`productCategory`**             | <code><a href="#product_category">PRODUCT_CATEGORY</a> \| null</code>                 | Product category.                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| **`productType`**                 | <code><a href="#product_type">PRODUCT_TYPE</a></code>                                 | The specific type of subscription or one time purchase this product represents. Important: In iOS, if using StoreKit 1, we cannot determine the type.                                                                                                                                                                                                                                                                                                            |
+| **`subscriptionPeriod`**          | <code>string \| null</code>                                                           | Subscription period, specified in ISO 8601 format. For example, P1W equates to one week, P1M equates to one month, P3M equates to three months, P6M equates to six months, and P1Y equates to one year. Note: Not available for Amazon.                                                                                                                                                                                                                          |
+| **`defaultOption`**               | <code><a href="#subscriptionoption">SubscriptionOption</a> \| null</code>             | Default subscription option for a product. Google Play only.                                                                                                                                                                                                                                                                                                                                                                                                     |
+| **`subscriptionOptions`**         | <code>SubscriptionOption[] \| null</code>                                             | Collection of subscription options for a product. Google Play only.                                                                                                                                                                                                                                                                                                                                                                                              |
+| **`presentedOfferingIdentifier`** | <code>string \| null</code>                                                           | Offering identifier the store product was presented from. Null if not using offerings or if fetched directly from store via getProducts.                                                                                                                                                                                                                                                                                                                         |
+| **`presentedOfferingContext`**    | <code><a href="#presentedofferingcontext">PresentedOfferingContext</a> \| null</code> | Offering context this package belongs to. Null if not using offerings or if fetched directly from store via getProducts.                                                                                                                                                                                                                                                                                                                                         |
 
 
 #### PurchasesIntroPrice
@@ -1268,6 +1296,7 @@ Used only for Google
 | **`introPhase`**                  | <code><a href="#pricingphase">PricingPhase</a> \| null</code>                         | The intro trial <a href="#pricingphase">PricingPhase</a> of the subscription. Looks for the first pricing phase of the <a href="#subscriptionoption">SubscriptionOption</a> where amountMicros is greater than 0. There can be a freeTrialPhase and an introductoryPhase in the same <a href="#subscriptionoption">SubscriptionOption</a>. |
 | **`presentedOfferingIdentifier`** | <code>string \| null</code>                                                           | Offering identifier the subscription option was presented from                                                                                                                                                                                                                                                                             |
 | **`presentedOfferingContext`**    | <code><a href="#presentedofferingcontext">PresentedOfferingContext</a> \| null</code> | Offering context this package belongs to. Null if not using offerings or if fetched directly from store via getProducts.                                                                                                                                                                                                                   |
+| **`installmentsInfo`**            | <code><a href="#installmentsinfo">InstallmentsInfo</a> \| null</code>                 | For installment subscriptions, the details of the installment plan the customer commits to. Null for non-installment subscriptions. Installment plans are only available for Google Play subscriptions.                                                                                                                                    |
 
 
 #### PricingPhase
@@ -1324,6 +1353,16 @@ Contains data about the context in which an offering was presented.
 | -------------- | ------------------- | ---------------------------------------------------------- |
 | **`revision`** | <code>number</code> | The revision of the targeting used to obtain this object.  |
 | **`ruleId`**   | <code>string</code> | The rule id from the targeting used to obtain this object. |
+
+
+#### InstallmentsInfo
+
+Type containing information of installment subscriptions. Currently only supported in Google Play.
+
+| Prop                                 | Type                | Description                                                                                            |
+| ------------------------------------ | ------------------- | ------------------------------------------------------------------------------------------------------ |
+| **`commitmentPaymentsCount`**        | <code>number</code> | Number of payments the customer commits to in order to purchase the subscription.                      |
+| **`renewalCommitmentPaymentsCount`** | <code>number</code> | After the commitment payments are complete, the number of payments the user commits to upon a renewal. |
 
 
 #### GetProductOptions
@@ -1410,7 +1449,7 @@ Holds the logIn result
 | **`created`**      | <code>boolean</code>                                  | True if the call resulted in a new user getting created in the RevenueCat backend. |
 
 
-#### SyncObserverModeAmazonPurchaseOptions
+#### SyncAmazonPurchaseOptions
 
 | Prop                  | Type                        | Description                                                                     |
 | --------------------- | --------------------------- | ------------------------------------------------------------------------------- |
@@ -1442,6 +1481,40 @@ Holds the introductory price status
 ### Type Aliases
 
 
+#### PurchasesAreCompletedBy
+
+Allows you to specify whether you want RevenueCat to complete your app's purchases
+or if your app will do so.
+
+You can configure RevenueCat to complete your purchases like so:
+```typescript
+Purchases.configure({
+ apiKey: "123",
+ purchasesAreCompletedBy: PURCHASES_ARE_COMPLETED_BY.REVENUECAT,
+});
+```
+
+You can specify that purchase are completed by your app like so:
+```typescript
+Purchases.configure({
+ apiKey: "123",
+ purchasesAreCompletedBy: {
+   type: PURCHASES_ARE_COMPLETED_BY.MY_APP,
+   storeKitVersion: <a href="#storekit_version">STOREKIT_VERSION</a>.STOREKIT_1
+ },
+});
+```
+
+<code><a href="#purchases_are_completed_by_type">PURCHASES_ARE_COMPLETED_BY_TYPE.REVENUECAT</a> | <a href="#purchasesarecompletedbymyapp">PurchasesAreCompletedByMyApp</a></code>
+
+
+#### PurchasesAreCompletedByMyApp
+
+Configuration option that specifies that your app will complete purchases.
+
+<code>{ type: <a href="#purchases_are_completed_by_type">PURCHASES_ARE_COMPLETED_BY_TYPE.MY_APP</a>; /** * The version of StoreKit that your app is using to make purchases. This value is ignored * on Android, so if your app is Android-only, you may provide any value. */ storeKitVersion: <a href="#storekit_version">STOREKIT_VERSION</a>; }</code>
+
+
 #### CustomerInfoUpdateListener
 
 Listener used on updated customer info
@@ -1468,7 +1541,29 @@ Listener used to receive log messages from the SDK.
 <code>(logLevel: <a href="#log_level">LOG_LEVEL</a>, message: string): void</code>
 
 
+#### SyncObserverModeAmazonPurchaseOptions
+
+<code><a href="#syncamazonpurchaseoptions">SyncAmazonPurchaseOptions</a></code>
+
+
 ### Enums
+
+
+#### PURCHASES_ARE_COMPLETED_BY_TYPE
+
+| Members          | Value                     | Description                                                                                                                                                                                                                                                                                                                                |
+| ---------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **`MY_APP`**     | <code>"MY_APP"</code>     | RevenueCat will **not** automatically acknowledge any purchases. You will have to do so manually. **Note:** failing to acknowledge a purchase within 3 days will lead to Google Play automatically issuing a refund to the user. For more info, see [revenuecat.com](https://docs.revenuecat.com/docs/observer-mode#option-2-client-side). |
+| **`REVENUECAT`** | <code>"REVENUECAT"</code> | RevenueCat will automatically acknowledge verified purchases. No action is required by you.                                                                                                                                                                                                                                                |
+
+
+#### STOREKIT_VERSION
+
+| Members          | Value                     | Description                                                                                                                                                                                                                                                    |
+| ---------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`STOREKIT_1`** | <code>"STOREKIT_1"</code> | Always use StoreKit 1.                                                                                                                                                                                                                                         |
+| **`STOREKIT_2`** | <code>"STOREKIT_2"</code> | Always use StoreKit 2 (StoreKit 1 will be used if StoreKit 2 is not available in the current device.) - Warning: Make sure you have an In-App Purchase Key configured in your app. Please see https://rev.cat/in-app-purchase-key-configuration for more info. |
+| **`DEFAULT`**    | <code>"DEFAULT"</code>    | Let RevenueCat use the most appropiate version of StoreKit                                                                                                                                                                                                     |
 
 
 #### ENTITLEMENT_VERIFICATION_MODE
@@ -1562,7 +1657,7 @@ Listener used to receive log messages from the SDK.
 | **`IMMEDIATE_WITH_TIME_PRORATION`**                 | <code>1</code> | Replacement takes effect immediately, and the remaining time will be prorated and credited to the user. This is the current default behavior.                                             |
 | **`IMMEDIATE_AND_CHARGE_PRORATED_PRICE`**           | <code>2</code> | Replacement takes effect immediately, and the billing cycle remains the same. The price for the remaining period will be charged. This option is only available for subscription upgrade. |
 | **`IMMEDIATE_WITHOUT_PRORATION`**                   | <code>3</code> | Replacement takes effect immediately, and the new price will be charged on next recurrence time. The billing cycle stays the same.                                                        |
-| **`DEFERRED`**                                      | <code>4</code> | Replacement takes effect when the old plan expires, and the new price will be charged at the same time.                                                                                   |
+| **`DEFERRED`**                                      | <code>6</code> | Replacement takes effect when the old plan expires, and the new price will be charged at the same time.                                                                                   |
 | **`IMMEDIATE_AND_CHARGE_FULL_PRICE`**               | <code>5</code> | Replacement takes effect immediately, and the user is charged full price of new plan and is given a full billing cycle of subscription, plus remaining prorated time from the old plan.   |
 
 
