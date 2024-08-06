@@ -1,3 +1,5 @@
+## v9 API Changes
+
 This latest release updates the Android SDK dependency from v7 to [v8](https://github.com/RevenueCat/purchases-android/releases/tag/6.0.0) to use BillingClient 7 and updates the iOS SDK dependency from v4 to v5 to use StoreKit 2 by default in the SDK.
 
 ### Migration Guides
@@ -69,4 +71,6 @@ await Purchases.configure({
 });
 ```
 
-Full migration guide to V9: [Capacitor - V9 API Migration Guide](migrations/v9-MIGRATION.md)
+### Reporting undocumented issues:
+
+Feel free to file an issue! [New RevenueCat Issue](https://github.com/RevenueCat/purchases-capacitor/issues/new/).
