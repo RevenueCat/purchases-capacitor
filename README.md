@@ -201,14 +201,14 @@ Sets a function to be called on updated customer info
 ### removeCustomerInfoUpdateListener(...)
 
 ```typescript
-removeCustomerInfoUpdateListener(listenerToRemove: PurchasesCallbackId) => Promise<{ wasRemoved: boolean; }>
+removeCustomerInfoUpdateListener(options: { listenerToRemove: PurchasesCallbackId; }) => Promise<{ wasRemoved: boolean; }>
 ```
 
 Removes a given <a href="#customerinfoupdatelistener">CustomerInfoUpdateListener</a>
 
-| Param                  | Type                | Description                                                                                              |
-| ---------------------- | ------------------- | -------------------------------------------------------------------------------------------------------- |
-| **`listenerToRemove`** | <code>string</code> | <a href="#customerinfoupdatelistener">CustomerInfoUpdateListener</a> reference of the listener to remove |
+| Param         | Type                                       | Description                                                                                                                                   |
+| ------------- | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`options`** | <code>{ listenerToRemove: string; }</code> | Include listenerToRemove, which is a <a href="#customerinfoupdatelistener">CustomerInfoUpdateListener</a> reference of the listener to remove |
 
 **Returns:** <code>Promise&lt;{ wasRemoved: boolean; }&gt;</code>
 
