@@ -66,9 +66,9 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
       'mock-callback-id',
     );
   }
-  removeCustomerInfoUpdateListener(
-    _listenerToRemove: string,
-  ): Promise<{ wasRemoved: boolean }> {
+  removeCustomerInfoUpdateListener(_options: {
+    listenerToRemove: string;
+  }): Promise<{ wasRemoved: boolean }> {
     return this.mockReturningFunctionIfEnabled(
       'removeCustomerInfoUpdateListener',
       { wasRemoved: false },
