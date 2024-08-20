@@ -188,12 +188,12 @@ export interface PurchasesPlugin {
 
   /**
    * Removes a given CustomerInfoUpdateListener
-   * @param {CustomerInfoUpdateListener} options Include listenerToRemove, which is a CustomerInfoUpdateListener 
+   * @param {CustomerInfoUpdateListener} options Include listenerToRemove, which is a CustomerInfoUpdateListener
    * reference of the listener to remove
    * @returns Promise with boolean. True if listener was removed, false otherwise
    */
   removeCustomerInfoUpdateListener(options: {
-    listenerToRemove: PurchasesCallbackId,
+    listenerToRemove: PurchasesCallbackId;
   }): Promise<{ wasRemoved: boolean }>;
 
   // TODO: Support addShouldPurchasePromoProductListener functionality
