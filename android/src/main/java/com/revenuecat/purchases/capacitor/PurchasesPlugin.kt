@@ -310,11 +310,10 @@ class PurchasesPlugin : Plugin() {
         getCustomerInfoCommon(getOnResult(call, CUSTOMER_INFO_KEY))
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun syncPurchases(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
-        syncPurchasesCommon()
-        call.resolve()
+        syncPurchasesCommon(getOnResult(call))
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_NONE)

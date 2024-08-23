@@ -24,7 +24,7 @@ CAP_PLUGIN(PurchasesPlugin, "Purchases",
            CAP_PLUGIN_METHOD(logOut, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(setLogLevel, CAPPluginReturnNone);
            CAP_PLUGIN_METHOD(getCustomerInfo, CAPPluginReturnPromise);
-           CAP_PLUGIN_METHOD(syncPurchases, CAPPluginReturnNone);
+           CAP_PLUGIN_METHOD(syncPurchases, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(syncObserverModeAmazonPurchase, CAPPluginReturnNone);
            CAP_PLUGIN_METHOD(enableAdServicesAttributionTokenCollection, CAPPluginReturnNone);
            CAP_PLUGIN_METHOD(isAnonymous, CAPPluginReturnPromise);
