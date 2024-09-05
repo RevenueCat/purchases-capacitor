@@ -194,9 +194,9 @@ removeCustomerInfoUpdateListener(options: { listenerToRemove: PurchasesCallbackI
 
 Removes a given <a href="#customerinfoupdatelistener">CustomerInfoUpdateListener</a>
 
-| Param         | Type                                       | Description                                                                                                                                   |
-| ------------- | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`options`** | <code>{ listenerToRemove: string; }</code> | Include listenerToRemove, which is a <a href="#customerinfoupdatelistener">CustomerInfoUpdateListener</a> reference of the listener to remove |
+| Param         | Type                                       | Description                                                                                         |
+| ------------- | ------------------------------------------ | --------------------------------------------------------------------------------------------------- |
+| **`options`** | <code>{ listenerToRemove: string; }</code> | Include listenerToRemove, which is a CustomerInfoUpdateListener reference of the listener to remove |
 
 **Returns:** <code>Promise&lt;{ wasRemoved: boolean; }&gt;</code>
 
