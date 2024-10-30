@@ -1,5 +1,6 @@
 ## RevenueCat SDK
 ### 📦 Dependency Updates
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 13.5.0 (#336) via RevenueCat Git Bot (@RCGitBot)
-* Bump fastlane from 2.223.1 to 2.224.0 (#334) via dependabot[bot] (@dependabot[bot])
-* Bump fastlane from 2.222.0 to 2.223.1 (#330) via dependabot[bot] (@dependabot[bot])
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 13.7.0 (#345) via RevenueCat Git Bot (@RCGitBot)
+* Bump cocoapods from 1.15.2 to 1.16.1 (#346) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane from 2.224.0 to 2.225.0 (#342) via dependabot[bot] (@dependabot[bot])
+* Bump danger from 9.5.0 to 9.5.1 (#341) via dependabot[bot] (@dependabot[bot])
