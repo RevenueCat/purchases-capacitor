@@ -1704,10 +1704,11 @@ Listener used to receive log messages from the SDK.
 
 #### IN_APP_MESSAGE_TYPE
 
-| Members                      | Value          | Description                                                                                                                |
-| ---------------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| **`BILLING_ISSUE`**          | <code>0</code> | In-app messages to indicate there has been a billing issue charging the user.                                              |
-| **`PRICE_INCREASE_CONSENT`** | <code>1</code> | iOS-only. This message will show if you increase the price of a subscription and the user needs to opt-in to the increase. |
-| **`GENERIC`**                | <code>2</code> | iOS-only. StoreKit generic messages.                                                                                       |
+| Members                      | Value          | Description                                                                                                                                 |
+| ---------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`BILLING_ISSUE`**          | <code>0</code> | In-app messages to indicate there has been a billing issue charging the user.                                                               |
+| **`PRICE_INCREASE_CONSENT`** | <code>1</code> | iOS-only. This message will show if you increase the price of a subscription and the user needs to opt-in to the increase.                  |
+| **`GENERIC`**                | <code>2</code> | iOS-only. StoreKit generic messages.                                                                                                        |
+| **`WIN_BACK_OFFER`**         | <code>3</code> | iOS-only. This message will show if the subscriber is eligible for an iOS win-back offer and will allow the subscriber to redeem the offer. |
 
 </docgen-api>
