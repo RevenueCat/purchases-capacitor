@@ -528,6 +528,11 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     updateLastFunction('isConfigured', isConfiguredResult);
   };
 
+  const goToWinBackOfferTestingScreen = async () => {
+    window.location.href = '/win-back-offer-testing';
+    updateLastFunctionWithoutContent('goToWinBackOfferTestingScreen');
+  };
+
   return (
     <div id="container">
       <IonCard id={'last_request_card'}>
@@ -716,6 +721,9 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         </IonButton>
         <IonButton size="small" onClick={isConfigured}>
           Is configured?
+        </IonButton>
+        <IonButton size="small" onClick={goToWinBackOfferTestingScreen}>
+          Go to win-back offer testing screen
         </IonButton>
       </div>
     </div>

@@ -82,6 +82,10 @@ This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package
 * [`isAnonymous()`](#isanonymous)
 * [`checkTrialOrIntroductoryPriceEligibility(...)`](#checktrialorintroductorypriceeligibility)
 * [`getPromotionalOffer(...)`](#getpromotionaloffer)
+* [`getEligibleWinBackOffersForProduct(...)`](#geteligiblewinbackoffersforproduct)
+* [`getEligibleWinBackOffersForPackage(...)`](#geteligiblewinbackoffersforpackage)
+* [`purchaseProductWithWinBackOffer(...)`](#purchaseproductwithwinbackoffer)
+* [`purchasePackageWithWinBackOffer(...)`](#purchasepackagewithwinbackoffer)
 * [`invalidateCustomerInfoCache()`](#invalidatecustomerinfocache)
 * [`presentCodeRedemptionSheet()`](#presentcoderedemptionsheet)
 * [`setAttributes(...)`](#setattributes)
@@ -571,6 +575,78 @@ iOS only. Use this function to retrieve the <a href="#purchasespromotionaloffer"
 | **`options`** | <code><a href="#getpromotionalofferoptions">GetPromotionalOfferOptions</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#purchasespromotionaloffer">PurchasesPromotionalOffer</a>&gt;</code>
+
+--------------------
+
+
+### getEligibleWinBackOffersForProduct(...)
+
+```typescript
+getEligibleWinBackOffersForProduct(product: PurchasesStoreProduct) => Promise<{ eligibleWinBackOffers: PurchasesWinBackOffer[]; } | undefined>
+```
+
+iOS only, requires iOS 18.0 or greater with StoreKit 2. Use this function to retrieve
+the eligible `PurchasesWinBackOffer`s that a subscriber is eligible for for a
+given <a href="#purchasesstoreproduct">`PurchasesStoreProduct`</a>.
+
+| Param         | Type                                                                    |
+| ------------- | ----------------------------------------------------------------------- |
+| **`product`** | <code><a href="#purchasesstoreproduct">PurchasesStoreProduct</a></code> |
+
+**Returns:** <code>Promise&lt;{ eligibleWinBackOffers: PurchasesWinBackOffer[]; }&gt;</code>
+
+--------------------
+
+
+### getEligibleWinBackOffersForPackage(...)
+
+```typescript
+getEligibleWinBackOffersForPackage(aPackage: PurchasesPackage) => Promise<{ eligibleWinBackOffers: PurchasesWinBackOffer[]; } | undefined>
+```
+
+iOS only, requires iOS 18.0 or greater with StoreKit 2. Use this function to retrieve
+the eligible `PurchasesWinBackOffer`s that a subscriber is eligible for for a
+given `PurchasesStorePackage`.
+
+| Param          | Type                                                          |
+| -------------- | ------------------------------------------------------------- |
+| **`aPackage`** | <code><a href="#purchasespackage">PurchasesPackage</a></code> |
+
+**Returns:** <code>Promise&lt;{ eligibleWinBackOffers: PurchasesWinBackOffer[]; }&gt;</code>
+
+--------------------
+
+
+### purchaseProductWithWinBackOffer(...)
+
+```typescript
+purchaseProductWithWinBackOffer(options: PurchaseProductWithWinBackOfferOptions) => Promise<MakePurchaseResult | undefined>
+```
+
+iOS only. Purchase a product applying a given win-back offer.
+
+| Param         | Type                                                                                                      |
+| ------------- | --------------------------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#purchaseproductwithwinbackofferoptions">PurchaseProductWithWinBackOfferOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#makepurchaseresult">MakePurchaseResult</a>&gt;</code>
+
+--------------------
+
+
+### purchasePackageWithWinBackOffer(...)
+
+```typescript
+purchasePackageWithWinBackOffer(options: PurchasePackageWithWinBackOfferOptions) => Promise<MakePurchaseResult | undefined>
+```
+
+iOS only. Purchase a package applying a given win-back offer.
+
+| Param         | Type                                                                                                      |
+| ------------- | --------------------------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#purchasepackagewithwinbackofferoptions">PurchasePackageWithWinBackOfferOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#makepurchaseresult">MakePurchaseResult</a>&gt;</code>
 
 --------------------
 
@@ -1476,6 +1552,27 @@ Holds the introductory price status
 | -------------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | **`product`**  | <code><a href="#purchasesstoreproduct">PurchasesStoreProduct</a></code>                 | The <a href="#purchasesstoreproduct">`PurchasesStoreProduct`</a> the user intends to purchase.            |
 | **`discount`** | <code><a href="#purchasesstoreproductdiscount">PurchasesStoreProductDiscount</a></code> | The <a href="#purchasesstoreproductdiscount">`PurchasesStoreProductDiscount`</a> to apply to the product. |
+
+
+#### PurchasesWinBackOffer
+
+Contains information about a Win-Back Offer in Apple's App Store. Req
+
+
+#### PurchaseProductWithWinBackOfferOptions
+
+| Prop               | Type                                                                    | Description                                                                                       |
+| ------------------ | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| **`product`**      | <code><a href="#purchasesstoreproduct">PurchasesStoreProduct</a></code> | The product you want to purchase                                                                  |
+| **`winBackOffer`** | <code><a href="#purchaseswinbackoffer">PurchasesWinBackOffer</a></code> | Win-back offer to apply to this purchase. Retrieve this using getEligibleWinBackOffersForProduct. |
+
+
+#### PurchasePackageWithWinBackOfferOptions
+
+| Prop               | Type                                                                    | Description                                                                                       |
+| ------------------ | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| **`package`**      | <code><a href="#purchasespackage">PurchasesPackage</a></code>           | The product you want to purchase                                                                  |
+| **`winBackOffer`** | <code><a href="#purchaseswinbackoffer">PurchasesWinBackOffer</a></code> | Win-back offer to apply to this purchase. Retrieve this using getEligibleWinBackOffersForPackage. |
 
 
 ### Type Aliases
