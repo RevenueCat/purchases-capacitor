@@ -30,6 +30,10 @@ CAP_PLUGIN(PurchasesPlugin, "Purchases",
            CAP_PLUGIN_METHOD(isAnonymous, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(checkTrialOrIntroductoryPriceEligibility, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getPromotionalOffer, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(getEligibleWinBackOffersForProduct, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(getEligibleWinBackOffersForPackage, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(purchaseProductWithWinBackOffer, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(purchasePackageWithWinBackOffer, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(invalidateCustomerInfoCache, CAPPluginReturnNone);
            CAP_PLUGIN_METHOD(presentCodeRedemptionSheet, CAPPluginReturnNone);
            CAP_PLUGIN_METHOD(setAttributes, CAPPluginReturnNone);
