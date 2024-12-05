@@ -8,7 +8,12 @@ import {
   IonCardTitle,
 } from '@ionic/react';
 import React, { useState } from 'react';
-import { Purchases } from '@revenuecat/purchases-capacitor';
+import {
+  Purchases,
+  PurchasesPackage,
+  PurchasesStoreProduct,
+  PurchasesWinBackOffer,
+} from '@revenuecat/purchases-capacitor';
 
 interface ContainerProps {}
 
@@ -50,14 +55,16 @@ const WinBackOfferTestingContainer: React.FC<ContainerProps> = () => {
     }
   };
 
-  const fetchEligibleWinBackOffersForProduct = async (product: any) => {
+  const fetchEligibleWinBackOffersForProduct = async (
+    product: PurchasesStoreProduct,
+  ) => {
     try {
       console.log('gonna call getEligibleWinBackOffersForProduct');
       console.log(product);
-      const offers = await Purchases.getEligibleWinBackOffersForProduct({
+      const offers = await Purchases.getEligibleWinBackOffersForProduct(
         product,
-      });
-      setProductWinBackOffers(offers.eligibleWinBackOffers || []);
+      );
+      setProductWinBackOffers(offers?.eligibleWinBackOffers || []);
     } catch (err) {
       console.log('Error fetching win-back offers:', err);
       setProductWinBackOffers([]);
@@ -66,11 +73,11 @@ const WinBackOfferTestingContainer: React.FC<ContainerProps> = () => {
 
   const fetchEligibleWinBackOffersForPackage = async (package_: any) => {
     try {
-      const offers = await Purchases.getEligibleWinBackOffersForPackage({
-        aPackage: package_,
-      });
+      const offers = await Purchases.getEligibleWinBackOffersForPackage(
+        package_,
+      );
       console.log('offers', offers);
-      setPackageWinBackOffers(offers.eligibleWinBackOffers || []);
+      setPackageWinBackOffers(offers?.eligibleWinBackOffers || []);
     } catch (err) {
       console.log('Error fetching win-back offers:', err);
       setPackageWinBackOffers([]);
@@ -115,10 +122,13 @@ const WinBackOfferTestingContainer: React.FC<ContainerProps> = () => {
     }
   };
 
-  const purchaseWinBackOfferForPackage = async (package_: any, offer: any) => {
+  const purchaseWinBackOfferForPackage = async (
+    package_: PurchasesPackage,
+    offer: PurchasesWinBackOffer,
+  ) => {
     try {
       const result = await Purchases.purchasePackageWithWinBackOffer({
-        aPackage: package_,
+        package: package_,
         winBackOffer: offer,
       });
       console.log('Win-Back Offer purchase successful:', result);
