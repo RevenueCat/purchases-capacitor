@@ -144,7 +144,7 @@ class PurchasesPlugin : Plugin() {
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun removeCustomerInfoUpdateListener(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
-        val callbackIDToRemove = call.getStringOrReject("callbackID") ?: return
+        val callbackIDToRemove = call.getStringOrReject("listenerToRemove") ?: return
         val wasRemoved = customerInfoListeners.remove(callbackIDToRemove)
         bridge?.getSavedCall(callbackIDToRemove)?.setKeepAlive(false)
         call.resolveWithMap(mapOf("wasRemoved" to wasRemoved))
