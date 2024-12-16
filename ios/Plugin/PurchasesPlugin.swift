@@ -341,7 +341,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
         }
 
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
-        guard let aPackage = options["aPackage"] as? [String: Any],
+        guard let aPackage = call.getOrRejectObject("aPackage") as? [String: Any],
               let product = aPackage["product"] as? [String: Any],
               let productID = product["identifier"] as? String else {
             call.reject("Package did not contain a product with a product identifier.")

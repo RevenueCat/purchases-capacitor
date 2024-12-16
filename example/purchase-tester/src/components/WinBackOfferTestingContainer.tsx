@@ -126,7 +126,7 @@ const WinBackOfferTestingContainer: React.FC<ContainerProps> = () => {
   ) => {
     try {
       const result = await Purchases.purchasePackageWithWinBackOffer({
-        package: package_,
+        aPackage: package_,
         winBackOffer: offer,
       });
       console.log('Win-Back Offer purchase successful:', result);
