@@ -71,7 +71,7 @@
         "name" : "Offer Code Redeem Sheet"
       }
     ],
-    "_timeRate" : 1003
+    "_timeRate" : 1002
   },
   "subscriptionGroups" : [
     {
@@ -95,8 +95,8 @@
           "introductoryOffer" : null,
           "localizations" : [
             {
-              "description" : "",
-              "displayName" : "",
+              "description" : "this is a description",
+              "displayName" : "Subscription",
               "locale" : "en_US"
             }
           ],

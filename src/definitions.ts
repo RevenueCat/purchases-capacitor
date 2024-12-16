@@ -68,6 +68,20 @@ export interface PurchaseDiscountedProductOptions {
   discount: PurchasesPromotionalOffer;
 }
 
+export interface GetEligibleWinBackOffersForProductOptions {
+  /**
+   * The product you want to fetch eligible win-back offers for
+   */
+  product: PurchasesStoreProduct;
+}
+
+export interface GetEligibleWinBackOffersForPackageOptions {
+  /**
+   * The package you want to fetch eligible win-back offers for
+   */
+  aPackage: PurchasesPackage;
+}
+
 export interface PurchaseProductWithWinBackOfferOptions {
   /**
    * The product you want to purchase
@@ -83,7 +97,7 @@ export interface PurchasePackageWithWinBackOfferOptions {
   /**
    * The product you want to purchase
    */
-  package: PurchasesPackage;
+  aPackage: PurchasesPackage;
   /**
    * Win-back offer to apply to this purchase. Retrieve this using getEligibleWinBackOffersForPackage.
    */
@@ -491,7 +505,9 @@ export interface PurchasesPlugin {
    * Null is returned for Android and incompatible iOS versions. The promise will be rejected if configure has not been
    * called yet.
    */
-  getEligibleWinBackOffersForProduct(product: PurchasesStoreProduct): Promise<
+  getEligibleWinBackOffersForProduct(
+    options: GetEligibleWinBackOffersForProductOptions,
+  ): Promise<
     | {
         eligibleWinBackOffers: PurchasesWinBackOffer[];
       }
@@ -508,7 +524,9 @@ export interface PurchasesPlugin {
    * Null is returned for Android and incompatible iOS versions. The promise will be rejected if configure has not been
    * called yet.
    */
-  getEligibleWinBackOffersForPackage(aPackage: PurchasesPackage): Promise<
+  getEligibleWinBackOffersForPackage(
+    options: GetEligibleWinBackOffersForPackageOptions,
+  ): Promise<
     | {
         eligibleWinBackOffers: PurchasesWinBackOffer[];
       }

@@ -318,9 +318,9 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
         }
 
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
-        guard let storeProduct = call.getOrRejectObject("product") else { return }
-        guard let productID = storeProduct["identifier"] as? String else {
-            call.reject("Product parameter did not have identifier key")
+        guard let product = call.getOrRejectObject("product") as? [String: Any],
+              let productID = product["identifier"] as? String else {
+            call.reject("Product does not contain an identifier.")
             return
         }
        
@@ -341,8 +341,8 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
         }
 
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
-        guard let aPackage = call.getOrRejectObject("aPackage") else { return }
-        guard let product = aPackage["product"] as? [String: Any],
+        guard let aPackage = options["aPackage"] as? [String: Any],
+              let product = aPackage["product"] as? [String: Any],
               let productID = product["identifier"] as? String else {
             call.reject("Package did not contain a product with a product identifier.")
             return
@@ -367,7 +367,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
         guard let product = call.getOrRejectObject("product") else { return }
         guard let productID = product["identifier"] as? String else {
-            call.reject("Producdt does not contain an identifier.")
+            call.reject("Product does not contain an identifier.")
             return
         }
 

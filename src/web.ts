@@ -15,7 +15,6 @@ import type {
   PurchasesEntitlementInfo,
   PurchasesOffering,
   PurchasesOfferings,
-  PurchasesPackage,
   PurchasesPromotionalOffer,
   PurchasesStoreProduct,
   PurchasesStoreTransaction,
@@ -28,6 +27,8 @@ import {
 } from '@revenuecat/purchases-typescript-internal-esm';
 
 import type {
+  GetEligibleWinBackOffersForProductOptions,
+  GetEligibleWinBackOffersForPackageOptions,
   GetProductOptions,
   GetPromotionalOfferOptions,
   PurchaseDiscountedPackageOptions,
@@ -271,7 +272,7 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     );
   }
   getEligibleWinBackOffersForProduct(
-    _product: PurchasesStoreProduct,
+    _options: GetEligibleWinBackOffersForProductOptions,
   ): Promise<{ eligibleWinBackOffers: PurchasesWinBackOffer[] } | undefined> {
     return this.mockReturningFunctionIfEnabled(
       'getEligibleWinBackOffersForProduct',
@@ -279,7 +280,7 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     );
   }
   getEligibleWinBackOffersForPackage(
-    _aPackage: PurchasesPackage,
+    _options: GetEligibleWinBackOffersForPackageOptions,
   ): Promise<{ eligibleWinBackOffers: PurchasesWinBackOffer[] } | undefined> {
     return this.mockReturningFunctionIfEnabled(
       'getEligibleWinBackOffersForPackage',

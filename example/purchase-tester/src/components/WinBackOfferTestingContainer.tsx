@@ -59,11 +59,9 @@ const WinBackOfferTestingContainer: React.FC<ContainerProps> = () => {
     product: PurchasesStoreProduct,
   ) => {
     try {
-      console.log('gonna call getEligibleWinBackOffersForProduct');
-      console.log(product);
-      const offers = await Purchases.getEligibleWinBackOffersForProduct(
+      const offers = await Purchases.getEligibleWinBackOffersForProduct({
         product,
-      );
+      });
       setProductWinBackOffers(offers?.eligibleWinBackOffers || []);
     } catch (err) {
       console.log('Error fetching win-back offers:', err);
@@ -71,11 +69,11 @@ const WinBackOfferTestingContainer: React.FC<ContainerProps> = () => {
     }
   };
 
-  const fetchEligibleWinBackOffersForPackage = async (package_: any) => {
+  const fetchEligibleWinBackOffersForPackage = async (aPackage: any) => {
     try {
-      const offers = await Purchases.getEligibleWinBackOffersForPackage(
-        package_,
-      );
+      const offers = await Purchases.getEligibleWinBackOffersForPackage({
+        aPackage,
+      });
       console.log('offers', offers);
       setPackageWinBackOffers(offers?.eligibleWinBackOffers || []);
     } catch (err) {
