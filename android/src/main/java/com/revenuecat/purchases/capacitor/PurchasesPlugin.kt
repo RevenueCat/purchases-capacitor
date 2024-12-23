@@ -98,6 +98,7 @@ class PurchasesPlugin : Plugin() {
         val shouldShowInAppMessages = call.getBoolean("shouldShowInAppMessagesAutomatically")
         val entitlementVerificationMode = call.getString("entitlementVerificationMode")
         val pendingTransactionsForPrepaidPlansEnabled = call.getBoolean("pendingTransactionsForPrepaidPlansEnabled")
+        val diagnosticsEnabled = call.getBoolean("diagnosticsEnabled")
 
         configure(
             context.applicationContext,
@@ -109,6 +110,7 @@ class PurchasesPlugin : Plugin() {
             shouldShowInAppMessagesAutomatically = shouldShowInAppMessages,
             verificationMode = entitlementVerificationMode,
             pendingTransactionsForPrepaidPlansEnabled = pendingTransactionsForPrepaidPlansEnabled,
+            diagnosticsEnabled = diagnosticsEnabled,
         )
         Purchases.sharedInstance.updatedCustomerInfoListener = UpdatedCustomerInfoListener { customerInfo ->
             for (callbackId in customerInfoListeners) {

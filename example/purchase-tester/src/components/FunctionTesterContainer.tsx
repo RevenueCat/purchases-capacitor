@@ -88,6 +88,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
       },
       entitlementVerificationMode: ENTITLEMENT_VERIFICATION_MODE.INFORMATIONAL,
       pendingTransactionsForPrepaidPlansEnabled: true,
+      diagnosticsEnabled: true,
     });
     await Purchases.addCustomerInfoUpdateListener(customerInfo => {
       console.log(
