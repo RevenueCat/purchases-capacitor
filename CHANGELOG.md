@@ -1,3 +1,8 @@
+## 9.1.0
+## RevenueCat SDK
+### ✨ New Features
+* Add diagnostics support (#376) via Toni Rico (@tonidero)
+
 ## 9.0.9
 ## RevenueCat SDK
 ### 📦 Dependency Updates
