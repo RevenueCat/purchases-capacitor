@@ -533,6 +533,53 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     updateLastFunctionWithoutContent('goToWinBackOfferTestingScreen');
   };
 
+  const purchaseProductForWinBackTesting = async () => {
+    try {
+      const products = await Purchases.getProducts({
+        productIdentifiers: ['com.revenuecat.monthly_4.99.1_week_intro'],
+      });
+      if (products.products.length > 0) {
+        const product = products.products[0]
+        const purchaseResult = await Purchases.purchaseStoreProduct({
+          product
+        });
+        console.log('Purchase successful:', purchaseResult);
+      } else {
+        console.log('No products available!');
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const fetchAndRedeemWinBackOfferForProduct = async () => {
+      const products = await Purchases.getProducts({
+        productIdentifiers: ['com.revenuecat.monthly_4.99.1_week_intro'],
+      });
+      const product = products.products[0];
+      const offers = await Purchases.getEligibleWinBackOffersForProduct({
+        product,
+      });
+
+      if(offers === undefined) {
+        console.log('No win-back offers found!')
+        return;
+      } else {
+        console.log('Found win-back offers! ' + offers);
+      }
+
+      try {
+        const result = await Purchases.purchaseProductWithWinBackOffer({
+          product,
+          winBackOffer: offers.eligibleWinBackOffers[0],
+        });
+        console.log('Win-Back Offer purchase successful:', result);
+      } catch (err) {
+        console.log('Win-Back Offer purchase failed:', err);
+      }
+
+  }
+
   return (
     <div id="container">
       <IonCard id={'last_request_card'}>
@@ -724,6 +771,12 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         </IonButton>
         <IonButton size="small" onClick={goToWinBackOfferTestingScreen}>
           Go to win-back offer testing screen
+        </IonButton>
+        <IonButton size="small" onClick={purchaseProductForWinBackTesting}>
+          Purchase Product for WinBack Testing
+        </IonButton>
+        <IonButton size="small" onClick={fetchAndRedeemWinBackOfferForProduct}>
+          Fetch & Redeem WinBackOffer for Product
         </IonButton>
       </div>
     </div>
