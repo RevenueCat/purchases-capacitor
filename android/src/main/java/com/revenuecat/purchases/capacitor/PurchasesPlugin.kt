@@ -77,7 +77,7 @@ class PurchasesPlugin : Plugin() {
 
     companion object {
         private const val PLATFORM_NAME = "capacitor"
-        private const val PLUGIN_VERSION = "9.0.7"
+        private const val PLUGIN_VERSION = "9.1.0"
 
         private const val CUSTOMER_INFO_KEY = "customerInfo"
     }
@@ -98,6 +98,7 @@ class PurchasesPlugin : Plugin() {
         val shouldShowInAppMessages = call.getBoolean("shouldShowInAppMessagesAutomatically")
         val entitlementVerificationMode = call.getString("entitlementVerificationMode")
         val pendingTransactionsForPrepaidPlansEnabled = call.getBoolean("pendingTransactionsForPrepaidPlansEnabled")
+        val diagnosticsEnabled = call.getBoolean("diagnosticsEnabled")
 
         configure(
             context.applicationContext,
@@ -109,6 +110,7 @@ class PurchasesPlugin : Plugin() {
             shouldShowInAppMessagesAutomatically = shouldShowInAppMessages,
             verificationMode = entitlementVerificationMode,
             pendingTransactionsForPrepaidPlansEnabled = pendingTransactionsForPrepaidPlansEnabled,
+            diagnosticsEnabled = diagnosticsEnabled,
         )
         Purchases.sharedInstance.updatedCustomerInfoListener = UpdatedCustomerInfoListener { customerInfo ->
             for (callbackId in customerInfoListeners) {
@@ -144,7 +146,7 @@ class PurchasesPlugin : Plugin() {
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun removeCustomerInfoUpdateListener(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
-        val callbackIDToRemove = call.getStringOrReject("callbackID") ?: return
+        val callbackIDToRemove = call.getStringOrReject("listenerToRemove") ?: return
         val wasRemoved = customerInfoListeners.remove(callbackIDToRemove)
         bridge?.getSavedCall(callbackIDToRemove)?.setKeepAlive(false)
         call.resolveWithMap(mapOf("wasRemoved" to wasRemoved))
