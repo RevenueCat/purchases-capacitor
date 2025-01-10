@@ -582,7 +582,7 @@ iOS only. Use this function to retrieve the <a href="#purchasespromotionaloffer"
 ### getEligibleWinBackOffersForProduct(...)
 
 ```typescript
-getEligibleWinBackOffersForProduct(options: GetEligibleWinBackOffersForProductOptions) => Promise<{ eligibleWinBackOffers: PurchasesWinBackOffer[]; } | undefined>
+getEligibleWinBackOffersForProduct(options: GetEligibleWinBackOffersForProductOptions) => Promise<{ eligibleWinBackOffers: PurchasesWinBackOffer[]; }>
 ```
 
 iOS only, requires iOS 18.0 or greater with StoreKit 2. Use this function to retrieve
@@ -601,7 +601,7 @@ given <a href="#purchasesstoreproduct">`PurchasesStoreProduct`</a>.
 ### getEligibleWinBackOffersForPackage(...)
 
 ```typescript
-getEligibleWinBackOffersForPackage(options: GetEligibleWinBackOffersForPackageOptions) => Promise<{ eligibleWinBackOffers: PurchasesWinBackOffer[]; } | undefined>
+getEligibleWinBackOffersForPackage(options: GetEligibleWinBackOffersForPackageOptions) => Promise<{ eligibleWinBackOffers: PurchasesWinBackOffer[]; }>
 ```
 
 iOS only, requires iOS 18.0 or greater with StoreKit 2. Use this function to retrieve
@@ -623,7 +623,7 @@ given `PurchasesStorePackage`.
 purchaseProductWithWinBackOffer(options: PurchaseProductWithWinBackOfferOptions) => Promise<MakePurchaseResult | undefined>
 ```
 
-iOS only. Purchase a product applying a given win-back offer.
+iOS only, requires iOS 18.0 or greater with StoreKit 2. Purchase a product applying a given win-back offer.
 
 | Param         | Type                                                                                                      |
 | ------------- | --------------------------------------------------------------------------------------------------------- |
@@ -640,7 +640,7 @@ iOS only. Purchase a product applying a given win-back offer.
 purchasePackageWithWinBackOffer(options: PurchasePackageWithWinBackOfferOptions) => Promise<MakePurchaseResult | undefined>
 ```
 
-iOS only. Purchase a package applying a given win-back offer.
+iOS only, requires iOS 18.0 or greater with StoreKit 2. Purchase a package applying a given win-back offer.
 
 | Param         | Type                                                                                                      |
 | ------------- | --------------------------------------------------------------------------------------------------------- |
@@ -1557,7 +1557,7 @@ Holds the introductory price status
 
 #### PurchasesWinBackOffer
 
-Contains information about a Win-Back Offer in Apple's App Store. Req
+Holds the information about a Win-Back Offer in Apple's App Store.
 
 
 #### GetEligibleWinBackOffersForProductOptions
