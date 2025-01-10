@@ -82,10 +82,6 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
   const configure = async () => {
     await Purchases.configure({
       apiKey: REVENUECAT_API_KEY,
-      purchasesAreCompletedBy: {
-        type: PURCHASES_ARE_COMPLETED_BY_TYPE.REVENUECAT,
-        storeKitVersion: STOREKIT_VERSION.STOREKIT_2,
-      },
       entitlementVerificationMode: ENTITLEMENT_VERIFICATION_MODE.INFORMATIONAL,
       pendingTransactionsForPrepaidPlansEnabled: true,
       diagnosticsEnabled: true,
