@@ -502,7 +502,7 @@ export interface PurchasesPlugin {
    *
    * @returns { Promise<{ eligibleWinBackOffers: PurchasesWinBackOffer[] }> } A dictionary containing an array of `PurchasesWinBackOffer`s that
    * the subscriber is eligible for for the given `PurchasesStoreProduct`.
-   * Null is returned for Android and incompatible iOS versions. The promise will be rejected if configure has not been
+   * An error is thrown for Android and incompatible iOS versions. The promise will be rejected if configure has not been
    * called yet.
    */
   getEligibleWinBackOffersForProduct(

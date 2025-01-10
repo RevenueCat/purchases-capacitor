@@ -370,25 +370,25 @@ class PurchasesPlugin : Plugin() {
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun getEligibleWinBackOffersForProduct(call: PluginCall) {
         logNotSupportedFunctionalityInAndroid("getEligibleWinBackOffersForProduct")
-        call.resolve()
+        call.unavailable()
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun getEligibleWinBackOffersForPackage(call: PluginCall) {
         logNotSupportedFunctionalityInAndroid("getEligibleWinBackOffersForPackage")
-        call.resolve()
+        call.unavailable()
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun purchaseProductWithWinBackOffer(call: PluginCall) {
         logNotSupportedFunctionalityInAndroid("purchaseProductWithWinBackOffer")
-        call.resolve()
+        call.unavailable()
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun purchasePackageWithWinBackOffer(call: PluginCall) {
         logNotSupportedFunctionalityInAndroid("purchasePackageWithWinBackOffer")
-        call.resolve()
+        call.unavailable()
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_NONE)
