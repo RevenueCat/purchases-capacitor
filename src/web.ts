@@ -273,18 +273,18 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
   }
   getEligibleWinBackOffersForProduct(
     _options: GetEligibleWinBackOffersForProductOptions,
-  ): Promise<{ eligibleWinBackOffers: PurchasesWinBackOffer[] } | undefined> {
+  ): Promise<{ eligibleWinBackOffers: PurchasesWinBackOffer[] }> {
     return this.mockReturningFunctionIfEnabled(
       'getEligibleWinBackOffersForProduct',
-      undefined,
+      { eligibleWinBackOffers: [] },
     );
   }
   getEligibleWinBackOffersForPackage(
     _options: GetEligibleWinBackOffersForPackageOptions,
-  ): Promise<{ eligibleWinBackOffers: PurchasesWinBackOffer[] } | undefined> {
+  ): Promise<{ eligibleWinBackOffers: PurchasesWinBackOffer[] }> {
     return this.mockReturningFunctionIfEnabled(
       'getEligibleWinBackOffersForPackage',
-      undefined,
+      { eligibleWinBackOffers: [] },
     );
   }
   purchaseProductWithWinBackOffer(

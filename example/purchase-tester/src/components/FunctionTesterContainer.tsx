@@ -82,10 +82,6 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
   const configure = async () => {
     await Purchases.configure({
       apiKey: REVENUECAT_API_KEY,
-      purchasesAreCompletedBy: {
-        type: PURCHASES_ARE_COMPLETED_BY_TYPE.MY_APP,
-        storeKitVersion: STOREKIT_VERSION.STOREKIT_2,
-      },
       entitlementVerificationMode: ENTITLEMENT_VERIFICATION_MODE.INFORMATIONAL,
       pendingTransactionsForPrepaidPlansEnabled: true,
       diagnosticsEnabled: true,
@@ -529,57 +525,184 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     updateLastFunction('isConfigured', isConfiguredResult);
   };
 
-  const goToWinBackOfferTestingScreen = async () => {
-    window.location.href = '/win-back-offer-testing';
-    updateLastFunctionWithoutContent('goToWinBackOfferTestingScreen');
-  };
-
   const purchaseProductForWinBackTesting = async () => {
     try {
       const products = await Purchases.getProducts({
         productIdentifiers: ['com.revenuecat.monthly_4.99.1_week_intro'],
       });
       if (products.products.length > 0) {
-        const product = products.products[0]
+        const product = products.products[0];
         const purchaseResult = await Purchases.purchaseStoreProduct({
-          product
+          product,
         });
         console.log('Purchase successful:', purchaseResult);
+        updateLastFunction('purchaseProductForWinBackTesting', JSON.stringify(purchaseResult));
       } else {
         console.log('No products available!');
+        updateLastFunction('purchaseProductForWinBackTesting', 'No products available!');
       }
     } catch (err) {
       console.log(err);
+      updateLastFunction('purchaseProductForWinBackTesting', JSON.stringify(err));
     }
-  }
+  };
 
   const fetchAndRedeemWinBackOfferForProduct = async () => {
-      const products = await Purchases.getProducts({
-        productIdentifiers: ['com.revenuecat.monthly_4.99.1_week_intro'],
-      });
-      const product = products.products[0];
-      const offers = await Purchases.getEligibleWinBackOffersForProduct({
-        product,
-      });
+    const products = await Purchases.getProducts({
+      productIdentifiers: ['com.revenuecat.monthly_4.99.1_week_intro'],
+    });
+    const product = products.products[0];
 
-      if(offers === undefined) {
-        console.log('No win-back offers found!')
+    try {
+      const { eligibleWinBackOffers } = await Purchases.getEligibleWinBackOffersForProduct({
+          product,
+        });
+
+      if (eligibleWinBackOffers.length === 0) {
+        updateLastFunction(
+          'fetchAndRedeemWinBackOfferForProduct',
+          'no win back offers found',
+        );
         return;
-      } else {
-        console.log('Found win-back offers! ' + offers);
       }
 
       try {
         const result = await Purchases.purchaseProductWithWinBackOffer({
           product,
-          winBackOffer: offers.eligibleWinBackOffers[0],
+          winBackOffer: eligibleWinBackOffers[0],
         });
         console.log('Win-Back Offer purchase successful:', result);
+        updateLastFunction(
+          'fetchAndRedeemWinBackOfferForProduct',
+          JSON.stringify(result),
+        );
       } catch (err) {
         console.log('Win-Back Offer purchase failed:', err);
+        updateLastFunction(
+          'fetchAndRedeemWinBackOfferForProduct',
+          JSON.stringify(err),
+        );
+      }
+    } catch (err) {
+      console.log('fetchAndRedeemWinBackOfferForProduct failed: ' + JSON.stringify(err));
+      updateLastFunction('fetchAndRedeemWinBackOfferForProduct', JSON.stringify(err));
+    }
+    
+  };
+
+  const purchasePackageForWinBackTesting = async () => {
+    try {
+      const offering = (await Purchases.getOfferings()).current;
+      if (!offering || !offering.availablePackages) {
+        console.log('No offering or packages available');
+        updateLastFunction(
+          'purchasePackageForWinBackTesting',
+          'no offering or packages available',
+        );
+        return;
       }
 
-  }
+      const targetPackage = offering.availablePackages.find(
+        pkg =>
+          pkg.product.identifier === 'com.revenuecat.monthly_4.99.1_week_intro',
+      );
+
+      if (!targetPackage) {
+        console.log('Package with specified product ID not found');
+        updateLastFunction(
+          'purchasePackageForWinBackTesting',
+          'package with specified product ID not found',
+        );
+        return;
+      }
+
+      Purchases.purchasePackage({
+        aPackage: targetPackage,
+      });
+    } catch (err) {
+      console.log(err);
+      updateLastFunction(
+        'purchasePackageForWinBackTesting',
+        JSON.stringify(err),
+      );
+    }
+  };
+
+  const fetchAndRedeemWinBackOfferForPackage = async () => {
+    const offering = (await Purchases.getOfferings()).current;
+    if (!offering || !offering.availablePackages) {
+      console.log('No offering or packages available');
+      updateLastFunction(
+        'fetchAndRedeemWinBackOfferForPackage',
+        'no offering or packages available',
+      );
+      return;
+    }
+
+    console.log('Offering:', JSON.stringify(offering));
+    const targetPackage = offering.availablePackages.find(
+      pkg =>
+        pkg.product.identifier === 'com.revenuecat.monthly_4.99.1_week_intro',
+    );
+
+    if (!targetPackage) {
+      console.log('Package with specified product ID not found');
+      updateLastFunction(
+        'fetchAndRedeemWinBackOfferForPackage',
+        'package with specified product ID not found',
+      );
+      return;
+    }
+
+    try {
+      const { eligibleWinBackOffers } =
+        await Purchases.getEligibleWinBackOffersForPackage({
+          aPackage: targetPackage,
+        });
+      console.log(
+        'eligible win back offers:',
+        JSON.stringify(eligibleWinBackOffers),
+      );
+
+      if (eligibleWinBackOffers.length === 0) {
+        console.log('No win-back offers found!');
+        updateLastFunction(
+          'fetchAndRedeemWinBackOfferForPackage',
+          'no win back offers found',
+        );
+        return;
+      } else {
+        console.log('Found eligible win-back offers! ' + eligibleWinBackOffers);
+      }
+
+      try {
+        const winBackOffer = eligibleWinBackOffers[0];
+        if (winBackOffer) {
+          const result = await Purchases.purchasePackageWithWinBackOffer({
+            aPackage: targetPackage,
+            winBackOffer,
+          });
+          console.log('Win-Back Offer purchase successful:', result);
+          updateLastFunction(
+            'fetchAndRedeemWinBackOfferForPackage',
+            JSON.stringify(result),
+          );
+        }
+      } catch (err) {
+        console.log('Win-Back Offer purchase failed:', err);
+        updateLastFunction(
+          'fetchAndRedeemWinBackOfferForPackage',
+          JSON.stringify(err),
+        );
+      }
+    } catch (err) {
+      console.log('getEligibleWinBackOffersForPackage failed:', err);
+      updateLastFunction(
+        'fetchAndRedeemWinBackOfferForPackage',
+        JSON.stringify(err),
+      );
+    }
+  };
 
   return (
     <div id="container">
@@ -770,14 +893,17 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         <IonButton size="small" onClick={isConfigured}>
           Is configured?
         </IonButton>
-        <IonButton size="small" onClick={goToWinBackOfferTestingScreen}>
-          Go to win-back offer testing screen
-        </IonButton>
         <IonButton size="small" onClick={purchaseProductForWinBackTesting}>
           Purchase Product for WinBack Testing
         </IonButton>
         <IonButton size="small" onClick={fetchAndRedeemWinBackOfferForProduct}>
           Fetch & Redeem WinBackOffer for Product
+        </IonButton>
+        <IonButton size="small" onClick={purchasePackageForWinBackTesting}>
+          Purchase Package for WinBack Testing
+        </IonButton>
+        <IonButton size="small" onClick={fetchAndRedeemWinBackOfferForPackage}>
+          Fetch & Redeem WinBackOffer for Package
         </IonButton>
       </div>
     </div>

@@ -320,7 +320,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
         }
 
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
-        guard let product = call.getOrRejectObject("product") as? [String: Any],
+        guard let product = call.getOrRejectObject("product"),
               let productID = product["identifier"] as? String else {
             call.reject("Product does not contain an identifier.")
             return
@@ -343,7 +343,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
         }
 
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
-        guard let aPackage = call.getOrRejectObject("aPackage") as? [String: Any],
+        guard let aPackage = call.getOrRejectObject("aPackage"),
               let product = aPackage["product"] as? [String: Any],
               let productID = product["identifier"] as? String else {
             call.reject("Package did not contain a product with a product identifier.")
