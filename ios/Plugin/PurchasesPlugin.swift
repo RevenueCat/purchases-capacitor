@@ -406,9 +406,14 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
             return
         }
 
+        guard let presentedOfferingContext = aPackage["presentedOfferingContext"] as? [String: Any] else {
+            call.reject("aPackage parameter did not have presentedOfferingContext key")
+            return
+        }
+
         CommonFunctionality.purchase(
             package: packageID,
-            presentedOfferingContext: aPackage["presentedOfferingContext"] as? [String: Any] ?? [:],
+            presentedOfferingContext: presentedOfferingContext,
             winBackOfferID: winBackOfferID,
             completion: self.getCompletionBlockHandler(call)
         )
