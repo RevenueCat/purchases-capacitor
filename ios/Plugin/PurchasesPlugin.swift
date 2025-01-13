@@ -312,6 +312,113 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
                                              completion: self.getCompletionBlockHandler(call))
     }
 
+    @objc func getEligibleWinBackOffersForProduct(_ call: CAPPluginCall) {
+        guard #available(iOS 18.0, macOS 15.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *) else {
+            NSLog("[Purchases] Warning: iOS win-back offers are only available on iOS 18.0+")
+            call.unavailable()
+            return
+        }
+
+        guard self.rejectIfPurchasesNotConfigured(call) else { return }
+        guard let product = call.getOrRejectObject("product"),
+              let productID = product["identifier"] as? String else {
+            call.reject("Product does not contain an identifier.")
+            return
+        }
+       
+        CommonFunctionality.eligibleWinBackOffers(
+            for: productID,
+            completion: self.getCompletionBlockHandlerForArrayResponse(
+                call,
+                wrapperKey: "eligibleWinBackOffers"
+            )
+        )
+    }
+
+    @objc func getEligibleWinBackOffersForPackage(_ call: CAPPluginCall) {
+        guard #available(iOS 18.0, macOS 15.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *) else {
+            NSLog("[Purchases] Warning: iOS win-back offers are only available on iOS 18.0+")
+            call.unavailable()
+            return
+        }
+
+        guard self.rejectIfPurchasesNotConfigured(call) else { return }
+        guard let aPackage = call.getOrRejectObject("aPackage"),
+              let product = aPackage["product"] as? [String: Any],
+              let productID = product["identifier"] as? String else {
+            call.reject("Package did not contain a product with a product identifier.")
+            return
+        }
+       
+        CommonFunctionality.eligibleWinBackOffers(
+            for: productID,
+            completion: self.getCompletionBlockHandlerForArrayResponse(
+                call,
+                wrapperKey: "eligibleWinBackOffers"
+            )
+        )
+    }
+
+    @objc func purchaseProductWithWinBackOffer(_ call: CAPPluginCall) {
+        guard #available(iOS 18.0, macOS 15.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *) else {
+            NSLog("[Purchases] Warning: iOS win-back offers are only available on iOS 18.0+")
+            call.unavailable()
+            return
+        }
+
+        guard self.rejectIfPurchasesNotConfigured(call) else { return }
+        guard let product = call.getOrRejectObject("product") else { return }
+        guard let productID = product["identifier"] as? String else {
+            call.reject("Product does not contain an identifier.")
+            return
+        }
+
+        guard let winBackOffer = call.getOrRejectObject("winBackOffer") else { return }
+        guard let winBackOfferID = winBackOffer["identifier"] as? String else {
+            call.reject("Win-back offer does not contain an identifier.")
+            return
+        }
+
+        CommonFunctionality.purchase(
+            product: productID,
+            winBackOfferID: winBackOfferID,
+            completion: self.getCompletionBlockHandler(call)
+        )
+    }
+
+    @objc func purchasePackageWithWinBackOffer(_ call: CAPPluginCall) {
+        guard #available(iOS 18.0, macOS 15.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *) else {
+            NSLog("[Purchases] Warning: iOS win-back offers are only available on iOS 18.0+")
+            call.unavailable()
+            return
+        }
+
+        guard self.rejectIfPurchasesNotConfigured(call) else { return }
+        guard let aPackage = call.getOrRejectObject("aPackage") else { return }
+        guard let packageID = aPackage["identifier"] as? String else {
+            call.reject("Package does not contain an identifier.")
+            return
+        }
+
+        guard let winBackOffer = call.getOrRejectObject("winBackOffer") else { return }
+        guard let winBackOfferID = winBackOffer["identifier"] as? String else {
+            call.reject("Win-back offer does not contain an identifier.")
+            return
+        }
+
+        guard let presentedOfferingContext = aPackage["presentedOfferingContext"] as? [String: Any] else {
+            call.reject("aPackage parameter did not have presentedOfferingContext key")
+            return
+        }
+
+        CommonFunctionality.purchase(
+            package: packageID,
+            presentedOfferingContext: presentedOfferingContext,
+            winBackOfferID: winBackOfferID,
+            completion: self.getCompletionBlockHandler(call)
+        )
+    }
+
     @objc func invalidateCustomerInfoCache(_ call: CAPPluginCall) {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
         CommonFunctionality.invalidateCustomerInfoCache()

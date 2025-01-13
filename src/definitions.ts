@@ -21,6 +21,7 @@ import type {
   IN_APP_MESSAGE_TYPE,
   PurchasesOffering,
   PurchasesStoreTransaction,
+  PurchasesWinBackOffer,
 } from '@revenuecat/purchases-typescript-internal-esm';
 
 export * from '@revenuecat/purchases-typescript-internal-esm';
@@ -65,6 +66,42 @@ export interface PurchaseDiscountedProductOptions {
    * Discount to apply to this package. Retrieve this discount using getPromotionalOffer.
    */
   discount: PurchasesPromotionalOffer;
+}
+
+export interface GetEligibleWinBackOffersForProductOptions {
+  /**
+   * The product you want to fetch eligible win-back offers for
+   */
+  product: PurchasesStoreProduct;
+}
+
+export interface GetEligibleWinBackOffersForPackageOptions {
+  /**
+   * The package you want to fetch eligible win-back offers for
+   */
+  aPackage: PurchasesPackage;
+}
+
+export interface PurchaseProductWithWinBackOfferOptions {
+  /**
+   * The product you want to purchase
+   */
+  product: PurchasesStoreProduct;
+  /**
+   * Win-back offer to apply to this purchase. Retrieve this using getEligibleWinBackOffersForProduct.
+   */
+  winBackOffer: PurchasesWinBackOffer;
+}
+
+export interface PurchasePackageWithWinBackOfferOptions {
+  /**
+   * The package you want to purchase
+   */
+  aPackage: PurchasesPackage;
+  /**
+   * Win-back offer to apply to this purchase. Retrieve this using getEligibleWinBackOffersForPackage.
+   */
+  winBackOffer: PurchasesWinBackOffer;
 }
 
 export interface PurchasePackageOptions {
@@ -457,6 +494,62 @@ export interface PurchasesPlugin {
   getPromotionalOffer(
     options: GetPromotionalOfferOptions,
   ): Promise<PurchasesPromotionalOffer | undefined>;
+
+  /**
+   * iOS only, requires iOS 18.0 or greater with StoreKit 2. Use this function to retrieve
+   * the eligible `PurchasesWinBackOffer`s that a subscriber is eligible for for a
+   * given `PurchasesStoreProduct`.
+   *
+   * @returns { Promise<{ eligibleWinBackOffers: PurchasesWinBackOffer[] }> } A dictionary containing an array of `PurchasesWinBackOffer`s that
+   * the subscriber is eligible for for the given `PurchasesStoreProduct`.
+   * The promise will be rejected if called on an unsupported platform (Android or iOS < 18), or if called on iOS 18+ with StoreKit 1.
+   * The promise will also be rejected if configure has not been called yet.
+   */
+  getEligibleWinBackOffersForProduct(
+    options: GetEligibleWinBackOffersForProductOptions,
+  ): Promise<{
+    eligibleWinBackOffers: PurchasesWinBackOffer[];
+  }>;
+
+  /**
+   * iOS only, requires iOS 18.0 or greater with StoreKit 2. Use this function to retrieve
+   * the eligible `PurchasesWinBackOffer`s that a subscriber is eligible for for a
+   * given `PurchasesStorePackage`.
+   *
+   * @returns { Promise<{ eligibleWinBackOffers: PurchasesWinBackOffer[] }> } An array of `PurchasesWinBackOffer`s that
+   * the subscriber is eligible for for the given `PurchasesStorePackage`.
+   * The promise will be rejected if called on an unsupported platform (Android or iOS < 18), or if called on iOS 18+ with StoreKit 1.
+   * The promise will also be rejected if configure has not been called yet.
+   */
+  getEligibleWinBackOffersForPackage(
+    options: GetEligibleWinBackOffersForPackageOptions,
+  ): Promise<{
+    eligibleWinBackOffers: PurchasesWinBackOffer[];
+  }>;
+
+  /**
+   * iOS only, requires iOS 18.0 or greater with StoreKit 2. Purchase a product applying a given win-back offer.
+   *
+   * @returns {Promise<MakePurchaseResult>} A promise of an object containing
+   * a customer info object, a transaction, and a product identifier. Rejections return an error code, a boolean indicating if the
+   * user cancelled the purchase, and an object with more information. The promise will be also be rejected if configure
+   * has not been called yet or if called in an unsupported platform (Android or iOS < 18), or if called on iOS 18+ with StoreKit 1.
+   */
+  purchaseProductWithWinBackOffer(
+    options: PurchaseProductWithWinBackOfferOptions,
+  ): Promise<MakePurchaseResult | undefined>;
+
+  /**
+   * iOS only, requires iOS 18.0 or greater with StoreKit 2. Purchase a package applying a given win-back offer.
+   *
+   * @returns {Promise<MakePurchaseResult>} A promise of an object containing
+   * a customer info object, a transaction, and a product identifier. Rejections return an error code, a boolean indicating if the
+   * user cancelled the purchase, and an object with more information. The promise will be also be rejected if configure
+   * has not been called yet or if called in an unsupported platform (Android or iOS < 18), or if called on iOS 18+ with StoreKit 1.
+   */
+  purchasePackageWithWinBackOffer(
+    options: PurchasePackageWithWinBackOfferOptions,
+  ): Promise<MakePurchaseResult | undefined>;
 
   /**
    * Invalidates the cache for customer information.

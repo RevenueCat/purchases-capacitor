@@ -18,6 +18,7 @@ import type {
   PurchasesPromotionalOffer,
   PurchasesStoreProduct,
   PurchasesStoreTransaction,
+  PurchasesWinBackOffer,
   ShouldPurchasePromoProductListener,
 } from '@revenuecat/purchases-typescript-internal-esm';
 import {
@@ -26,11 +27,15 @@ import {
 } from '@revenuecat/purchases-typescript-internal-esm';
 
 import type {
+  GetEligibleWinBackOffersForProductOptions,
+  GetEligibleWinBackOffersForPackageOptions,
   GetProductOptions,
   GetPromotionalOfferOptions,
   PurchaseDiscountedPackageOptions,
   PurchaseDiscountedProductOptions,
   PurchasePackageOptions,
+  PurchasePackageWithWinBackOfferOptions,
+  PurchaseProductWithWinBackOfferOptions,
   PurchasesPlugin,
   PurchaseStoreProductOptions,
   PurchaseSubscriptionOptionOptions,
@@ -263,6 +268,38 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
   ): Promise<PurchasesPromotionalOffer | undefined> {
     return this.mockReturningFunctionIfEnabled(
       'getPromotionalOffer',
+      undefined,
+    );
+  }
+  getEligibleWinBackOffersForProduct(
+    _options: GetEligibleWinBackOffersForProductOptions,
+  ): Promise<{ eligibleWinBackOffers: PurchasesWinBackOffer[] }> {
+    return this.mockReturningFunctionIfEnabled(
+      'getEligibleWinBackOffersForProduct',
+      { eligibleWinBackOffers: [] },
+    );
+  }
+  getEligibleWinBackOffersForPackage(
+    _options: GetEligibleWinBackOffersForPackageOptions,
+  ): Promise<{ eligibleWinBackOffers: PurchasesWinBackOffer[] }> {
+    return this.mockReturningFunctionIfEnabled(
+      'getEligibleWinBackOffersForPackage',
+      { eligibleWinBackOffers: [] },
+    );
+  }
+  purchaseProductWithWinBackOffer(
+    _options: PurchaseProductWithWinBackOfferOptions,
+  ): Promise<MakePurchaseResult | undefined> {
+    return this.mockReturningFunctionIfEnabled(
+      'purchaseProductWithWinBackOffer',
+      undefined,
+    );
+  }
+  purchasePackageWithWinBackOffer(
+    _options: PurchasePackageWithWinBackOfferOptions,
+  ): Promise<MakePurchaseResult | undefined> {
+    return this.mockReturningFunctionIfEnabled(
+      'purchasePackageWithWinBackOffer',
       undefined,
     );
   }
