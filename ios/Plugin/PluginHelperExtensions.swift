@@ -43,18 +43,14 @@ internal extension PurchasesPlugin {
 
     func getCompletionBlockHandlerForArrayResponse(
         _ call: CAPPluginCall,
-        wrapperKey: String? = nil
+        wrapperKey: String
     ) -> ([[String: Any]]?, ErrorContainer?) -> Void {
         func handleResponse(response: [[String: Any]]?, error: ErrorContainer?) {
             if let error {
                 rejectWithErrorContainer(call, error: error)
             } else if let response {
                 let mapToResolve: [String: Any] = {
-                    if let wrapperKey {
-                        return [wrapperKey: response]
-                    } else {
-                        return ["results": response]
-                    }
+                    return [wrapperKey: response]
                 }()
                 call.resolve(mapToResolve)
             } else {
