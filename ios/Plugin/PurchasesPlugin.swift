@@ -313,7 +313,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
     }
 
     @objc func getEligibleWinBackOffersForProduct(_ call: CAPPluginCall) {
-        guard #available(iOS 18.0, *) else {
+        guard #available(iOS 18.0, macOS 15.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *) else {
             NSLog("[Purchases] Warning: iOS win-back offers are only available on iOS 18.0+")
             call.unavailable()
             return
@@ -336,7 +336,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
     }
 
     @objc func getEligibleWinBackOffersForPackage(_ call: CAPPluginCall) {
-        guard #available(iOS 18.0, *) else {
+        guard #available(iOS 18.0, macOS 15.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *) else {
             NSLog("[Purchases] Warning: iOS win-back offers are only available on iOS 18.0+")
             call.unavailable()
             return
@@ -360,7 +360,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
     }
 
     @objc func purchaseProductWithWinBackOffer(_ call: CAPPluginCall) {
-        guard #available(iOS 18.0, *) else {
+        guard #available(iOS 18.0, macOS 15.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *) else {
             NSLog("[Purchases] Warning: iOS win-back offers are only available on iOS 18.0+")
             call.unavailable()
             return
