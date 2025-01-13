@@ -1586,7 +1586,7 @@ Holds the information about a Win-Back Offer in Apple's App Store.
 
 | Prop               | Type                                                                    | Description                                                                                       |
 | ------------------ | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| **`aPackage`**     | <code><a href="#purchasespackage">PurchasesPackage</a></code>           | The product you want to purchase                                                                  |
+| **`aPackage`**     | <code><a href="#purchasespackage">PurchasesPackage</a></code>           | The package you want to purchase                                                                  |
 | **`winBackOffer`** | <code><a href="#purchaseswinbackoffer">PurchasesWinBackOffer</a></code> | Win-back offer to apply to this purchase. Retrieve this using getEligibleWinBackOffersForPackage. |
 
 

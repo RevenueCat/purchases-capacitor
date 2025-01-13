@@ -95,7 +95,7 @@ export interface PurchaseProductWithWinBackOfferOptions {
 
 export interface PurchasePackageWithWinBackOfferOptions {
   /**
-   * The product you want to purchase
+   * The package you want to purchase
    */
   aPackage: PurchasesPackage;
   /**
