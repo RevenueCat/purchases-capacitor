@@ -49,9 +49,7 @@ internal extension PurchasesPlugin {
             if let error {
                 rejectWithErrorContainer(call, error: error)
             } else if let response {
-                let mapToResolve: [String: Any] = {
-                    return [wrapperKey: response]
-                }()
+                let mapToResolve: [String: Any] = [wrapperKey: response]
                 call.resolve(mapToResolve)
             } else {
                 call.reject("Incorrect completion. No response nor error passed.")
