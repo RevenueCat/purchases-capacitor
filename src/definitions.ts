@@ -211,17 +211,13 @@ export interface PurchasesPlugin {
    * purchases flow. More information: http://errors.rev.cat/ask-to-buy
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet.
    */
-  setSimulatesAskToBuyInSandbox(options: {
-    simulatesAskToBuyInSandbox: boolean;
-  }): Promise<void>;
+  setSimulatesAskToBuyInSandbox(options: { simulatesAskToBuyInSandbox: boolean }): Promise<void>;
 
   /**
    * Sets a function to be called on updated customer info
    * @param {CustomerInfoUpdateListener} customerInfoUpdateListener CustomerInfo update listener
    */
-  addCustomerInfoUpdateListener(
-    customerInfoUpdateListener: CustomerInfoUpdateListener,
-  ): Promise<PurchasesCallbackId>;
+  addCustomerInfoUpdateListener(customerInfoUpdateListener: CustomerInfoUpdateListener): Promise<PurchasesCallbackId>;
 
   /**
    * Removes a given CustomerInfoUpdateListener
@@ -270,9 +266,7 @@ export interface PurchasesPlugin {
    * @returns {Promise<PurchasesOffering | null>} Promise of optional offering. The promise will be rejected if configure
    * has not been called yet.
    */
-  getCurrentOfferingForPlacement(options: {
-    placementIdentifier: string;
-  }): Promise<PurchasesOffering | null>;
+  getCurrentOfferingForPlacement(options: { placementIdentifier: string }): Promise<PurchasesOffering | null>;
 
   /**
    * Syncs subscriber attributes and then fetches the configured offerings for this user. This method is intended to
@@ -290,9 +284,7 @@ export interface PurchasesPlugin {
    * Rejections return an error code, and a userInfo object with more information. The promise will also be rejected
    * if configure has not been called yet.
    */
-  getProducts(
-    options: GetProductOptions,
-  ): Promise<{ products: PurchasesStoreProduct[] }>;
+  getProducts(options: GetProductOptions): Promise<{ products: PurchasesStoreProduct[] }>;
 
   /**
    * Make a purchase
@@ -302,9 +294,7 @@ export interface PurchasesPlugin {
    * a boolean indicating if the user cancelled the purchase, and an object with more information. The promise will
    * also be rejected if configure has not been called yet.
    */
-  purchaseStoreProduct(
-    options: PurchaseStoreProductOptions,
-  ): Promise<MakePurchaseResult>;
+  purchaseStoreProduct(options: PurchaseStoreProductOptions): Promise<MakePurchaseResult>;
 
   /**
    * iOS only. Purchase a product applying a given discount.
@@ -314,9 +304,7 @@ export interface PurchasesPlugin {
    * a boolean indicating if the user cancelled the purchase, and an object with more information. The promise will be
    * rejected if configure has not been called yet.
    */
-  purchaseDiscountedProduct(
-    options: PurchaseDiscountedProductOptions,
-  ): Promise<MakePurchaseResult>;
+  purchaseDiscountedProduct(options: PurchaseDiscountedProductOptions): Promise<MakePurchaseResult>;
 
   /**
    * Make a purchase
@@ -336,9 +324,7 @@ export interface PurchasesPlugin {
    * user cancelled the purchase, and an object with more information. The promise will be also be rejected if configure
    * has not been called yet.
    */
-  purchaseSubscriptionOption(
-    options: PurchaseSubscriptionOptionOptions,
-  ): Promise<MakePurchaseResult>;
+  purchaseSubscriptionOption(options: PurchaseSubscriptionOptionOptions): Promise<MakePurchaseResult>;
 
   /**
    * iOS only. Purchase a package applying a given discount.
@@ -348,9 +334,7 @@ export interface PurchasesPlugin {
    * user cancelled the purchase, and an object with more information. The promise will be also be rejected if configure
    * has not been called yet.
    */
-  purchaseDiscountedPackage(
-    options: PurchaseDiscountedPackageOptions,
-  ): Promise<MakePurchaseResult>;
+  purchaseDiscountedPackage(options: PurchaseDiscountedPackageOptions): Promise<MakePurchaseResult>;
 
   /**
    * Restores a user's previous purchases and links their appUserIDs to any user's also using those purchases.
@@ -366,9 +350,7 @@ export interface PurchasesPlugin {
    * You only need to use this method with *new* purchases. Subscription updates are observed automatically.
    * @param options The productID that was purchased that needs to be synced with RevenueCat's backend.
    */
-  recordPurchase(options: {
-    productID: string;
-  }): Promise<{ transaction: PurchasesStoreTransaction }>;
+  recordPurchase(options: { productID: string }): Promise<{ transaction: PurchasesStoreTransaction }>;
 
   /**
    * Get the appUserID
@@ -438,9 +420,7 @@ export interface PurchasesPlugin {
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet or if there's an error
    * syncing purchases.
    */
-  syncObserverModeAmazonPurchase(
-    options: SyncObserverModeAmazonPurchaseOptions,
-  ): Promise<void>;
+  syncObserverModeAmazonPurchase(options: SyncObserverModeAmazonPurchaseOptions): Promise<void>;
 
   /**
    * This method will send a purchase to the RevenueCat backend. This function should only be called if you are
@@ -491,9 +471,7 @@ export interface PurchasesPlugin {
    * Null is returned for Android and incompatible iOS versions. The promise will be rejected if configure has not been
    * called yet or if there's an error getting the payment discount.
    */
-  getPromotionalOffer(
-    options: GetPromotionalOfferOptions,
-  ): Promise<PurchasesPromotionalOffer | undefined>;
+  getPromotionalOffer(options: GetPromotionalOfferOptions): Promise<PurchasesPromotionalOffer | undefined>;
 
   /**
    * iOS only, requires iOS 18.0 or greater with StoreKit 2. Use this function to retrieve
@@ -505,9 +483,7 @@ export interface PurchasesPlugin {
    * The promise will be rejected if called on an unsupported platform (Android or iOS < 18), or if called on iOS 18+ with StoreKit 1.
    * The promise will also be rejected if configure has not been called yet.
    */
-  getEligibleWinBackOffersForProduct(
-    options: GetEligibleWinBackOffersForProductOptions,
-  ): Promise<{
+  getEligibleWinBackOffersForProduct(options: GetEligibleWinBackOffersForProductOptions): Promise<{
     eligibleWinBackOffers: PurchasesWinBackOffer[];
   }>;
 
@@ -521,9 +497,7 @@ export interface PurchasesPlugin {
    * The promise will be rejected if called on an unsupported platform (Android or iOS < 18), or if called on iOS 18+ with StoreKit 1.
    * The promise will also be rejected if configure has not been called yet.
    */
-  getEligibleWinBackOffersForPackage(
-    options: GetEligibleWinBackOffersForPackageOptions,
-  ): Promise<{
+  getEligibleWinBackOffersForPackage(options: GetEligibleWinBackOffersForPackageOptions): Promise<{
     eligibleWinBackOffers: PurchasesWinBackOffer[];
   }>;
 
@@ -697,9 +671,7 @@ export interface PurchasesPlugin {
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet or if there's an error
    * setting the Mixpanel Distinct ID.
    */
-  setMixpanelDistinctID(options: {
-    mixpanelDistinctID: string | null;
-  }): Promise<void>;
+  setMixpanelDistinctID(options: { mixpanelDistinctID: string | null }): Promise<void>;
 
   /**
    * Subscriber attribute associated with the Firebase App Instance ID for the user
@@ -709,9 +681,7 @@ export interface PurchasesPlugin {
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet or if there's an error
    * setting the Firebase App Instance ID.
    */
-  setFirebaseAppInstanceID(options: {
-    firebaseAppInstanceID: string | null;
-  }): Promise<void>;
+  setFirebaseAppInstanceID(options: { firebaseAppInstanceID: string | null }): Promise<void>;
 
   /**
    * Subscriber attribute associated with the OneSignal Player ID for the user
@@ -731,9 +701,7 @@ export interface PurchasesPlugin {
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet or if there's an error
    * setting the OneSignal user ID.
    */
-  setOnesignalUserID(options: {
-    onesignalUserID: string | null;
-  }): Promise<void>;
+  setOnesignalUserID(options: { onesignalUserID: string | null }): Promise<void>;
 
   /**
    * Subscriber attribute associated with the Airship Channel ID for the user
@@ -743,9 +711,7 @@ export interface PurchasesPlugin {
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet or if there's an error
    * setting the Airship Channel ID.
    */
-  setAirshipChannelID(options: {
-    airshipChannelID: string | null;
-  }): Promise<void>;
+  setAirshipChannelID(options: { airshipChannelID: string | null }): Promise<void>;
 
   /**
    * Subscriber attribute associated with the install media source for the user
@@ -812,9 +778,7 @@ export interface PurchasesPlugin {
    *       [BILLING_FEATURE]. By default, is an empty list and no specific feature support will be checked.
    * @returns promise with boolean response. True if billing is supported, false otherwise.
    */
-  canMakePayments(options?: {
-    features?: BILLING_FEATURE[];
-  }): Promise<{ canMakePayments: boolean }>;
+  canMakePayments(options?: { features?: BILLING_FEATURE[] }): Promise<{ canMakePayments: boolean }>;
 
   /**
    * iOS 15+ only. Presents a refund request sheet in the current window scene for
@@ -876,9 +840,7 @@ export interface PurchasesPlugin {
    *       [IN_APP_MESSAGE_TYPE]. By default, is undefined and all message types will be shown.
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet.
    */
-  showInAppMessages(options?: {
-    messageTypes?: IN_APP_MESSAGE_TYPE[];
-  }): Promise<void>;
+  showInAppMessages(options?: { messageTypes?: IN_APP_MESSAGE_TYPE[] }): Promise<void>;
 
   /**
    * Check if configure has finished and Purchases has been configured.
