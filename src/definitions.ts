@@ -34,7 +34,8 @@ export interface GetProductOptions {
    */
   productIdentifiers: string[];
   /**
-   * Optional type of products to fetch, can be SUBSCRIPTION or NON_SUBSCRIPTION. SUBSCRIPTION by default. Ignored in iOS.
+   * Ignored in iOS.  
+   * Optional type of products to fetch, can be `SUBSCRIPTION` or `NON_SUBSCRIPTION.SUBSCRIPTION` by default. 
    */
   type?: PRODUCT_CATEGORY;
 }
@@ -45,14 +46,16 @@ export interface PurchaseStoreProductOptions {
    */
   product: PurchasesStoreProduct;
   /**
-   * Android only. Optional GoogleProductChangeInfo you
-   * wish to upgrade from containing the oldProductIdentifier and the optional prorationMode.
+   * Android only.  
+   * Optional `GoogleProductChangeInfo` you
+   * wish to upgrade from containing the `oldProductIdentifier` and the optional `prorationMode`.
    */
   googleProductChangeInfo?: GoogleProductChangeInfo | null;
   /**
-   * Android and Google only. Optional boolean indicates personalized pricing on products available for purchase in the EU.
+   * Android and Google only.  
+   * Optional boolean indicates personalized pricing on products available for purchase in the EU.
    * For compliance with EU regulations. User will see "This price has been customized for you" in the purchase dialog when true.
-   * See https://developer.android.com/google/play/billing/integrate#personalized-price for more info.
+   * @see https://developer.android.com/google/play/billing/integrate#personalized-price for more info.
    */
   googleIsPersonalizedPrice?: boolean | null;
 }
@@ -63,7 +66,7 @@ export interface PurchaseDiscountedProductOptions {
    */
   product: PurchasesStoreProduct;
   /**
-   * Discount to apply to this package. Retrieve this discount using getPromotionalOffer.
+   * Discount to apply to this package. Retrieve this discount using `getPromotionalOffer`.
    */
   discount: PurchasesPromotionalOffer;
 }
@@ -106,47 +109,51 @@ export interface PurchasePackageWithWinBackOfferOptions {
 
 export interface PurchasePackageOptions {
   /**
-   * The Package you wish to purchase. You can get the Packages by calling getOfferings
+   * The Package you wish to purchase. You can get the Packages by calling `getOfferings`
    */
   aPackage: PurchasesPackage;
   /**
-   * Android only. Optional GoogleProductChangeInfo you
-   * wish to upgrade from containing the oldProductIdentifier and the optional prorationMode.
+   * Android only.  
+   * Optional `GoogleProductChangeInfo` you
+   * wish to upgrade from containing the `oldProductIdentifier` and the optional `prorationMode`.
    */
   googleProductChangeInfo?: GoogleProductChangeInfo | null;
   /**
-   * Android and Google only. Optional boolean indicates personalized pricing on products available for purchase in the EU.
+   * Android and Google only.  
+   * Optional boolean indicates personalized pricing on products available for purchase in the EU.
    * For compliance with EU regulations. User will see "This price has been customized for you" in the purchase dialog when true.
-   * See https://developer.android.com/google/play/billing/integrate#personalized-price for more info.
+   * @see https://developer.android.com/google/play/billing/integrate#personalized-price for more info.
    */
   googleIsPersonalizedPrice?: boolean | null;
 }
 
 export interface PurchaseSubscriptionOptionOptions {
   /**
-   * The SubscriptionOption you wish to purchase. You can get the SubscriptionOption from StoreProducts by calling getOfferings
+   * The `SubscriptionOption` you wish to purchase. You can get the `SubscriptionOption` from `StoreProducts` by calling `getOfferings`
    */
   subscriptionOption: SubscriptionOption;
   /**
-   * Android only. Optional GoogleProductChangeInfo you
-   * wish to upgrade from containing the oldProductIdentifier and the optional prorationMode.
+   * Android only.  
+   * Optional `GoogleProductChangeInfo` you
+   * wish to upgrade from containing the `oldProductIdentifier` and the optional `prorationMode`.
    */
   googleProductChangeInfo?: GoogleProductChangeInfo | null;
   /**
-   * Android and Google only. Optional boolean indicates personalized pricing on products available for purchase in the EU.
+   * Android and Google only.  
+   * Optional boolean indicates personalized pricing on products available for purchase in the EU.
    * For compliance with EU regulations. User will see "This price has been customized for you" in the purchase dialog when true.
-   * See https://developer.android.com/google/play/billing/integrate#personalized-price for more info.
+   * @see https://developer.android.com/google/play/billing/integrate#personalized-price for more info.
    */
   googleIsPersonalizedPrice?: boolean | null;
 }
 
 export interface PurchaseDiscountedPackageOptions {
   /**
-   * The Package you wish to purchase. You can get the Packages by calling getOfferings
+   * The Package you wish to purchase. You can get the Packages by calling `getOfferings`
    */
   aPackage: PurchasesPackage;
   /**
-   * Discount to apply to this package. Retrieve this discount using getPromotionalOffer.
+   * Discount to apply to this package. Retrieve this discount using `getPromotionalOffer`.
    */
   discount: PurchasesPromotionalOffer;
 }
@@ -175,7 +182,7 @@ export interface SyncAmazonPurchaseOptions {
 }
 
 /**
- * @deprecated - Use SyncAmazonPurchaseOptions instead
+ * @deprecated Use `SyncAmazonPurchaseOptions` instead
  */
 export type SyncObserverModeAmazonPurchaseOptions = SyncAmazonPurchaseOptions;
 
@@ -200,8 +207,8 @@ export interface PurchasesPlugin {
   /**
    * Sets whether the SDK should return mocked results in the web version.
    * This won't affect the iOS and Android versions of the implementation.
-   * Default is false
-   * @param options Set shouldMockWebResults to true if you want the plugin methods to return mocked values
+   * Default is `false`
+   * @param options Set `shouldMockWebResults` to true if you want the plugin methods to return mocked values
    */
   setMockWebResults(options: { shouldMockWebResults: boolean }): Promise<void>;
 
@@ -215,13 +222,13 @@ export interface PurchasesPlugin {
 
   /**
    * Sets a function to be called on updated customer info
-   * @param {CustomerInfoUpdateListener} customerInfoUpdateListener CustomerInfo update listener
+   * @param {CustomerInfoUpdateListener} customerInfoUpdateListener `CustomerInfo` update listener
    */
   addCustomerInfoUpdateListener(customerInfoUpdateListener: CustomerInfoUpdateListener): Promise<PurchasesCallbackId>;
 
   /**
-   * Removes a given CustomerInfoUpdateListener
-   * @param {CustomerInfoUpdateListener} options Include listenerToRemove, which is a CustomerInfoUpdateListener
+   * Removes a given `CustomerInfoUpdateListener`
+   * @param {CustomerInfoUpdateListener} options Include `listenerToRemove`, which is a `CustomerInfoUpdateListener`
    * reference of the listener to remove
    * @returns Promise with boolean. True if listener was removed, false otherwise
    */
@@ -297,7 +304,8 @@ export interface PurchasesPlugin {
   purchaseStoreProduct(options: PurchaseStoreProductOptions): Promise<MakePurchaseResult>;
 
   /**
-   * iOS only. Purchase a product applying a given discount.
+   * iOS only.  
+   * Purchase a product applying a given discount.
    *
    * @returns {Promise<{ productIdentifier: string, customerInfo:CustomerInfo }>} A promise of an object containing
    * a customer info object and a product identifier. Rejections return an error code,
@@ -317,7 +325,8 @@ export interface PurchasesPlugin {
   purchasePackage(options: PurchasePackageOptions): Promise<MakePurchaseResult>;
 
   /**
-   * Google only. Make a purchase of a subscriptionOption
+   * Google only.  
+   * Make a purchase of a `subscriptionOption`
    *
    * @returns {Promise<{ productIdentifier: string, customerInfo: CustomerInfo }>} A promise of an object containing
    * a customer info object and a product identifier. Rejections return an error code, a boolean indicating if the
@@ -327,7 +336,8 @@ export interface PurchasesPlugin {
   purchaseSubscriptionOption(options: PurchaseSubscriptionOptionOptions): Promise<MakePurchaseResult>;
 
   /**
-   * iOS only. Purchase a package applying a given discount.
+   * iOS only.  
+   * Purchase a package applying a given discount.
    *
    * @returns {Promise<{ productIdentifier: string, customerInfo: CustomerInfo }>} A promise of an object containing
    * a customer info object and a product identifier. Rejections return an error code, a boolean indicating if the
@@ -337,7 +347,7 @@ export interface PurchasesPlugin {
   purchaseDiscountedPackage(options: PurchaseDiscountedPackageOptions): Promise<MakePurchaseResult>;
 
   /**
-   * Restores a user's previous purchases and links their appUserIDs to any user's also using those purchases.
+   * Restores a user's previous purchases and links their `appUserID`'s to any user's also using those purchases.
    * @returns {Promise<{ customerInfo: CustomerInfo }>} A promise of a customer info object. Rejections return an error code, and an
    * userInfo object with more information. The promise will be also be rejected if configure has not been called yet.
    */
@@ -348,20 +358,20 @@ export interface PurchasesPlugin {
    * RevenueCat's backend. If you are using StoreKit 1 for your implementation, you do not need this method.
    *
    * You only need to use this method with *new* purchases. Subscription updates are observed automatically.
-   * @param options The productID that was purchased that needs to be synced with RevenueCat's backend.
+   * @param options The `productID` that was purchased that needs to be synced with RevenueCat's backend.
    */
   recordPurchase(options: { productID: string }): Promise<{ transaction: PurchasesStoreTransaction }>;
 
   /**
-   * Get the appUserID
+   * Get the `appUserID`
    * @returns {Promise<string>} The app user id in a promise
    */
   getAppUserID(): Promise<{ appUserID: string }>;
 
   /**
-   * This function will log in the current user with an appUserID. Typically, this would be used after a log in
+   * This function will log in the current user with an `appUserID`. Typically, this would be used after a log in
    * to identify a user without calling configure.
-   * @param options The appUserID that should be linked to the current user
+   * @param options The `appUserID` that should be linked to the current user
    * @returns {Promise<LogInResult>} A promise of an object that contains the customerInfo after logging in, as well
    * as a boolean indicating whether the user has just been created for the first time in the RevenueCat backend. The
    * promise will be rejected if configure has not been called yet or if there's an issue logging in.
@@ -369,7 +379,7 @@ export interface PurchasesPlugin {
   logIn(options: { appUserID: string }): Promise<LogInResult>;
 
   /**
-   * Logs out the Purchases client clearing the saved appUserID. This will generate a random user id and save it in the cache.
+   * Logs out the Purchases client clearing the saved `appUserID`. This will generate a random user id and save it in the cache.
    * @returns {Promise<{ customerInfo: CustomerInfo }>} A promise of a customer info object. Rejections return an error code,
    * and a userInfo object with more information. The promise will be rejected if configure has not been called yet or if
    * there's an issue logging out.
@@ -378,7 +388,7 @@ export interface PurchasesPlugin {
 
   /**
    * Used to set the log level. Useful for debugging issues with the lovely team @RevenueCat.
-   * The default is {LOG_LEVEL.INFO} in release builds and {LOG_LEVEL.DEBUG} in debug builds.
+   * The default is `LOG_LEVEL.INFO` in release builds and `LOG_LEVEL.DEBUG` in debug builds.
    * @param options Log level to use to display logs.
    */
   setLogLevel(options: { level: LOG_LEVEL }): Promise<void>;
@@ -386,7 +396,7 @@ export interface PurchasesPlugin {
   /**
    * Set a custom log handler for redirecting logs to your own logging system.
    * By default, this sends info, warning, and error messages.
-   * If you wish to receive Debug level messages, see [setLogLevel].
+   * If you wish to receive Debug level messages, see {@link setLogLevel}.
    * @param {LogHandler} logHandler It will get called for each log event.
    * Use this function to redirect the log to your own logging system
    */
@@ -395,7 +405,7 @@ export interface PurchasesPlugin {
   /**
    * Gets current customer info
    * @returns {Promise<{ customerInfo: CustomerInfo }>} A promise of a customer info object. Rejections return an error code, and an
-   * userInfo object with more information. The promise will be rejected if configure has not been called yet or if
+   * `userInfo` object with more information. The promise will be rejected if configure has not been called yet or if
    * there's an issue getting the customer information.
    */
   getCustomerInfo(): Promise<{ customerInfo: CustomerInfo }>;
@@ -404,14 +414,14 @@ export interface PurchasesPlugin {
    * This method will send all the purchases to the RevenueCat backend. Call this when using your own implementation
    * for subscriptions anytime a sync is needed, like after a successful purchase.
    *
-   * @warning This function should only be called if you're not calling purchaseProduct/purchaseStoreProduct/purchasePackage/purchaseSubscriptionOption.
+   * @warning This function should only be called if you're not calling `purchaseProduct`/`purchaseStoreProduct`/`purchasePackage`/`purchaseSubscriptionOption`.
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet or if there's an error
    * syncing purchases.
    */
   syncPurchases(): Promise<void>;
 
   /**
-   * @deprecated - Use syncAmazonPurchase instead
+   * @deprecated - Use {@link syncAmazonPurchase} instead
    * This method will send a purchase to the RevenueCat backend. This function should only be called if you are
    * in Amazon observer mode or performing a client side migration of your current users to RevenueCat.
    *
@@ -434,7 +444,9 @@ export interface PurchasesPlugin {
   syncAmazonPurchase(options: SyncAmazonPurchaseOptions): Promise<void>;
 
   /**
-   * Enable automatic collection of Apple Search Ad attribution on iOS. Disabled by default. Supported in iOS 14.3+ only
+   * Supported in iOS 14.3+ only  
+   * Enable automatic collection of Apple Search Ad attribution on iOS.  
+   * Disabled by default.
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet.
    */
   enableAdServicesAttributionTokenCollection(): Promise<void>;
@@ -446,7 +458,8 @@ export interface PurchasesPlugin {
   isAnonymous(): Promise<{ isAnonymous: boolean }>;
 
   /**
-   * iOS only. Computes whether a user is eligible for the introductory pricing period of a given product.
+   * iOS only.  
+   * Computes whether a user is eligible for the introductory pricing period of a given product.
    * You should use this method to determine whether you show the user the normal product price or the
    * introductory price. This also applies to trials (trials are considered a type of introductory pricing).
    *
@@ -454,10 +467,10 @@ export interface PurchasesPlugin {
    * definitively compute the eligibility, most likely because of missing group information, it will return
    * `INTRO_ELIGIBILITY_STATUS_UNKNOWN`. The best course of action on unknown status is to display the non-intro
    * pricing, to not create a misleading situation. To avoid this, make sure you are testing with the latest version of
-   * iOS so that the subscription group can be collected by the SDK. Android always returns INTRO_ELIGIBILITY_STATUS_UNKNOWN.
+   * iOS so that the subscription group can be collected by the SDK. Android always returns `INTRO_ELIGIBILITY_STATUS_UNKNOWN`.
    *
    * @param options Array of product identifiers for which you want to compute eligibility
-   * @returns { Promise<[productId: string]: IntroEligibility> } A map of IntroEligility per productId. The promise
+   * @returns { Promise<[productId: string]: IntroEligibility> } A map of `IntroEligibility` per `productId`. The promise
    * will be rejected if configure has not been called yet or if there's in an error checking eligibility.
    */
   checkTrialOrIntroductoryPriceEligibility(options: {
@@ -465,7 +478,8 @@ export interface PurchasesPlugin {
   }): Promise<{ [productId: string]: IntroEligibility }>;
 
   /**
-   * iOS only. Use this function to retrieve the `PurchasesPromotionalOffer` for a given `PurchasesPackage`.
+   * iOS only.  
+   * Use this function to retrieve the `PurchasesPromotionalOffer` for a given `PurchasesPackage`.
    *
    * @returns { Promise<PurchasesPromotionalOffer | undefined> } Returns when the `PurchasesPaymentDiscount` is returned.
    * Null is returned for Android and incompatible iOS versions. The promise will be rejected if configure has not been
@@ -539,7 +553,8 @@ export interface PurchasesPlugin {
    */
   invalidateCustomerInfoCache(): Promise<void>;
 
-  /** iOS 14.0+ only. Presents a code redemption sheet, useful for redeeming offer codes
+  /** iOS 14.0+ only.  
+   * Presents a code redemption sheet, useful for redeeming offer codes
    * Refer to https://docs.revenuecat.com/docs/ios-subscription-offers#offer-codes for more information on how
    * to configure and use offer codes
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet or there's an error
@@ -555,7 +570,7 @@ export interface PurchasesPlugin {
    * Key names starting with "$" are reserved names used by RevenueCat. For a full list of key
    * restrictions refer to our guide: https://docs.revenuecat.com/docs/subscriber-attributes
    *
-   * @param attributes Map of attributes by key. Set the value as an empty string to delete an attribute.
+   * @param attributes Map of attributes by key. Set the value as an empty string or null to delete an attribute.
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet or there's an error
    * setting the subscriber attributes.
    */
@@ -591,7 +606,7 @@ export interface PurchasesPlugin {
   /**
    * Subscriber attribute associated with the push token for the user
    *
-   * @param options null will delete the subscriber attribute.
+   * @param options Empty string or null will delete the subscriber attribute.
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet or if there's an error
    * setting the push token.
    */
@@ -606,9 +621,9 @@ export interface PurchasesPlugin {
   setProxyURL(options: { url: string }): Promise<void>;
 
   /**
-   * Automatically collect subscriber attributes associated with the device identifiers.
-   * $idfa, $idfv, $ip on iOS
-   * $gpsAdId, $androidId, $ip on Android
+   * Automatically collect subscriber attributes associated with the device identifiers.  
+   * `$idfa`, `$idfv`, `$ip` on iOS  
+   * `$gpsAdId`, `$androidId`, `$ip` on Android
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet or if there's an error
    * setting collecting the device identifiers.
    */
@@ -684,8 +699,9 @@ export interface PurchasesPlugin {
   setFirebaseAppInstanceID(options: { firebaseAppInstanceID: string | null }): Promise<void>;
 
   /**
+   * Deprecated for OneSignal versions above v9.0.  
    * Subscriber attribute associated with the OneSignal Player ID for the user
-   * Required for the RevenueCat OneSignal integration. Deprecated for OneSignal versions above v9.0.
+   * Required for the RevenueCat OneSignal integration. 
    *
    * @param options OneSignal Player ID to use in OneSignal integration. Empty String or null will delete the subscriber attribute.
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet or if there's an error
@@ -781,7 +797,8 @@ export interface PurchasesPlugin {
   canMakePayments(options?: { features?: BILLING_FEATURE[] }): Promise<{ canMakePayments: boolean }>;
 
   /**
-   * iOS 15+ only. Presents a refund request sheet in the current window scene for
+   * iOS 15+ only.  
+   * Presents a refund request sheet in the current window scene for
    * the latest transaction associated with the active entitlement.
    *
    * If the request was unsuccessful, no active entitlements could be found for
@@ -792,38 +809,40 @@ export interface PurchasesPlugin {
    * Important: This method should only be used if your user can only have a single active entitlement at a given time.
    * If a user could have more than one entitlement at a time, use `beginRefundRequestForEntitlement` instead.
    *
-   * @returns Returns refundRequestStatus: The status of the
-   *  refund request. Keep in mind the status could be REFUND_REQUEST_STATUS.USER_CANCELLED
+   * @returns Returns `refundRequestStatus` - The status of the
+   *  refund request. Keep in mind the status could be `REFUND_REQUEST_STATUS.USER_CANCELLED`
    */
   beginRefundRequestForActiveEntitlement(): Promise<{
     refundRequestStatus: REFUND_REQUEST_STATUS;
   }>;
 
   /**
-   * iOS 15+ only. Presents a refund request sheet in the current window scene for
+   * iOS 15+ only.  
+   * Presents a refund request sheet in the current window scene for
    * the latest transaction associated with the `entitlement`.
    *
    * If the request was unsuccessful, the promise will return an error.
    * If called in an unsupported platform (Android or iOS < 15), an `UnsupportedPlatformException` will be thrown.
    *
    * @param options The entitlement to begin a refund request for.
-   * @returns Returns refundRequestStatus: The status of the
-   *  refund request. Keep in mind the status could be REFUND_REQUEST_STATUS.USER_CANCELLED
+   * @returns Returns `refundRequestStatus` - The status of the
+   *  refund request. Keep in mind the status could be `REFUND_REQUEST_STATUS.USER_CANCELLED`
    */
   beginRefundRequestForEntitlement(options: {
     entitlementInfo: PurchasesEntitlementInfo;
   }): Promise<{ refundRequestStatus: REFUND_REQUEST_STATUS }>;
 
   /**
-   * iOS 15+ only. Presents a refund request sheet in the current window scene for
+   * iOS 15+ only.  
+   * Presents a refund request sheet in the current window scene for
    * the latest transaction associated with the `product`.
    *
    * If the request was unsuccessful, the promise will return an error.
    * If called in an unsupported platform (Android or iOS < 15), an `UnsupportedPlatformException` will be thrown.
    *
    * @param options The StoreProduct to begin a refund request for.
-   * @returns {Promise<REFUND_REQUEST_STATUS>} Returns a REFUND_REQUEST_STATUS: The status of the
-   *  refund request. Keep in mind the status could be REFUND_REQUEST_STATUS.USER_CANCELLED
+   * @returns {Promise<REFUND_REQUEST_STATUS>} Returns `refundRequestStatus` -  The status of the
+   *  refund request. Keep in mind the status could be `REFUND_REQUEST_STATUS.USER_CANCELLED`
    */
   beginRefundRequestForProduct(options: {
     storeProduct: PurchasesStoreProduct;
@@ -831,13 +850,13 @@ export interface PurchasesPlugin {
 
   /**
    * Shows in-app messages available from the App Store or Google Play. You need to disable messages from showing
-   * automatically using [PurchasesConfiguration.shouldShowInAppMessagesAutomatically].
+   * automatically using `[PurchasesConfiguration.shouldShowInAppMessagesAutomatically]`.
    *
    * Note: In iOS, this requires version 16+. In older versions the promise will be resolved successfully
    * immediately.
    *
    * @param options An array of message types that the stores can display inside your app. Values must be one of
-   *       [IN_APP_MESSAGE_TYPE]. By default, is undefined and all message types will be shown.
+   *       `[IN_APP_MESSAGE_TYPE]`. By default, is undefined and all message types will be shown.
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet.
    */
   showInAppMessages(options?: { messageTypes?: IN_APP_MESSAGE_TYPE[] }): Promise<void>;
