@@ -6,12 +6,12 @@ import {
   PRODUCT_CATEGORY,
   PurchaseDiscountedPackageOptions,
   Purchases,
-  PURCHASES_ARE_COMPLETED_BY_TYPE,
-  STOREKIT_VERSION,
 } from '@revenuecat/purchases-capacitor';
 
 import {REVENUECAT_API_KEY} from '../constants';
 import {ENTITLEMENT_VERIFICATION_MODE, IN_APP_MESSAGE_TYPE,} from '@revenuecat/purchases-typescript-internal-esm';
+import {App, URLOpenListenerEvent} from "@capacitor/app";
+import {Dialog} from "@capacitor/dialog";
 
 interface ContainerProps {}
 
@@ -91,6 +91,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         `Received customer info in listener: ${prettifyJson(customerInfo)}`,
       );
     });
+    await listenDeepLinks();
     updateLastFunctionWithoutContent('configure');
   };
 
@@ -587,7 +588,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
       console.log('fetchAndRedeemWinBackOfferForProduct failed: ' + JSON.stringify(err));
       updateLastFunction('fetchAndRedeemWinBackOfferForProduct', JSON.stringify(err));
     }
-    
+
   };
 
   const purchasePackageForWinBackTesting = async () => {
@@ -616,7 +617,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         return;
       }
 
-      Purchases.purchasePackage({
+      await Purchases.purchasePackage({
         aPackage: targetPackage,
       });
     } catch (err) {
@@ -702,6 +703,20 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         JSON.stringify(err),
       );
     }
+  };
+
+  const listenDeepLinks = async () => {
+    await App.addListener('appUrlOpen', async (event: URLOpenListenerEvent) => {
+      const url = event.url;
+      const { webPurchaseRedemption } = await Purchases.parseAsWebPurchaseRedemption({ urlString: url });
+      if (webPurchaseRedemption) {
+        console.log('Parsed web purchase redemption: ', webPurchaseRedemption);
+        const redemptionResult = await Purchases.redeemWebPurchase({ webPurchaseRedemption: webPurchaseRedemption });
+        await Dialog.alert({ title: 'Redemption result', message: JSON.stringify(redemptionResult, null, 2) });
+      } else {
+        await Dialog.alert({ title: 'No redemption link', message: 'Link opened is not a redemption link' });
+      }
+    });
   };
 
   return (

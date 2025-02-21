@@ -19,6 +19,7 @@
     "@capacitor/ios": "^7.0.0",
     "@capacitor/keyboard": "^7.0.0",
     "@capacitor/status-bar": "^7.0.0",
+    "@capacitor/dialog": "^7.0.0",
     "@ionic/react": "^7.0.0",
     "@ionic/react-router": "^7.0.0",
     "@revenuecat/purchases-capacitor": "file:../..",
