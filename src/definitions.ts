@@ -1,27 +1,29 @@
 import type {
+  BILLING_FEATURE,
   CustomerInfo,
   CustomerInfoUpdateListener,
   GoogleProductChangeInfo,
+  IN_APP_MESSAGE_TYPE,
   IntroEligibility,
+  LOG_LEVEL,
   LogHandler,
   LogInResult,
   MakePurchaseResult,
+  PRODUCT_CATEGORY,
   PurchasesConfiguration,
   PurchasesEntitlementInfo,
+  PurchasesOffering,
   PurchasesOfferings,
   PurchasesPackage,
   PurchasesPromotionalOffer,
   PurchasesStoreProduct,
   PurchasesStoreProductDiscount,
-  SubscriptionOption,
-  BILLING_FEATURE,
-  LOG_LEVEL,
-  PRODUCT_CATEGORY,
-  REFUND_REQUEST_STATUS,
-  IN_APP_MESSAGE_TYPE,
-  PurchasesOffering,
   PurchasesStoreTransaction,
   PurchasesWinBackOffer,
+  REFUND_REQUEST_STATUS,
+  SubscriptionOption,
+  WebPurchaseRedemption,
+  WebPurchaseRedemptionResult,
 } from '@revenuecat/purchases-typescript-internal-esm';
 
 export * from '@revenuecat/purchases-typescript-internal-esm';
@@ -196,6 +198,24 @@ export interface PurchasesPlugin {
    * @param {PurchasesConfiguration} configuration RevenueCat configuration object including the API key and other optional parameters. See {@link PurchasesConfiguration}
    */
   configure(configuration: PurchasesConfiguration): Promise<void>;
+
+  /**
+   * Parses the given URL string into a [WebPurchaseRedemption] object that can be used to redeem web purchases.
+   * @param options Set the urlString used to open the App.
+   * @returns {Promise<{ webPurchaseRedemption: WebPurchaseRedemption | null}>} A promise of a WebPurchaseRedemption
+   * object that can be redeemed using {@link redeemWebPurchase} or null if the link is invalid.
+   */
+  parseAsWebPurchaseRedemption(options: {
+    urlString: string;
+  }): Promise<{ webPurchaseRedemption: WebPurchaseRedemption | null }>;
+
+  /**
+   * Redeems the web purchase associated with the Redemption Link obtained with [parseAsWebPurchaseRedemption].
+   * @param options The WebPurchaseRedemption object obtained from {@link parseAsWebPurchaseRedemption}.
+   * @returns {Promise<WebPurchaseRedemptionResult>} The result of the redemption process.
+   * Can throw if an invalid WebPurchaseRedemption parameter is passed or Purchases is not configured.
+   */
+  redeemWebPurchase(options: { webPurchaseRedemption: WebPurchaseRedemption }): Promise<WebPurchaseRedemptionResult>;
 
   /**
    * Sets whether the SDK should return mocked results in the web version.

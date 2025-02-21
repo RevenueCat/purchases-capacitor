@@ -20,6 +20,7 @@ import com.revenuecat.purchases.hybridcommon.OnResultAny
 import com.revenuecat.purchases.hybridcommon.OnResultList
 import com.revenuecat.purchases.hybridcommon.configure
 import com.revenuecat.purchases.hybridcommon.getProductInfo
+import com.revenuecat.purchases.hybridcommon.isWebPurchaseRedemptionURL
 import com.revenuecat.purchases.hybridcommon.mappers.convertToMap
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.purchaseProduct
@@ -40,6 +41,7 @@ import com.revenuecat.purchases.hybridcommon.logIn as logInCommon
 import com.revenuecat.purchases.hybridcommon.logOut as logOutCommon
 import com.revenuecat.purchases.hybridcommon.purchasePackage as purchasePackageCommon
 import com.revenuecat.purchases.hybridcommon.purchaseSubscriptionOption as purchaseSubscriptionOptionCommon
+import com.revenuecat.purchases.hybridcommon.redeemWebPurchase as redeemWebPurchaseCommon
 import com.revenuecat.purchases.hybridcommon.restorePurchases as restorePurchasesCommon
 import com.revenuecat.purchases.hybridcommon.setAd as setAdCommon
 import com.revenuecat.purchases.hybridcommon.setAdGroup as setAdGroupCommon
@@ -118,6 +120,24 @@ class PurchasesPlugin : Plugin() {
             }
         }
         call.resolve()
+    }
+
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
+    fun parseAsWebPurchaseRedemption(call: PluginCall) {
+        val urlString = call.getStringOrReject("urlString") ?: return
+        if (isWebPurchaseRedemptionURL(urlString)) {
+            call.resolveWithMap(mapOf("webPurchaseRedemption" to mapOf("redemptionLink" to urlString)))
+        } else {
+            call.resolveWithMap(mapOf("webPurchaseRedemption" to null))
+        }
+    }
+
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
+    fun redeemWebPurchase(call: PluginCall) {
+        if (rejectIfNotConfigured(call)) return
+        val webPurchaseRedemption = call.getObjectOrReject("webPurchaseRedemption") ?: return
+        val redemptionLink = webPurchaseRedemption.getStringOrReject(call, "redemptionLink") ?: return
+        redeemWebPurchaseCommon(redemptionLink, getOnResult(call))
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_NONE)

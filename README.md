@@ -54,6 +54,8 @@ This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package
 <docgen-index>
 
 * [`configure(...)`](#configure)
+* [`parseAsWebPurchaseRedemption(...)`](#parseaswebpurchaseredemption)
+* [`redeemWebPurchase(...)`](#redeemwebpurchase)
 * [`setMockWebResults(...)`](#setmockwebresults)
 * [`setSimulatesAskToBuyInSandbox(...)`](#setsimulatesasktobuyinsandbox)
 * [`addCustomerInfoUpdateListener(...)`](#addcustomerinfoupdatelistener)
@@ -137,6 +139,40 @@ Sets up Purchases with your API key and an app user id.
 | Param               | Type                                                                      | Description                                                                                                                                                   |
 | ------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **`configuration`** | <code><a href="#purchasesconfiguration">PurchasesConfiguration</a></code> | RevenueCat configuration object including the API key and other optional parameters. See {@link <a href="#purchasesconfiguration">PurchasesConfiguration</a>} |
+
+--------------------
+
+
+### parseAsWebPurchaseRedemption(...)
+
+```typescript
+parseAsWebPurchaseRedemption(options: { urlString: string; }) => Promise<{ webPurchaseRedemption: WebPurchaseRedemption | null; }>
+```
+
+Parses the given URL string into a [WebPurchaseRedemption] object that can be used to redeem web purchases.
+
+| Param         | Type                                | Description                             |
+| ------------- | ----------------------------------- | --------------------------------------- |
+| **`options`** | <code>{ urlString: string; }</code> | Set the urlString used to open the App. |
+
+**Returns:** <code>Promise&lt;{ webPurchaseRedemption: <a href="#webpurchaseredemption">WebPurchaseRedemption</a> | null; }&gt;</code>
+
+--------------------
+
+
+### redeemWebPurchase(...)
+
+```typescript
+redeemWebPurchase(options: { webPurchaseRedemption: WebPurchaseRedemption; }) => Promise<WebPurchaseRedemptionResult>
+```
+
+Redeems the web purchase associated with the Redemption Link obtained with [parseAsWebPurchaseRedemption].
+
+| Param         | Type                                                                                                | Description                                                                                                               |
+| ------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| **`options`** | <code>{ webPurchaseRedemption: <a href="#webpurchaseredemption">WebPurchaseRedemption</a>; }</code> | The <a href="#webpurchaseredemption">WebPurchaseRedemption</a> object obtained from {@link parseAsWebPurchaseRedemption}. |
+
+**Returns:** <code>Promise&lt;<a href="#webpurchaseredemptionresult">WebPurchaseRedemptionResult</a>&gt;</code>
 
 --------------------
 
@@ -1250,6 +1286,29 @@ Represents a non-subscription transaction in the Store.
 | **`purchaseDate`**          | <code>string</code> | Purchase date of the transaction in ISO 8601 format. |
 
 
+#### PurchasesError
+
+Type encapsulating an error in an SDK operation.
+
+| Prop                         | Type                                                                  |
+| ---------------------------- | --------------------------------------------------------------------- |
+| **`code`**                   | <code><a href="#purchases_error_code">PURCHASES_ERROR_CODE</a></code> |
+| **`message`**                | <code>string</code>                                                   |
+| **`readableErrorCode`**      | <code>string</code>                                                   |
+| **`userInfo`**               | <code><a href="#errorinfo">ErrorInfo</a></code>                       |
+| **`underlyingErrorMessage`** | <code>string</code>                                                   |
+| **`userCancelled`**          | <code>boolean \| null</code>                                          |
+
+
+#### ErrorInfo
+
+Type encapsulating extra info on an error in an SDK operation.
+
+| Prop                    | Type                |
+| ----------------------- | ------------------- |
+| **`readableErrorCode`** | <code>string</code> |
+
+
 #### PurchasesOfferings
 
 Contains all the offerings configured in RevenueCat dashboard.
@@ -1627,6 +1686,20 @@ Configuration option that specifies that your app will complete purchases.
 <code>{ type: <a href="#purchases_are_completed_by_type">PURCHASES_ARE_COMPLETED_BY_TYPE.MY_APP</a>; /** * The version of StoreKit that your app is using to make purchases. This value is ignored * on Android, so if your app is Android-only, you may provide any value. */ storeKitVersion: <a href="#storekit_version">STOREKIT_VERSION</a>; }</code>
 
 
+#### WebPurchaseRedemption
+
+An object containing the redemption link to be redeemed.
+
+<code>{ /** * The redemption link to be redeemed. */ redemptionLink: string; }</code>
+
+
+#### WebPurchaseRedemptionResult
+
+The result of a redemption attempt.
+
+<code>{ result: <a href="#webpurchaseredemptionresulttype">WebPurchaseRedemptionResultType.SUCCESS</a>; customerInfo: <a href="#customerinfo">CustomerInfo</a>; } | { result: <a href="#webpurchaseredemptionresulttype">WebPurchaseRedemptionResultType.ERROR</a>; error: <a href="#purchaseserror">PurchasesError</a>; } | { result: <a href="#webpurchaseredemptionresulttype">WebPurchaseRedemptionResultType.PURCHASE_BELONGS_TO_OTHER_USER</a>; } | { result: <a href="#webpurchaseredemptionresulttype">WebPurchaseRedemptionResultType.INVALID_TOKEN</a>; } | { result: <a href="#webpurchaseredemptionresulttype">WebPurchaseRedemptionResultType.EXPIRED</a>; obfuscatedEmail: string; }</code>
+
+
 #### CustomerInfoUpdateListener
 
 Listener used on updated customer info
@@ -1686,6 +1759,17 @@ Listener used to receive log messages from the SDK.
 | **`INFORMATIONAL`** | <code>"INFORMATIONAL"</code> | Enable entitlement verification. If verification fails, this will be indicated with [VerificationResult.FAILED] in the [EntitlementInfos.verification] and [EntitlementInfo.verification] properties but parsing will not fail (i.e. Entitlements will still be granted). This can be useful if you want to handle verification failures to display an error/warning to the user or to track this situation but still grant access. |
 
 
+#### WebPurchaseRedemptionResultType
+
+| Members                              | Value                                         | Description                                                                                  |
+| ------------------------------------ | --------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| **`SUCCESS`**                        | <code>"SUCCESS"</code>                        | The redemption was successful.                                                               |
+| **`ERROR`**                          | <code>"ERROR"</code>                          | The redemption failed.                                                                       |
+| **`PURCHASE_BELONGS_TO_OTHER_USER`** | <code>"PURCHASE_BELONGS_TO_OTHER_USER"</code> | The purchase associated to the link belongs to another user.                                 |
+| **`INVALID_TOKEN`**                  | <code>"INVALID_TOKEN"</code>                  | The token is invalid.                                                                        |
+| **`EXPIRED`**                        | <code>"EXPIRED"</code>                        | The token has expired. A new Redemption Link will be sent to the email used during purchase. |
+
+
 #### VERIFICATION_RESULT
 
 | Members                  | Value                             | Description                                                                                                                                       |
@@ -1694,6 +1778,47 @@ Listener used to receive log messages from the SDK.
 | **`VERIFIED`**           | <code>"VERIFIED"</code>           | Verification with our server was performed successfully.                                                                                          |
 | **`FAILED`**             | <code>"FAILED"</code>             | Verification failed, possibly due to a MiTM attack.                                                                                               |
 | **`VERIFIED_ON_DEVICE`** | <code>"VERIFIED_ON_DEVICE"</code> | Verification was performed on device.                                                                                                             |
+
+
+#### PURCHASES_ERROR_CODE
+
+| Members                                                            | Value             |
+| ------------------------------------------------------------------ | ----------------- |
+| **`UNKNOWN_ERROR`**                                                | <code>"0"</code>  |
+| **`PURCHASE_CANCELLED_ERROR`**                                     | <code>"1"</code>  |
+| **`STORE_PROBLEM_ERROR`**                                          | <code>"2"</code>  |
+| **`PURCHASE_NOT_ALLOWED_ERROR`**                                   | <code>"3"</code>  |
+| **`PURCHASE_INVALID_ERROR`**                                       | <code>"4"</code>  |
+| **`PRODUCT_NOT_AVAILABLE_FOR_PURCHASE_ERROR`**                     | <code>"5"</code>  |
+| **`PRODUCT_ALREADY_PURCHASED_ERROR`**                              | <code>"6"</code>  |
+| **`RECEIPT_ALREADY_IN_USE_ERROR`**                                 | <code>"7"</code>  |
+| **`INVALID_RECEIPT_ERROR`**                                        | <code>"8"</code>  |
+| **`MISSING_RECEIPT_FILE_ERROR`**                                   | <code>"9"</code>  |
+| **`NETWORK_ERROR`**                                                | <code>"10"</code> |
+| **`INVALID_CREDENTIALS_ERROR`**                                    | <code>"11"</code> |
+| **`UNEXPECTED_BACKEND_RESPONSE_ERROR`**                            | <code>"12"</code> |
+| **`RECEIPT_IN_USE_BY_OTHER_SUBSCRIBER_ERROR`**                     | <code>"13"</code> |
+| **`INVALID_APP_USER_ID_ERROR`**                                    | <code>"14"</code> |
+| **`OPERATION_ALREADY_IN_PROGRESS_ERROR`**                          | <code>"15"</code> |
+| **`UNKNOWN_BACKEND_ERROR`**                                        | <code>"16"</code> |
+| **`INVALID_APPLE_SUBSCRIPTION_KEY_ERROR`**                         | <code>"17"</code> |
+| **`INELIGIBLE_ERROR`**                                             | <code>"18"</code> |
+| **`INSUFFICIENT_PERMISSIONS_ERROR`**                               | <code>"19"</code> |
+| **`PAYMENT_PENDING_ERROR`**                                        | <code>"20"</code> |
+| **`INVALID_SUBSCRIBER_ATTRIBUTES_ERROR`**                          | <code>"21"</code> |
+| **`LOG_OUT_ANONYMOUS_USER_ERROR`**                                 | <code>"22"</code> |
+| **`CONFIGURATION_ERROR`**                                          | <code>"23"</code> |
+| **`UNSUPPORTED_ERROR`**                                            | <code>"24"</code> |
+| **`EMPTY_SUBSCRIBER_ATTRIBUTES_ERROR`**                            | <code>"25"</code> |
+| **`PRODUCT_DISCOUNT_MISSING_IDENTIFIER_ERROR`**                    | <code>"26"</code> |
+| **`PRODUCT_DISCOUNT_MISSING_SUBSCRIPTION_GROUP_IDENTIFIER_ERROR`** | <code>"28"</code> |
+| **`CUSTOMER_INFO_ERROR`**                                          | <code>"29"</code> |
+| **`SYSTEM_INFO_ERROR`**                                            | <code>"30"</code> |
+| **`BEGIN_REFUND_REQUEST_ERROR`**                                   | <code>"31"</code> |
+| **`PRODUCT_REQUEST_TIMED_OUT_ERROR`**                              | <code>"32"</code> |
+| **`API_ENDPOINT_BLOCKED`**                                         | <code>"33"</code> |
+| **`INVALID_PROMOTIONAL_OFFER_ERROR`**                              | <code>"34"</code> |
+| **`OFFLINE_CONNECTION_ERROR`**                                     | <code>"35"</code> |
 
 
 #### PACKAGE_TYPE
