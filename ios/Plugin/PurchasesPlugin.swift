@@ -69,6 +69,29 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
         call.resolve()
     }
 
+    @objc func parseAsWebPurchaseRedemption(_ call: CAPPluginCall) {
+        guard let urlString = call.getOrRejectString("urlString") else { return }
+        let result: [String: Any?]
+        if CommonFunctionality.isWebPurchaseRedemptionURL(urlString: urlString) {
+            result = ["webPurchaseRedemption": ["redemptionLink": urlString]]
+        } else {
+            result = [
+                "webPurchaseRedemption": nil
+            ]
+        }
+        call.resolve(result as PluginCallResultData)
+    }
+
+    @objc func redeemWebPurchase(_ call: CAPPluginCall) {
+        guard let webPurchaseRedemption = call.getOrRejectObject("webPurchaseRedemption") else { return }
+        guard let redemptionLink = webPurchaseRedemption["redemptionLink"] as? String else {
+            call.reject("WebPurchaseRedemption parameter did not have a redemptionLink key")
+            return
+        }
+        CommonFunctionality.redeemWebPurchase(urlString: redemptionLink,
+                                              completion: self.getCompletionBlockHandler(call))
+    }
+
     @objc func setMockWebResults(_ call: CAPPluginCall) {
         NSLog("Cannot enable mock web results in iOS.")
         call.resolve()

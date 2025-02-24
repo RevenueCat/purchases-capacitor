@@ -20,12 +20,18 @@ import type {
   PurchasesStoreTransaction,
   PurchasesWinBackOffer,
   ShouldPurchasePromoProductListener,
+  WebPurchaseRedemption,
+  WebPurchaseRedemptionResult,
 } from '@revenuecat/purchases-typescript-internal-esm';
-import { REFUND_REQUEST_STATUS, VERIFICATION_RESULT } from '@revenuecat/purchases-typescript-internal-esm';
+import {
+  REFUND_REQUEST_STATUS,
+  VERIFICATION_RESULT,
+  WebPurchaseRedemptionResultType,
+} from '@revenuecat/purchases-typescript-internal-esm';
 
 import type {
-  GetEligibleWinBackOffersForProductOptions,
   GetEligibleWinBackOffersForPackageOptions,
+  GetEligibleWinBackOffersForProductOptions,
   GetProductOptions,
   GetPromotionalOfferOptions,
   PurchaseDiscountedPackageOptions,
@@ -46,6 +52,18 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
 
   configure(_configuration: PurchasesConfiguration): Promise<void> {
     return this.mockNonReturningFunctionIfEnabled('configure');
+  }
+
+  parseAsWebPurchaseRedemption(_options: { urlString: string }): Promise<{
+    webPurchaseRedemption: WebPurchaseRedemption | null;
+  }> {
+    return this.mockReturningFunctionIfEnabled('parseAsWebPurchaseRedemption', { webPurchaseRedemption: null });
+  }
+
+  redeemWebPurchase(_options: { webPurchaseRedemption: WebPurchaseRedemption }): Promise<WebPurchaseRedemptionResult> {
+    return this.mockReturningFunctionIfEnabled('redeemWebPurchase', {
+      result: WebPurchaseRedemptionResultType.INVALID_TOKEN,
+    });
   }
 
   setMockWebResults(options: { shouldMockWebResults: boolean }): Promise<void> {
