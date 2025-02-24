@@ -91,7 +91,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         `Received customer info in listener: ${prettifyJson(customerInfo)}`,
       );
     });
-    await listenDeepLinks();
+    await listenForDeepLinks();
     updateLastFunctionWithoutContent('configure');
   };
 
@@ -705,7 +705,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     }
   };
 
-  const listenDeepLinks = async () => {
+  const listenForDeepLinks = async () => {
     await App.addListener('appUrlOpen', async (event: URLOpenListenerEvent) => {
       const url = event.url;
       const { webPurchaseRedemption } = await Purchases.parseAsWebPurchaseRedemption({ urlString: url });
