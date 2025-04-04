@@ -462,6 +462,7 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     originalPurchaseDate: null,
     managementURL: null,
     nonSubscriptionTransactions: [],
+    subscriptionsByProductIdentifier: {},
   };
 
   private mockTransaction(
