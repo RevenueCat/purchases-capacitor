@@ -1,3 +1,9 @@
+## 9.2.2
+### 🐞 Bugfixes
+* Fix compilation issue in latest versions of Xcode due to name collisions
+### 🔄 Other Changes
+* Updates purchases-hybrid-common to 13.26.0 via Toni Rico (@tonidero)
+
 ## 9.2.1
 ## RevenueCat SDK
 ### 📦 Dependency Updates
