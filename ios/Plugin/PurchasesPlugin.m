@@ -22,6 +22,7 @@ CAP_PLUGIN(PurchasesPlugin, "Purchases",
            CAP_PLUGIN_METHOD(restorePurchases, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(recordPurchase, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getAppUserID, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(getStorefront, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(logIn, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(logOut, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(setLogLevel, CAPPluginReturnNone);
