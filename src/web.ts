@@ -19,7 +19,8 @@ import type {
   PurchasesStoreProduct,
   PurchasesStoreTransaction,
   PurchasesWinBackOffer,
-  ShouldPurchasePromoProductListener, Storefront,
+  ShouldPurchasePromoProductListener,
+  Storefront,
   WebPurchaseRedemption,
   WebPurchaseRedemptionResult,
 } from '@revenuecat/purchases-typescript-internal-esm';
