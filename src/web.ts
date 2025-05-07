@@ -20,6 +20,7 @@ import type {
   PurchasesStoreTransaction,
   PurchasesWinBackOffer,
   ShouldPurchasePromoProductListener,
+  Storefront,
   WebPurchaseRedemption,
   WebPurchaseRedemptionResult,
 } from '@revenuecat/purchases-typescript-internal-esm';
@@ -163,6 +164,11 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
   getAppUserID(): Promise<{ appUserID: string }> {
     return this.mockReturningFunctionIfEnabled('getAppUserID', {
       appUserID: 'test-web-user-id',
+    });
+  }
+  getStorefront(): Promise<Storefront> {
+    return this.mockReturningFunctionIfEnabled('getStorefront', {
+      countryCode: 'USA',
     });
   }
   logIn(_appUserID: { appUserID: string }): Promise<LogInResult> {

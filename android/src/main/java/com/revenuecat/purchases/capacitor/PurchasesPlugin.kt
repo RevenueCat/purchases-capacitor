@@ -35,6 +35,7 @@ import com.revenuecat.purchases.hybridcommon.getAppUserID as getAppUserIDCommon
 import com.revenuecat.purchases.hybridcommon.getCurrentOfferingForPlacement as getCurrentOfferingForPlacementCommon
 import com.revenuecat.purchases.hybridcommon.getCustomerInfo as getCustomerInfoCommon
 import com.revenuecat.purchases.hybridcommon.getOfferings as getOfferingsCommon
+import com.revenuecat.purchases.hybridcommon.getStorefront as getStorefrontCommon
 import com.revenuecat.purchases.hybridcommon.invalidateCustomerInfoCache as invalidateCustomerInfoCacheCommon
 import com.revenuecat.purchases.hybridcommon.isAnonymous as isAnonymousCommon
 import com.revenuecat.purchases.hybridcommon.logIn as logInCommon
@@ -295,6 +296,18 @@ class PurchasesPlugin : Plugin() {
     fun getAppUserID(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         call.resolveWithMap(mapOf("appUserID" to getAppUserIDCommon()))
+    }
+
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
+    fun getStorefront(call: PluginCall) {
+        if (rejectIfNotConfigured(call)) return
+        getStorefrontCommon { storefront ->
+            if (storefront == null) {
+                call.reject("Storefront info could not be obtained for account.")
+                return@getStorefrontCommon
+            }
+            call.resolveWithMap(storefront)
+        }
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)

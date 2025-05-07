@@ -249,6 +249,17 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
         ])
     }
 
+    @objc func getStorefront(_ call: CAPPluginCall) {
+        guard self.rejectIfPurchasesNotConfigured(call) else { return }
+        CommonFunctionality.getStorefront { storefront in
+            if let storefront = storefront {
+                call.resolve(storefront)
+            } else {
+                call.reject("Storefront info could not be obtained for account.")
+            }
+        }
+    }
+
     @objc func logIn(_ call: CAPPluginCall) {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
         guard let appUserID = call.getOrRejectString("appUserID") else { return }
@@ -348,7 +359,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
             call.reject("Product does not contain an identifier.")
             return
         }
-       
+
         CommonFunctionality.eligibleWinBackOffers(
             for: productID,
             completion: self.getCompletionBlockHandlerForArrayResponse(
@@ -372,7 +383,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
             call.reject("Package did not contain a product with a product identifier.")
             return
         }
-       
+
         CommonFunctionality.eligibleWinBackOffers(
             for: productID,
             completion: self.getCompletionBlockHandlerForArrayResponse(

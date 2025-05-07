@@ -72,6 +72,7 @@ This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package
 * [`restorePurchases()`](#restorepurchases)
 * [`recordPurchase(...)`](#recordpurchase)
 * [`getAppUserID()`](#getappuserid)
+* [`getStorefront()`](#getstorefront)
 * [`logIn(...)`](#login)
 * [`logOut()`](#logout)
 * [`setLogLevel(...)`](#setloglevel)
@@ -433,6 +434,19 @@ getAppUserID() => Promise<{ appUserID: string; }>
 Get the appUserID
 
 **Returns:** <code>Promise&lt;{ appUserID: string; }&gt;</code>
+
+--------------------
+
+
+### getStorefront()
+
+```typescript
+getStorefront() => Promise<Storefront | null>
+```
+
+Gets the storefront for the current store account.
+
+**Returns:** <code>Promise&lt;<a href="#storefront">Storefront</a> | null&gt;</code>
 
 --------------------
 
@@ -1597,6 +1611,15 @@ Holds the information about a PromotionalOffer in Apple's App <a href="#store">S
 | -------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | **`aPackage`** | <code><a href="#purchasespackage">PurchasesPackage</a></code>                   | The Package you wish to purchase. You can get the Packages by calling getOfferings   |
 | **`discount`** | <code><a href="#purchasespromotionaloffer">PurchasesPromotionalOffer</a></code> | Discount to apply to this package. Retrieve this discount using getPromotionalOffer. |
+
+
+#### Storefront
+
+Contains the information about the current store account.
+
+| Prop              | Type                | Description                                |
+| ----------------- | ------------------- | ------------------------------------------ |
+| **`countryCode`** | <code>string</code> | Country code of the current store account. |
 
 
 #### LogInResult
