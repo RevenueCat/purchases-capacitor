@@ -25,10 +25,7 @@ export interface RevenueCatUIPlugin {
    * @param eventName The event to listen for
    * @param listener The listener to call when the event is triggered
    */
-  addListener(
-    eventName: 'paywallDisplayed' | 'paywallDismissed',
-    listener: () => void,
-  ): Promise<PluginListenerHandle>;
+  addListener(eventName: 'paywallDisplayed' | 'paywallDismissed', listener: () => void): Promise<PluginListenerHandle>;
 
   /**
    * Remove all listeners for this plugin.
@@ -90,4 +87,4 @@ export interface PaywallResult {
    * The result of the paywall presentation.
    */
   result: PaywallResultEnum;
-} 
+}
