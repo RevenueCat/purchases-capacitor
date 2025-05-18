@@ -1,0 +1,80 @@
+{
+  "name": "@revenuecat/purchases-capacitor-ui",
+  "version": "10.2.4",
+  "description": "UI components for RevenueCat Capacitor SDK",
+  "main": "dist/plugin.cjs.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "unpkg": "dist/plugin.js",
+  "files": [
+    "android/src/main/",
+    "android/build.gradle",
+    "dist/",
+    "ios/Plugin/",
+    "PurchasesCapacitorUi.podspec"
+  ],
+  "author": "RevenueCat, Inc.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RevenueCat/purchases-capacitor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/RevenueCat/purchases-capacitor/issues"
+  },
+  "keywords": [
+    "capacitor",
+    "plugin",
+    "native",
+    "revenuecat",
+    "purchases",
+    "subscriptions",
+    "iap",
+    "in-app-purchases",
+    "ui",
+    "paywall",
+    "customer-center"
+  ],
+  "capacitor": {
+    "ios": {
+      "src": "ios"
+    },
+    "android": {
+      "src": "android"
+    }
+  },
+  "scripts": {
+    "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
+    "verify:ios": "cd ios && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin -destination generic/platform=iOS && cd ..",
+    "verify:android": "cd android && ./gradlew clean build test && cd ..",
+    "verify:web": "npm run build",
+    "lint": "npm run eslint && npm run prettier -- --check",
+    "fmt": "npm run eslint -- --fix && npm run prettier -- --write",
+    "eslint": "eslint . --ext ts",
+    "prettier": "prettier \"**/*.{css,html,js,java,json,md,ts,tsx}\"",
+    "docgen": "docgen --api RevenueCatUIPlugin --output-readme README.md",
+    "build": "npm run clean && tsc && rollup -c ../rollup.config.js",
+    "clean": "rimraf ./dist",
+    "watch": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@capacitor/core": "^7.0.0",
+    "@revenuecat/purchases-capacitor": "^10.2.4"
+  },
+  "peerDependencies": {
+    "@capacitor/core": "^7.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.0.0",
+    "@capacitor/docgen": "^0.3.0",
+    "@ionic/eslint-config": "^0.4.0",
+    "@ionic/prettier-config": "^4.0.0",
+    "eslint": "^8.57.0",
+    "prettier": "^3.4.2",
+    "prettier-plugin-java": "^2.6.6",
+    "rimraf": "^6.0.1",
+    "rollup": "^4.30.1",
+    "typescript": "~4.1.5"
+  }
+} 
