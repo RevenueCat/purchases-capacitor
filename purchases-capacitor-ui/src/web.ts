@@ -45,9 +45,12 @@ export class RevenueCatUIWeb extends WebPlugin implements RevenueCatUIPlugin {
   }
 
   addListener(
-    eventName: 'paywallDisplayed' | 'paywallDismissed', 
-    listener: () => void
+    eventName: string,
+    listener: (...args: any[]) => void
   ): Promise<PluginListenerHandle> {
+    if (eventName !== 'paywallDisplayed' && eventName !== 'paywallDismissed') {
+      console.warn(`Unsupported event: ${eventName}`);
+    }
     return super.addListener(eventName, listener);
   }
 
