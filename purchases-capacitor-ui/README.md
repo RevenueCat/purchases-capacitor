@@ -2,6 +2,14 @@
 
 UI components for RevenueCat Capacitor SDK. This plugin extends the functionality of the [@revenuecat/purchases-capacitor](https://github.com/RevenueCat/purchases-capacitor) plugin to provide UI components for displaying paywalls and customer center.
 
+## Platform Support
+
+> ⚠️ **IMPORTANT: Platform Limitations**
+>
+> - **iOS**: Paywalls and Customer Center are fully supported on iOS 15.0+
+> - **Android**: Paywalls and Customer Center are **NOT YET SUPPORTED** on Android. API calls will resolve gracefully without errors but will not display any UI.
+> - **Web**: Not supported
+
 ## Install
 
 ```bash
@@ -11,6 +19,10 @@ npx cap sync
 ```
 
 > Note: Make sure to use the same version for both `@revenuecat/purchases-capacitor` and `@revenuecat/purchases-capacitor-ui`.
+
+## iOS Configuration
+
+For iOS, you need to add SwiftUI to your app's capabilities. Follow the [iOS SDK's SwiftUI Configuration](https://github.com/RevenueCat/purchases-ios-ui#swift-package-manager) guide for details.
 
 ## API
 
@@ -48,6 +60,8 @@ await Purchases.configure({
 
 ### Presenting Paywalls
 
+> ⚠️ **Note**: Paywalls are currently only supported on iOS 15.0+. On Android, these methods will resolve gracefully but will not display any UI.
+
 ```typescript
 import { RevenueCatUI } from '@revenuecat/purchases-capacitor-ui';
 
@@ -69,12 +83,22 @@ const result = await RevenueCatUI.presentPaywallIfNeeded({
 
 ### Customer Center
 
+> ⚠️ **Note**: Customer Center is currently only supported on iOS 15.0+. On Android, this method will resolve gracefully but will not display any UI.
+
 ```typescript
 import { RevenueCatUI } from '@revenuecat/purchases-capacitor-ui';
 
 // Present the customer center
 await RevenueCatUI.presentCustomerCenter();
 ```
+
+## Demo
+
+Here's a quick demo of Paywalls running on iOS:
+
+![iOS Paywalls Demo](./assets/ios-paywalls-demo.mp4)
+
+> Note: To view the demo, please download the MP4 file from the assets directory.
 
 ## Events
 

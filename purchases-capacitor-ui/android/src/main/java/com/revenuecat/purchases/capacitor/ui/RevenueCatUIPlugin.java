@@ -56,114 +56,39 @@ public class RevenueCatUIPlugin extends Plugin {
     
     @PluginMethod
     public void presentPaywall(final PluginCall call) {
-        String offeringIdentifier = call.getString("offeringIdentifier");
+        // Gracefully handle unsupported feature on Android
+        JSObject result = new JSObject();
+        result.put("result", "NOT_PRESENTED");
+        call.resolve(result);
         
-        if (offeringIdentifier != null) {
-            Purchases.getSharedInstance().getOfferings(new Purchases.GetOfferingsListener() {
-                @Override
-                public void onReceived(Offerings offerings) {
-                    if (offerings.getOffering(offeringIdentifier) != null) {
-                        launchPaywall(offerings.getOffering(offeringIdentifier), call);
-                    } else {
-                        call.reject("Offering not found: " + offeringIdentifier);
-                    }
-                }
-                
-                @Override
-                public void onError(Exception error) {
-                    call.reject("Failed to get offerings: " + error.getMessage());
-                }
-            });
-        } else {
-            Purchases.getSharedInstance().getOfferings(new Purchases.GetOfferingsListener() {
-                @Override
-                public void onReceived(Offerings offerings) {
-                    if (offerings.getCurrentOffering() != null) {
-                        launchPaywall(offerings.getCurrentOffering(), call);
-                    } else {
-                        call.reject("No current offering found");
-                    }
-                }
-                
-                @Override
-                public void onError(Exception error) {
-                    call.reject("Failed to get offerings: " + error.getMessage());
-                }
-            });
-        }
+        // Log warning that this feature is not available on Android yet
+        getActivity().runOnUiThread(() -> {
+            Purchases.getSharedInstance().logMessage("RevenueCatUI warning: Paywalls are not supported on Android yet.");
+        });
     }
     
     @PluginMethod
     public void presentPaywallIfNeeded(final PluginCall call) {
-        String requiredEntitlementIdentifier = call.getString("requiredEntitlementIdentifier");
-        if (requiredEntitlementIdentifier == null) {
-            call.reject("Required entitlement identifier is missing");
-            return;
-        }
+        // Gracefully handle unsupported feature on Android
+        JSObject result = new JSObject();
+        result.put("result", "NOT_PRESENTED");
+        call.resolve(result);
         
-        Purchases.getSharedInstance().getCustomerInfo(new Purchases.GetCustomerInfoListener() {
-            @Override
-            public void onReceived(CustomerInfo customerInfo) {
-                if (customerInfo.getEntitlements().get(requiredEntitlementIdentifier) != null && 
-                    customerInfo.getEntitlements().get(requiredEntitlementIdentifier).isActive()) {
-                    JSObject result = new JSObject();
-                    result.put("result", "NOT_PRESENTED");
-                    call.resolve(result);
-                    return;
-                }
-                
-                String offeringIdentifier = call.getString("offeringIdentifier");
-                
-                if (offeringIdentifier != null) {
-                    Purchases.getSharedInstance().getOfferings(new Purchases.GetOfferingsListener() {
-                        @Override
-                        public void onReceived(Offerings offerings) {
-                            if (offerings.getOffering(offeringIdentifier) != null) {
-                                launchPaywall(offerings.getOffering(offeringIdentifier), call);
-                            } else if (offerings.getCurrentOffering() != null) {
-                                launchPaywall(offerings.getCurrentOffering(), call);
-                            } else {
-                                call.reject("No offering found");
-                            }
-                        }
-                        
-                        @Override
-                        public void onError(Exception error) {
-                            call.reject("Failed to get offerings: " + error.getMessage());
-                        }
-                    });
-                } else {
-                    Purchases.getSharedInstance().getOfferings(new Purchases.GetOfferingsListener() {
-                        @Override
-                        public void onReceived(Offerings offerings) {
-                            if (offerings.getCurrentOffering() != null) {
-                                launchPaywall(offerings.getCurrentOffering(), call);
-                            } else {
-                                call.reject("No current offering found");
-                            }
-                        }
-                        
-                        @Override
-                        public void onError(Exception error) {
-                            call.reject("Failed to get offerings: " + error.getMessage());
-                        }
-                    });
-                }
-            }
-            
-            @Override
-            public void onError(Exception error) {
-                call.reject("Failed to get customer info: " + error.getMessage());
-            }
+        // Log warning that this feature is not available on Android yet
+        getActivity().runOnUiThread(() -> {
+            Purchases.getSharedInstance().logMessage("RevenueCatUI warning: Paywalls are not supported on Android yet.");
         });
     }
     
     @PluginMethod
     public void presentCustomerCenter(PluginCall call) {
-        savedCall = call;
-        Intent intent = CustomerCenterActivity.newIntent(getActivity());
-        notifyListeners("paywallDisplayed", new JSObject());
-        customerCenterLauncher.launch(intent);
+        // Gracefully handle unsupported feature on Android
+        call.resolve();
+        
+        // Log warning that this feature is not available on Android yet
+        getActivity().runOnUiThread(() -> {
+            Purchases.getSharedInstance().logMessage("RevenueCatUI warning: Customer Center is not supported on Android yet.");
+        });
     }
     
     private void launchPaywall(com.revenuecat.purchases.Offering offering, PluginCall call) {
