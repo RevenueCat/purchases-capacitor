@@ -1,11 +1,14 @@
-import { WebPlugin, type PluginListenerHandle } from '@capacitor/core';
+import { WebPlugin } from '@capacitor/core';
+import type { PluginListenerHandle } from '@capacitor/core';
 
 import { 
   PaywallResultEnum,
-  type PaywallResult,
-  type PresentPaywallIfNeededOptions, 
-  type PresentPaywallOptions, 
-  type RevenueCatUIPlugin 
+} from './definitions';
+import type {
+  PaywallResult,
+  PresentPaywallIfNeededOptions,
+  PresentPaywallOptions,
+  RevenueCatUIPlugin
 } from './definitions';
 
 export class RevenueCatUIWeb extends WebPlugin implements RevenueCatUIPlugin {
