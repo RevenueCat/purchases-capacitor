@@ -21,6 +21,7 @@ import type {
   PurchasesStoreTransaction,
   PurchasesWinBackOffer,
   REFUND_REQUEST_STATUS,
+  Storefront,
   SubscriptionOption,
   WebPurchaseRedemption,
   WebPurchaseRedemptionResult,
@@ -377,6 +378,14 @@ export interface PurchasesPlugin {
    * @returns {Promise<string>} The app user id in a promise
    */
   getAppUserID(): Promise<{ appUserID: string }>;
+
+  /**
+   * Gets the storefront for the current store account.
+   * @return {Promise<Storefront>} A promise of a Storefront object.
+   * The promise will be rejected if configure has not been called yet or if storefront could
+   * not be obtained for account.
+   */
+  getStorefront(): Promise<Storefront>;
 
   /**
    * This function will log in the current user with an appUserID. Typically, this would be used after a log in

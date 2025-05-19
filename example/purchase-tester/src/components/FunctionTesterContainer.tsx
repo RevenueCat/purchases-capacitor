@@ -238,6 +238,11 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     updateLastFunction('getAppUserID', appUserID);
   };
 
+  const getStorefront = async () => {
+    const storefront = await Purchases.getStorefront();
+    updateLastFunction('getStorefront', JSON.stringify(storefront));
+  };
+
   const logIn = async () => {
     const appUserIDToUse = 'test-capacitor-app-user-id';
     const customerInfo = await Purchases.logIn({ appUserID: appUserIDToUse });
@@ -778,6 +783,9 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         </IonButton>
         <IonButton size="small" onClick={getAppUserID}>
           Get current user id
+        </IonButton>
+        <IonButton size="small" onClick={getStorefront}>
+          Get Storefront
         </IonButton>
         <IonButton size="small" onClick={logIn}>
           Log in with test-app-user-id
