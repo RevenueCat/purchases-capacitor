@@ -10,35 +10,24 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
-import com.revenuecat.purchases.CustomerInfo;
-import com.revenuecat.purchases.Offerings;
-import com.revenuecat.purchases.Purchases;
-import com.revenuecat.purchases.ui.CustomerCenterActivity;
-import com.revenuecat.purchases.ui.revenuecatui.PaywallActivity;
-import com.revenuecat.purchases.ui.revenuecatui.PaywallOptions;
-import com.revenuecat.purchases.ui.revenuecatui.PaywallResult;
+import com.revenuecat.purchases.hybrid.common.CustomerInfo;
+import com.revenuecat.purchases.hybrid.common.ui.CustomerCenterHelper;
+import com.revenuecat.purchases.hybrid.common.ui.PaywallActivityLauncher;
+import com.revenuecat.purchases.hybrid.common.ui.PaywallResult;
+import com.revenuecat.purchases.hybrid.common.ui.PaywallResultHandler;
 
 @CapacitorPlugin(name = "RevenueCatUI")
-public class RevenueCatUIPlugin extends Plugin {
+public class RevenueCatUIPlugin extends Plugin implements PaywallResultHandler {
 
     private PluginCall savedCall;
-    private ActivityResultLauncher<Intent> paywallLauncher;
+    private PaywallActivityLauncher paywallLauncher;
     private ActivityResultLauncher<Intent> customerCenterLauncher;
 
     @Override
     public void load() {
         super.load();
 
-        paywallLauncher = getActivity()
-            .registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        handlePaywallResult(result);
-                    }
-                }
-            );
+        paywallLauncher = new PaywallActivityLauncher(getActivity(), this);
 
         customerCenterLauncher = getActivity()
             .registerForActivityResult(
@@ -57,74 +46,70 @@ public class RevenueCatUIPlugin extends Plugin {
 
     @PluginMethod
     public void presentPaywall(final PluginCall call) {
-        // Gracefully handle unsupported feature on Android
-        JSObject result = new JSObject();
-        result.put("result", "NOT_PRESENTED");
-        call.resolve(result);
+        savedCall = call;
+        String offeringIdentifier = call.getString("offeringIdentifier");
+        Boolean displayCloseButton = call.getBoolean("displayCloseButton", false);
 
-        // Log warning that this feature is not available on Android yet
-        getActivity()
-            .runOnUiThread(() -> {
-                Purchases.getSharedInstance().logMessage("RevenueCatUI warning: Paywalls are not supported on Android yet.");
-            });
+        if (offeringIdentifier != null && !offeringIdentifier.isEmpty()) {
+            // Launch paywall with specific offering
+            paywallLauncher.launch(offeringIdentifier, displayCloseButton);
+            notifyListeners("paywallDisplayed", new JSObject());
+        } else {
+            // Launch paywall with current offering
+            paywallLauncher.launch(displayCloseButton);
+            notifyListeners("paywallDisplayed", new JSObject());
+        }
     }
 
     @PluginMethod
     public void presentPaywallIfNeeded(final PluginCall call) {
-        // Gracefully handle unsupported feature on Android
-        JSObject result = new JSObject();
-        result.put("result", "NOT_PRESENTED");
-        call.resolve(result);
+        String requiredEntitlementIdentifier = call.getString("requiredEntitlementIdentifier");
+        if (requiredEntitlementIdentifier == null || requiredEntitlementIdentifier.isEmpty()) {
+            call.reject("Required entitlement identifier is required");
+            return;
+        }
 
-        // Log warning that this feature is not available on Android yet
-        getActivity()
-            .runOnUiThread(() -> {
-                Purchases.getSharedInstance().logMessage("RevenueCatUI warning: Paywalls are not supported on Android yet.");
-            });
+        savedCall = call;
+        String offeringIdentifier = call.getString("offeringIdentifier");
+        Boolean displayCloseButton = call.getBoolean("displayCloseButton", false);
+
+        if (offeringIdentifier != null && !offeringIdentifier.isEmpty()) {
+            // Launch paywall if needed with specific offering
+            paywallLauncher.launchIfNeeded(requiredEntitlementIdentifier, offeringIdentifier, displayCloseButton);
+            notifyListeners("paywallDisplayed", new JSObject());
+        } else {
+            // Launch paywall if needed with current offering
+            paywallLauncher.launchIfNeeded(requiredEntitlementIdentifier, displayCloseButton);
+            notifyListeners("paywallDisplayed", new JSObject());
+        }
     }
 
     @PluginMethod
     public void presentCustomerCenter(PluginCall call) {
-        // Gracefully handle unsupported feature on Android
-        call.resolve();
-
-        // Log warning that this feature is not available on Android yet
-        getActivity()
-            .runOnUiThread(() -> {
-                Purchases.getSharedInstance().logMessage("RevenueCatUI warning: Customer Center is not supported on Android yet.");
-            });
-    }
-
-    private void launchPaywall(com.revenuecat.purchases.Offering offering, PluginCall call) {
         savedCall = call;
-        Intent intent = PaywallActivity.newIntent(getActivity(), offering);
-        notifyListeners("paywallDisplayed", new JSObject());
-        paywallLauncher.launch(intent);
+        Intent intent = CustomerCenterHelper.newIntent(getActivity());
+        customerCenterLauncher.launch(intent);
     }
 
-    private void handlePaywallResult(ActivityResult result) {
+    @Override
+    public void onActivityResult(PaywallResult result) {
         if (savedCall == null) {
             return;
         }
 
-        if (result.getResultCode() == PaywallResult.PURCHASED.getResultCode()) {
-            JSObject jsObject = new JSObject();
+        JSObject jsObject = new JSObject();
+        
+        if (result == PaywallResult.PURCHASED) {
             jsObject.put("result", "PURCHASED");
-            savedCall.resolve(jsObject);
-        } else if (result.getResultCode() == PaywallResult.RESTORED.getResultCode()) {
-            JSObject jsObject = new JSObject();
+        } else if (result == PaywallResult.RESTORED) {
             jsObject.put("result", "RESTORED");
-            savedCall.resolve(jsObject);
-        } else if (result.getResultCode() == PaywallResult.CANCELLED.getResultCode()) {
-            JSObject jsObject = new JSObject();
+        } else if (result == PaywallResult.CANCELLED) {
             jsObject.put("result", "CANCELLED");
-            savedCall.resolve(jsObject);
         } else {
-            JSObject jsObject = new JSObject();
             jsObject.put("result", "ERROR");
-            savedCall.resolve(jsObject);
         }
-
+        
+        savedCall.resolve(jsObject);
         notifyListeners("paywallDismissed", new JSObject());
         savedCall = null;
     }
