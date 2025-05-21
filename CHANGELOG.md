@@ -1,3 +1,8 @@
+## 10.3.0
+## RevenueCat SDK
+### ✨ New Features
+* Add `getStorefront` API (#436) via Toni Rico (@tonidero)
+
 ## 10.2.4
 ## RevenueCat SDK
 ### 📦 Dependency Updates
