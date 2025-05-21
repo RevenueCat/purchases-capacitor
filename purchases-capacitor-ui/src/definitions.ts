@@ -1,4 +1,5 @@
 import type { PluginListenerHandle } from '@capacitor/core';
+import { PAYWALL_RESULT } from '@revenuecat/purchases-typescript-internal-esm';
 
 export interface RevenueCatUIPlugin {
   /**
@@ -55,36 +56,12 @@ export interface PresentPaywallIfNeededOptions extends PresentPaywallOptions {
   requiredEntitlementIdentifier: string;
 }
 
-export enum PaywallResultEnum {
-  /**
-   * The paywall wasn't presented because the user already has the required entitlement.
-   */
-  NOT_PRESENTED = 'NOT_PRESENTED',
-
-  /**
-   * The user cancelled the paywall without purchasing anything.
-   */
-  CANCELLED = 'CANCELLED',
-
-  /**
-   * An error occurred while presenting the paywall.
-   */
-  ERROR = 'ERROR',
-
-  /**
-   * The user made a purchase.
-   */
-  PURCHASED = 'PURCHASED',
-
-  /**
-   * The user restored a previous purchase.
-   */
-  RESTORED = 'RESTORED',
-}
+// Using the enum from purchases-typescript-internal-esm instead of defining our own
+export { PAYWALL_RESULT as PaywallResultEnum };
 
 export interface PaywallResult {
   /**
    * The result of the paywall presentation.
    */
-  result: PaywallResultEnum;
+  result: PAYWALL_RESULT;
 }

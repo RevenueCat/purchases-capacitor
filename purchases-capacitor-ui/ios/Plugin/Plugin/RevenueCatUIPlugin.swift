@@ -41,6 +41,12 @@ public class RevenueCatUIPlugin: CAPPlugin {
                 return 
             }
             
+            // Check if there's already a presentation in progress
+            if self.savedCall != nil {
+                call.reject("A paywall presentation is already in progress")
+                return
+            }
+            
             guard #available(iOS 15.0, *), let proxy = self._paywallProxy else {
                 call.reject("PaywallViewController requires iOS 15.0 or newer")
                 return
@@ -82,6 +88,12 @@ public class RevenueCatUIPlugin: CAPPlugin {
             guard let self = self else { 
                 call.reject("Plugin instance was deallocated")
                 return 
+            }
+            
+            // Check if there's already a presentation in progress
+            if self.savedCall != nil {
+                call.reject("A paywall presentation is already in progress")
+                return
             }
             
             guard #available(iOS 15.0, *), let proxy = self._paywallProxy else {
@@ -131,6 +143,12 @@ public class RevenueCatUIPlugin: CAPPlugin {
             guard let self = self else { 
                 call.reject("Plugin instance was deallocated")
                 return 
+            }
+            
+            // Check if there's already a presentation in progress
+            if self.savedCall != nil {
+                call.reject("A customer center presentation is already in progress")
+                return
             }
             
             guard #available(iOS 15.0, *), let proxy = self._customerCenterProxy else {

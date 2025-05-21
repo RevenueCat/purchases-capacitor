@@ -36,6 +36,12 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
 
     @PluginMethod
     fun presentPaywall(call: PluginCall) {
+        // Check if there's already a presentation in progress
+        if (savedCall != null) {
+            call.reject("A paywall presentation is already in progress")
+            return
+        }
+        
         savedCall = call
 
         val offeringIdentifier = call.getString("offeringIdentifier")
@@ -72,6 +78,12 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
             return
         }
 
+        // Check if there's already a presentation in progress
+        if (savedCall != null) {
+            call.reject("A paywall presentation is already in progress")
+            return
+        }
+        
         savedCall = call
 
         val offeringIdentifier = call.getString("offeringIdentifier")
@@ -111,6 +123,12 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
             return
         }
 
+        // Check if there's already a presentation in progress
+        if (savedCall != null) {
+            call.reject("A customer center presentation is already in progress")
+            return
+        }
+        
         savedCall = call
 
         val intent = ShowCustomerCenter().createIntent(currentActivity, Unit)

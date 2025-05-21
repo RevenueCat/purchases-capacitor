@@ -1,7 +1,7 @@
 import { WebPlugin } from '@capacitor/core';
 import type { PluginListenerHandle } from '@capacitor/core';
+import { PAYWALL_RESULT } from '@revenuecat/purchases-typescript-internal-esm';
 
-import { PaywallResultEnum } from './definitions';
 import type {
   PaywallResult,
   PresentPaywallIfNeededOptions,
@@ -18,7 +18,7 @@ export class RevenueCatUIWeb extends WebPlugin implements RevenueCatUIPlugin {
     console.warn('RevenueCatUI.presentPaywall is not implemented on web', options);
 
     return {
-      result: PaywallResultEnum.NOT_PRESENTED,
+      result: PAYWALL_RESULT.NOT_PRESENTED,
     };
   }
 
@@ -26,7 +26,7 @@ export class RevenueCatUIWeb extends WebPlugin implements RevenueCatUIPlugin {
     console.warn('RevenueCatUI.presentPaywallIfNeeded is not implemented on web', options);
 
     return {
-      result: PaywallResultEnum.NOT_PRESENTED,
+      result: PAYWALL_RESULT.NOT_PRESENTED,
     };
   }
 
