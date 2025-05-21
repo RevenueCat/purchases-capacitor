@@ -7,7 +7,7 @@ UI components for RevenueCat Capacitor SDK. This plugin extends the functionalit
 > ⚠️ **IMPORTANT: Platform Limitations**
 >
 > - **iOS**: Paywalls and Customer Center are fully supported on iOS 15.0+
-> - **Android**: Paywalls and Customer Center are **NOT YET SUPPORTED** on Android. API calls will resolve gracefully without errors but will not display any UI.
+> - **Android**: Paywalls and Customer Center are now fully supported on Android 6.0+ (API level 23+)
 > - **Web**: Not supported
 
 ## Install
@@ -60,8 +60,6 @@ await Purchases.configure({
 
 ### Presenting Paywalls
 
-> ⚠️ **Note**: Paywalls are currently only supported on iOS 15.0+. On Android, these methods will resolve gracefully but will not display any UI.
-
 ```typescript
 import { RevenueCatUI } from '@revenuecat/purchases-capacitor-ui';
 
@@ -82,8 +80,6 @@ const result = await RevenueCatUI.presentPaywallIfNeeded({
 ```
 
 ### Customer Center
-
-> ⚠️ **Note**: Customer Center is currently only supported on iOS 15.0+. On Android, this method will resolve gracefully but will not display any UI.
 
 ```typescript
 import { RevenueCatUI } from '@revenuecat/purchases-capacitor-ui';
