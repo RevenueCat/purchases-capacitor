@@ -34,93 +34,123 @@ public class RevenueCatUIPlugin: CAPPlugin {
     // MARK: - Plugin Methods
 
     @objc func presentPaywall(_ call: CAPPluginCall) {
-        guard #available(iOS 15.0, *), let proxy = _paywallProxy else {
-            call.reject("PaywallViewController requires iOS 15.0 or newer")
-            return
-        }
-
-        savedCall = call
-
-        let offeringIdentifier = call.getString("offeringIdentifier")
-        let displayCloseButton = call.getBool("displayCloseButton") ?? false
-
-        var options: [String: Any] = [
-            "displayCloseButton": displayCloseButton,
-            "shouldBlockTouchEvents": true
-        ]
-
-        if let offeringIdentifier = offeringIdentifier {
-            options["offeringIdentifier"] = offeringIdentifier
-        }
-
-        proxy.presentPaywall(
-            options: options,
-            paywallResultHandler: { [weak self] result in
-                guard let self = self else { return }
-
-                if let call = self.savedCall {
-                    call.resolve(["result": result])
-                    self.savedCall = nil
-                }
+        // Ensure UI operations run on the main thread
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { 
+                call.reject("Plugin instance was deallocated")
+                return 
             }
-        )
+            
+            guard #available(iOS 15.0, *), let proxy = self._paywallProxy else {
+                call.reject("PaywallViewController requires iOS 15.0 or newer")
+                return
+            }
+
+            self.savedCall = call
+
+            let offeringIdentifier = call.getString("offeringIdentifier")
+            let displayCloseButton = call.getBool("displayCloseButton") ?? false
+
+            var options: [String: Any] = [
+                "displayCloseButton": displayCloseButton,
+                "shouldBlockTouchEvents": true
+            ]
+
+            if let offeringIdentifier = offeringIdentifier {
+                options["offeringIdentifier"] = offeringIdentifier
+            }
+
+            proxy.presentPaywall(
+                options: options,
+                paywallResultHandler: { [weak self] result in
+                    guard let self = self else { return }
+                    
+                    DispatchQueue.main.async {
+                        if let call = self.savedCall {
+                            call.resolve(["result": result])
+                            self.savedCall = nil
+                        }
+                    }
+                }
+            )
+        }
     }
 
     @objc func presentPaywallIfNeeded(_ call: CAPPluginCall) {
-        guard #available(iOS 15.0, *), let proxy = _paywallProxy else {
-            call.reject("PaywallViewController requires iOS 15.0 or newer")
-            return
-        }
-
-        savedCall = call
-
-        guard let requiredEntitlementIdentifier = call.getString("requiredEntitlementIdentifier") else {
-            call.reject("Required entitlement identifier is missing")
-            return
-        }
-
-        let offeringIdentifier = call.getString("offeringIdentifier")
-        let displayCloseButton = call.getBool("displayCloseButton") ?? false
-
-        var options: [String: Any] = [
-            "displayCloseButton": displayCloseButton,
-            "shouldBlockTouchEvents": true,
-            "requiredEntitlementIdentifier": requiredEntitlementIdentifier
-        ]
-
-        if let offeringIdentifier = offeringIdentifier {
-            options["offeringIdentifier"] = offeringIdentifier
-        }
-
-        proxy.presentPaywallIfNeeded(
-            options: options,
-            paywallResultHandler: { [weak self] result in
-                guard let self = self else { return }
-
-                if let call = self.savedCall {
-                    call.resolve(["result": result])
-                    self.savedCall = nil
-                }
+        // Ensure UI operations run on the main thread
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { 
+                call.reject("Plugin instance was deallocated")
+                return 
             }
-        )
+            
+            guard #available(iOS 15.0, *), let proxy = self._paywallProxy else {
+                call.reject("PaywallViewController requires iOS 15.0 or newer")
+                return
+            }
+
+            self.savedCall = call
+
+            guard let requiredEntitlementIdentifier = call.getString("requiredEntitlementIdentifier") else {
+                call.reject("Required entitlement identifier is missing")
+                return
+            }
+
+            let offeringIdentifier = call.getString("offeringIdentifier")
+            let displayCloseButton = call.getBool("displayCloseButton") ?? false
+
+            var options: [String: Any] = [
+                "displayCloseButton": displayCloseButton,
+                "shouldBlockTouchEvents": true,
+                "requiredEntitlementIdentifier": requiredEntitlementIdentifier
+            ]
+
+            if let offeringIdentifier = offeringIdentifier {
+                options["offeringIdentifier"] = offeringIdentifier
+            }
+
+            proxy.presentPaywallIfNeeded(
+                options: options,
+                paywallResultHandler: { [weak self] result in
+                    guard let self = self else { return }
+                    
+                    DispatchQueue.main.async {
+                        if let call = self.savedCall {
+                            call.resolve(["result": result])
+                            self.savedCall = nil
+                        }
+                    }
+                }
+            )
+        }
     }
 
     @objc func presentCustomerCenter(_ call: CAPPluginCall) {
-        guard #available(iOS 15.0, *), let proxy = _customerCenterProxy else {
-            call.reject("CustomerCenterViewController requires iOS 15.0 or newer")
-            return
-        }
-
-        savedCall = call
-
-        proxy.present(resultHandler: { [weak self] in
-            guard let self = self else { return }
-
-            if let call = self.savedCall {
-                call.resolve()
-                self.savedCall = nil
+        // Ensure UI operations run on the main thread
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { 
+                call.reject("Plugin instance was deallocated")
+                return 
             }
-        })
+            
+            guard #available(iOS 15.0, *), let proxy = self._customerCenterProxy else {
+                call.reject("CustomerCenterViewController requires iOS 15.0 or newer")
+                return
+            }
+
+            self.savedCall = call
+
+            proxy.present(resultHandler: { [weak self] in
+                guard let self = self else { return }
+                
+                DispatchQueue.main.async {
+                    if let call = self.savedCall {
+                        call.resolve()
+                        self.savedCall = nil
+                    }
+                }
+            })
+        }
     }
 }
 
