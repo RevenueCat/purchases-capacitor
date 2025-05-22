@@ -36,63 +36,63 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
 
     @PluginMethod
     fun presentPaywall(call: PluginCall) {
-        // Check if there's already a presentation in progress
-        if (savedCall != null) {
-            call.reject("A paywall presentation is already in progress")
-            return
-        }
-        
-        savedCall = call
-
         val offeringIdentifier = call.getString("offeringIdentifier")
-        val displayCloseButton = call.getBoolean("displayCloseButton", false)
-
-        val currentActivity = activity
-        if (currentActivity !is FragmentActivity) {
-            call.reject(
-                "PAYWALLS_MISSING_ACTIVITY",
-                "Paywalls require your activity to subclass FragmentActivity"
-            )
-            return
-        }
-
-        val paywallSource = offeringIdentifier?.let { PaywallSource.OfferingIdentifier(it) }
-            ?: PaywallSource.DefaultOffering
-
-        val options = PresentPaywallOptions(
-            paywallSource = paywallSource,
-            requiredEntitlementIdentifier = null,
-            shouldDisplayDismissButton = displayCloseButton,
-            paywallResultListener = this
+        val displayCloseButton = call.getBoolean("displayCloseButton") ?: false
+        
+        presentPaywallInternal(
+            call = call,
+            offeringIdentifier = offeringIdentifier,
+            displayCloseButton = displayCloseButton,
+            requiredEntitlementIdentifier = null
         )
-
-        presentPaywallFromFragment(currentActivity, options)
-        notifyListeners("paywallDisplayed", JSObject())
     }
 
     @PluginMethod
     fun presentPaywallIfNeeded(call: PluginCall) {
         val requiredEntitlementIdentifier = call.getString("requiredEntitlementIdentifier")
         if (requiredEntitlementIdentifier.isNullOrEmpty()) {
-            call.reject("Required entitlement identifier is required")
+            call.reject(
+                "PAYWALL_ERROR",
+                "Required entitlement identifier is required"
+            )
             return
         }
 
+        val offeringIdentifier = call.getString("offeringIdentifier")
+        val displayCloseButton = call.getBoolean("displayCloseButton") ?: false
+        
+        presentPaywallInternal(
+            call = call,
+            offeringIdentifier = offeringIdentifier,
+            displayCloseButton = displayCloseButton,
+            requiredEntitlementIdentifier = requiredEntitlementIdentifier
+        )
+    }
+
+    /**
+     * Shared implementation for presenting a paywall
+     */
+    private fun presentPaywallInternal(
+        call: PluginCall,
+        offeringIdentifier: String?,
+        displayCloseButton: Boolean,
+        requiredEntitlementIdentifier: String?
+    ) {
         // Check if there's already a presentation in progress
         if (savedCall != null) {
-            call.reject("A paywall presentation is already in progress")
+            call.reject(
+                "PAYWALL_ERROR",
+                "A paywall presentation is already in progress"
+            )
             return
         }
         
         savedCall = call
 
-        val offeringIdentifier = call.getString("offeringIdentifier")
-        val displayCloseButton = call.getBoolean("displayCloseButton", false)
-
         val currentActivity = activity
         if (currentActivity !is FragmentActivity) {
             call.reject(
-                "PAYWALLS_MISSING_ACTIVITY",
+                "PAYWALL_ERROR",
                 "Paywalls require your activity to subclass FragmentActivity"
             )
             return
@@ -117,7 +117,7 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
         val currentActivity = activity
         if (currentActivity == null) {
             call.reject(
-                "CUSTOMER_CENTER_MISSING_ACTIVITY",
+                "CUSTOMER_CENTER_ERROR",
                 "Could not present Customer Center. There's no activity"
             )
             return
@@ -125,7 +125,10 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
 
         // Check if there's already a presentation in progress
         if (savedCall != null) {
-            call.reject("A customer center presentation is already in progress")
+            call.reject(
+                "CUSTOMER_CENTER_ERROR",
+                "A customer center presentation is already in progress"
+            )
             return
         }
         

@@ -9,9 +9,7 @@ files_to_update_phc_version = {
     'RevenuecatPurchasesCapacitor.podspec' => ["'PurchasesHybridCommon', '{x}'"],
     'ios/Podfile' => ["'PurchasesHybridCommon', '{x}'"],
     'android/build.gradle' => ['com.revenuecat.purchases:purchases-hybrid-common:{x}'],
-    'package.json' => ['"@revenuecat/purchases-typescript-internal-esm": "{x}"']
-}
-files_to_update_phc_ui_version = {
+    'package.json' => ['"@revenuecat/purchases-typescript-internal-esm": "{x}"'],
     'purchases-capacitor-ui/RevenuecatPurchasesCapacitorUi.podspec' => ["'PurchasesHybridCommonUI', '{x}'"],
     'purchases-capacitor-ui/android/build.gradle' => ['com.revenuecat.purchases:purchases-hybrid-common-ui:{x}']
 }
@@ -173,37 +171,6 @@ lane :update_hybrid_common do |options|
   )
 end
 
-desc "Update purchases-hybrid-common-ui version, pushes changes to a new branch if open_pr option is true"
-lane :update_hybrid_common_ui do |options|
-  if options[:dry_run]
-    dry_run = true
-  end
-  if options[:version]
-    new_version_number = options[:version]
-  else
-    UI.user_error!("Missing `version` argument")
-  end
-
-  current_phc_ui_version = get_phc_ui_version
-
-  UI.message("ℹ️  Current Purchases Hybrid Common UI version: #{current_phc_ui_version}")
-  UI.message("ℹ️  Setting Purchases Hybrid Common UI version: #{new_version_number}")
-
-  if dry_run
-    UI.message("ℹ️  Nothing more to do, dry_run: true")
-    next
-  end
-
-  bump_phc_version(
-    repo_name: repo_name,
-    files_to_update: files_to_update_phc_ui_version,
-    current_version: current_phc_ui_version,
-    next_version: new_version_number,
-    open_pr: options[:open_pr] || false,
-    automatic_release: options[:automatic_release] || false
-  )
-end
-
 desc "Tag current branch with current version number"
 lane :tag_current_branch do |options|
   version_number = current_version_number
@@ -220,12 +187,6 @@ end
 def get_phc_version
   Dir.chdir(get_root_folder) do
     return (sh "cat RevenuecatPurchasesCapacitor.podspec | grep \"'PurchasesHybridCommon', '\" | awk '{print($3)}' | sed \"s/\'//g\"").strip
-  end
-end
-
-def get_phc_ui_version
-  Dir.chdir(get_root_folder) do
-    return (sh "cat purchases-capacitor-ui/RevenuecatPurchasesCapacitorUi.podspec | grep \"'PurchasesHybridCommonUI', '\" | awk '{print($3)}' | sed \"s/\'//g\"").strip
   end
 end
 
