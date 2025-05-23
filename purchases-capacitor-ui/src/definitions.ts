@@ -22,6 +22,13 @@ export interface RevenueCatUIPlugin {
   presentCustomerCenter(): Promise<void>;
 
   /**
+   * Used for web only. Enables or disables returning mock results instead of rejecting promises with "not supported".
+   * For testing purposes only.
+   * @param options Options for mock web results
+   */
+  setMockWebResults?(options: { shouldMockWebResults: boolean }): Promise<void>;
+
+  /**
    * Listen for when a paywall is displayed or dismissed.
    * @param eventName The event to listen for
    * @param listener The listener to call when the event is triggered
