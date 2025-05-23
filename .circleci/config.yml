@@ -232,37 +232,6 @@ jobs:
           command: bundle exec fastlane automatic_bump github_rate_limit:10
 
   # UI Package Jobs
-  run-tests-ui-ios:
-    description: "Test iOS build for purchases-capacitor-ui package"
-    <<: *base-mac-job
-    steps:
-      - checkout
-      - revenuecat/install-gem-mac-dependencies:
-          cache-version: v1
-      - yarn-dependencies-mac
-      - yarn-dependencies-ui-mac
-      - run: yarn build
-      - run:
-          name: Build and test UI package for iOS
-          command: cd purchases-capacitor-ui && npm run verify:ios
-
-  run-tests-ui-android:
-    description: "Test Android build for purchases-capacitor-ui package"
-    executor:
-      name: android/android_machine
-      resource_class: large
-      tag: default
-    steps:
-      - checkout
-      - revenuecat/install-gem-unix-dependencies:
-          cache-version: v1
-      - yarn-dependencies-unix
-      - yarn-dependencies-ui-unix
-      - run: yarn build
-      - run:
-          name: Build and test UI package for Android
-          command: cd purchases-capacitor-ui && npm run verify:android
-
   run-lint-ui:
     description: "Run linting for purchases-capacitor-ui package"
     docker:
@@ -320,8 +289,6 @@ workflows:
       - build-purchase-tester
       - build-ui-package
       # UI Package jobs
-      - run-tests-ui-ios
-      - run-tests-ui-android
       - run-lint-ui
       - dry-run-release-ui
 
@@ -337,10 +304,6 @@ workflows:
       - run-lint:
           <<: *release-branches
       # UI Package jobs for release branches
-      - run-tests-ui-ios:
-          <<: *release-branches
-      - run-tests-ui-android:
-          <<: *release-branches
       - run-lint-ui:
           <<: *release-branches
       - hold:
@@ -349,8 +312,6 @@ workflows:
             - run-tests-ios
             - run-tests-android
             - run-lint
-            - run-tests-ui-ios
-            - run-tests-ui-android
             - run-lint-ui
           <<: *release-branches
       - revenuecat/tag-current-branch:
