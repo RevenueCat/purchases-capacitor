@@ -76,6 +76,34 @@ commands:
             - node_modules
           key: v2-mac-dependencies-{{ checksum "package.json" }}
 
+  yarn-dependencies-ui-unix:
+    description: "Install yarn dependencies for UI package"
+    steps:
+      - install-nvm
+      - restore_cache:
+          key: v2-unix-ui-dependencies-{{ checksum "purchases-capacitor-ui/package.json" }}
+      - run:
+          name: Install UI package dependencies
+          command: cd purchases-capacitor-ui && npm install
+      - save_cache:
+          paths:
+            - purchases-capacitor-ui/node_modules
+          key: v2-unix-ui-dependencies-{{ checksum "purchases-capacitor-ui/package.json" }}
+
+  yarn-dependencies-ui-mac:
+    description: "Install yarn dependencies for UI package on Mac"
+    steps:
+      - install-nvm
+      - restore_cache:
+          key: v2-mac-ui-dependencies-{{ checksum "purchases-capacitor-ui/package.json" }}
+      - run:
+          name: Install UI package dependencies
+          command: cd purchases-capacitor-ui && npm install
+      - save_cache:
+          paths:
+            - purchases-capacitor-ui/node_modules
+          key: v2-mac-ui-dependencies-{{ checksum "purchases-capacitor-ui/package.json" }}
+
   install-sdkman:
     description: Install SDKMAN
     steps:
@@ -132,6 +160,18 @@ jobs:
           name: Build purchase tester
           command: bundle exec fastlane build_purchase_tester
 
+  build-ui-package:
+    description: "Build the purchases-capacitor-ui package"
+    docker:
+      - image: cimg/ruby:3.1.2
+    steps:
+      - checkout
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
+      - yarn-dependencies-unix
+      - run:
+          name: Build UI package
+          command: bundle exec fastlane build_ui_package
 
   run-lint:
     docker:
@@ -191,6 +231,82 @@ jobs:
           name: Create automatic PR
           command: bundle exec fastlane automatic_bump github_rate_limit:10
 
+  # UI Package Jobs
+  run-tests-ui-ios:
+    description: "Test iOS build for purchases-capacitor-ui package"
+    <<: *base-mac-job
+    steps:
+      - checkout
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - yarn-dependencies-mac
+      - yarn-dependencies-ui-mac
+      - run: yarn build
+      - run:
+          name: Build and test UI package for iOS
+          command: cd purchases-capacitor-ui && npm run verify:ios
+
+  run-tests-ui-android:
+    description: "Test Android build for purchases-capacitor-ui package"
+    executor:
+      name: android/android_machine
+      resource_class: large
+      tag: default
+    steps:
+      - checkout
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
+      - yarn-dependencies-unix
+      - yarn-dependencies-ui-unix
+      - run: yarn build
+      - run:
+          name: Build and test UI package for Android
+          command: cd purchases-capacitor-ui && npm run verify:android
+
+  run-lint-ui:
+    description: "Run linting for purchases-capacitor-ui package"
+    docker:
+      - image: cimg/ruby:3.1.2
+    steps:
+      - checkout
+      - yarn-dependencies-unix
+      - yarn-dependencies-ui-unix
+      - run: yarn build
+      - run:
+          name: Lint UI package
+          command: cd purchases-capacitor-ui && npm run lint
+
+  dry-run-release-ui:
+    description: "Validate purchases-capacitor-ui package can be published"
+    docker:
+      - image: cimg/ruby:3.1.2
+    steps:
+      - checkout
+      - yarn-dependencies-unix
+      - yarn-dependencies-ui-unix
+      - run: yarn build
+      - run:
+          name: Build UI package
+          command: cd purchases-capacitor-ui && npm run build
+      - run:
+          name: Dry run UI package release
+          command: cd purchases-capacitor-ui && npm publish --dry-run
+
+  make-release-ui:
+    description: "Publishes the UI package to npm"
+    <<: *base-mac-job
+    steps:
+      - checkout
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - yarn-dependencies-mac
+      - yarn-dependencies-ui-mac
+      - revenuecat/trust-github-key
+      - copy-npm-rc
+      - run:
+          name: Release UI package
+          command: bundle exec fastlane release_purchases_capacitor_ui
+
 workflows:
   version: 2
   build-test:
@@ -202,6 +318,12 @@ workflows:
       - run-tests-android
       - run-lint
       - build-purchase-tester
+      - build-ui-package
+      # UI Package jobs
+      - run-tests-ui-ios
+      - run-tests-ui-android
+      - run-lint-ui
+      - dry-run-release-ui
 
   deploy:
     when:
@@ -214,18 +336,30 @@ workflows:
           <<: *release-branches
       - run-lint:
           <<: *release-branches
+      # UI Package jobs for release branches
+      - run-tests-ui-ios:
+          <<: *release-branches
+      - run-tests-ui-android:
+          <<: *release-branches
+      - run-lint-ui:
+          <<: *release-branches
       - hold:
           type: approval
           requires:
             - run-tests-ios
             - run-tests-android
             - run-lint
+            - run-tests-ui-ios
+            - run-tests-ui-android
+            - run-lint-ui
           <<: *release-branches
       - revenuecat/tag-current-branch:
           requires:
             - hold
           <<: *release-branches
       - make-release:
+          <<: *release-tags
+      - make-release-ui:
           <<: *release-tags
 
   danger:

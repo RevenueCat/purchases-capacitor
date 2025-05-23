@@ -45,6 +45,14 @@ Make github release
 
 Creates GitHub release and publishes package
 
+### release_purchases_capacitor_ui
+
+```sh
+[bundle exec] fastlane release_purchases_capacitor_ui
+```
+
+Create purchases-capacitor-ui release
+
 ### change_purchase_tester_api_key
 
 ```sh
@@ -76,6 +84,14 @@ Build purchase tester and opens it in Xcode to run in iOS
 ```
 
 Build purchase tester and opens it in Android Studio to run in Android
+
+### build_ui_package
+
+```sh
+[bundle exec] fastlane build_ui_package
+```
+
+Build purchases-capacitor-ui package
 
 ### update_hybrid_common
 

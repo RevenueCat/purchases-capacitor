@@ -17,4 +17,4 @@
     "target": "es2017"
   },
   "files": ["src/index.ts"]
-} 
+}

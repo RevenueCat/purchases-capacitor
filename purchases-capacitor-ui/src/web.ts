@@ -23,15 +23,23 @@ export class RevenueCatUIWeb extends WebPlugin implements RevenueCatUIPlugin {
   }
 
   async presentPaywall(options?: PresentPaywallOptions): Promise<PaywallResult> {
-    return this.mockReturningFunctionIfEnabled('presentPaywall', {
-      result: PAYWALL_RESULT.NOT_PRESENTED,
-    }, options);
+    return this.mockReturningFunctionIfEnabled(
+      'presentPaywall',
+      {
+        result: PAYWALL_RESULT.NOT_PRESENTED,
+      },
+      options,
+    );
   }
 
   async presentPaywallIfNeeded(options: PresentPaywallIfNeededOptions): Promise<PaywallResult> {
-    return this.mockReturningFunctionIfEnabled('presentPaywallIfNeeded', {
-      result: PAYWALL_RESULT.NOT_PRESENTED,
-    }, options);
+    return this.mockReturningFunctionIfEnabled(
+      'presentPaywallIfNeeded',
+      {
+        result: PAYWALL_RESULT.NOT_PRESENTED,
+      },
+      options,
+    );
   }
 
   async presentCustomerCenter(): Promise<void> {
