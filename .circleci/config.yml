@@ -160,19 +160,6 @@ jobs:
           name: Build purchase tester
           command: bundle exec fastlane build_purchase_tester
 
-  build-ui-package:
-    description: "Build the purchases-capacitor-ui package"
-    docker:
-      - image: cimg/ruby:3.1.2
-    steps:
-      - checkout
-      - revenuecat/install-gem-unix-dependencies:
-          cache-version: v1
-      - yarn-dependencies-unix
-      - run:
-          name: Build UI package
-          command: bundle exec fastlane build_ui_package
-
   run-lint:
     docker:
       - image: cimg/ruby:3.1.2
@@ -287,7 +274,6 @@ workflows:
       - run-tests-android
       - run-lint
       - build-purchase-tester
-      - build-ui-package
       # UI Package jobs
       - run-lint-ui
       - dry-run-release-ui

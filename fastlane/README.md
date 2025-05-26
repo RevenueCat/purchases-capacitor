@@ -85,14 +85,6 @@ Build purchase tester and opens it in Xcode to run in iOS
 
 Build purchase tester and opens it in Android Studio to run in Android
 
-### build_ui_package
-
-```sh
-[bundle exec] fastlane build_ui_package
-```
-
-Build purchases-capacitor-ui package
-
 ### update_hybrid_common
 
 ```sh

@@ -180,14 +180,6 @@ lane :build_and_open_purchase_tester_android_studio do |options|
   end
 end
 
-desc "Build purchases-capacitor-ui package"
-lane :build_ui_package do |options|
-  Dir.chdir(File.expand_path('purchases-capacitor-ui', get_root_folder)) do
-    sh("npm", "install")
-    sh("npm", "run", "build")
-  end
-end
-
 desc "Update purchases-hybrid-common version, pushes changes to a new branch if open_pr option is true"
 lane :update_hybrid_common do |options|
   if options[:dry_run]
