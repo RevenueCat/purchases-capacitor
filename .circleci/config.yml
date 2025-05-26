@@ -307,6 +307,8 @@ workflows:
       - make-release:
           <<: *release-tags
       - make-release-ui:
+          requires:
+            - make-release
           <<: *release-tags
 
   danger:
