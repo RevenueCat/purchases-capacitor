@@ -1,5 +1,13 @@
 import './FunctionTesterContainer.css';
-import {IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,} from '@ionic/react';
+import {
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonItemDivider,
+} from '@ionic/react';
 import React, {useEffect, useState} from 'react';
 import {
   LOG_LEVEL,
@@ -7,6 +15,7 @@ import {
   PurchaseDiscountedPackageOptions,
   Purchases,
 } from '@revenuecat/purchases-capacitor';
+import { RevenueCatUI } from '@revenuecat/purchases-capacitor-ui';
 
 import {REVENUECAT_API_KEY} from '../constants';
 import {ENTITLEMENT_VERIFICATION_MODE, IN_APP_MESSAGE_TYPE,} from '@revenuecat/purchases-typescript-internal-esm';
@@ -710,6 +719,27 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     }
   };
 
+  const presentPaywallCurrentOffering = async () => {
+    const offerings = await Purchases.getOfferings();
+    const offering = offerings.current;
+    if (offering == null) {
+      updateLastFunction(
+        'presentPaywallCurrentOffering',
+        'No current offering available',
+      );
+      return;
+    }
+    const result = await RevenueCatUI.presentPaywall({
+      offering: offering,
+    });
+    updateLastFunction('presentPaywallCurrentOffering', result);
+  };
+
+  const presentCustomerCenter = async () => {
+    await RevenueCatUI.presentCustomerCenter();
+    updateLastFunctionWithoutContent('presentCustomerCenter');
+  };
+
   const listenForDeepLinks = async () => {
     await App.addListener('appUrlOpen', async (event: URLOpenListenerEvent) => {
       const url = event.url;
@@ -927,6 +957,13 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         </IonButton>
         <IonButton size="small" onClick={fetchAndRedeemWinBackOfferForPackage}>
           Fetch & Redeem WinBackOffer for Package
+        </IonButton>
+        <IonItemDivider/>
+        <IonButton size="small" onClick={presentPaywallCurrentOffering}>
+          Present paywall for current offering
+        </IonButton>
+        <IonButton size="small" onClick={presentCustomerCenter}>
+          Present customer center
         </IonButton>
       </div>
     </div>

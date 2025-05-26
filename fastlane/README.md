@@ -45,6 +45,14 @@ Make github release
 
 Creates GitHub release and publishes package
 
+### release_purchases_capacitor_ui
+
+```sh
+[bundle exec] fastlane release_purchases_capacitor_ui
+```
+
+Create purchases-capacitor-ui release
+
 ### change_purchase_tester_api_key
 
 ```sh

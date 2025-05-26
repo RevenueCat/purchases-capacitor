@@ -1,6 +1,7 @@
 files_with_version_number = {
     './.version' => ['{x}'],
     './package.json' => ['"version": "{x}"'],
+    './purchases-capacitor-ui/package.json' => ['"version": "{x}"'],
     './ios/Plugin/PurchasesPlugin.swift' => ['platformVersion = "{x}"'],
     './android/src/main/java/com/revenuecat/purchases/capacitor/PurchasesPlugin.kt' => ['PLUGIN_VERSION = "{x}"']
 }
@@ -8,7 +9,9 @@ files_to_update_phc_version = {
     'RevenuecatPurchasesCapacitor.podspec' => ["'PurchasesHybridCommon', '{x}'"],
     'ios/Podfile' => ["'PurchasesHybridCommon', '{x}'"],
     'android/build.gradle' => ['com.revenuecat.purchases:purchases-hybrid-common:{x}'],
-    'package.json' => ['"@revenuecat/purchases-typescript-internal-esm": "{x}"']
+    'package.json' => ['"@revenuecat/purchases-typescript-internal-esm": "{x}"'],
+    'purchases-capacitor-ui/RevenuecatPurchasesCapacitorUi.podspec' => ["'PurchasesHybridCommonUI', '{x}'"],
+    'purchases-capacitor-ui/android/build.gradle' => ['com.revenuecat.purchases:purchases-hybrid-common-ui:{x}']
 }
 repo_name = 'purchases-capacitor'
 changelog_latest_path = './CHANGELOG.latest.md'
@@ -98,6 +101,39 @@ lane :release do |options|
   github_release(version: version_number)
 end
 
+desc "Create purchases-capacitor-ui release"
+lane :release_purchases_capacitor_ui do |options|
+  version_number = current_version_number
+  is_prerelease = Gem::Version.new(version_number).prerelease?
+  dry_run = options[:dry_run] || false
+
+  # First do a dry run to validate the package
+  Dir.chdir(File.expand_path('purchases-capacitor-ui', get_root_folder)) do
+    sh('npm', 'publish', '--dry-run')
+  end
+
+  if dry_run
+    UI.message("ℹ️  Dry run completed successfully. Package is ready for publishing.")
+    next
+  end
+
+  # Copy npm credentials
+  Dir.chdir(get_root_folder) do
+    sh('cp', '.npmrc.SAMPLE', '.npmrc')
+  end
+
+  # Publish the UI package
+  args = [
+    'npm',
+    'publish',
+    is_prerelease ? '--tag next' : nil
+  ].compact
+
+  Dir.chdir(File.expand_path('purchases-capacitor-ui', get_root_folder)) do
+    sh(args)
+  end
+end
+
 desc "Change purchase tester API key"
 lane :change_purchase_tester_api_key do |options|
   new_api_key = options[:api_key] || ENV["REVENUECAT_API_KEY"]
@@ -115,8 +151,15 @@ desc "Build purchase tester"
 lane :build_purchase_tester do |options|
   Dir.chdir(get_root_folder) do
     sh("yarn && yarn build")
+    sh("yarn link")
+  end
+  Dir.chdir(File.expand_path('purchases-capacitor-ui', get_root_folder)) do
+    sh("yarn && yarn build")
+    sh("yarn link")
   end
   Dir.chdir(File.expand_path('example/purchase-tester', get_root_folder)) do
+    sh("yarn link @revenuecat/purchases-capacitor")
+    sh("yarn link @revenuecat/purchases-capacitor-ui")
     sh("yarn && yarn build")
   end
 end
