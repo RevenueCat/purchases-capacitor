@@ -730,7 +730,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
       return;
     }
     const result = await RevenueCatUI.presentPaywall({
-      offeringIdentifier: offering.identifier,
+      offering: offering,
     });
     updateLastFunction('presentPaywallCurrentOffering', result);
   };

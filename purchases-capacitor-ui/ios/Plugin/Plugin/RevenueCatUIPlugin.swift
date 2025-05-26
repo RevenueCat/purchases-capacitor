@@ -36,17 +36,17 @@ public class RevenueCatUIPlugin: CAPPlugin {
     @objc func presentPaywall(_ call: CAPPluginCall) {
         // Ensure UI operations run on the main thread
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else { 
+            guard let self = self else {
                 call.reject("Plugin instance was deallocated", "PAYWALL_ERROR")
-                return 
+                return
             }
-            
+
             // Check if there's already a presentation in progress
             if self.savedCall != nil {
                 call.reject("A paywall presentation is already in progress", "PAYWALL_ERROR")
                 return
             }
-            
+
             guard #available(iOS 15.0, *), let proxy = self._paywallProxy else {
                 call.reject("PaywallViewController requires iOS 15.0 or newer", "PAYWALL_ERROR")
                 return
@@ -54,7 +54,7 @@ public class RevenueCatUIPlugin: CAPPlugin {
 
             self.savedCall = call
 
-            let offeringIdentifier = call.getString("offeringIdentifier")
+            let offeringIdentifier = call.getObject("offering")?["identifier"]
             let displayCloseButton = call.getBool("displayCloseButton") ?? false
 
             var options: [String: Any] = [
@@ -70,7 +70,7 @@ public class RevenueCatUIPlugin: CAPPlugin {
                 options: options,
                 paywallResultHandler: { [weak self] result in
                     guard let self = self else { return }
-                    
+
                     DispatchQueue.main.async {
                         if let call = self.savedCall {
                             call.resolve(["result": result])
@@ -85,17 +85,17 @@ public class RevenueCatUIPlugin: CAPPlugin {
     @objc func presentPaywallIfNeeded(_ call: CAPPluginCall) {
         // Ensure UI operations run on the main thread
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else { 
+            guard let self = self else {
                 call.reject("Plugin instance was deallocated", "PAYWALL_ERROR")
-                return 
+                return
             }
-            
+
             // Check if there's already a presentation in progress
             if self.savedCall != nil {
                 call.reject("A paywall presentation is already in progress", "PAYWALL_ERROR")
                 return
             }
-            
+
             guard #available(iOS 15.0, *), let proxy = self._paywallProxy else {
                 call.reject("PaywallViewController requires iOS 15.0 or newer", "PAYWALL_ERROR")
                 return
@@ -125,7 +125,7 @@ public class RevenueCatUIPlugin: CAPPlugin {
                 options: options,
                 paywallResultHandler: { [weak self] result in
                     guard let self = self else { return }
-                    
+
                     DispatchQueue.main.async {
                         if let call = self.savedCall {
                             call.resolve(["result": result])
@@ -140,17 +140,17 @@ public class RevenueCatUIPlugin: CAPPlugin {
     @objc func presentCustomerCenter(_ call: CAPPluginCall) {
         // Ensure UI operations run on the main thread
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else { 
+            guard let self = self else {
                 call.reject("Plugin instance was deallocated", "CUSTOMER_CENTER_ERROR")
-                return 
+                return
             }
-            
+
             // Check if there's already a presentation in progress
             if self.savedCall != nil {
                 call.reject("A customer center presentation is already in progress", "CUSTOMER_CENTER_ERROR")
                 return
             }
-            
+
             guard #available(iOS 15.0, *), let proxy = self._customerCenterProxy else {
                 call.reject("CustomerCenterViewController requires iOS 15.0 or newer", "CUSTOMER_CENTER_ERROR")
                 return
@@ -160,7 +160,7 @@ public class RevenueCatUIPlugin: CAPPlugin {
 
             proxy.present(resultHandler: { [weak self] in
                 guard let self = self else { return }
-                
+
                 DispatchQueue.main.async {
                     if let call = self.savedCall {
                         call.resolve()

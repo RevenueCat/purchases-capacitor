@@ -1,5 +1,5 @@
 import type { PluginListenerHandle } from '@capacitor/core';
-import { PAYWALL_RESULT } from '@revenuecat/purchases-typescript-internal-esm';
+import { PAYWALL_RESULT, PurchasesOffering } from '@revenuecat/purchases-typescript-internal-esm';
 
 export interface RevenueCatUIPlugin {
   /**
@@ -43,10 +43,10 @@ export interface RevenueCatUIPlugin {
 
 export interface PresentPaywallOptions {
   /**
-   * The identifier of the offering to present.
+   * The offering to present.
    * If not provided, the current offering will be used.
    */
-  offeringIdentifier?: string;
+  offering?: PurchasesOffering;
 
   /**
    * Whether to display a close button on the paywall.

@@ -36,9 +36,10 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
 
     @PluginMethod
     fun presentPaywall(call: PluginCall) {
-        val offeringIdentifier = call.getString("offeringIdentifier")
+        val offering = call.getObject("offering")
+        val offeringIdentifier = offering?.getString("identifier")
         val displayCloseButton = call.getBoolean("displayCloseButton") ?: false
-        
+
         presentPaywallInternal(
             call = call,
             offeringIdentifier = offeringIdentifier,
@@ -58,9 +59,10 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
             return
         }
 
-        val offeringIdentifier = call.getString("offeringIdentifier")
+        val offering = call.getObject("offering")
+        val offeringIdentifier = offering?.getString("identifier")
         val displayCloseButton = call.getBoolean("displayCloseButton") ?: false
-        
+
         presentPaywallInternal(
             call = call,
             offeringIdentifier = offeringIdentifier,
@@ -86,7 +88,7 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
             )
             return
         }
-        
+
         savedCall = call
 
         val currentActivity = activity
@@ -131,7 +133,7 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
             )
             return
         }
-        
+
         savedCall = call
 
         val intent = ShowCustomerCenter().createIntent(currentActivity, Unit)
@@ -149,4 +151,4 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
         savedCall = null
     }
     // endregion
-} 
+}
