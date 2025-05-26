@@ -1,0 +1,7 @@
+build
+dist
+example
+node_modules
+android/build
+ios/build
+*.log 

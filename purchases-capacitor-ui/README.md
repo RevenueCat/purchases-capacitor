@@ -7,7 +7,7 @@ UI components for RevenueCat Capacitor SDK. This plugin extends the functionalit
 > ⚠️ **IMPORTANT: Platform Limitations**
 >
 > - **iOS**: Paywalls and Customer Center are fully supported on iOS 15.0+
-> - **Android**: Paywalls and Customer Center are now fully supported on Android 6.0+ (API level 23+)
+> - **Android**: Paywalls and Customer Center are now fully supported on Android 7.0+ (API level 24+)
 > - **Web**: Not supported
 
 ## Install
@@ -28,14 +28,14 @@ For iOS, you need to add SwiftUI to your app's capabilities. Follow the [iOS SDK
 
 <docgen-index>
 
-* [`presentPaywall(...)`](#presentpaywall)
-* [`presentPaywallIfNeeded(...)`](#presentpaywallIfNeeded)
-* [`presentCustomerCenter()`](#presentcustomercenter)
-* [`addListener('paywallDisplayed', ...)`](#addlistenerpaywallDisplayed)
-* [`addListener('paywallDismissed', ...)`](#addlistenerpaywallDismissed)
-* [`removeAllListeners()`](#removealllisteners)
-* [Interfaces](#interfaces)
-* [Enums](#enums)
+- [`presentPaywall(...)`](#presentpaywall)
+- [`presentPaywallIfNeeded(...)`](#presentpaywallIfNeeded)
+- [`presentCustomerCenter()`](#presentcustomercenter)
+- [`addListener('paywallDisplayed', ...)`](#addlistenerpaywallDisplayed)
+- [`addListener('paywallDismissed', ...)`](#addlistenerpaywallDismissed)
+- [`removeAllListeners()`](#removealllisteners)
+- [Interfaces](#interfaces)
+- [Enums](#enums)
 
 </docgen-index>
 
@@ -69,13 +69,13 @@ const result = await RevenueCatUI.presentPaywall();
 // Present a paywall with a specific offering
 const result = await RevenueCatUI.presentPaywall({
   offeringIdentifier: 'premium',
-  displayCloseButton: true
+  displayCloseButton: true,
 });
 
 // Present a paywall only if the user doesn't have a specific entitlement
 const result = await RevenueCatUI.presentPaywallIfNeeded({
   requiredEntitlementIdentifier: 'pro_access',
-  offeringIdentifier: 'premium'
+  offeringIdentifier: 'premium',
 });
 ```
 
@@ -116,4 +116,4 @@ RevenueCatUI.addListener('paywallDismissed', () => {
 
 ## License
 
-MIT 
+MIT

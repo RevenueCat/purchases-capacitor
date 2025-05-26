@@ -37,18 +37,18 @@ public class RevenueCatUIPlugin: CAPPlugin {
         // Ensure UI operations run on the main thread
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { 
-                call.reject("Plugin instance was deallocated")
+                call.reject("Plugin instance was deallocated", "PAYWALL_ERROR")
                 return 
             }
             
             // Check if there's already a presentation in progress
             if self.savedCall != nil {
-                call.reject("A paywall presentation is already in progress")
+                call.reject("A paywall presentation is already in progress", "PAYWALL_ERROR")
                 return
             }
             
             guard #available(iOS 15.0, *), let proxy = self._paywallProxy else {
-                call.reject("PaywallViewController requires iOS 15.0 or newer")
+                call.reject("PaywallViewController requires iOS 15.0 or newer", "PAYWALL_ERROR")
                 return
             }
 
@@ -86,25 +86,25 @@ public class RevenueCatUIPlugin: CAPPlugin {
         // Ensure UI operations run on the main thread
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { 
-                call.reject("Plugin instance was deallocated")
+                call.reject("Plugin instance was deallocated", "PAYWALL_ERROR")
                 return 
             }
             
             // Check if there's already a presentation in progress
             if self.savedCall != nil {
-                call.reject("A paywall presentation is already in progress")
+                call.reject("A paywall presentation is already in progress", "PAYWALL_ERROR")
                 return
             }
             
             guard #available(iOS 15.0, *), let proxy = self._paywallProxy else {
-                call.reject("PaywallViewController requires iOS 15.0 or newer")
+                call.reject("PaywallViewController requires iOS 15.0 or newer", "PAYWALL_ERROR")
                 return
             }
 
             self.savedCall = call
 
             guard let requiredEntitlementIdentifier = call.getString("requiredEntitlementIdentifier") else {
-                call.reject("Required entitlement identifier is missing")
+                call.reject("Required entitlement identifier is missing", "PAYWALL_ERROR")
                 return
             }
 
@@ -141,18 +141,18 @@ public class RevenueCatUIPlugin: CAPPlugin {
         // Ensure UI operations run on the main thread
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { 
-                call.reject("Plugin instance was deallocated")
+                call.reject("Plugin instance was deallocated", "CUSTOMER_CENTER_ERROR")
                 return 
             }
             
             // Check if there's already a presentation in progress
             if self.savedCall != nil {
-                call.reject("A customer center presentation is already in progress")
+                call.reject("A customer center presentation is already in progress", "CUSTOMER_CENTER_ERROR")
                 return
             }
             
             guard #available(iOS 15.0, *), let proxy = self._customerCenterProxy else {
-                call.reject("CustomerCenterViewController requires iOS 15.0 or newer")
+                call.reject("CustomerCenterViewController requires iOS 15.0 or newer", "CUSTOMER_CENTER_ERROR")
                 return
             }
 
