@@ -441,12 +441,12 @@ Get the appUserID
 ### getStorefront()
 
 ```typescript
-getStorefront() => Promise<Storefront | null>
+getStorefront() => Promise<Storefront>
 ```
 
 Gets the storefront for the current store account.
 
-**Returns:** <code>Promise&lt;<a href="#storefront">Storefront</a> | null&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#storefront">Storefront</a>&gt;</code>
 
 --------------------
 
