@@ -1,5 +1,6 @@
 import type { PluginListenerHandle } from '@capacitor/core';
-import { PAYWALL_RESULT, PurchasesOffering } from '@revenuecat/purchases-typescript-internal-esm';
+import type { PurchasesOffering } from '@revenuecat/purchases-typescript-internal-esm';
+import { PAYWALL_RESULT } from '@revenuecat/purchases-typescript-internal-esm';
 
 export interface RevenueCatUIPlugin {
   /**
