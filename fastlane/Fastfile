@@ -153,7 +153,7 @@ lane :build_purchase_tester do |options|
     sh("yarn && yarn build")
     sh("yarn link")
   end
-  Dir.chdir(File.expand_path('purchases-capacitor-ui')) do
+  Dir.chdir(File.expand_path('purchases-capacitor-ui', get_root_folder)) do
     sh("yarn && yarn build")
     sh("yarn link")
   end
