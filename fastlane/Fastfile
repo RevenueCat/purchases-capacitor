@@ -111,17 +111,17 @@ lane :release_purchases_capacitor_ui do |options|
   Dir.chdir(File.expand_path('purchases-capacitor-ui', get_root_folder)) do
     sh('npm', 'publish', '--dry-run')
   end
-  
+
   if dry_run
     UI.message("ℹ️  Dry run completed successfully. Package is ready for publishing.")
     next
   end
-  
+
   # Copy npm credentials
   Dir.chdir(get_root_folder) do
     sh('cp', '.npmrc.SAMPLE', '.npmrc')
   end
-  
+
   # Publish the UI package
   args = [
     'npm',
@@ -151,8 +151,15 @@ desc "Build purchase tester"
 lane :build_purchase_tester do |options|
   Dir.chdir(get_root_folder) do
     sh("yarn && yarn build")
+    sh("yarn link")
+  end
+  Dir.chdir(File.expand_path('purchases-capacitor-ui', get_root_folder)) do
+    sh("yarn && yarn build")
+    sh("yarn link")
   end
   Dir.chdir(File.expand_path('example/purchase-tester', get_root_folder)) do
+    sh("yarn link @revenuecat/purchases-capacitor")
+    sh("yarn link @revenuecat/purchases-capacitor-ui")
     sh("yarn && yarn build")
   end
 end
