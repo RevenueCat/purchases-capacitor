@@ -120,8 +120,15 @@ desc "Build purchase tester"
 lane :build_purchase_tester do |options|
   Dir.chdir(get_root_folder) do
     sh("yarn && yarn build")
+    sh("yarn link")
   end
+  Dir.chdir(File.expand_path('purchases-capacitor-ui') do
+      sh("yarn && yarn build")
+      sh("yarn link")
+    end
   Dir.chdir(File.expand_path('example/purchase-tester', get_root_folder)) do
+    sh("yarn link @revenuecat/purchases-capacitor")
+    sh("yarn link @revenuecat/purchases-capacitor-ui")
     sh("yarn && yarn build")
   end
 end
