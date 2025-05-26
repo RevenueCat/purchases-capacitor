@@ -11,8 +11,6 @@ public class RevenueCatUIPlugin: CAPPlugin {
 
     // MARK: - Properties
 
-    private var savedCall: CAPPluginCall?
-
     /// PaywallProxy for iOS 15.0+, will be nil on older iOS versions
     private var _paywallProxy: PaywallProxyType?
 
@@ -41,18 +39,10 @@ public class RevenueCatUIPlugin: CAPPlugin {
                 return
             }
 
-            // Check if there's already a presentation in progress
-            if self.savedCall != nil {
-                call.reject("A paywall presentation is already in progress", "PAYWALL_ERROR")
-                return
-            }
-
             guard #available(iOS 15.0, *), let proxy = self._paywallProxy else {
                 call.reject("PaywallViewController requires iOS 15.0 or newer", "PAYWALL_ERROR")
                 return
             }
-
-            self.savedCall = call
 
             let offeringIdentifier = call.getObject("offering")?["identifier"]
             let displayCloseButton = call.getBool("displayCloseButton") ?? false
@@ -72,10 +62,7 @@ public class RevenueCatUIPlugin: CAPPlugin {
                     guard let self = self else { return }
 
                     DispatchQueue.main.async {
-                        if let call = self.savedCall {
-                            call.resolve(["result": result])
-                            self.savedCall = nil
-                        }
+                        call.resolve(["result": result])
                     }
                 }
             )
@@ -90,18 +77,10 @@ public class RevenueCatUIPlugin: CAPPlugin {
                 return
             }
 
-            // Check if there's already a presentation in progress
-            if self.savedCall != nil {
-                call.reject("A paywall presentation is already in progress", "PAYWALL_ERROR")
-                return
-            }
-
             guard #available(iOS 15.0, *), let proxy = self._paywallProxy else {
                 call.reject("PaywallViewController requires iOS 15.0 or newer", "PAYWALL_ERROR")
                 return
             }
-
-            self.savedCall = call
 
             guard let requiredEntitlementIdentifier = call.getString("requiredEntitlementIdentifier") else {
                 call.reject("Required entitlement identifier is missing", "PAYWALL_ERROR")
@@ -127,10 +106,7 @@ public class RevenueCatUIPlugin: CAPPlugin {
                     guard let self = self else { return }
 
                     DispatchQueue.main.async {
-                        if let call = self.savedCall {
-                            call.resolve(["result": result])
-                            self.savedCall = nil
-                        }
+                        call.resolve(["result": result])
                     }
                 }
             )
@@ -145,27 +121,16 @@ public class RevenueCatUIPlugin: CAPPlugin {
                 return
             }
 
-            // Check if there's already a presentation in progress
-            if self.savedCall != nil {
-                call.reject("A customer center presentation is already in progress", "CUSTOMER_CENTER_ERROR")
-                return
-            }
-
             guard #available(iOS 15.0, *), let proxy = self._customerCenterProxy else {
                 call.reject("CustomerCenterViewController requires iOS 15.0 or newer", "CUSTOMER_CENTER_ERROR")
                 return
             }
 
-            self.savedCall = call
-
             proxy.present(resultHandler: { [weak self] in
                 guard let self = self else { return }
 
                 DispatchQueue.main.async {
-                    if let call = self.savedCall {
-                        call.resolve()
-                        self.savedCall = nil
-                    }
+                    call.resolve()
                 }
             })
         }
