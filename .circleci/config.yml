@@ -125,6 +125,12 @@ commands:
           name: Copy npmrc sample file to final location
           command: cp .npmrc.SAMPLE .npmrc
 
+  copy-npm-rc-ui:
+    steps:
+      - run:
+          name: Copy npmrc sample file to UI package location
+          command: cp .npmrc.SAMPLE purchases-capacitor-ui/.npmrc
+
 jobs:
   run-tests-ios:
     <<: *base-mac-job
@@ -258,7 +264,7 @@ jobs:
       - yarn-dependencies-mac
       - yarn-dependencies-ui-mac
       - revenuecat/trust-github-key
-      - copy-npm-rc
+      - copy-npm-rc-ui
       - run:
           name: Release UI package
           command: bundle exec fastlane release_purchases_capacitor_ui
