@@ -1,7 +1,6 @@
 ## RevenueCat SDK
-### ✨ New Features
-* Add `getStorefront` API (#436) via Toni Rico (@tonidero)
+### 🐞 Bugfixes
+* Fix UI package bundled files reference (#454) via Toni Rico (@tonidero)
 
-## RevenueCatUI SDK
-### ✨ New Features
-* Paywalls & Customer Center support (#448) via andsolleiro (@andsolleiro)
+### 🔄 Other Changes
+* Fix Capacitor UI SDK release (#453) via Toni Rico (@tonidero)
