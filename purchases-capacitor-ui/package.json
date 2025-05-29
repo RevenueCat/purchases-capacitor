@@ -11,7 +11,7 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "PurchasesCapacitorUi.podspec"
+    "RevenuecatPurchasesCapacitorUI.podspec"
   ],
   "author": "RevenueCat, Inc.",
   "license": "MIT",
