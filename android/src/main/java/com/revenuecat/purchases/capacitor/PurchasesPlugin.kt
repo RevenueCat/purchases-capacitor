@@ -22,7 +22,7 @@ import com.revenuecat.purchases.hybridcommon.configure
 import com.revenuecat.purchases.hybridcommon.getProductInfo
 import com.revenuecat.purchases.hybridcommon.isWebPurchaseRedemptionURL
 import com.revenuecat.purchases.hybridcommon.mappers.convertToMap
-import com.revenuecat.purchases.hybridcommon.mappers.map
+import com.revenuecat.purchases.hybridcommon.mappers.mapAsync
 import com.revenuecat.purchases.hybridcommon.purchaseProduct
 import com.revenuecat.purchases.hybridcommon.showInAppMessagesIfNeeded
 import com.revenuecat.purchases.interfaces.UpdatedCustomerInfoListener
@@ -116,8 +116,10 @@ class PurchasesPlugin : Plugin() {
             diagnosticsEnabled = diagnosticsEnabled,
         )
         Purchases.sharedInstance.updatedCustomerInfoListener = UpdatedCustomerInfoListener { customerInfo ->
-            for (callbackId in customerInfoListeners) {
-                bridge.getSavedCall(callbackId)?.resolveWithMap(customerInfo.map())
+            customerInfo.mapAsync { map ->
+                for (callbackId in customerInfoListeners) {
+                    bridge.getSavedCall(callbackId)?.resolveWithMap(map)
+                }
             }
         }
         call.resolve()
@@ -161,7 +163,7 @@ class PurchasesPlugin : Plugin() {
         if (rejectIfNotConfigured(call)) return
         customerInfoListeners.add(call.callbackId)
         call.setKeepAlive(true)
-        lastSeenCustomerInfo?.let { call.resolveWithMap(it.map()) }
+        lastSeenCustomerInfo?.let { it.mapAsync { map -> call.resolveWithMap(map) } }
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
