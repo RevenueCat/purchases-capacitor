@@ -7,4 +7,5 @@ const RevenueCatUI = registerPlugin<RevenueCatUIPlugin>('RevenueCatUI', {
 });
 
 export * from './definitions';
+export { PAYWALL_RESULT } from '@revenuecat/purchases-typescript-internal-esm';
 export { RevenueCatUI };
