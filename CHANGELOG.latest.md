@@ -1,8 +1,11 @@
 ## RevenueCat SDK
+### 🐞 Bugfixes
+* Export `PAYWALL_RESULT` from UI library (#478) via Toni Rico (@tonidero)
+* Fix invalid main entry point (#477) via Toni Rico (@tonidero)
 ### 📦 Dependency Updates
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 13.38.1 (#474) via RevenueCat Git Bot (@RCGitBot)
-  * [Android 8.20.0](https://github.com/RevenueCat/purchases-android/releases/tag/8.20.0)
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 14.0.2 (#480) via RevenueCat Git Bot (@RCGitBot)
+  * [iOS 5.30.0](https://github.com/RevenueCat/purchases-ios/releases/tag/5.30.0)
 
 ### 🔄 Other Changes
-* Bump nokogiri from 1.18.4 to 1.18.8 (#452) via dependabot[bot] (@dependabot[bot])
-* Bump fastlane from 2.227.2 to 2.228.0 (#463) via dependabot[bot] (@dependabot[bot])
+* Update workflows/issue-notifications.yml@v2 (#479) via Josh Holtz (@joshdholtz)
+* Add GitHub Issue Action Ack (#476) via Josh Holtz (@joshdholtz)
