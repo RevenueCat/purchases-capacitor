@@ -1,4 +1,7 @@
 ## RevenueCat SDK
+### 🐞 Bugfixes
+* Per-period prices are now correctly typed as nullable ([purchases-hybrid-common#1195](https://github.com/RevenueCat/purchases-hybrid-common/pull/1195)) via Jay Shortway (@JayShortway)
+
 ### 📦 Dependency Updates
 * [AUTOMATIC BUMP] Updates purchases-hybrid-common to 14.2.0 (#486) via RevenueCat Git Bot (@RCGitBot)
   * [Android 8.22.0](https://github.com/RevenueCat/purchases-android/releases/tag/8.22.0)
