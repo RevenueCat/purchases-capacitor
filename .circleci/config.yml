@@ -271,11 +271,12 @@ jobs:
 
 workflows:
   version: 2
-  build-test:
+  build-test-hold-deploy:
     when:
       not:
         equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
+      # Testing phase - runs on all branches
       - run-tests-ios
       - run-tests-android
       - run-lint
@@ -284,20 +285,7 @@ workflows:
       - run-lint-ui
       - dry-run-release-ui
 
-  deploy:
-    when:
-      not:
-        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
-    jobs:
-      - run-tests-ios:
-          <<: *release-branches
-      - run-tests-android:
-          <<: *release-branches
-      - run-lint:
-          <<: *release-branches
-      # UI Package jobs for release branches
-      - run-lint-ui:
-          <<: *release-branches
+      # Hold and deploy phase - only on release branches
       - hold:
           type: approval
           requires:
