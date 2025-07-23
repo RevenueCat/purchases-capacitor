@@ -36,6 +36,7 @@ import com.revenuecat.purchases.hybridcommon.getCurrentOfferingForPlacement as g
 import com.revenuecat.purchases.hybridcommon.getCustomerInfo as getCustomerInfoCommon
 import com.revenuecat.purchases.hybridcommon.getOfferings as getOfferingsCommon
 import com.revenuecat.purchases.hybridcommon.getStorefront as getStorefrontCommon
+import com.revenuecat.purchases.hybridcommon.getVirtualCurrencies as getVirtualCurrenciesCommon
 import com.revenuecat.purchases.hybridcommon.invalidateCustomerInfoCache as invalidateCustomerInfoCacheCommon
 import com.revenuecat.purchases.hybridcommon.isAnonymous as isAnonymousCommon
 import com.revenuecat.purchases.hybridcommon.logIn as logInCommon
@@ -124,6 +125,12 @@ class PurchasesPlugin : Plugin() {
         }
         call.resolve()
     }
+
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
+    fun getVirtualCurrencies(call: PluginCall) {
+        if (rejectIfNotConfigured(call)) return
+        getVirtualCurrenciesCommon(getOnResult(call))
+    }  
 
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun parseAsWebPurchaseRedemption(call: PluginCall) {

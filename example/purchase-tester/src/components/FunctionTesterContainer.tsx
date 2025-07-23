@@ -540,6 +540,11 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     updateLastFunction('isConfigured', isConfiguredResult);
   };
 
+  const getVirtualCurrencies = async () => {
+    const virtualCurrencies = await Purchases.getVirtualCurrencies();
+    updateLastFunction('getVirtualCurrencies', virtualCurrencies);
+  };
+
   const purchaseProductForWinBackTesting = async () => {
     try {
       const products = await Purchases.getProducts({
@@ -945,6 +950,9 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         </IonButton>
         <IonButton size="small" onClick={isConfigured}>
           Is configured?
+        </IonButton>
+        <IonButton size="small" onClick={getVirtualCurrencies}>
+          Get virtual currencies
         </IonButton>
         <IonButton size="small" onClick={purchaseProductForWinBackTesting}>
           Purchase Product for WinBack Testing

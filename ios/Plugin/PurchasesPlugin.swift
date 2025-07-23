@@ -69,6 +69,11 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
         call.resolve()
     }
 
+    @objc func getVirtualCurrencies(_ call: CAPPluginCall) {
+        guard self.rejectIfPurchasesNotConfigured(call) else { return }
+        CommonFunctionality.getVirtualCurrencies(completion: self.getCompletionBlockHandler(call))
+    }
+
     @objc func parseAsWebPurchaseRedemption(_ call: CAPPluginCall) {
         guard let urlString = call.getOrRejectString("urlString") else { return }
         let result: [String: Any?]

@@ -19,6 +19,7 @@ import type {
   PurchasesStoreProduct,
   PurchasesStoreProductDiscount,
   PurchasesStoreTransaction,
+  PurchasesVirtualCurrencies,
   PurchasesWinBackOffer,
   REFUND_REQUEST_STATUS,
   Storefront,
@@ -199,6 +200,14 @@ export interface PurchasesPlugin {
    * @param {PurchasesConfiguration} configuration RevenueCat configuration object including the API key and other optional parameters. See {@link PurchasesConfiguration}
    */
   configure(configuration: PurchasesConfiguration): Promise<void>;
+
+  /**
+   * Fetches the virtual currencies for the current subscriber.
+   *
+   * @returns {Promise<{ virtualCurrencies: PurchasesVirtualCurrencies }>} A promise of a VirtualCurrencies object.
+   * The promise will be rejected if configure has not been called yet or if there's an issue getting the virtual currencies.
+   */
+  getVirtualCurrencies(): Promise<{ virtualCurrencies: PurchasesVirtualCurrencies }>;
 
   /**
    * Parses the given URL string into a [WebPurchaseRedemption] object that can be used to redeem web purchases.
