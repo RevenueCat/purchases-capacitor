@@ -352,7 +352,9 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
   }
 
   getVirtualCurrencies(): Promise<{ virtualCurrencies: PurchasesVirtualCurrencies }> {
-    return this.mockReturningFunctionIfEnabled('getVirtualCurrencies', { virtualCurrencies: this.mockEmptyVirtualCurrencies });
+    return this.mockReturningFunctionIfEnabled('getVirtualCurrencies', {
+      virtualCurrencies: this.mockEmptyVirtualCurrencies,
+    });
   }
 
   invalidateVirtualCurrenciesCache(): Promise<void> {
@@ -360,7 +362,9 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
   }
 
   getCachedVirtualCurrencies(): Promise<{ cachedVirtualCurrencies: PurchasesVirtualCurrencies | null }> {
-    return this.mockReturningFunctionIfEnabled('getCachedVirtualCurrencies', { cachedVirtualCurrencies: this.mockEmptyVirtualCurrencies });
+    return this.mockReturningFunctionIfEnabled('getCachedVirtualCurrencies', {
+      cachedVirtualCurrencies: this.mockEmptyVirtualCurrencies,
+    });
   }
 
   // Mock helpers
@@ -387,7 +391,7 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
   };
 
   private mockEmptyVirtualCurrencies: PurchasesVirtualCurrencies = {
-    all: {}
+    all: {},
   };
 
   private mockTransaction(productIdentifier: string): PurchasesStoreTransaction {
