@@ -71,7 +71,12 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
 
     @objc func getVirtualCurrencies(_ call: CAPPluginCall) {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
-        CommonFunctionality.getVirtualCurrencies(completion: self.getCompletionBlockHandler(call))
+        CommonFunctionality.getVirtualCurrencies(
+            completion: self.getCompletionBlockHandler(
+                call, 
+                wrapperKey: "virtualCurrencies"
+            )
+        )
     }
 
     @objc func invalidateVirtualCurrenciesCache(_ call: CAPPluginCall) {
@@ -83,7 +88,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
     @objc func getCachedVirtualCurrencies(_ call: CAPPluginCall) {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
         call.resolve([
-            "virtualCurrencies": CommonFunctionality.getCachedVirtualCurrencies()
+            "cachedVirtualCurrencies": CommonFunctionality.getCachedVirtualCurrencies()
         ])
     }
 
