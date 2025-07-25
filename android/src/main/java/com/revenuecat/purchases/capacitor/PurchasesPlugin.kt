@@ -131,11 +131,11 @@ class PurchasesPlugin : Plugin() {
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun getVirtualCurrencies(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
-        getVirtualCurrenciesCommon(getOnResult(call))
+        getVirtualCurrenciesCommon(getOnResult(call, "virtualCurrencies"))
     }  
 
     @PluginMethod(returnType = PluginMethod.RETURN_NONE)
-    fun invalidateVirtualCurrenciesCache() {
+    fun invalidateVirtualCurrenciesCache(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         invalidateVirtualCurrenciesCacheCommon()
         call.resolve()
@@ -144,7 +144,7 @@ class PurchasesPlugin : Plugin() {
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun getCachedVirtualCurrencies(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
-        call.resolveWithMap(mapOf("virtualCurrencies" to getCachedVirtualCurrenciesCommon()))
+        call.resolveWithMap(mapOf("cachedVirtualCurrencies" to getCachedVirtualCurrenciesCommon()))
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
