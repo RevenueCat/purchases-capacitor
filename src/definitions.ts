@@ -223,10 +223,10 @@ export interface PurchasesPlugin {
    * This value will remain null until virtual currencies have been fetched at 
    * least once with {@link getVirtualCurrencies} or an equivalent function.
    * 
-   * @returns {Promise<{ virtualCurrencies: PurchasesVirtualCurrencies | null }>} The currently cached virtual currencies for the current subscriber.
+   * @returns {Promise<{ cachedVirtualCurrencies: PurchasesVirtualCurrencies | null }>} The currently cached virtual currencies for the current subscriber.
    * The promise will be rejected if configure has not been called yet or there's an error.
    */
-  getCachedVirtualCurrencies(): Promise<{ virtualCurrencies: PurchasesVirtualCurrencies | null }>;
+  getCachedVirtualCurrencies(): Promise<{ cachedVirtualCurrencies: PurchasesVirtualCurrencies | null }>;
 
   /**
    * Parses the given URL string into a [WebPurchaseRedemption] object that can be used to redeem web purchases.
