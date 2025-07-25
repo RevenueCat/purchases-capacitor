@@ -32,11 +32,14 @@ import com.revenuecat.purchases.hybridcommon.canMakePayments as canMakePaymentsC
 import com.revenuecat.purchases.hybridcommon.checkTrialOrIntroductoryPriceEligibility as checkTrialOrIntroductoryPriceEligibilityCommon
 import com.revenuecat.purchases.hybridcommon.collectDeviceIdentifiers as collectDeviceIdentifiersCommon
 import com.revenuecat.purchases.hybridcommon.getAppUserID as getAppUserIDCommon
+import com.revenuecat.purchases.hybridcommon.getCachedVirtualCurrencies as getCachedVirtualCurrenciesCommon
 import com.revenuecat.purchases.hybridcommon.getCurrentOfferingForPlacement as getCurrentOfferingForPlacementCommon
 import com.revenuecat.purchases.hybridcommon.getCustomerInfo as getCustomerInfoCommon
 import com.revenuecat.purchases.hybridcommon.getOfferings as getOfferingsCommon
 import com.revenuecat.purchases.hybridcommon.getStorefront as getStorefrontCommon
+import com.revenuecat.purchases.hybridcommon.getVirtualCurrencies as getVirtualCurrenciesCommon
 import com.revenuecat.purchases.hybridcommon.invalidateCustomerInfoCache as invalidateCustomerInfoCacheCommon
+import com.revenuecat.purchases.hybridcommon.invalidateVirtualCurrenciesCache as invalidateVirtualCurrenciesCacheCommon
 import com.revenuecat.purchases.hybridcommon.isAnonymous as isAnonymousCommon
 import com.revenuecat.purchases.hybridcommon.logIn as logInCommon
 import com.revenuecat.purchases.hybridcommon.logOut as logOutCommon
@@ -123,6 +126,25 @@ class PurchasesPlugin : Plugin() {
             }
         }
         call.resolve()
+    }
+
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
+    fun getVirtualCurrencies(call: PluginCall) {
+        if (rejectIfNotConfigured(call)) return
+        getVirtualCurrenciesCommon(getOnResult(call, "virtualCurrencies"))
+    }  
+
+    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    fun invalidateVirtualCurrenciesCache(call: PluginCall) {
+        if (rejectIfNotConfigured(call)) return
+        invalidateVirtualCurrenciesCacheCommon()
+        call.resolve()
+    }
+
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
+    fun getCachedVirtualCurrencies(call: PluginCall) {
+        if (rejectIfNotConfigured(call)) return
+        call.resolveWithMap(mapOf("cachedVirtualCurrencies" to getCachedVirtualCurrenciesCommon()))
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
