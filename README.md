@@ -178,14 +178,14 @@ or if you increased the balance from your backend using the server APIs.
 ### getCachedVirtualCurrencies()
 
 ```typescript
-getCachedVirtualCurrencies() => Promise<{ virtualCurrencies: PurchasesVirtualCurrencies | null; }>
+getCachedVirtualCurrencies() => Promise<{ cachedVirtualCurrencies: PurchasesVirtualCurrencies | null; }>
 ```
 
 The currently cached {@link <a href="#purchasesvirtualcurrencies">PurchasesVirtualCurrencies</a>} if one is available.
 This value will remain null until virtual currencies have been fetched at 
 least once with {@link getVirtualCurrencies} or an equivalent function.
 
-**Returns:** <code>Promise&lt;{ virtualCurrencies: <a href="#purchasesvirtualcurrencies">PurchasesVirtualCurrencies</a> | null; }&gt;</code>
+**Returns:** <code>Promise&lt;{ cachedVirtualCurrencies: <a href="#purchasesvirtualcurrencies">PurchasesVirtualCurrencies</a> | null; }&gt;</code>
 
 --------------------
 
