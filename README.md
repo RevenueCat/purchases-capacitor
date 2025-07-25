@@ -55,6 +55,8 @@ This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package
 
 * [`configure(...)`](#configure)
 * [`getVirtualCurrencies()`](#getvirtualcurrencies)
+* [`invalidateVirtualCurrenciesCache()`](#invalidatevirtualcurrenciescache)
+* [`getCachedVirtualCurrencies()`](#getcachedvirtualcurrencies)
 * [`parseAsWebPurchaseRedemption(...)`](#parseaswebpurchaseredemption)
 * [`redeemWebPurchase(...)`](#redeemwebpurchase)
 * [`setMockWebResults(...)`](#setmockwebresults)
@@ -154,6 +156,36 @@ getVirtualCurrencies() => Promise<{ virtualCurrencies: PurchasesVirtualCurrencie
 Fetches the virtual currencies for the current subscriber.
 
 **Returns:** <code>Promise&lt;{ virtualCurrencies: <a href="#purchasesvirtualcurrencies">PurchasesVirtualCurrencies</a>; }&gt;</code>
+
+--------------------
+
+
+### invalidateVirtualCurrenciesCache()
+
+```typescript
+invalidateVirtualCurrenciesCache() => Promise<void>
+```
+
+Invalidates the cache for virtual currencies.
+
+This is useful for cases where a virtual currency's balance might have been updated
+outside of the app, like if you decreased a user's balance from the user spending a virtual currency,
+or if you increased the balance from your backend using the server APIs.
+
+--------------------
+
+
+### getCachedVirtualCurrencies()
+
+```typescript
+getCachedVirtualCurrencies() => Promise<{ virtualCurrencies: PurchasesVirtualCurrencies | null; }>
+```
+
+The currently cached {@link <a href="#purchasesvirtualcurrencies">PurchasesVirtualCurrencies</a>} if one is available.
+This value will remain null until virtual currencies have been fetched at 
+least once with {@link getVirtualCurrencies} or an equivalent function.
+
+**Returns:** <code>Promise&lt;{ virtualCurrencies: <a href="#purchasesvirtualcurrencies">PurchasesVirtualCurrencies</a> | null; }&gt;</code>
 
 --------------------
 

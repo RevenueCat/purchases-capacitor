@@ -355,6 +355,14 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     return this.mockReturningFunctionIfEnabled('getVirtualCurrencies', { virtualCurrencies: this.mockEmptyVirtualCurrencies });
   }
 
+  invalidateVirtualCurrenciesCache(): Promise<void> {
+    return this.mockNonReturningFunctionIfEnabled('invalidateVirtualCurrenciesCache');
+  }
+
+  getCachedVirtualCurrencies(): Promise<{ virtualCurrencies: PurchasesVirtualCurrencies | null }> {
+    return this.mockReturningFunctionIfEnabled('getCachedVirtualCurrencies', { virtualCurrencies: this.mockEmptyVirtualCurrencies });
+  }
+
   // Mock helpers
 
   private mockEmptyCustomerInfo: CustomerInfo = {
