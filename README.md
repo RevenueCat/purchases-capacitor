@@ -182,7 +182,7 @@ getCachedVirtualCurrencies() => Promise<{ cachedVirtualCurrencies: PurchasesVirt
 ```
 
 The currently cached {@link <a href="#purchasesvirtualcurrencies">PurchasesVirtualCurrencies</a>} if one is available.
-This value will remain null until virtual currencies have been fetched at 
+This value will remain null until virtual currencies have been fetched at
 least once with {@link getVirtualCurrencies} or an equivalent function.
 
 **Returns:** <code>Promise&lt;{ cachedVirtualCurrencies: <a href="#purchasesvirtualcurrencies">PurchasesVirtualCurrencies</a> | null; }&gt;</code>
@@ -1289,12 +1289,12 @@ The VirtualCurrencies object contains all the virtual currencies associated to t
 The VirtualCurrency object represents information about a virtual currency in the app.
 Use this object to access information about a virtual currency, such as its current balance.
 
-| Prop                    | Type                        | Description                                                            |
-| ----------------------- | --------------------------- | ---------------------------------------------------------------------- |
-| **`balance`**           | <code>number</code>         | The virtual currency's balance.                                        |
-| **`name`**              | <code>string</code>         | The virtual currency's name.                                           |
-| **`code`**              | <code>string</code>         | The virtual currency's code.                                           |
-| **`serverDescription`** | <code>string \| null</code> | The virtual currency'sdescription defined in the RevenueCat dashboard. |
+| Prop                    | Type                        | Description                                                             |
+| ----------------------- | --------------------------- | ----------------------------------------------------------------------- |
+| **`balance`**           | <code>number</code>         | The virtual currency's balance.                                         |
+| **`name`**              | <code>string</code>         | The virtual currency's name.                                            |
+| **`code`**              | <code>string</code>         | The virtual currency's code.                                            |
+| **`serverDescription`** | <code>string \| null</code> | The virtual currency's description defined in the RevenueCat dashboard. |
 
 
 #### CustomerInfo
