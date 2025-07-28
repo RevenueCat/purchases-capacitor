@@ -6,7 +6,7 @@
 CAP_PLUGIN(PurchasesPlugin, "Purchases",
            CAP_PLUGIN_METHOD(configure, CAPPluginReturnNone);
            CAP_PLUGIN_METHOD(getVirtualCurrencies, CAPPluginReturnPromise);
-           CAP_PLUGIN_METHOD(invalidateVirtualCurrenciesCache, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(invalidateVirtualCurrenciesCache, CAPPluginReturnNone);
            CAP_PLUGIN_METHOD(getCachedVirtualCurrencies, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(parseAsWebPurchaseRedemption, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(redeemWebPurchase, CAPPluginReturnPromise);
