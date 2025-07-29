@@ -54,6 +54,9 @@ This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package
 <docgen-index>
 
 * [`configure(...)`](#configure)
+* [`getVirtualCurrencies()`](#getvirtualcurrencies)
+* [`invalidateVirtualCurrenciesCache()`](#invalidatevirtualcurrenciescache)
+* [`getCachedVirtualCurrencies()`](#getcachedvirtualcurrencies)
 * [`parseAsWebPurchaseRedemption(...)`](#parseaswebpurchaseredemption)
 * [`redeemWebPurchase(...)`](#redeemwebpurchase)
 * [`setMockWebResults(...)`](#setmockwebresults)
@@ -140,6 +143,49 @@ Sets up Purchases with your API key and an app user id.
 | Param               | Type                                                                      | Description                                                                                                                                                   |
 | ------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **`configuration`** | <code><a href="#purchasesconfiguration">PurchasesConfiguration</a></code> | RevenueCat configuration object including the API key and other optional parameters. See {@link <a href="#purchasesconfiguration">PurchasesConfiguration</a>} |
+
+--------------------
+
+
+### getVirtualCurrencies()
+
+```typescript
+getVirtualCurrencies() => Promise<{ virtualCurrencies: PurchasesVirtualCurrencies; }>
+```
+
+Fetches the virtual currencies for the current subscriber.
+
+**Returns:** <code>Promise&lt;{ virtualCurrencies: <a href="#purchasesvirtualcurrencies">PurchasesVirtualCurrencies</a>; }&gt;</code>
+
+--------------------
+
+
+### invalidateVirtualCurrenciesCache()
+
+```typescript
+invalidateVirtualCurrenciesCache() => Promise<void>
+```
+
+Invalidates the cache for virtual currencies.
+
+This is useful for cases where a virtual currency's balance might have been updated
+outside of the app, like if you decreased a user's balance from the user spending a virtual currency,
+or if you increased the balance from your backend using the server APIs.
+
+--------------------
+
+
+### getCachedVirtualCurrencies()
+
+```typescript
+getCachedVirtualCurrencies() => Promise<{ cachedVirtualCurrencies: PurchasesVirtualCurrencies | null; }>
+```
+
+The currently cached {@link <a href="#purchasesvirtualcurrencies">PurchasesVirtualCurrencies</a>} if one is available.
+This value will remain null until virtual currencies have been fetched at
+least once with {@link getVirtualCurrencies} or an equivalent function.
+
+**Returns:** <code>Promise&lt;{ cachedVirtualCurrencies: <a href="#purchasesvirtualcurrencies">PurchasesVirtualCurrencies</a> | null; }&gt;</code>
 
 --------------------
 
@@ -1227,6 +1273,28 @@ Holds parameters to initialize the SDK.
 | **`entitlementVerificationMode`**               | <code><a href="#entitlement_verification_mode">ENTITLEMENT_VERIFICATION_MODE</a></code> | Verification strictness levels for [EntitlementInfo]. See https://rev.cat/trusted-entitlements for more info.                                                                                                                                                                                                                                                                                                                                                                             |
 | **`pendingTransactionsForPrepaidPlansEnabled`** | <code>boolean</code>                                                                    | Enable this setting if you want to allow pending purchases for prepaid subscriptions (only supported in Google Play). Note that entitlements are not granted until payment is done. Disabled by default.                                                                                                                                                                                                                                                                                  |
 | **`diagnosticsEnabled`**                        | <code>boolean</code>                                                                    | Enabling diagnostics will send some performance and debugging information from the SDK to RevenueCat's servers. Examples of this information include response times, cache hits or error codes. No personal identifiable information will be collected. The default value is false.                                                                                                                                                                                                       |
+
+
+#### PurchasesVirtualCurrencies
+
+The VirtualCurrencies object contains all the virtual currencies associated to the user.
+
+| Prop      | Type                                                                                              | Description                                                                                                                             |
+| --------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **`all`** | <code>{ [key: string]: <a href="#purchasesvirtualcurrency">PurchasesVirtualCurrency</a>; }</code> | Map of all VirtualCurrency (<a href="#purchasesvirtualcurrency">`PurchasesVirtualCurrency`</a>) objects keyed by virtual currency code. |
+
+
+#### PurchasesVirtualCurrency
+
+The VirtualCurrency object represents information about a virtual currency in the app.
+Use this object to access information about a virtual currency, such as its current balance.
+
+| Prop                    | Type                        | Description                                                             |
+| ----------------------- | --------------------------- | ----------------------------------------------------------------------- |
+| **`balance`**           | <code>number</code>         | The virtual currency's balance.                                         |
+| **`name`**              | <code>string</code>         | The virtual currency's name.                                            |
+| **`code`**              | <code>string</code>         | The virtual currency's code.                                            |
+| **`serverDescription`** | <code>string \| null</code> | The virtual currency's description defined in the RevenueCat dashboard. |
 
 
 #### CustomerInfo

@@ -18,6 +18,7 @@ import type {
   PurchasesPromotionalOffer,
   PurchasesStoreProduct,
   PurchasesStoreTransaction,
+  PurchasesVirtualCurrencies,
   PurchasesWinBackOffer,
   ShouldPurchasePromoProductListener,
   Storefront,
@@ -350,6 +351,22 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     return this.mockReturningFunctionIfEnabled('isConfigured', mockResult);
   }
 
+  getVirtualCurrencies(): Promise<{ virtualCurrencies: PurchasesVirtualCurrencies }> {
+    return this.mockReturningFunctionIfEnabled('getVirtualCurrencies', {
+      virtualCurrencies: this.mockEmptyVirtualCurrencies,
+    });
+  }
+
+  invalidateVirtualCurrenciesCache(): Promise<void> {
+    return this.mockNonReturningFunctionIfEnabled('invalidateVirtualCurrenciesCache');
+  }
+
+  getCachedVirtualCurrencies(): Promise<{ cachedVirtualCurrencies: PurchasesVirtualCurrencies | null }> {
+    return this.mockReturningFunctionIfEnabled('getCachedVirtualCurrencies', {
+      cachedVirtualCurrencies: this.mockEmptyVirtualCurrencies,
+    });
+  }
+
   // Mock helpers
 
   private mockEmptyCustomerInfo: CustomerInfo = {
@@ -371,6 +388,10 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     managementURL: null,
     nonSubscriptionTransactions: [],
     subscriptionsByProductIdentifier: {},
+  };
+
+  private mockEmptyVirtualCurrencies: PurchasesVirtualCurrencies = {
+    all: {},
   };
 
   private mockTransaction(productIdentifier: string): PurchasesStoreTransaction {
