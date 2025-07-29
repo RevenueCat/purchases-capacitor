@@ -1,18 +1,8 @@
 ## RevenueCat SDK
+### ✨ New Features
+* [iOS + Android] Virtual Currency Support (#502) via Will Taylor (@fire-at-will)
 ### 📦 Dependency Updates
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 16.0.2 (#500) via RevenueCat Git Bot (@RCGitBot)
-  * [Android 9.1.2](https://github.com/RevenueCat/purchases-android/releases/tag/9.1.2)
-  * [Android 9.1.1](https://github.com/RevenueCat/purchases-android/releases/tag/9.1.1)
-  * [Android 9.1.0](https://github.com/RevenueCat/purchases-android/releases/tag/9.1.0)
-  * [Android 9.0.1](https://github.com/RevenueCat/purchases-android/releases/tag/9.0.1)
-  * [Android 9.0.0](https://github.com/RevenueCat/purchases-android/releases/tag/9.0.0)
-  * [iOS 5.33.1](https://github.com/RevenueCat/purchases-ios/releases/tag/5.33.1)
-  * [iOS 5.33.0](https://github.com/RevenueCat/purchases-ios/releases/tag/5.33.0)
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 16.0.1 (#498) via RevenueCat Git Bot (@RCGitBot)
-  * [Android 9.1.2](https://github.com/RevenueCat/purchases-android/releases/tag/9.1.2)
-  * [Android 9.1.1](https://github.com/RevenueCat/purchases-android/releases/tag/9.1.1)
-  * [Android 9.1.0](https://github.com/RevenueCat/purchases-android/releases/tag/9.1.0)
-  * [Android 9.0.1](https://github.com/RevenueCat/purchases-android/releases/tag/9.0.1)
-  * [Android 9.0.0](https://github.com/RevenueCat/purchases-android/releases/tag/9.0.0)
-  * [iOS 5.33.1](https://github.com/RevenueCat/purchases-ios/releases/tag/5.33.1)
-  * [iOS 5.33.0](https://github.com/RevenueCat/purchases-ios/releases/tag/5.33.0)
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 16.1.0 (#503) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Improve 11.0.0 changelog (#504) via Toni Rico (@tonidero)
