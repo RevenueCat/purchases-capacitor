@@ -1,5 +1,9 @@
 ## 11.1.2
 ## RevenueCat SDK
+> [!WARNING]  
+> If you don't have any login system in your app, please make sure your one-time purchase products have been correctly configured in the RevenueCat dashboard as either consumable or non-consumable. If they're incorrectly configured as consumables, RevenueCat will consume these purchases. This means that users won't be able to restore them from version 11.0.0 onward.
+> Non-consumables are products that are meant to be bought only once, for example, lifetime subscriptions.
+
 ### 📦 Dependency Updates
 * [AUTOMATIC BUMP] Updates purchases-hybrid-common to 17.0.0 (#517) via RevenueCat Git Bot (@RCGitBot)
   * [Android 9.3.2](https://github.com/RevenueCat/purchases-android/releases/tag/9.3.2)
@@ -10,6 +14,10 @@
 
 ## 11.1.1
 ## RevenueCat SDK
+> [!WARNING]  
+> If you don't have any login system in your app, please make sure your one-time purchase products have been correctly configured in the RevenueCat dashboard as either consumable or non-consumable. If they're incorrectly configured as consumables, RevenueCat will consume these purchases. This means that users won't be able to restore them from version 11.0.0 onward.
+> Non-consumables are products that are meant to be bought only once, for example, lifetime subscriptions.
+
 ### 📦 Dependency Updates
 * [AUTOMATIC BUMP] Updates purchases-hybrid-common to 16.2.0 (#509) via RevenueCat Git Bot (@RCGitBot)
   * [Android 9.2.0](https://github.com/RevenueCat/purchases-android/releases/tag/9.2.0)
@@ -22,6 +30,10 @@
 
 ## 11.1.0
 ## RevenueCat SDK
+> [!WARNING]  
+> If you don't have any login system in your app, please make sure your one-time purchase products have been correctly configured in the RevenueCat dashboard as either consumable or non-consumable. If they're incorrectly configured as consumables, RevenueCat will consume these purchases. This means that users won't be able to restore them from version 11.0.0 onward.
+> Non-consumables are products that are meant to be bought only once, for example, lifetime subscriptions.
+
 ### ✨ New Features
 * [iOS + Android] Virtual Currency Support (#502) via Will Taylor (@fire-at-will)
 ### 📦 Dependency Updates
@@ -32,16 +44,12 @@
 
 ## 11.0.1
 ## RevenueCat SDK
+> [!WARNING]  
+> If you don't have any login system in your app, please make sure your one-time purchase products have been correctly configured in the RevenueCat dashboard as either consumable or non-consumable. If they're incorrectly configured as consumables, RevenueCat will consume these purchases. This means that users won't be able to restore them from version 11.0.0 onward.
+> Non-consumables are products that are meant to be bought only once, for example, lifetime subscriptions.
+
 ### 📦 Dependency Updates
 * [AUTOMATIC BUMP] Updates purchases-hybrid-common to 16.0.2 (#500) via RevenueCat Git Bot (@RCGitBot)
-  * [Android 9.1.2](https://github.com/RevenueCat/purchases-android/releases/tag/9.1.2)
-  * [Android 9.1.1](https://github.com/RevenueCat/purchases-android/releases/tag/9.1.1)
-  * [Android 9.1.0](https://github.com/RevenueCat/purchases-android/releases/tag/9.1.0)
-  * [Android 9.0.1](https://github.com/RevenueCat/purchases-android/releases/tag/9.0.1)
-  * [Android 9.0.0](https://github.com/RevenueCat/purchases-android/releases/tag/9.0.0)
-  * [iOS 5.33.1](https://github.com/RevenueCat/purchases-ios/releases/tag/5.33.1)
-  * [iOS 5.33.0](https://github.com/RevenueCat/purchases-ios/releases/tag/5.33.0)
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 16.0.1 (#498) via RevenueCat Git Bot (@RCGitBot)
   * [Android 9.1.2](https://github.com/RevenueCat/purchases-android/releases/tag/9.1.2)
   * [Android 9.1.1](https://github.com/RevenueCat/purchases-android/releases/tag/9.1.1)
   * [Android 9.1.0](https://github.com/RevenueCat/purchases-android/releases/tag/9.1.0)
