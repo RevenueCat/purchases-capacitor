@@ -9,11 +9,13 @@ import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
+import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.hybridcommon.ui.PaywallResultListener
 import com.revenuecat.purchases.hybridcommon.ui.PaywallSource
 import com.revenuecat.purchases.hybridcommon.ui.PresentPaywallOptions
 import com.revenuecat.purchases.hybridcommon.ui.presentPaywallFromFragment
 import com.revenuecat.purchases.ui.revenuecatui.customercenter.ShowCustomerCenter
+import org.json.JSONObject
 
 @CapacitorPlugin(name = "RevenueCatUI")
 class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
@@ -38,11 +40,15 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
     fun presentPaywall(call: PluginCall) {
         val offering = call.getObject("offering")
         val offeringIdentifier = offering?.getString("identifier")
+        val presentedOfferingContext = offering?.optJSONArray("availablePackages")
+            ?.optJSONObject(0)
+            ?.optJSONObject("presentedOfferingContext")
         val displayCloseButton = call.getBoolean("displayCloseButton") ?: false
 
         presentPaywallInternal(
             call = call,
             offeringIdentifier = offeringIdentifier,
+            presentedOfferingContext = presentedOfferingContext,
             displayCloseButton = displayCloseButton,
             requiredEntitlementIdentifier = null
         )
@@ -61,11 +67,15 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
 
         val offering = call.getObject("offering")
         val offeringIdentifier = offering?.getString("identifier")
+        val presentedOfferingContext = offering?.optJSONArray("availablePackages")
+            ?.optJSONObject(0)
+            ?.optJSONObject("presentedOfferingContext")
         val displayCloseButton = call.getBoolean("displayCloseButton") ?: false
 
         presentPaywallInternal(
             call = call,
             offeringIdentifier = offeringIdentifier,
+            presentedOfferingContext = presentedOfferingContext,
             displayCloseButton = displayCloseButton,
             requiredEntitlementIdentifier = requiredEntitlementIdentifier
         )
@@ -77,6 +87,7 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
     private fun presentPaywallInternal(
         call: PluginCall,
         offeringIdentifier: String?,
+        presentedOfferingContext: JSONObject?,
         displayCloseButton: Boolean,
         requiredEntitlementIdentifier: String?
     ) {
@@ -100,8 +111,34 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
             return
         }
 
-        val paywallSource = offeringIdentifier?.let { PaywallSource.OfferingIdentifier(it) }
-            ?: PaywallSource.DefaultOffering
+        val presentedOfferingContext = presentedOfferingContext?.let { jsContext ->
+            val offeringId = jsContext.optString("offeringIdentifier").takeUnless { it.isNullOrEmpty() }
+            if (offeringId == null) { return@let null }
+            val placementIdentifier = jsContext.optString("placementIdentifier").takeUnless { it.isNullOrEmpty() }
+            val targetingContext = jsContext.optJSONObject("targetingContext")?.let { targetingContext ->
+                val revision = targetingContext.optInt("revision", -1).takeUnless { it == -1 }
+                val ruleId = targetingContext.optString("ruleId").takeUnless { it.isNullOrEmpty() }
+                if (revision == null || ruleId == null) { return@let null }
+                PresentedOfferingContext.TargetingContext(
+                    revision = revision,
+                    ruleId = ruleId,
+                )
+            }
+            PresentedOfferingContext(
+                offeringIdentifier = offeringId,
+                placementIdentifier = placementIdentifier,
+                targetingContext = targetingContext,
+            )
+        }
+
+        val paywallSource = if (offeringIdentifier != null && presentedOfferingContext != null) {
+            PaywallSource.OfferingIdentifierWithPresentedOfferingContext(
+                offeringIdentifier = offeringIdentifier,
+                presentedOfferingContext = presentedOfferingContext,
+            )
+        } else {
+            PaywallSource.DefaultOffering
+        }
 
         val options = PresentPaywallOptions(
             paywallSource = paywallSource,
