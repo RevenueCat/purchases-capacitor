@@ -105,6 +105,7 @@ class PurchasesPlugin : Plugin() {
         val entitlementVerificationMode = call.getString("entitlementVerificationMode")
         val pendingTransactionsForPrepaidPlansEnabled = call.getBoolean("pendingTransactionsForPrepaidPlansEnabled")
         val diagnosticsEnabled = call.getBoolean("diagnosticsEnabled")
+        val automaticDeviceIdentifierCollectionEnabled = call.getBoolean("automaticDeviceIdentifierCollectionEnabled")
 
         configure(
             context.applicationContext,
@@ -117,6 +118,7 @@ class PurchasesPlugin : Plugin() {
             verificationMode = entitlementVerificationMode,
             pendingTransactionsForPrepaidPlansEnabled = pendingTransactionsForPrepaidPlansEnabled,
             diagnosticsEnabled = diagnosticsEnabled,
+            automaticDeviceIdentifierCollectionEnabled = automaticDeviceIdentifierCollectionEnabled,
         )
         Purchases.sharedInstance.updatedCustomerInfoListener = UpdatedCustomerInfoListener { customerInfo ->
             customerInfo.mapAsync { map ->
