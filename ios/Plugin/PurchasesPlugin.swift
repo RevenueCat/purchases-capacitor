@@ -53,6 +53,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
         let shouldShowInAppMessagesAutomatically = call.getBool("shouldShowInAppMessagesAutomatically") ?? true
         let entitlementVerificationMode = call.getString("entitlementVerificationMode")
         let diagnosticsEnabled = call.getBool("diagnosticsEnabled") ?? false
+        let automaticDeviceIdentifierCollectionEnabled = call.getBool("automaticDeviceIdentifierCollectionEnabled") ?? true
 
         let purchases = Purchases.configure(apiKey: apiKey,
                                             appUserID: appUserID,
@@ -64,7 +65,8 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
                                             dangerousSettings: DangerousSettings(),
                                             shouldShowInAppMessagesAutomatically: shouldShowInAppMessagesAutomatically,
                                             verificationMode: entitlementVerificationMode,
-                                            diagnosticsEnabled: diagnosticsEnabled)
+                                            diagnosticsEnabled: diagnosticsEnabled,
+                                            automaticDeviceIdentifierCollectionEnabled: automaticDeviceIdentifierCollectionEnabled)
         purchases.delegate = self
         call.resolve()
     }
