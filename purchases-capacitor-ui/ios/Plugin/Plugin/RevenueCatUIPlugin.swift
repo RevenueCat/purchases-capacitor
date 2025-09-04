@@ -44,7 +44,7 @@ public class RevenueCatUIPlugin: CAPPlugin {
                 return
             }
 
-            let offeringIdentifier = call.getObject("offering")?["identifier"]
+            let offeringOptions = self.processOfferingOptions(call)
             let displayCloseButton = call.getBool("displayCloseButton") ?? false
 
             var options: [String: Any] = [
@@ -52,8 +52,10 @@ public class RevenueCatUIPlugin: CAPPlugin {
                 "shouldBlockTouchEvents": true
             ]
 
-            if let offeringIdentifier = offeringIdentifier {
-                options["offeringIdentifier"] = offeringIdentifier
+            if let offeringOptions = offeringOptions {
+                options.merge(offeringOptions) { original, offeringOption in
+                    offeringOption
+                }
             }
 
             proxy.presentPaywall(
@@ -87,7 +89,7 @@ public class RevenueCatUIPlugin: CAPPlugin {
                 return
             }
 
-            let offeringIdentifier = call.getString("offeringIdentifier")
+            let offeringOptions = self.processOfferingOptions(call)
             let displayCloseButton = call.getBool("displayCloseButton") ?? false
 
             var options: [String: Any] = [
@@ -96,8 +98,10 @@ public class RevenueCatUIPlugin: CAPPlugin {
                 "requiredEntitlementIdentifier": requiredEntitlementIdentifier
             ]
 
-            if let offeringIdentifier = offeringIdentifier {
-                options["offeringIdentifier"] = offeringIdentifier
+            if let offeringOptions = offeringOptions {
+                options.merge(offeringOptions) { original, offeringOption in
+                    offeringOption
+                }
             }
 
             proxy.presentPaywallIfNeeded(
@@ -133,6 +137,46 @@ public class RevenueCatUIPlugin: CAPPlugin {
                     call.resolve()
                 }
             })
+        }
+    }
+}
+
+private extension RevenueCatUIPlugin {
+
+    func processOfferingOptions(_ call: CAPPluginCall) -> [String: Any]? {
+        let offering = call.getObject("offering")
+        let offeringIdentifier = call.getString("offeringIdentifier")
+        let availablePackages = offering?["availablePackages"] as? JSArray
+        let firstPackage = availablePackages?.first as? JSObject
+        let presentedOfferingContext = firstPackage?["presentedOfferingContext"] as? JSObject
+        let contextOfferingIdentifier = presentedOfferingContext?["offeringIdentifier"]
+        let contextPlacementIdentifier = presentedOfferingContext?["placementIdentifier"]
+        let contextTargetingContext = presentedOfferingContext?["targetingContext"] as? JSObject
+        let contextTargetingRevision = contextTargetingContext?["revision"]
+        let contextTargetingRuleId = contextTargetingContext?["ruleId"]
+        let displayCloseButton = call.getBool("displayCloseButton") ?? false
+
+        var options: [String: Any] = [:]
+        if let offeringIdentifier = offeringIdentifier {
+            options[PaywallProxy.PaywallOptionsKeys.offeringIdentifier] = offeringIdentifier
+            if let presentedOfferingContext = presentedOfferingContext,
+                let contextOfferingIdentifier = contextOfferingIdentifier {
+                var presentedOfferingContextMap = [
+                    PaywallProxy.PresentedOfferingContextKeys.offeringIdentifier: contextOfferingIdentifier,
+                    PaywallProxy.PresentedOfferingContextKeys.placementIdentifier: contextPlacementIdentifier,
+                ]
+                if let contextTargetingRevision = contextTargetingRevision,
+                    let contextTargetingRuleId {
+                    presentedOfferingContextMap[PaywallProxy.PresentedOfferingContextKeys.targetingContext] = [
+                        PaywallProxy.PresentedOfferingTargetingContextKeys.revision: contextTargetingRevision,
+                        PaywallProxy.PresentedOfferingTargetingContextKeys.ruleId: contextTargetingRuleId
+                    ]
+                }
+                options[PaywallProxy.PaywallOptionsKeys.presentedOfferingContext] = presentedOfferingContextMap
+            }
+            return options
+        } else {
+            return nil
         }
     }
 }
