@@ -51,6 +51,6 @@ repositories {
 dependencies {
     implementation project(':capacitor-android')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
-    implementation 'com.revenuecat.purchases:purchases-hybrid-common-ui:17.8.0'
+    implementation 'com.revenuecat.purchases:purchases-hybrid-common-ui:17.9.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.20"
 } 
