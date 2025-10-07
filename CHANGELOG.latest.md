@@ -1,18 +1,16 @@
-## RevenueCat SDK
-### 🐞 Bugfixes
-* Per-period prices are now correctly typed as nullable ([purchases-hybrid-common#1195](https://github.com/RevenueCat/purchases-hybrid-common/pull/1195)) via Jay Shortway (@JayShortway)
+> [!WARNING]  
+> If you don't have any login system in your app, please make sure your one-time purchase products have been correctly configured in the RevenueCat dashboard as either consumable or non-consumable. If they're incorrectly configured as consumables, RevenueCat will consume these purchases. This means that users won't be able to restore them from version 11.0.0 onward.
+> Non-consumables are products that are meant to be bought only once, for example, lifetime subscriptions.
 
+
+## RevenueCat SDK
 ### 📦 Dependency Updates
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 14.2.0 (#486) via RevenueCat Git Bot (@RCGitBot)
-  * [Android 8.22.0](https://github.com/RevenueCat/purchases-android/releases/tag/8.22.0)
-  * [Android 8.21.0](https://github.com/RevenueCat/purchases-android/releases/tag/8.21.0)
-  * [iOS 5.32.0](https://github.com/RevenueCat/purchases-ios/releases/tag/5.32.0)
-  * [iOS 5.31.0](https://github.com/RevenueCat/purchases-ios/releases/tag/5.31.0)
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 14.1.0 (#484) via RevenueCat Git Bot (@RCGitBot)
-  * [Android 8.22.0](https://github.com/RevenueCat/purchases-android/releases/tag/8.22.0)
-  * [Android 8.21.0](https://github.com/RevenueCat/purchases-android/releases/tag/8.21.0)
-  * [iOS 5.32.0](https://github.com/RevenueCat/purchases-ios/releases/tag/5.32.0)
-  * [iOS 5.31.0](https://github.com/RevenueCat/purchases-ios/releases/tag/5.31.0)
+* Updates purchases-hybrid-common to 14.3.0 (#548) via Antonio Pallares (@ajpallares)
+  * [Android 8.24.0](https://github.com/RevenueCat/purchases-android/releases/tag/8.24.0)
+  * [Android 8.23.0](https://github.com/RevenueCat/purchases-android/releases/tag/8.23.0)
+  * [Android 8.22.1](https://github.com/RevenueCat/purchases-android/releases/tag/8.22.1)
 
 ### 🔄 Other Changes
-* Bump danger from 9.5.1 to 9.5.3 (#483) via dependabot[bot] (@dependabot[bot])
+* [v10] Update fastlane plugin (#557) via Antonio Pallares (@ajpallares)
+* [v10] Update fastlane plugin (#550) via Antonio Pallares (@ajpallares)
+* [v10] Prepare for next release (#549) via Antonio Pallares (@ajpallares)
