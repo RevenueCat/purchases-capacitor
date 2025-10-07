@@ -221,6 +221,23 @@ lane :tag_current_branch do |options|
   push_git_tags(tag: version_number)
 end
 
+desc "If the release corresponds to a previous version, creates a PR to insert the release changelog into main's CHANGELOG.md"
+lane :insert_changelog_latest_in_main_if_needed do |options|
+  if options[:dry_run]
+    dry_run = true
+  else
+    dry_run = false
+  end
+
+  insert_changelog_of_older_version(
+    sdk_version: current_version_number,
+    changelog_path: changelog_path,
+    changelog_latest_path: changelog_latest_path,
+    repo_name: repo_name,
+    dry_run: dry_run
+  )
+end
+
 ###############################################################################
 # Helper functions 🤜🤛                                                      #
 ###############################################################################

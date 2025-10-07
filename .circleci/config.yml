@@ -322,6 +322,12 @@ workflows:
           requires:
             - make-release
           <<: *release-tags
+      - revenuecat/insert-changelog-latest-in-main-if-needed:
+          cache-version: v1
+          requires:
+            - make-release
+            - make-release-ui
+          <<: *release-tags
 
   danger:
     jobs:
