@@ -36,7 +36,7 @@ aliases:
 parameters:
   action:
     type: enum
-    enum: [build, upgrade-hybrid-common, bump]
+    enum: [build, upgrade-hybrid-common, bump, insert-changelog-in-main]
     default: build
   version:
     type: string
@@ -283,6 +283,14 @@ workflows:
       # UI Package jobs
       - run-lint-ui
       - dry-run-release-ui
+
+  temp-insert-changelog-latest-in-main-if-needed:
+    when:
+      and:
+        - equal: [ insert-changelog-in-main, << pipeline.parameters.action >> ]
+    jobs:
+      - revenuecat/insert-changelog-latest-in-main-if-needed:
+          cache-version: v1
 
   deploy:
     when:
