@@ -3,7 +3,7 @@ orbs:
   macos: circleci/macos@2.3.6
   android: circleci/android@3.0.2
   node: circleci/node@5.1.0
-  revenuecat: revenuecat/sdks-common-config@2.2.0
+  revenuecat: revenuecat/sdks-common-config@dev:0797bbcc943eecd4dcb0bf81dabd8e3e102a2105
 
 aliases:
   base-mac-job: &base-mac-job
@@ -289,7 +289,7 @@ workflows:
       and:
         - not:
             equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
-        # Only run this workflow when the action is "build" (the default), 
+        # Only run this workflow when the action is "build" (the default),
         # so it doesn't run for other actions like "bump" on a release branch,
         # which should only open the release PR but not deploy it.
         # (Deployment happens after the hold job is approved on the release PR.)
