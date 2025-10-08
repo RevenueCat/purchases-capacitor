@@ -70,3 +70,4 @@ fastlane/.env
 
 # CI dependencies
 vendor
+.bundle/
