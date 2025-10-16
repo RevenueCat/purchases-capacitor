@@ -9,7 +9,7 @@ aliases:
   base-mac-job: &base-mac-job
     resource_class: macos.m1.medium.gen1
     macos:
-      xcode: '15.2'
+      xcode: '15.4'
     shell: /bin/bash --login -o pipefail
 
   release-tags: &release-tags
