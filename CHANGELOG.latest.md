@@ -4,12 +4,8 @@
 
 
 ## RevenueCat SDK
-### 📦 Dependency Updates
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 17.10.0 (#565) via RevenueCat Git Bot (@RCGitBot)
-  * [Android 9.9.0](https://github.com/RevenueCat/purchases-android/releases/tag/9.9.0)
-  * [iOS 5.43.0](https://github.com/RevenueCat/purchases-ios/releases/tag/5.43.0)
-  * [iOS 5.42.0](https://github.com/RevenueCat/purchases-ios/releases/tag/5.42.0)
+### 🐞 Bugfixes
+* Fix passing offering to `presentPaywall` functions (#572) via Toni Rico (@tonidero)
 
 ### 🔄 Other Changes
-* Update Readme with new APIs in PHC 17.10.0 (#566) via Antonio Pallares (@ajpallares)
-* Bump fastlane-plugin-revenuecat_internal from `3f7fffc` to `25c7fb8` (#564) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `25c7fb8` to `525d48c` (#571) via dependabot[bot] (@dependabot[bot])
