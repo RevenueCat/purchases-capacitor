@@ -61,7 +61,7 @@
   "dependencies": {
     "@capacitor/core": "^7.0.0",
     "@revenuecat/purchases-capacitor": "^10.2.4",
-    "@revenuecat/purchases-typescript-internal-esm": "17.10.0"
+    "@revenuecat/purchases-typescript-internal-esm": "17.11.0"
   },
   "peerDependencies": {
     "@capacitor/core": "^7.0.0"
