@@ -248,7 +248,7 @@ jobs:
           cache-version: v1
       - run:
           name: Temporarily bump version
-          command: bundle exec fastlane temporary_snapshot_bump
+          command: bundle exec fastlane temporary_bump_version
       - yarn-dependencies-unix
       - yarn-dependencies-ui-unix
       - run: yarn build

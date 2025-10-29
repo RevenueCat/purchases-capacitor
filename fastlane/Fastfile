@@ -86,22 +86,26 @@ lane :github_release do |options|
 end
 
 desc "Temporarily bumps the version of the package to the next snapshot version, but does not commit or push the changes"
-lane :temporary_snapshot_bump do |options|
+lane :temporary_bump_version do |options|
   version_number = current_version_number
+
   is_prerelease = Gem::Version.new(version_number).prerelease?
+
+  delimiters = %w[. - +]
+  version_split = current_version.split(Regexp.union(delimiters))
+  major = version_split[0]
+  minor = version_split[1]
+  patch = version_split[2]
+
   if is_prerelease
-    UI.user_error!("Current version is a prerelease, cannot temporarily bump")
+    next_version = "#{major}.#{minor}.#{patch}"
+  else
+    next_version = "#{major}.#{minor}.#{patch + 1}"
   end
 
-  next_version, type_of_bump = determine_next_version_using_labels(
-    repo_name: repo_name,
-    github_rate_limit: options[:github_rate_limit]
-  )
-
-  next_prerelease_version = next_version + "-SNAPSHOT"
   replace_version_number(
     current_version: version_number,
-    new_version_number: next_prerelease_version,
+    new_version_number: next_version,
     files_to_update: files_with_version_number,
     files_to_update_without_prerelease_modifiers: {}
   )
