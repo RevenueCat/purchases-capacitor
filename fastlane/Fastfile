@@ -100,7 +100,7 @@ lane :temporary_bump_version do |options|
   if is_prerelease
     next_version = "#{major}.#{minor}.#{patch}"
   else
-    next_version = "#{major}.#{minor}.#{patch + 1}"
+    next_version = "#{major}.#{minor}.#{patch.to_i + 1}"
   end
 
   replace_version_number(
