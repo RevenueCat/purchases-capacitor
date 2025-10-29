@@ -12,7 +12,13 @@ function unwrapCapacitorError(error: any): any {
     console.log('[Purchases] Original error:', JSON.stringify(error, null, 2));
     const unwrapped = {
       ...error,
-      ...error.data,
+      message: error.data.message,
+      readableErrorCode: error.data.readableErrorCode,
+      userInfo: {
+        readableErrorCode: error.data.readableErrorCode,
+      },
+      underlyingErrorMessage: error.data.underlyingErrorMessage,
+      userCancelled: error.data.userCancelled ?? null,
     };
     console.log('[Purchases] Unwrapped error:', JSON.stringify(unwrapped, null, 2));
     return unwrapped;
@@ -51,14 +57,20 @@ const methodCache = new Map<string | symbol, any>();
 const Purchases = new Proxy(PurchasesNative, {
   get(target, prop, receiver) {
     const value = Reflect.get(target, prop, receiver);
-    
+
     if (typeof value === 'function') {
+      if (typeof prop === 'number') {
+        console.log('[Purchases] Skipping method wrapping for numeric prop:', prop);
+        return value;
+      }
+
       if (!methodCache.has(prop)) {
+        console.log('[Purchases] Wrapping method:', String(prop));
         methodCache.set(prop, wrapMethod(value, target, prop));
       }
       return methodCache.get(prop);
     }
-    
+
     return value;
   },
 });

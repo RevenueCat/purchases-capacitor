@@ -12,7 +12,13 @@ function unwrapCapacitorError(error: any): any {
     console.log('[RevenueCatUI] Original error:', JSON.stringify(error, null, 2));
     const unwrapped = {
       ...error,
-      ...error.data,
+      message: error.data.message,
+      readableErrorCode: error.data.readableErrorCode,
+      userInfo: {
+        readableErrorCode: error.data.readableErrorCode,
+      },
+      underlyingErrorMessage: error.data.underlyingErrorMessage,
+      userCancelled: error.data.userCancelled ?? null,
     };
     console.log('[RevenueCatUI] Unwrapped error:', JSON.stringify(unwrapped, null, 2));
     return unwrapped;
@@ -51,14 +57,20 @@ const methodCache = new Map<string | symbol, any>();
 const RevenueCatUI = new Proxy(RevenueCatUINative, {
   get(target, prop, receiver) {
     const value = Reflect.get(target, prop, receiver);
-    
+
     if (typeof value === 'function') {
+      if (typeof prop === 'number') {
+        console.log('[RevenueCatUI] Skipping method wrapping for numeric prop:', prop);
+        return value;
+      }
+
       if (!methodCache.has(prop)) {
+        console.log('[RevenueCatUI] Wrapping method:', String(prop));
         methodCache.set(prop, wrapMethod(value, target, prop));
       }
       return methodCache.get(prop);
     }
-    
+
     return value;
   },
 });
