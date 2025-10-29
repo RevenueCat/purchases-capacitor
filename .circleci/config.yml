@@ -244,6 +244,12 @@ jobs:
       - image: cimg/ruby:3.1.2
     steps:
       - checkout
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
+      - run:
+          name: Temporarily bump version
+          description: Running `npm publish --dry-run` for an existing version fails because the version is already published. This lane temporarily bumps the version to a next version just for testing the publish command.
+          command: bundle exec fastlane temporary_bump_version
       - yarn-dependencies-unix
       - yarn-dependencies-ui-unix
       - run: yarn build

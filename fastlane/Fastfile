@@ -85,6 +85,34 @@ lane :github_release do |options|
   )
 end
 
+desc "Temporarily bumps the version of the package to the next snapshot version, but does not commit or push the changes"
+lane :temporary_bump_version do |options|
+  version_number = current_version_number
+
+  is_prerelease = Gem::Version.new(version_number).prerelease?
+
+  delimiters = %w[. - +]
+  version_split = version_number.split(Regexp.union(delimiters))
+  major = version_split[0]
+  minor = version_split[1]
+  patch = version_split[2]
+
+  if is_prerelease
+    next_version = "#{major}.#{minor}.#{patch}"
+  else
+    next_version = "#{major}.#{minor}.#{patch.to_i + 1}"
+  end
+
+  replace_version_number(
+    current_version: version_number,
+    new_version_number: next_version,
+    files_to_update: files_with_version_number,
+    files_to_update_without_prerelease_modifiers: {}
+  )
+
+  UI.message("ℹ️  Temporarily bumped version to #{next_version}")
+end
+
 desc "Creates GitHub release and publishes package"
 lane :release do |options|
   version_number = current_version_number
