@@ -145,7 +145,7 @@ private extension RevenueCatUIPlugin {
 
     func processOfferingOptions(_ call: CAPPluginCall) -> [String: Any]? {
         let offering = call.getObject("offering")
-        let offeringIdentifier = call.getString("offeringIdentifier")
+        let offeringIdentifier = offering?["identifier"] as? String
         let availablePackages = offering?["availablePackages"] as? JSArray
         let firstPackage = availablePackages?.first as? JSObject
         let presentedOfferingContext = firstPackage?["presentedOfferingContext"] as? JSObject
