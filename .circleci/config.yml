@@ -244,6 +244,11 @@ jobs:
       - image: cimg/ruby:3.1.2
     steps:
       - checkout
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - run:
+          name: Temporarily bump version
+          command: bundle exec fastlane temporary_snapshot_bump
       - yarn-dependencies-unix
       - yarn-dependencies-ui-unix
       - run: yarn build
