@@ -8,9 +8,7 @@ const RevenueCatUINative = registerPlugin<RevenueCatUIPlugin>('RevenueCatUI', {
 
 function unwrapCapacitorError(error: any): any {
   if (error?.data && typeof error.data === 'object') {
-    console.log('[RevenueCatUI] Unwrapping Capacitor error');
-    console.log('[RevenueCatUI] Original error:', JSON.stringify(error, null, 2));
-    const unwrapped = {
+    return {
       ...error,
       message: error.data.message,
       readableErrorCode: error.data.readableErrorCode,
@@ -20,10 +18,7 @@ function unwrapCapacitorError(error: any): any {
       underlyingErrorMessage: error.data.underlyingErrorMessage,
       userCancelled: error.data.userCancelled ?? null,
     };
-    console.log('[RevenueCatUI] Unwrapped error:', JSON.stringify(unwrapped, null, 2));
-    return unwrapped;
   }
-  console.log('[RevenueCatUI] Error does not need unwrapping:', error);
   return error;
 }
 
@@ -60,12 +55,10 @@ const RevenueCatUI = new Proxy(RevenueCatUINative, {
 
     if (typeof value === 'function') {
       if (typeof prop === 'number') {
-        console.log('[RevenueCatUI] Skipping method wrapping for numeric prop:', prop);
         return value;
       }
 
       if (!methodCache.has(prop)) {
-        console.log('[RevenueCatUI] Wrapping method:', String(prop));
         methodCache.set(prop, wrapMethod(value, target, prop));
       }
       return methodCache.get(prop);
