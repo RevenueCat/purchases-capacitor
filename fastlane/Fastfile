@@ -92,7 +92,7 @@ lane :temporary_bump_version do |options|
   is_prerelease = Gem::Version.new(version_number).prerelease?
 
   delimiters = %w[. - +]
-  version_split = current_version.split(Regexp.union(delimiters))
+  version_split = version_number.split(Regexp.union(delimiters))
   major = version_split[0]
   minor = version_split[1]
   patch = version_split[2]
