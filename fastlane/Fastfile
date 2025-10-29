@@ -110,7 +110,7 @@ lane :temporary_bump_version do |options|
     files_to_update_without_prerelease_modifiers: {}
   )
 
-  UI.message("ℹ️  Temporarily bumped version to #{next_prerelease_version}")
+  UI.message("ℹ️  Temporarily bumped version to #{next_version}")
 end
 
 desc "Creates GitHub release and publishes package"
