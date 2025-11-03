@@ -54,6 +54,10 @@ const RevenueCatUI = new Proxy(RevenueCatUINative, {
     const value = Reflect.get(target, prop, receiver);
 
     if (typeof value === 'function') {
+      if (typeof prop === 'number') {
+        return value;
+      }
+
       if (!methodCache.has(prop)) {
         methodCache.set(prop, wrapMethod(value, target, prop));
       }
