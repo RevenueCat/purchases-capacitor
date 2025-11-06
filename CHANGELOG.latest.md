@@ -8,15 +8,6 @@
 * [AUTOMATIC BUMP] Updates purchases-hybrid-common to 17.16.0 (#590) via RevenueCat Git Bot (@RCGitBot)
   * [Android 9.12.2](https://github.com/RevenueCat/purchases-android/releases/tag/9.12.2)
   * [iOS 5.46.1](https://github.com/RevenueCat/purchases-ios/releases/tag/5.46.1)
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 17.15.1 (#587) via RevenueCat Git Bot (@RCGitBot)
-  * [Android 9.12.2](https://github.com/RevenueCat/purchases-android/releases/tag/9.12.2)
-  * [iOS 5.46.1](https://github.com/RevenueCat/purchases-ios/releases/tag/5.46.1)
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 17.15.0 (#585) via RevenueCat Git Bot (@RCGitBot)
-  * [Android 9.12.2](https://github.com/RevenueCat/purchases-android/releases/tag/9.12.2)
-  * [iOS 5.46.1](https://github.com/RevenueCat/purchases-ios/releases/tag/5.46.1)
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 17.14.0 (#584) via RevenueCat Git Bot (@RCGitBot)
-  * [Android 9.12.2](https://github.com/RevenueCat/purchases-android/releases/tag/9.12.2)
-  * [iOS 5.46.1](https://github.com/RevenueCat/purchases-ios/releases/tag/5.46.1)
 
 ### 🔄 Other Changes
 * Bump fastlane-plugin-revenuecat_internal from `525d48c` to `db532ed` (#589) via dependabot[bot] (@dependabot[bot])
