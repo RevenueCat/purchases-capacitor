@@ -37,10 +37,25 @@ For more detailed information, you can view our complete documentation at [docs.
 
 Please follow the [Quickstart Guide](https://docs.revenuecat.com/docs/) for more information on how to install the SDK.
 
+### Installation via npm (CocoaPods for iOS)
+
 ```bash
 npm install @revenuecat/purchases-capacitor
 npx cap sync
 ```
+
+### Installation via Swift Package Manager (iOS 15+)
+
+**Requirements**: iOS 15+ for SPM. For iOS 14 support, use CocoaPods (npm install method above).
+
+1. In Xcode, go to **File > Add Package Dependencies...**
+2. Enter repository URL: `https://github.com/RevenueCat/purchases-capacitor`
+3. Select version and add the following products:
+   - `RevenuecatPurchasesCapacitor` (core plugin, required)
+   - `RevenuecatPurchasesCapacitorUI` (optional UI components)
+4. Also add Capacitor via SPM to avoid mixing package managers in the same target
+
+**Note for git installs**: When installing from git (e.g., `npm i git+https://github.com/yourfork/purchases-capacitor.git#branch`), the `prepare` script will automatically build the TypeScript `dist/` folder.
 
 ## Contributing
 Contributions are always welcome! To learn how you can contribute, please see the [Contributing Guide](./CONTRIBUTING.md).
