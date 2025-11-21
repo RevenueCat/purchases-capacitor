@@ -31,8 +31,8 @@
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
     "verify:ios": "npm run verify:ios:cocoapods && npm run verify:ios:spm",
-    "verify:ios:cocoapods": "cd ios/Sources/RevenuecatPurchasesCapacitor && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin -destination generic/platform=iOS && cd ../../..",
-    "verify:ios:spm": "swift build --package-path .",
+    "verify:ios:cocoapods": "cd ios/Cocoapods && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin -destination generic/platform=iOS && cd ../../..",
+    "verify:ios:spm": "cd ios/SPM && xcodebuild -project Plugin.xcodeproj -scheme Plugin -destination 'generic/platform=iOS' clean build && cd ../../..",
     "verify:android": "cd android && ./gradlew clean build test && cd ..",
     "verify:web": "npm run build",
     "lint": "npm run eslint && npm run prettier -- --check",

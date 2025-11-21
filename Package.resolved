@@ -1,0 +1,34 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "capacitor-swift-pm",
+        "repositoryURL": "https://github.com/ionic-team/capacitor-swift-pm.git",
+        "state": {
+          "branch": null,
+          "revision": "145cf37b8e3b240efef3d2d8a7262e621f08bb6f",
+          "version": "7.4.4"
+        }
+      },
+      {
+        "package": "PurchasesHybridCommon",
+        "repositoryURL": "https://github.com/RevenueCat/purchases-hybrid-common.git",
+        "state": {
+          "branch": null,
+          "revision": "9e362312589a10dc4ce549400b76aa4edec0ac93",
+          "version": "17.19.1"
+        }
+      },
+      {
+        "package": "RevenueCat",
+        "repositoryURL": "https://github.com/RevenueCat/purchases-ios-spm",
+        "state": {
+          "branch": null,
+          "revision": "8d258661d1e5be78f39ad4b37b5ed72cf073149d",
+          "version": "5.48.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
