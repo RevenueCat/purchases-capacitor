@@ -2,7 +2,7 @@ files_with_version_number = {
     './.version' => ['{x}'],
     './package.json' => ['"version": "{x}"'],
     './purchases-capacitor-ui/package.json' => ['"version": "{x}"'],
-    './ios/Plugin/PurchasesPlugin.swift' => ['platformVersion = "{x}"'],
+    './ios/Sources/RevenuecatPurchasesCapacitor/Plugin/PurchasesPlugin.swift' => ['platformVersion = "{x}"'],
     './android/src/main/java/com/revenuecat/purchases/capacitor/PurchasesPlugin.kt' => ['PLUGIN_VERSION = "{x}"']
 }
 files_to_update_phc_version = {

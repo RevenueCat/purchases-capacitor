@@ -10,7 +10,61 @@ import RevenueCat
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(PurchasesPlugin)
-public class PurchasesPlugin: CAPPlugin, PurchasesDelegate {
+public class PurchasesPlugin: CAPPlugin, CAPBridgedPlugin, PurchasesDelegate {
+    public let identifier = "PurchasesPlugin"
+    public let jsName = "Purchases"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "configure", returnType: CAPPluginReturnNone),
+        CAPPluginMethod(name: "getVirtualCurrencies", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "invalidateVirtualCurrenciesCache", returnType: CAPPluginReturnNone),
+        CAPPluginMethod(name: "getCachedVirtualCurrencies", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "parseAsWebPurchaseRedemption", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "redeemWebPurchase", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setMockWebResults", returnType: CAPPluginReturnNone),
+        CAPPluginMethod(name: "setSimulatesAskToBuyInSandbox", returnType: CAPPluginReturnNone),
+        CAPPluginMethod(name: "addCustomerInfoUpdateListener", returnType: CAPPluginReturnCallback),
+        CAPPluginMethod(name: "removeCustomerInfoUpdateListener", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getOfferings", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getCurrentOfferingForPlacement", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "syncAttributesAndOfferingsIfNeeded", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getProducts", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "purchaseStoreProduct", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "purchaseDiscountedProduct", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "purchasePackage", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "purchaseSubscriptionOption", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "purchaseDiscountedPackage", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "restorePurchases", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "recordPurchase", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getAppUserID", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getStorefront", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "logIn", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "logOut", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setLogLevel", returnType: CAPPluginReturnNone),
+        CAPPluginMethod(name: "setLogHandler", returnType: CAPPluginReturnCallback),
+        CAPPluginMethod(name: "getCustomerInfo", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "syncPurchases", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "syncObserverModeAmazonPurchase", returnType: CAPPluginReturnNone),
+        CAPPluginMethod(name: "syncAmazonPurchase", returnType: CAPPluginReturnNone),
+        CAPPluginMethod(name: "enableAdServicesAttributionTokenCollection", returnType: CAPPluginReturnNone),
+        CAPPluginMethod(name: "isAnonymous", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "checkTrialOrIntroductoryPriceEligibility", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getPromotionalOffer", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getEligibleWinBackOffersForProduct", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getEligibleWinBackOffersForPackage", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "purchaseProductWithWinBackOffer", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "purchasePackageWithWinBackOffer", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "invalidateCustomerInfoCache", returnType: CAPPluginReturnNone),
+        CAPPluginMethod(name: "presentCodeRedemptionSheet", returnType: CAPPluginReturnNone),
+        CAPPluginMethod(name: "setProxyURL", returnType: CAPPluginReturnNone),
+        CAPPluginMethod(name: "collectDeviceIdentifiers", returnType: CAPPluginReturnNone),
+        CAPPluginMethod(name: "canMakePayments", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "beginRefundRequestForActiveEntitlement", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "beginRefundRequestForEntitlement", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "beginRefundRequestForProduct", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "showInAppMessages", returnType: CAPPluginReturnNone),
+        CAPPluginMethod(name: "isConfigured", returnType: CAPPluginReturnPromise),
+    ]
+    
     private let platformFlavor = "capacitor"
     private let platformVersion = "11.2.14"
 
