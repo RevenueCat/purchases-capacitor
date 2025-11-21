@@ -37,6 +37,14 @@ Automatically bumps version, edit changelog, and create pull request
 
 Make github release
 
+### temporary_bump_version
+
+```sh
+[bundle exec] fastlane temporary_bump_version
+```
+
+Temporarily bumps the version of the package to the next snapshot version, but does not commit or push the changes
+
 ### release
 
 ```sh
@@ -45,6 +53,14 @@ Make github release
 
 Creates GitHub release and publishes package
 
+### release_bc7
+
+```sh
+[bundle exec] fastlane release_bc7
+```
+
+Publishes bc7 variant with bc7 dependencies on bc7 npm tag
+
 ### release_purchases_capacitor_ui
 
 ```sh
@@ -52,6 +68,14 @@ Creates GitHub release and publishes package
 ```
 
 Create purchases-capacitor-ui release
+
+### release_purchases_capacitor_ui_bc7
+
+```sh
+[bundle exec] fastlane release_purchases_capacitor_ui_bc7
+```
+
+Publishes UI package bc7 variant with bc7 dependencies on bc7 npm tag
 
 ### change_purchase_tester_api_key
 

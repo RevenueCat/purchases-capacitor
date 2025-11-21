@@ -130,6 +130,42 @@ lane :release do |options|
   github_release(version: version_number)
 end
 
+desc "Publishes bc7 variant with bc7 dependencies on bc7 npm tag"
+lane :release_bc7 do |options|
+  version_number = current_version_number
+  is_prerelease = Gem::Version.new(version_number).prerelease?
+
+  if is_prerelease
+    UI.message("ℹ️  Skipping bc7 release for prerelease version #{version_number}")
+    next
+  end
+
+  bc7_version = "#{version_number}+bc7"
+
+  # Update version in package.json to include +bc7 suffix
+  package_json_path = File.join(get_root_folder, 'package.json')
+  package_json = File.read(package_json_path)
+  package_json.gsub!(/"version": "#{version_number}"/, "\"version\": \"#{bc7_version}\"")
+  File.write(package_json_path, package_json)
+  UI.success("✓ Updated version to #{bc7_version} in package.json")
+
+  # Update Android dependency to bc7 variant
+  android_build_gradle_path = File.join(get_root_folder, 'android/build.gradle')
+  android_build_gradle = File.read(android_build_gradle_path)
+  android_build_gradle.gsub!(
+    /com\.revenuecat\.purchases:purchases-hybrid-common:([0-9.]+)/,
+    'com.revenuecat.purchases:purchases-hybrid-common-bc7:\1'
+  )
+  File.write(android_build_gradle_path, android_build_gradle)
+  UI.success("✓ Updated Android dependencies to bc7 variants")
+
+  # Publish with bc7 tag
+  Dir.chdir(get_root_folder) do
+    sh('npm', 'publish', '--tag', 'bc7', '--dry-run')
+  end
+  UI.success("✓ Published #{bc7_version} with bc7 tag")
+end
+
 desc "Create purchases-capacitor-ui release"
 lane :release_purchases_capacitor_ui do |options|
   version_number = current_version_number
@@ -161,6 +197,51 @@ lane :release_purchases_capacitor_ui do |options|
   Dir.chdir(File.expand_path('purchases-capacitor-ui', get_root_folder)) do
     sh(args)
   end
+end
+
+desc "Publishes UI package bc7 variant with bc7 dependencies on bc7 npm tag"
+lane :release_purchases_capacitor_ui_bc7 do |options|
+  version_number = current_version_number
+  is_prerelease = Gem::Version.new(version_number).prerelease?
+
+  if is_prerelease
+    UI.message("ℹ️  Skipping bc7 UI release for prerelease version #{version_number}")
+    next
+  end
+
+  bc7_version = "#{version_number}+bc7"
+
+  ui_package_dir = File.expand_path('purchases-capacitor-ui', get_root_folder)
+
+  # Update version in UI package.json to include +bc7 suffix
+  ui_package_json_path = File.join(ui_package_dir, 'package.json')
+  ui_package_json = File.read(ui_package_json_path)
+  ui_package_json.gsub!(/"version": "#{version_number}"/, "\"version\": \"#{bc7_version}\"")
+
+  # Update peer dependency on main package to use bc7 version
+  ui_package_json.gsub!(
+    /"@revenuecat\/purchases-capacitor": "\^#{version_number}"/,
+    "\"@revenuecat/purchases-capacitor\": \"^#{bc7_version}\""
+  )
+
+  File.write(ui_package_json_path, ui_package_json)
+  UI.success("✓ Updated version to #{bc7_version} in UI package.json")
+
+  # Update Android dependency to bc7 variant
+  ui_android_build_gradle_path = File.join(ui_package_dir, 'android/build.gradle')
+  ui_android_build_gradle = File.read(ui_android_build_gradle_path)
+  ui_android_build_gradle.gsub!(
+    /com\.revenuecat\.purchases:purchases-hybrid-common-ui:([0-9.]+)/,
+    'com.revenuecat.purchases:purchases-hybrid-common-ui-bc7:\1'
+  )
+  File.write(ui_android_build_gradle_path, ui_android_build_gradle)
+  UI.success("✓ Updated Android dependencies to bc7 variants")
+
+  # Publish with bc7 tag
+  Dir.chdir(ui_package_dir) do
+    sh('npm', 'publish', '--tag', 'bc7', '--dry-run')
+  end
+  UI.success("✓ Published UI package #{bc7_version} with bc7 tag")
 end
 
 desc "Change purchase tester API key"
