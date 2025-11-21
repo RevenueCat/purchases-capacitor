@@ -132,7 +132,7 @@ commands:
           command: cp .npmrc.SAMPLE purchases-capacitor-ui/.npmrc
 
 jobs:
-  run-tests-ios:
+  run-tests-ios-cocoapods:
     <<: *base-mac-job
     steps:
       - checkout
@@ -140,7 +140,17 @@ jobs:
           cache-version: v1
       - yarn-dependencies-mac
       - run: yarn build
-      - run: yarn verify:ios
+      - run: yarn verify:ios:cocoapods
+
+  run-tests-ios-spm:
+    <<: *base-mac-job
+    steps:
+      - checkout
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - yarn-dependencies-mac
+      - run: yarn build
+      - run: yarn verify:ios:spm
 
   run-tests-android:
     executor:
@@ -165,6 +175,35 @@ jobs:
       - run:
           name: Build purchase tester
           command: bundle exec fastlane build_purchase_tester
+
+  build-purchase-tester-ios-spm:
+    <<: *base-mac-job
+    steps:
+      - checkout
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - yarn-dependencies-mac
+      - run:
+          name: Build purchase tester (SPM)
+          command: |
+            bundle exec fastlane build_purchase_tester
+            cd example/purchase-tester/ios/App
+            xcodebuild -project App.xcodeproj -scheme App -destination 'generic/platform=iOS' clean build
+
+  build-purchase-tester-ios-cocoapods:
+    <<: *base-mac-job
+    steps:
+      - checkout
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - yarn-dependencies-mac
+      - run:
+          name: Build purchase tester (CocoaPods)
+          command: |
+            bundle exec fastlane build_purchase_tester
+            cd example/purchase-tester/ios/App-Cocoapods
+            pod install
+            xcodebuild -workspace App.xcworkspace -scheme App -destination 'generic/platform=iOS' clean build
 
   run-lint:
     docker:
@@ -283,10 +322,13 @@ workflows:
         equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
       # Testing phase - runs on all branches
-      - run-tests-ios
+      - run-tests-ios-cocoapods
+      - run-tests-ios-spm
       - run-tests-android
       - run-lint
       - build-purchase-tester
+      - build-purchase-tester-ios-spm
+      - build-purchase-tester-ios-cocoapods
       # UI Package jobs
       - run-lint-ui
       - dry-run-release-ui
@@ -295,7 +337,8 @@ workflows:
       - hold:
           type: approval
           requires:
-            - run-tests-ios
+            - run-tests-ios-cocoapods
+            - run-tests-ios-spm
             - run-tests-android
             - run-lint
             - run-lint-ui
