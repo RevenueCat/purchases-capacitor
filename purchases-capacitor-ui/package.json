@@ -10,8 +10,10 @@
     "android/src/main/",
     "android/build.gradle",
     "dist/",
-    "ios/Plugin/",
-    "RevenuecatPurchasesCapacitorUI.podspec"
+    "RevenuecatPurchasesCapacitorUI.podspec",
+    "ios/Sources",
+    "ios/Tests",
+    "Package.swift"
   ],
   "author": "RevenueCat, Inc.",
   "license": "MIT",
