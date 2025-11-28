@@ -7,7 +7,7 @@ let package = Package(
     products: [
         .library(
             name: "RevenuecatPurchasesCapacitor",
-            targets: ["PurchasesPlugin"])
+            targets: ["RevenuecatPurchasesCapacitor"])
     ],
     dependencies: [
         .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "7.0.0"),
@@ -15,16 +15,16 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "PurchasesPlugin",
+            name: "RevenuecatPurchasesCapacitor",
             dependencies: [
                 .product(name: "Capacitor", package: "capacitor-swift-pm"),
                 .product(name: "Cordova", package: "capacitor-swift-pm"),
                 .product(name: "PurchasesHybridCommon", package: "purchases-hybrid-common")
             ],
-            path: "ios/Sources/PurchasesPlugin"),
+            path: "ios/Sources/RevenuecatPurchasesCapacitor"),
         .testTarget(
-            name: "PurchasesPluginTests",
-            dependencies: ["PurchasesPlugin"],
-            path: "ios/Tests/PurchasesPluginTests")
+            name: "RevenuecatPurchasesCapacitorTests",
+            dependencies: ["RevenuecatPurchasesCapacitor"],
+            path: "ios/Tests/RevenuecatPurchasesCapacitorTests")
     ]
 )
