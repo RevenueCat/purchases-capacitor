@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -118,6 +118,7 @@
 				};
 			};
 			buildConfigurationList = 1D976D692EDD9BAE0090B158 /* Build configuration list for PBXProject "CocoapodsInstallationTest" */;
+			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -126,7 +127,6 @@
 			);
 			mainGroup = 1D976D652EDD9BAE0090B158;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
 			productRefGroup = 1D976D6F2EDD9BAE0090B158 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
