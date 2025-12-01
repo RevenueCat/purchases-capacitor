@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Capacitor
-import RevenueCat
+import RevenueCatUI
 
 @main
 struct CocoapodsInstallationTestApp: App {

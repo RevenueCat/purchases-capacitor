@@ -47,7 +47,8 @@
   },
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
-    "verify:ios": "xcodebuild -scheme RevenuecatPurchasesCapacitorUi -destination generic/platform=iOS",
+    "verify:ios": "xcodebuild -scheme RevenuecatPurchasesCapacitorUi -destination generic/platform=iOS && npm run verify:ios:cocoapods",
+    "verify:ios:cocoapods": "cd ios/CocoapodsInstallationTest && pod install && xcodebuild -workspace CocoapodsInstallationTest.xcworkspace -scheme CocoapodsInstallationTest -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=\"\" build",
     "verify:android": "cd android && ./gradlew clean build test && cd ..",
     "verify:web": "npm run build",
     "lint": "npm run eslint && npm run prettier -- --check",
