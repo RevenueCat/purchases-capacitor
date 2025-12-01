@@ -7,25 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1DB6331A2EDDE72E00A91E15 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1DB633162EDDE72E00A91E15 /* Assets.xcassets */; };
+		1DB6331B2EDDE72E00A91E15 /* CocoapodsInstallationTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB633172EDDE72E00A91E15 /* CocoapodsInstallationTestApp.swift */; };
+		1DB6331C2EDDE72E00A91E15 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB633182EDDE72E00A91E15 /* ContentView.swift */; };
 		BFE3D2954215E6D8EF83DD12 /* Pods_CocoapodsInstallationTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74E1709AAA186E383AAD67BC /* Pods_CocoapodsInstallationTest.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1AC40C95E652C3EB55A4A777 /* Pods-CocoapodsInstallationTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CocoapodsInstallationTest.release.xcconfig"; path = "Target Support Files/Pods-CocoapodsInstallationTest/Pods-CocoapodsInstallationTest.release.xcconfig"; sourceTree = "<group>"; };
 		1D976D6E2EDD9BAE0090B158 /* CocoapodsInstallationTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CocoapodsInstallationTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1DB633162EDDE72E00A91E15 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1DB633172EDDE72E00A91E15 /* CocoapodsInstallationTestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocoapodsInstallationTestApp.swift; sourceTree = "<group>"; };
+		1DB633182EDDE72E00A91E15 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		6ED8630CDA88E03C7EE5A77C /* Pods-CocoapodsInstallationTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CocoapodsInstallationTest.debug.xcconfig"; path = "Target Support Files/Pods-CocoapodsInstallationTest/Pods-CocoapodsInstallationTest.debug.xcconfig"; sourceTree = "<group>"; };
 		74E1709AAA186E383AAD67BC /* Pods_CocoapodsInstallationTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CocoapodsInstallationTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		1D976D702EDD9BAE0090B158 /* CocoapodsInstallationTest */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
-			path = CocoapodsInstallationTest;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		1D976D6B2EDD9BAE0090B158 /* Frameworks */ = {
@@ -42,7 +38,7 @@
 		1D976D652EDD9BAE0090B158 = {
 			isa = PBXGroup;
 			children = (
-				1D976D702EDD9BAE0090B158 /* CocoapodsInstallationTest */,
+				1DB633192EDDE72E00A91E15 /* CocoapodsInstallationTest */,
 				1D976D6F2EDD9BAE0090B158 /* Products */,
 				803A937BA5EAFA65E87A0640 /* Pods */,
 				A84BBAB06197EE56DF455A5A /* Frameworks */,
@@ -55,6 +51,16 @@
 				1D976D6E2EDD9BAE0090B158 /* CocoapodsInstallationTest.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		1DB633192EDDE72E00A91E15 /* CocoapodsInstallationTest */ = {
+			isa = PBXGroup;
+			children = (
+				1DB633162EDDE72E00A91E15 /* Assets.xcassets */,
+				1DB633172EDDE72E00A91E15 /* CocoapodsInstallationTestApp.swift */,
+				1DB633182EDDE72E00A91E15 /* ContentView.swift */,
+			);
+			path = CocoapodsInstallationTest;
 			sourceTree = "<group>";
 		};
 		803A937BA5EAFA65E87A0640 /* Pods */ = {
@@ -90,9 +96,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				1D976D702EDD9BAE0090B158 /* CocoapodsInstallationTest */,
 			);
 			name = CocoapodsInstallationTest;
 			productName = CocoapodsInstallationTest;
@@ -138,6 +141,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1DB6331A2EDDE72E00A91E15 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,8 +177,12 @@
 			);
 			inputFileListPaths = (
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -188,6 +196,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1DB6331B2EDDE72E00A91E15 /* CocoapodsInstallationTestApp.swift in Sources */,
+				1DB6331C2EDDE72E00A91E15 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
