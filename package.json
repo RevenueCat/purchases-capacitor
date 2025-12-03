@@ -12,7 +12,6 @@
     "dist/",
     "RevenuecatPurchasesCapacitorUI.podspec",
     "ios/Sources",
-    "ios/Tests",
     "Package.swift"
   ],
   "author": "RevenueCat, Inc.",
