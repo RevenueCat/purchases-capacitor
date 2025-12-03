@@ -135,7 +135,7 @@ This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package
 ### configure(...)
 
 ```typescript
-configure(configuration: PurchasesConfiguration) => Promise<void>
+configure(configuration: PurchasesConfiguration) => any
 ```
 
 Sets up Purchases with your API key and an app user id.
@@ -144,18 +144,20 @@ Sets up Purchases with your API key and an app user id.
 | ------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **`configuration`** | <code><a href="#purchasesconfiguration">PurchasesConfiguration</a></code> | RevenueCat configuration object including the API key and other optional parameters. See {@link <a href="#purchasesconfiguration">PurchasesConfiguration</a>} |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### getVirtualCurrencies()
 
 ```typescript
-getVirtualCurrencies() => Promise<{ virtualCurrencies: PurchasesVirtualCurrencies; }>
+getVirtualCurrencies() => any
 ```
 
 Fetches the virtual currencies for the current subscriber.
 
-**Returns:** <code>Promise&lt;{ virtualCurrencies: <a href="#purchasesvirtualcurrencies">PurchasesVirtualCurrencies</a>; }&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -163,7 +165,7 @@ Fetches the virtual currencies for the current subscriber.
 ### invalidateVirtualCurrenciesCache()
 
 ```typescript
-invalidateVirtualCurrenciesCache() => Promise<void>
+invalidateVirtualCurrenciesCache() => any
 ```
 
 Invalidates the cache for virtual currencies.
@@ -172,20 +174,22 @@ This is useful for cases where a virtual currency's balance might have been upda
 outside of the app, like if you decreased a user's balance from the user spending a virtual currency,
 or if you increased the balance from your backend using the server APIs.
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### getCachedVirtualCurrencies()
 
 ```typescript
-getCachedVirtualCurrencies() => Promise<{ cachedVirtualCurrencies: PurchasesVirtualCurrencies | null; }>
+getCachedVirtualCurrencies() => any
 ```
 
 The currently cached {@link <a href="#purchasesvirtualcurrencies">PurchasesVirtualCurrencies</a>} if one is available.
 This value will remain null until virtual currencies have been fetched at
 least once with {@link getVirtualCurrencies} or an equivalent function.
 
-**Returns:** <code>Promise&lt;{ cachedVirtualCurrencies: <a href="#purchasesvirtualcurrencies">PurchasesVirtualCurrencies</a> | null; }&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -193,7 +197,7 @@ least once with {@link getVirtualCurrencies} or an equivalent function.
 ### parseAsWebPurchaseRedemption(...)
 
 ```typescript
-parseAsWebPurchaseRedemption(options: { urlString: string; }) => Promise<{ webPurchaseRedemption: WebPurchaseRedemption | null; }>
+parseAsWebPurchaseRedemption(options: { urlString: string; }) => any
 ```
 
 Parses the given URL string into a [WebPurchaseRedemption] object that can be used to redeem web purchases.
@@ -202,7 +206,7 @@ Parses the given URL string into a [WebPurchaseRedemption] object that can be us
 | ------------- | ----------------------------------- | --------------------------------------- |
 | **`options`** | <code>{ urlString: string; }</code> | Set the urlString used to open the App. |
 
-**Returns:** <code>Promise&lt;{ webPurchaseRedemption: <a href="#webpurchaseredemption">WebPurchaseRedemption</a> | null; }&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -210,7 +214,7 @@ Parses the given URL string into a [WebPurchaseRedemption] object that can be us
 ### redeemWebPurchase(...)
 
 ```typescript
-redeemWebPurchase(options: { webPurchaseRedemption: WebPurchaseRedemption; }) => Promise<WebPurchaseRedemptionResult>
+redeemWebPurchase(options: { webPurchaseRedemption: WebPurchaseRedemption; }) => any
 ```
 
 Redeems the web purchase associated with the Redemption Link obtained with [parseAsWebPurchaseRedemption].
@@ -219,7 +223,7 @@ Redeems the web purchase associated with the Redemption Link obtained with [pars
 | ------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | **`options`** | <code>{ webPurchaseRedemption: <a href="#webpurchaseredemption">WebPurchaseRedemption</a>; }</code> | The <a href="#webpurchaseredemption">WebPurchaseRedemption</a> object obtained from {@link parseAsWebPurchaseRedemption}. |
 
-**Returns:** <code>Promise&lt;<a href="#webpurchaseredemptionresult">WebPurchaseRedemptionResult</a>&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -227,7 +231,7 @@ Redeems the web purchase associated with the Redemption Link obtained with [pars
 ### setMockWebResults(...)
 
 ```typescript
-setMockWebResults(options: { shouldMockWebResults: boolean; }) => Promise<void>
+setMockWebResults(options: { shouldMockWebResults: boolean; }) => any
 ```
 
 Sets whether the SDK should return mocked results in the web version.
@@ -238,13 +242,15 @@ Default is false
 | ------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------- |
 | **`options`** | <code>{ shouldMockWebResults: boolean; }</code> | Set shouldMockWebResults to true if you want the plugin methods to return mocked values |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### setSimulatesAskToBuyInSandbox(...)
 
 ```typescript
-setSimulatesAskToBuyInSandbox(options: { simulatesAskToBuyInSandbox: boolean; }) => Promise<void>
+setSimulatesAskToBuyInSandbox(options: { simulatesAskToBuyInSandbox: boolean; }) => any
 ```
 
 iOS only.
@@ -253,13 +259,15 @@ iOS only.
 | ------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | **`options`** | <code>{ simulatesAskToBuyInSandbox: boolean; }</code> | Set this property to true *only* when testing the ask-to-buy / SCA purchases flow. More information: http://errors.rev.cat/ask-to-buy |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### addCustomerInfoUpdateListener(...)
 
 ```typescript
-addCustomerInfoUpdateListener(customerInfoUpdateListener: CustomerInfoUpdateListener) => Promise<PurchasesCallbackId>
+addCustomerInfoUpdateListener(customerInfoUpdateListener: CustomerInfoUpdateListener) => any
 ```
 
 Sets a function to be called on updated customer info
@@ -268,7 +276,7 @@ Sets a function to be called on updated customer info
 | -------------------------------- | --------------------------------------------------------------------------------- | -------------------------------------------------------- |
 | **`customerInfoUpdateListener`** | <code><a href="#customerinfoupdatelistener">CustomerInfoUpdateListener</a></code> | <a href="#customerinfo">CustomerInfo</a> update listener |
 
-**Returns:** <code>Promise&lt;string&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -276,7 +284,7 @@ Sets a function to be called on updated customer info
 ### removeCustomerInfoUpdateListener(...)
 
 ```typescript
-removeCustomerInfoUpdateListener(options: { listenerToRemove: PurchasesCallbackId; }) => Promise<{ wasRemoved: boolean; }>
+removeCustomerInfoUpdateListener(options: { listenerToRemove: PurchasesCallbackId; }) => any
 ```
 
 Removes a given <a href="#customerinfoupdatelistener">CustomerInfoUpdateListener</a>
@@ -285,7 +293,7 @@ Removes a given <a href="#customerinfoupdatelistener">CustomerInfoUpdateListener
 | ------------- | ------------------------------------------ | --------------------------------------------------------------------------------------------------- |
 | **`options`** | <code>{ listenerToRemove: string; }</code> | Include listenerToRemove, which is a CustomerInfoUpdateListener reference of the listener to remove |
 
-**Returns:** <code>Promise&lt;{ wasRemoved: boolean; }&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -293,12 +301,12 @@ Removes a given <a href="#customerinfoupdatelistener">CustomerInfoUpdateListener
 ### getOfferings()
 
 ```typescript
-getOfferings() => Promise<PurchasesOfferings>
+getOfferings() => any
 ```
 
 Gets the map of entitlements -&gt; offerings -&gt; products
 
-**Returns:** <code>Promise&lt;<a href="#purchasesofferings">PurchasesOfferings</a>&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -306,7 +314,7 @@ Gets the map of entitlements -&gt; offerings -&gt; products
 ### getCurrentOfferingForPlacement(...)
 
 ```typescript
-getCurrentOfferingForPlacement(options: { placementIdentifier: string; }) => Promise<PurchasesOffering | null>
+getCurrentOfferingForPlacement(options: { placementIdentifier: string; }) => any
 ```
 
 Retrieves a current offering for a placement identifier, use this to access offerings defined by targeting
@@ -316,7 +324,7 @@ placements configured in the RevenueCat dashboard.
 | ------------- | --------------------------------------------- |
 | **`options`** | <code>{ placementIdentifier: string; }</code> |
 
-**Returns:** <code>Promise&lt;<a href="#purchasesoffering">PurchasesOffering</a> | null&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -324,14 +332,14 @@ placements configured in the RevenueCat dashboard.
 ### syncAttributesAndOfferingsIfNeeded()
 
 ```typescript
-syncAttributesAndOfferingsIfNeeded() => Promise<PurchasesOfferings>
+syncAttributesAndOfferingsIfNeeded() => any
 ```
 
 Syncs subscriber attributes and then fetches the configured offerings for this user. This method is intended to
 be called when using Targeting Rules with Custom Attributes. Any subscriber attributes should be set before
 calling this method to ensure the returned offerings are applied with the latest subscriber attributes.
 
-**Returns:** <code>Promise&lt;<a href="#purchasesofferings">PurchasesOfferings</a>&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -339,7 +347,7 @@ calling this method to ensure the returned offerings are applied with the latest
 ### getProducts(...)
 
 ```typescript
-getProducts(options: GetProductOptions) => Promise<{ products: PurchasesStoreProduct[]; }>
+getProducts(options: GetProductOptions) => any
 ```
 
 Fetch the product info
@@ -348,7 +356,7 @@ Fetch the product info
 | ------------- | --------------------------------------------------------------- |
 | **`options`** | <code><a href="#getproductoptions">GetProductOptions</a></code> |
 
-**Returns:** <code>Promise&lt;{ products: PurchasesStoreProduct[]; }&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -356,7 +364,7 @@ Fetch the product info
 ### purchaseStoreProduct(...)
 
 ```typescript
-purchaseStoreProduct(options: PurchaseStoreProductOptions) => Promise<MakePurchaseResult>
+purchaseStoreProduct(options: PurchaseStoreProductOptions) => any
 ```
 
 Make a purchase
@@ -365,7 +373,7 @@ Make a purchase
 | ------------- | ----------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#purchasestoreproductoptions">PurchaseStoreProductOptions</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#makepurchaseresult">MakePurchaseResult</a>&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -373,7 +381,7 @@ Make a purchase
 ### purchaseDiscountedProduct(...)
 
 ```typescript
-purchaseDiscountedProduct(options: PurchaseDiscountedProductOptions) => Promise<MakePurchaseResult>
+purchaseDiscountedProduct(options: PurchaseDiscountedProductOptions) => any
 ```
 
 iOS only. Purchase a product applying a given discount.
@@ -382,7 +390,7 @@ iOS only. Purchase a product applying a given discount.
 | ------------- | --------------------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#purchasediscountedproductoptions">PurchaseDiscountedProductOptions</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#makepurchaseresult">MakePurchaseResult</a>&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -390,7 +398,7 @@ iOS only. Purchase a product applying a given discount.
 ### purchasePackage(...)
 
 ```typescript
-purchasePackage(options: PurchasePackageOptions) => Promise<MakePurchaseResult>
+purchasePackage(options: PurchasePackageOptions) => any
 ```
 
 Make a purchase
@@ -399,7 +407,7 @@ Make a purchase
 | ------------- | ------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#purchasepackageoptions">PurchasePackageOptions</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#makepurchaseresult">MakePurchaseResult</a>&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -407,7 +415,7 @@ Make a purchase
 ### purchaseSubscriptionOption(...)
 
 ```typescript
-purchaseSubscriptionOption(options: PurchaseSubscriptionOptionOptions) => Promise<MakePurchaseResult>
+purchaseSubscriptionOption(options: PurchaseSubscriptionOptionOptions) => any
 ```
 
 Google only. Make a purchase of a subscriptionOption
@@ -416,7 +424,7 @@ Google only. Make a purchase of a subscriptionOption
 | ------------- | ----------------------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#purchasesubscriptionoptionoptions">PurchaseSubscriptionOptionOptions</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#makepurchaseresult">MakePurchaseResult</a>&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -424,7 +432,7 @@ Google only. Make a purchase of a subscriptionOption
 ### purchaseDiscountedPackage(...)
 
 ```typescript
-purchaseDiscountedPackage(options: PurchaseDiscountedPackageOptions) => Promise<MakePurchaseResult>
+purchaseDiscountedPackage(options: PurchaseDiscountedPackageOptions) => any
 ```
 
 iOS only. Purchase a package applying a given discount.
@@ -433,7 +441,7 @@ iOS only. Purchase a package applying a given discount.
 | ------------- | --------------------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#purchasediscountedpackageoptions">PurchaseDiscountedPackageOptions</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#makepurchaseresult">MakePurchaseResult</a>&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -441,12 +449,12 @@ iOS only. Purchase a package applying a given discount.
 ### restorePurchases()
 
 ```typescript
-restorePurchases() => Promise<{ customerInfo: CustomerInfo; }>
+restorePurchases() => any
 ```
 
 Restores a user's previous purchases and links their appUserIDs to any user's also using those purchases.
 
-**Returns:** <code>Promise&lt;{ customerInfo: <a href="#customerinfo">CustomerInfo</a>; }&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -454,7 +462,7 @@ Restores a user's previous purchases and links their appUserIDs to any user's al
 ### recordPurchase(...)
 
 ```typescript
-recordPurchase(options: { productID: string; }) => Promise<{ transaction: PurchasesStoreTransaction; }>
+recordPurchase(options: { productID: string; }) => any
 ```
 
 Use this method only if you already have your own IAP implementation using StoreKit 2 and want to use
@@ -466,7 +474,7 @@ You only need to use this method with *new* purchases. Subscription updates are 
 | ------------- | ----------------------------------- | ----------------------------------------------------------------------------------- |
 | **`options`** | <code>{ productID: string; }</code> | The productID that was purchased that needs to be synced with RevenueCat's backend. |
 
-**Returns:** <code>Promise&lt;{ transaction: <a href="#purchasesstoretransaction">PurchasesStoreTransaction</a>; }&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -474,12 +482,12 @@ You only need to use this method with *new* purchases. Subscription updates are 
 ### getAppUserID()
 
 ```typescript
-getAppUserID() => Promise<{ appUserID: string; }>
+getAppUserID() => any
 ```
 
 Get the appUserID
 
-**Returns:** <code>Promise&lt;{ appUserID: string; }&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -487,12 +495,12 @@ Get the appUserID
 ### getStorefront()
 
 ```typescript
-getStorefront() => Promise<Storefront>
+getStorefront() => any
 ```
 
 Gets the storefront for the current store account.
 
-**Returns:** <code>Promise&lt;<a href="#storefront">Storefront</a>&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -500,7 +508,7 @@ Gets the storefront for the current store account.
 ### logIn(...)
 
 ```typescript
-logIn(options: { appUserID: string; }) => Promise<LogInResult>
+logIn(options: { appUserID: string; }) => any
 ```
 
 This function will log in the current user with an appUserID. Typically, this would be used after a log in
@@ -510,7 +518,7 @@ to identify a user without calling configure.
 | ------------- | ----------------------------------- | ------------------------------------------------------- |
 | **`options`** | <code>{ appUserID: string; }</code> | The appUserID that should be linked to the current user |
 
-**Returns:** <code>Promise&lt;<a href="#loginresult">LogInResult</a>&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -518,12 +526,12 @@ to identify a user without calling configure.
 ### logOut()
 
 ```typescript
-logOut() => Promise<{ customerInfo: CustomerInfo; }>
+logOut() => any
 ```
 
 Logs out the Purchases client clearing the saved appUserID. This will generate a random user id and save it in the cache.
 
-**Returns:** <code>Promise&lt;{ customerInfo: <a href="#customerinfo">CustomerInfo</a>; }&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -531,7 +539,7 @@ Logs out the Purchases client clearing the saved appUserID. This will generate a
 ### setLogLevel(...)
 
 ```typescript
-setLogLevel(options: { level: LOG_LEVEL; }) => Promise<void>
+setLogLevel(options: { level: LOG_LEVEL; }) => any
 ```
 
 Used to set the log level. Useful for debugging issues with the lovely team @RevenueCat.
@@ -541,13 +549,15 @@ The default is {<a href="#log_level">LOG_LEVEL.INFO</a>} in release builds and {
 | ------------- | ----------------------------------------------------------- | --------------------------------- |
 | **`options`** | <code>{ level: <a href="#log_level">LOG_LEVEL</a>; }</code> | Log level to use to display logs. |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### setLogHandler(...)
 
 ```typescript
-setLogHandler(logHandler: LogHandler) => Promise<void>
+setLogHandler(logHandler: LogHandler) => any
 ```
 
 Set a custom log handler for redirecting logs to your own logging system.
@@ -558,18 +568,20 @@ If you wish to receive Debug level messages, see [setLogLevel].
 | ---------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | **`logHandler`** | <code><a href="#loghandler">LogHandler</a></code> | It will get called for each log event. Use this function to redirect the log to your own logging system |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### getCustomerInfo()
 
 ```typescript
-getCustomerInfo() => Promise<{ customerInfo: CustomerInfo; }>
+getCustomerInfo() => any
 ```
 
 Gets current customer info
 
-**Returns:** <code>Promise&lt;{ customerInfo: <a href="#customerinfo">CustomerInfo</a>; }&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -577,11 +589,13 @@ Gets current customer info
 ### syncPurchases()
 
 ```typescript
-syncPurchases() => Promise<void>
+syncPurchases() => any
 ```
 
 This method will send all the purchases to the RevenueCat backend. Call this when using your own implementation
 for subscriptions anytime a sync is needed, like after a successful purchase.
+
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -589,12 +603,14 @@ for subscriptions anytime a sync is needed, like after a successful purchase.
 ### syncObserverModeAmazonPurchase(...)
 
 ```typescript
-syncObserverModeAmazonPurchase(options: SyncObserverModeAmazonPurchaseOptions) => Promise<void>
+syncObserverModeAmazonPurchase(options: SyncObserverModeAmazonPurchaseOptions) => any
 ```
 
 | Param         | Type                                                                            |
 | ------------- | ------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#syncamazonpurchaseoptions">SyncAmazonPurchaseOptions</a></code> |
+
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -602,7 +618,7 @@ syncObserverModeAmazonPurchase(options: SyncObserverModeAmazonPurchaseOptions) =
 ### syncAmazonPurchase(...)
 
 ```typescript
-syncAmazonPurchase(options: SyncAmazonPurchaseOptions) => Promise<void>
+syncAmazonPurchase(options: SyncAmazonPurchaseOptions) => any
 ```
 
 This method will send a purchase to the RevenueCat backend. This function should only be called if you are
@@ -614,16 +630,20 @@ The receipt IDs are cached if successfully posted, so they are not posted more t
 | ------------- | ------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#syncamazonpurchaseoptions">SyncAmazonPurchaseOptions</a></code> |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### enableAdServicesAttributionTokenCollection()
 
 ```typescript
-enableAdServicesAttributionTokenCollection() => Promise<void>
+enableAdServicesAttributionTokenCollection() => any
 ```
 
 Enable automatic collection of Apple Search Ad attribution on iOS. Disabled by default. Supported in iOS 14.3+ only
+
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -631,10 +651,10 @@ Enable automatic collection of Apple Search Ad attribution on iOS. Disabled by d
 ### isAnonymous()
 
 ```typescript
-isAnonymous() => Promise<{ isAnonymous: boolean; }>
+isAnonymous() => any
 ```
 
-**Returns:** <code>Promise&lt;{ isAnonymous: boolean; }&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -642,18 +662,18 @@ isAnonymous() => Promise<{ isAnonymous: boolean; }>
 ### checkTrialOrIntroductoryPriceEligibility(...)
 
 ```typescript
-checkTrialOrIntroductoryPriceEligibility(options: { productIdentifiers: string[]; }) => Promise<{ [productId: string]: IntroEligibility; }>
+checkTrialOrIntroductoryPriceEligibility(options: { productIdentifiers: string[]; }) => any
 ```
 
 iOS only. Computes whether a user is eligible for the introductory pricing period of a given product.
 You should use this method to determine whether you show the user the normal product price or the
 introductory price. This also applies to trials (trials are considered a type of introductory pricing).
 
-| Param         | Type                                           | Description                                                            |
-| ------------- | ---------------------------------------------- | ---------------------------------------------------------------------- |
-| **`options`** | <code>{ productIdentifiers: string[]; }</code> | Array of product identifiers for which you want to compute eligibility |
+| Param         | Type                                     | Description                                                            |
+| ------------- | ---------------------------------------- | ---------------------------------------------------------------------- |
+| **`options`** | <code>{ productIdentifiers: {}; }</code> | Array of product identifiers for which you want to compute eligibility |
 
-**Returns:** <code>Promise&lt;{ [productId: string]: <a href="#introeligibility">IntroEligibility</a>; }&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -661,7 +681,7 @@ introductory price. This also applies to trials (trials are considered a type of
 ### getPromotionalOffer(...)
 
 ```typescript
-getPromotionalOffer(options: GetPromotionalOfferOptions) => Promise<PurchasesPromotionalOffer | undefined>
+getPromotionalOffer(options: GetPromotionalOfferOptions) => any
 ```
 
 iOS only. Use this function to retrieve the <a href="#purchasespromotionaloffer">`PurchasesPromotionalOffer`</a> for a given <a href="#purchasespackage">`PurchasesPackage`</a>.
@@ -670,7 +690,7 @@ iOS only. Use this function to retrieve the <a href="#purchasespromotionaloffer"
 | ------------- | --------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#getpromotionalofferoptions">GetPromotionalOfferOptions</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#purchasespromotionaloffer">PurchasesPromotionalOffer</a>&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -678,7 +698,7 @@ iOS only. Use this function to retrieve the <a href="#purchasespromotionaloffer"
 ### getEligibleWinBackOffersForProduct(...)
 
 ```typescript
-getEligibleWinBackOffersForProduct(options: GetEligibleWinBackOffersForProductOptions) => Promise<{ eligibleWinBackOffers: PurchasesWinBackOffer[]; }>
+getEligibleWinBackOffersForProduct(options: GetEligibleWinBackOffersForProductOptions) => any
 ```
 
 iOS only, requires iOS 18.0 or greater with StoreKit 2. Use this function to retrieve
@@ -689,7 +709,7 @@ given <a href="#purchasesstoreproduct">`PurchasesStoreProduct`</a>.
 | ------------- | --------------------------------------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#geteligiblewinbackoffersforproductoptions">GetEligibleWinBackOffersForProductOptions</a></code> |
 
-**Returns:** <code>Promise&lt;{ eligibleWinBackOffers: PurchasesWinBackOffer[]; }&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -697,7 +717,7 @@ given <a href="#purchasesstoreproduct">`PurchasesStoreProduct`</a>.
 ### getEligibleWinBackOffersForPackage(...)
 
 ```typescript
-getEligibleWinBackOffersForPackage(options: GetEligibleWinBackOffersForPackageOptions) => Promise<{ eligibleWinBackOffers: PurchasesWinBackOffer[]; }>
+getEligibleWinBackOffersForPackage(options: GetEligibleWinBackOffersForPackageOptions) => any
 ```
 
 iOS only, requires iOS 18.0 or greater with StoreKit 2. Use this function to retrieve
@@ -708,7 +728,7 @@ given `PurchasesStorePackage`.
 | ------------- | --------------------------------------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#geteligiblewinbackoffersforpackageoptions">GetEligibleWinBackOffersForPackageOptions</a></code> |
 
-**Returns:** <code>Promise&lt;{ eligibleWinBackOffers: PurchasesWinBackOffer[]; }&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -716,7 +736,7 @@ given `PurchasesStorePackage`.
 ### purchaseProductWithWinBackOffer(...)
 
 ```typescript
-purchaseProductWithWinBackOffer(options: PurchaseProductWithWinBackOfferOptions) => Promise<MakePurchaseResult | undefined>
+purchaseProductWithWinBackOffer(options: PurchaseProductWithWinBackOfferOptions) => any
 ```
 
 iOS only, requires iOS 18.0 or greater with StoreKit 2. Purchase a product applying a given win-back offer.
@@ -725,7 +745,7 @@ iOS only, requires iOS 18.0 or greater with StoreKit 2. Purchase a product apply
 | ------------- | --------------------------------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#purchaseproductwithwinbackofferoptions">PurchaseProductWithWinBackOfferOptions</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#makepurchaseresult">MakePurchaseResult</a>&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -733,7 +753,7 @@ iOS only, requires iOS 18.0 or greater with StoreKit 2. Purchase a product apply
 ### purchasePackageWithWinBackOffer(...)
 
 ```typescript
-purchasePackageWithWinBackOffer(options: PurchasePackageWithWinBackOfferOptions) => Promise<MakePurchaseResult | undefined>
+purchasePackageWithWinBackOffer(options: PurchasePackageWithWinBackOfferOptions) => any
 ```
 
 iOS only, requires iOS 18.0 or greater with StoreKit 2. Purchase a package applying a given win-back offer.
@@ -742,7 +762,7 @@ iOS only, requires iOS 18.0 or greater with StoreKit 2. Purchase a package apply
 | ------------- | --------------------------------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#purchasepackagewithwinbackofferoptions">PurchasePackageWithWinBackOfferOptions</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#makepurchaseresult">MakePurchaseResult</a>&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -750,7 +770,7 @@ iOS only, requires iOS 18.0 or greater with StoreKit 2. Purchase a package apply
 ### invalidateCustomerInfoCache()
 
 ```typescript
-invalidateCustomerInfoCache() => Promise<void>
+invalidateCustomerInfoCache() => any
 ```
 
 Invalidates the cache for customer information.
@@ -762,18 +782,22 @@ using the cache properly.
 This is useful for cases where customer information might have been updated outside the app, like if a
 promotional subscription is granted through the RevenueCat dashboard.
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### presentCodeRedemptionSheet()
 
 ```typescript
-presentCodeRedemptionSheet() => Promise<void>
+presentCodeRedemptionSheet() => any
 ```
 
 iOS 14.0+ only. Presents a code redemption sheet, useful for redeeming offer codes
 Refer to https://docs.revenuecat.com/docs/ios-subscription-offers#offer-codes for more information on how
 to configure and use offer codes
+
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -781,7 +805,7 @@ to configure and use offer codes
 ### setAttributes(...)
 
 ```typescript
-setAttributes(attributes: { [key: string]: string | null; }) => Promise<void>
+setAttributes(attributes: { [key: string]: string | null; }) => any
 ```
 
 Subscriber attributes are useful for storing additional, structured information on a user.
@@ -795,13 +819,15 @@ restrictions refer to our guide: https://docs.revenuecat.com/docs/subscriber-att
 | ---------------- | ----------------------------------------------- | ---------------------------------------------------------------------------------- |
 | **`attributes`** | <code>{ [key: string]: string \| null; }</code> | Map of attributes by key. Set the value as an empty string to delete an attribute. |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### setEmail(...)
 
 ```typescript
-setEmail(options: { email: string | null; }) => Promise<void>
+setEmail(options: { email: string | null; }) => any
 ```
 
 Subscriber attribute associated with the email address for the user
@@ -810,13 +836,15 @@ Subscriber attribute associated with the email address for the user
 | ------------- | --------------------------------------- | ---------------------------------------------------------- |
 | **`options`** | <code>{ email: string \| null; }</code> | Empty String or null will delete the subscriber attribute. |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### setPhoneNumber(...)
 
 ```typescript
-setPhoneNumber(options: { phoneNumber: string | null; }) => Promise<void>
+setPhoneNumber(options: { phoneNumber: string | null; }) => any
 ```
 
 Subscriber attribute associated with the phone number for the user
@@ -825,13 +853,15 @@ Subscriber attribute associated with the phone number for the user
 | ------------- | --------------------------------------------- | ---------------------------------------------------------- |
 | **`options`** | <code>{ phoneNumber: string \| null; }</code> | Empty String or null will delete the subscriber attribute. |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### setDisplayName(...)
 
 ```typescript
-setDisplayName(options: { displayName: string | null; }) => Promise<void>
+setDisplayName(options: { displayName: string | null; }) => any
 ```
 
 Subscriber attribute associated with the display name for the user
@@ -840,13 +870,15 @@ Subscriber attribute associated with the display name for the user
 | ------------- | --------------------------------------------- | ---------------------------------------------------------- |
 | **`options`** | <code>{ displayName: string \| null; }</code> | Empty String or null will delete the subscriber attribute. |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### setPushToken(...)
 
 ```typescript
-setPushToken(options: { pushToken: string | null; }) => Promise<void>
+setPushToken(options: { pushToken: string | null; }) => any
 ```
 
 Subscriber attribute associated with the push token for the user
@@ -855,13 +887,15 @@ Subscriber attribute associated with the push token for the user
 | ------------- | ------------------------------------------- | ------------------------------------------ |
 | **`options`** | <code>{ pushToken: string \| null; }</code> | null will delete the subscriber attribute. |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### setProxyURL(...)
 
 ```typescript
-setProxyURL(options: { url: string; }) => Promise<void>
+setProxyURL(options: { url: string; }) => any
 ```
 
 Set this property to your proxy URL before configuring Purchases *only* if you've received a proxy key value
@@ -871,18 +905,22 @@ from your RevenueCat contact.
 | ------------- | ----------------------------- |
 | **`options`** | <code>{ url: string; }</code> |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### collectDeviceIdentifiers()
 
 ```typescript
-collectDeviceIdentifiers() => Promise<void>
+collectDeviceIdentifiers() => any
 ```
 
 Automatically collect subscriber attributes associated with the device identifiers.
 $idfa, $idfv, $ip on iOS
 $gpsAdId, $androidId, $ip on Android
+
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -890,7 +928,7 @@ $gpsAdId, $androidId, $ip on Android
 ### setAdjustID(...)
 
 ```typescript
-setAdjustID(options: { adjustID: string | null; }) => Promise<void>
+setAdjustID(options: { adjustID: string | null; }) => any
 ```
 
 Subscriber attribute associated with the Adjust ID for the user
@@ -900,13 +938,15 @@ Required for the RevenueCat Adjust integration
 | ------------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------- |
 | **`options`** | <code>{ adjustID: string \| null; }</code> | Adjust ID to use in Adjust integration. Empty String or null will delete the subscriber attribute. |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### setAppsflyerID(...)
 
 ```typescript
-setAppsflyerID(options: { appsflyerID: string | null; }) => Promise<void>
+setAppsflyerID(options: { appsflyerID: string | null; }) => any
 ```
 
 Subscriber attribute associated with the AppsFlyer ID for the user
@@ -916,13 +956,15 @@ Required for the RevenueCat AppsFlyer integration
 | ------------- | --------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
 | **`options`** | <code>{ appsflyerID: string \| null; }</code> | Appsflyer ID to use in Appsflyer integration. Empty String or null will delete the subscriber attribute. |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### setFBAnonymousID(...)
 
 ```typescript
-setFBAnonymousID(options: { fbAnonymousID: string | null; }) => Promise<void>
+setFBAnonymousID(options: { fbAnonymousID: string | null; }) => any
 ```
 
 Subscriber attribute associated with the Facebook SDK Anonymous ID for the user
@@ -932,13 +974,15 @@ Recommended for the RevenueCat Facebook integration
 | ------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
 | **`options`** | <code>{ fbAnonymousID: string \| null; }</code> | Facebook Anonymous ID to use in Mparticle integration. Empty String or null will delete the subscriber attribute. |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### setMparticleID(...)
 
 ```typescript
-setMparticleID(options: { mparticleID: string | null; }) => Promise<void>
+setMparticleID(options: { mparticleID: string | null; }) => any
 ```
 
 Subscriber attribute associated with the mParticle ID for the user
@@ -948,13 +992,15 @@ Recommended for the RevenueCat mParticle integration
 | ------------- | --------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
 | **`options`** | <code>{ mparticleID: string \| null; }</code> | Mparticle ID to use in Mparticle integration. Empty String or null will delete the subscriber attribute. |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### setCleverTapID(...)
 
 ```typescript
-setCleverTapID(options: { cleverTapID: string | null; }) => Promise<void>
+setCleverTapID(options: { cleverTapID: string | null; }) => any
 ```
 
 Subscriber attribute associated with the CleverTap ID for the user
@@ -964,13 +1010,15 @@ Required for the RevenueCat CleverTap integration
 | ------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | **`options`** | <code>{ cleverTapID: string \| null; }</code> | CleverTap user ID to use in CleverTap integration. Empty String or null will delete the subscriber attribute. |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### setMixpanelDistinctID(...)
 
 ```typescript
-setMixpanelDistinctID(options: { mixpanelDistinctID: string | null; }) => Promise<void>
+setMixpanelDistinctID(options: { mixpanelDistinctID: string | null; }) => any
 ```
 
 Subscriber attribute associated with the Mixpanel Distinct ID for the user
@@ -980,13 +1028,15 @@ Required for the RevenueCat Mixpanel integration
 | ------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | **`options`** | <code>{ mixpanelDistinctID: string \| null; }</code> | Mixpanel Distinct ID to use in Mixpanel integration. Empty String or null will delete the subscriber attribute. |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### setFirebaseAppInstanceID(...)
 
 ```typescript
-setFirebaseAppInstanceID(options: { firebaseAppInstanceID: string | null; }) => Promise<void>
+setFirebaseAppInstanceID(options: { firebaseAppInstanceID: string | null; }) => any
 ```
 
 Subscriber attribute associated with the Firebase App Instance ID for the user
@@ -996,13 +1046,15 @@ Required for the RevenueCat Firebase integration
 | ------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | **`options`** | <code>{ firebaseAppInstanceID: string \| null; }</code> | Firebase App Instance ID to use in Firebase integration. Empty String or null will delete the subscriber attribute. |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### setOnesignalID(...)
 
 ```typescript
-setOnesignalID(options: { onesignalID: string | null; }) => Promise<void>
+setOnesignalID(options: { onesignalID: string | null; }) => any
 ```
 
 Subscriber attribute associated with the OneSignal Player ID for the user
@@ -1012,13 +1064,15 @@ Required for the RevenueCat OneSignal integration. Deprecated for OneSignal vers
 | ------------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | **`options`** | <code>{ onesignalID: string \| null; }</code> | OneSignal Player ID to use in OneSignal integration. Empty String or null will delete the subscriber attribute. |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### setOnesignalUserID(...)
 
 ```typescript
-setOnesignalUserID(options: { onesignalUserID: string | null; }) => Promise<void>
+setOnesignalUserID(options: { onesignalUserID: string | null; }) => any
 ```
 
 Subscriber attribute associated with the OneSignal User ID for the user
@@ -1028,13 +1082,15 @@ Required for the RevenueCat OneSignal integration with versions v11.0 and above.
 | ------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | **`options`** | <code>{ onesignalUserID: string \| null; }</code> | OneSignal UserId to use in OneSignal integration. Empty String or null will delete the subscriber attribute. |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### setAirshipChannelID(...)
 
 ```typescript
-setAirshipChannelID(options: { airshipChannelID: string | null; }) => Promise<void>
+setAirshipChannelID(options: { airshipChannelID: string | null; }) => any
 ```
 
 Subscriber attribute associated with the Airship Channel ID for the user
@@ -1044,13 +1100,15 @@ Required for the RevenueCat Airship integration
 | ------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | **`options`** | <code>{ airshipChannelID: string \| null; }</code> | Airship Channel ID to use in Airship integration. Empty String or null will delete the subscriber attribute. |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### setMediaSource(...)
 
 ```typescript
-setMediaSource(options: { mediaSource: string | null; }) => Promise<void>
+setMediaSource(options: { mediaSource: string | null; }) => any
 ```
 
 Subscriber attribute associated with the install media source for the user
@@ -1059,13 +1117,15 @@ Subscriber attribute associated with the install media source for the user
 | ------------- | --------------------------------------------- | ---------------------------------------------------------- |
 | **`options`** | <code>{ mediaSource: string \| null; }</code> | Empty String or null will delete the subscriber attribute. |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### setCampaign(...)
 
 ```typescript
-setCampaign(options: { campaign: string | null; }) => Promise<void>
+setCampaign(options: { campaign: string | null; }) => any
 ```
 
 Subscriber attribute associated with the install campaign for the user
@@ -1074,13 +1134,15 @@ Subscriber attribute associated with the install campaign for the user
 | ------------- | ------------------------------------------ | ---------------------------------------------------------- |
 | **`options`** | <code>{ campaign: string \| null; }</code> | Empty String or null will delete the subscriber attribute. |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### setAdGroup(...)
 
 ```typescript
-setAdGroup(options: { adGroup: string | null; }) => Promise<void>
+setAdGroup(options: { adGroup: string | null; }) => any
 ```
 
 Subscriber attribute associated with the install ad group for the user
@@ -1089,13 +1151,15 @@ Subscriber attribute associated with the install ad group for the user
 | ------------- | ----------------------------------------- | ---------------------------------------------------------- |
 | **`options`** | <code>{ adGroup: string \| null; }</code> | Empty String or null will delete the subscriber attribute. |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### setAd(...)
 
 ```typescript
-setAd(options: { ad: string | null; }) => Promise<void>
+setAd(options: { ad: string | null; }) => any
 ```
 
 Subscriber attribute associated with the install ad for the user
@@ -1104,13 +1168,15 @@ Subscriber attribute associated with the install ad for the user
 | ------------- | ------------------------------------ | ---------------------------------------------------------- |
 | **`options`** | <code>{ ad: string \| null; }</code> | Empty String or null will delete the subscriber attribute. |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### setKeyword(...)
 
 ```typescript
-setKeyword(options: { keyword: string | null; }) => Promise<void>
+setKeyword(options: { keyword: string | null; }) => any
 ```
 
 Subscriber attribute associated with the install keyword for the user
@@ -1119,13 +1185,15 @@ Subscriber attribute associated with the install keyword for the user
 | ------------- | ----------------------------------------- | ---------------------------------------------------------- |
 | **`options`** | <code>{ keyword: string \| null; }</code> | Empty String or null will delete the subscriber attribute. |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### setCreative(...)
 
 ```typescript
-setCreative(options: { creative: string | null; }) => Promise<void>
+setCreative(options: { creative: string | null; }) => any
 ```
 
 Subscriber attribute associated with the install ad creative for the user
@@ -1134,13 +1202,15 @@ Subscriber attribute associated with the install ad creative for the user
 | ------------- | ------------------------------------------ | ---------------------------------------------------------- |
 | **`options`** | <code>{ creative: string \| null; }</code> | Empty String or null will delete the subscriber attribute. |
 
+**Returns:** <code>any</code>
+
 --------------------
 
 
 ### canMakePayments(...)
 
 ```typescript
-canMakePayments(options?: { features?: BILLING_FEATURE[] | undefined; } | undefined) => Promise<{ canMakePayments: boolean; }>
+canMakePayments(options?: { features?: {} | undefined; } | undefined) => any
 ```
 
 Check if billing is supported for the current user (meaning IN-APP purchases are supported)
@@ -1149,11 +1219,11 @@ and optionally, whether a list of specified feature types are supported.
 Note: Billing features are only relevant to Google Play Android users.
 For other stores and platforms, billing features won't be checked.
 
-| Param         | Type                                           | Description                                                                                                                                                                   |
-| ------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`options`** | <code>{ features?: BILLING_FEATURE[]; }</code> | An array of feature types to check for support. Feature types must be one of [BILLING_FEATURE]. By default, is an empty list and no specific feature support will be checked. |
+| Param         | Type                            | Description                                                                                                                                                                   |
+| ------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`options`** | <code>{ features?: {}; }</code> | An array of feature types to check for support. Feature types must be one of [BILLING_FEATURE]. By default, is an empty list and no specific feature support will be checked. |
 
-**Returns:** <code>Promise&lt;{ canMakePayments: boolean; }&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -1161,7 +1231,7 @@ For other stores and platforms, billing features won't be checked.
 ### beginRefundRequestForActiveEntitlement()
 
 ```typescript
-beginRefundRequestForActiveEntitlement() => Promise<{ refundRequestStatus: REFUND_REQUEST_STATUS; }>
+beginRefundRequestForActiveEntitlement() => any
 ```
 
 iOS 15+ only. Presents a refund request sheet in the current window scene for
@@ -1175,7 +1245,7 @@ If called in an unsupported platform (Android or iOS &lt; 15), an `UnsupportedPl
 Important: This method should only be used if your user can only have a single active entitlement at a given time.
 If a user could have more than one entitlement at a time, use `beginRefundRequestForEntitlement` instead.
 
-**Returns:** <code>Promise&lt;{ refundRequestStatus: <a href="#refund_request_status">REFUND_REQUEST_STATUS</a>; }&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -1183,7 +1253,7 @@ If a user could have more than one entitlement at a time, use `beginRefundReques
 ### beginRefundRequestForEntitlement(...)
 
 ```typescript
-beginRefundRequestForEntitlement(options: { entitlementInfo: PurchasesEntitlementInfo; }) => Promise<{ refundRequestStatus: REFUND_REQUEST_STATUS; }>
+beginRefundRequestForEntitlement(options: { entitlementInfo: PurchasesEntitlementInfo; }) => any
 ```
 
 iOS 15+ only. Presents a refund request sheet in the current window scene for
@@ -1196,7 +1266,7 @@ If called in an unsupported platform (Android or iOS &lt; 15), an `UnsupportedPl
 | ------------- | --------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
 | **`options`** | <code>{ entitlementInfo: <a href="#purchasesentitlementinfo">PurchasesEntitlementInfo</a>; }</code> | The entitlement to begin a refund request for. |
 
-**Returns:** <code>Promise&lt;{ refundRequestStatus: <a href="#refund_request_status">REFUND_REQUEST_STATUS</a>; }&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -1204,7 +1274,7 @@ If called in an unsupported platform (Android or iOS &lt; 15), an `UnsupportedPl
 ### beginRefundRequestForProduct(...)
 
 ```typescript
-beginRefundRequestForProduct(options: { storeProduct: PurchasesStoreProduct; }) => Promise<{ refundRequestStatus: REFUND_REQUEST_STATUS; }>
+beginRefundRequestForProduct(options: { storeProduct: PurchasesStoreProduct; }) => any
 ```
 
 iOS 15+ only. Presents a refund request sheet in the current window scene for
@@ -1217,7 +1287,7 @@ If called in an unsupported platform (Android or iOS &lt; 15), an `UnsupportedPl
 | ------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------- |
 | **`options`** | <code>{ storeProduct: <a href="#purchasesstoreproduct">PurchasesStoreProduct</a>; }</code> | The StoreProduct to begin a refund request for. |
 
-**Returns:** <code>Promise&lt;{ refundRequestStatus: <a href="#refund_request_status">REFUND_REQUEST_STATUS</a>; }&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -1225,7 +1295,7 @@ If called in an unsupported platform (Android or iOS &lt; 15), an `UnsupportedPl
 ### showInAppMessages(...)
 
 ```typescript
-showInAppMessages(options?: { messageTypes?: IN_APP_MESSAGE_TYPE[] | undefined; } | undefined) => Promise<void>
+showInAppMessages(options?: { messageTypes?: {} | undefined; } | undefined) => any
 ```
 
 Shows in-app messages available from the App <a href="#store">Store</a> or Google Play. You need to disable messages from showing
@@ -1234,9 +1304,11 @@ automatically using [PurchasesConfiguration.shouldShowInAppMessagesAutomatically
 Note: In iOS, this requires version 16+. In older versions the promise will be resolved successfully
 immediately.
 
-| Param         | Type                                                   | Description                                                                                                                                                                       |
-| ------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`options`** | <code>{ messageTypes?: IN_APP_MESSAGE_TYPE[]; }</code> | An array of message types that the stores can display inside your app. Values must be one of [IN_APP_MESSAGE_TYPE]. By default, is undefined and all message types will be shown. |
+| Param         | Type                                | Description                                                                                                                                                                       |
+| ------------- | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`options`** | <code>{ messageTypes?: {}; }</code> | An array of message types that the stores can display inside your app. Values must be one of [IN_APP_MESSAGE_TYPE]. By default, is undefined and all message types will be shown. |
+
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -1244,12 +1316,12 @@ immediately.
 ### isConfigured()
 
 ```typescript
-isConfigured() => Promise<{ isConfigured: boolean; }>
+isConfigured() => any
 ```
 
 Check if configure has finished and Purchases has been configured.
 
-**Returns:** <code>Promise&lt;{ isConfigured: boolean; }&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -1306,8 +1378,8 @@ Type containing all information regarding the customer
 | Prop                                   | Type                                                                                                | Description                                                                                                                                                                                                                                                                                                                                                                                |
 | -------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **`entitlements`**                     | <code><a href="#purchasesentitlementinfos">PurchasesEntitlementInfos</a></code>                     | Entitlements attached to this customer info                                                                                                                                                                                                                                                                                                                                                |
-| **`activeSubscriptions`**              | <code>string[]</code>                                                                               | Set of active subscription skus                                                                                                                                                                                                                                                                                                                                                            |
-| **`allPurchasedProductIdentifiers`**   | <code>string[]</code>                                                                               | Set of purchased skus, active and inactive                                                                                                                                                                                                                                                                                                                                                 |
+| **`activeSubscriptions`**              | <code>{}</code>                                                                                     | Set of active subscription skus                                                                                                                                                                                                                                                                                                                                                            |
+| **`allPurchasedProductIdentifiers`**   | <code>{}</code>                                                                                     | Set of purchased skus, active and inactive                                                                                                                                                                                                                                                                                                                                                 |
 | **`latestExpirationDate`**             | <code>string \| null</code>                                                                         | The latest expiration date of all purchased skus                                                                                                                                                                                                                                                                                                                                           |
 | **`firstSeen`**                        | <code>string</code>                                                                                 | The date this user was first seen in RevenueCat.                                                                                                                                                                                                                                                                                                                                           |
 | **`originalAppUserId`**                | <code>string</code>                                                                                 | The original App User Id recorded for this user.                                                                                                                                                                                                                                                                                                                                           |
@@ -1317,7 +1389,7 @@ Type containing all information regarding the customer
 | **`originalApplicationVersion`**       | <code>string \| null</code>                                                                         | Returns the version number for the version of the application when the user bought the app. Use this for grandfathering users when migrating to subscriptions. This corresponds to the value of CFBundleVersion (in iOS) in the Info.plist file when the purchase was originally made. This is always null in Android                                                                      |
 | **`originalPurchaseDate`**             | <code>string \| null</code>                                                                         | Returns the purchase date for the version of the application when the user bought the app. Use this for grandfathering users when migrating to subscriptions.                                                                                                                                                                                                                              |
 | **`managementURL`**                    | <code>string \| null</code>                                                                         | URL to manage the active subscription of the user. If this user has an active iOS subscription, this will point to the App <a href="#store">Store</a>, if the user has an active Play <a href="#store">Store</a> subscription it will point there. If there are no active subscriptions it will be null. If there are multiple for different platforms, it will point to the device store. |
-| **`nonSubscriptionTransactions`**      | <code>PurchasesStoreTransaction[]</code>                                                            | List of all non subscription transactions. Use this to fetch the history of non-subscription purchases                                                                                                                                                                                                                                                                                     |
+| **`nonSubscriptionTransactions`**      | <code>{}</code>                                                                                     | List of all non subscription transactions. Use this to fetch the history of non-subscription purchases                                                                                                                                                                                                                                                                                     |
 | **`subscriptionsByProductIdentifier`** | <code>{ [key: string]: <a href="#purchasessubscriptioninfo">PurchasesSubscriptionInfo</a>; }</code> | Information about the customer's subscriptions for each product identifier.                                                                                                                                                                                                                                                                                                                |
 
 
@@ -1438,7 +1510,7 @@ For more info see https://docs.revenuecat.com/docs/entitlements
 | **`identifier`**        | <code>string</code>                                                   | Unique identifier defined in RevenueCat dashboard.                                                                                                                                                                                                                                                         |
 | **`serverDescription`** | <code>string</code>                                                   | Offering description defined in RevenueCat dashboard.                                                                                                                                                                                                                                                      |
 | **`metadata`**          | <code>{ [key: string]: unknown; }</code>                              | Offering metadata defined in RevenueCat dashboard. To access values, you need to check the type beforehand. For example: const my_unknown_value: unknown = offering.metadata['my_key']; const my_string_value: string \| undefined = typeof(my_unknown_value) === 'string' ? my_unknown_value : undefined; |
-| **`availablePackages`** | <code>PurchasesPackage[]</code>                                       | Array of `Package` objects available for purchase.                                                                                                                                                                                                                                                         |
+| **`availablePackages`** | <code>{}</code>                                                       | Array of `Package` objects available for purchase.                                                                                                                                                                                                                                                         |
 | **`lifetime`**          | <code><a href="#purchasespackage">PurchasesPackage</a> \| null</code> | Lifetime package type configured in the RevenueCat dashboard, if available.                                                                                                                                                                                                                                |
 | **`annual`**            | <code><a href="#purchasespackage">PurchasesPackage</a> \| null</code> | Annual package type configured in the RevenueCat dashboard, if available.                                                                                                                                                                                                                                  |
 | **`sixMonth`**          | <code><a href="#purchasespackage">PurchasesPackage</a> \| null</code> | Six month package type configured in the RevenueCat dashboard, if available.                                                                                                                                                                                                                               |
@@ -1481,12 +1553,12 @@ Type representing a product from the <a href="#store">Store</a>.
 | **`pricePerYearString`**          | <code>string \| null</code>                                                           | Null for INAPP products. The price of the <a href="#purchasesstoreproduct">PurchasesStoreProduct</a> formatted for the current locale in a yearly recurrence. This means that, for example, if the period is monthly, the price will be multiplied by 12. It uses a currency formatter to format the price in the given locale. Note that this value may be an approximation. For Google subscriptions, this value will use the basePlan to calculate the value. |
 | **`currencyCode`**                | <code>string</code>                                                                   | Currency code for price and original price. Contains the currency code value of defaultOption for Google Play.                                                                                                                                                                                                                                                                                                                                                   |
 | **`introPrice`**                  | <code><a href="#purchasesintroprice">PurchasesIntroPrice</a> \| null</code>           | Introductory price.                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| **`discounts`**                   | <code>PurchasesStoreProductDiscount[] \| null</code>                                  | Collection of discount offers for a product. Null for Android.                                                                                                                                                                                                                                                                                                                                                                                                   |
+| **`discounts`**                   | <code>{} \| null</code>                                                               | Collection of discount offers for a product. Null for Android.                                                                                                                                                                                                                                                                                                                                                                                                   |
 | **`productCategory`**             | <code><a href="#product_category">PRODUCT_CATEGORY</a> \| null</code>                 | Product category.                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | **`productType`**                 | <code><a href="#product_type">PRODUCT_TYPE</a></code>                                 | The specific type of subscription or one time purchase this product represents. Important: In iOS, if using StoreKit 1, we cannot determine the type.                                                                                                                                                                                                                                                                                                            |
 | **`subscriptionPeriod`**          | <code>string \| null</code>                                                           | Subscription period, specified in ISO 8601 format. For example, P1W equates to one week, P1M equates to one month, P3M equates to three months, P6M equates to six months, and P1Y equates to one year. Note: Not available for Amazon.                                                                                                                                                                                                                          |
 | **`defaultOption`**               | <code><a href="#subscriptionoption">SubscriptionOption</a> \| null</code>             | Default subscription option for a product. Google Play only.                                                                                                                                                                                                                                                                                                                                                                                                     |
-| **`subscriptionOptions`**         | <code>SubscriptionOption[] \| null</code>                                             | Collection of subscription options for a product. Google Play only.                                                                                                                                                                                                                                                                                                                                                                                              |
+| **`subscriptionOptions`**         | <code>{} \| null</code>                                                               | Collection of subscription options for a product. Google Play only.                                                                                                                                                                                                                                                                                                                                                                                              |
 | **`presentedOfferingIdentifier`** | <code>string \| null</code>                                                           | Offering identifier the store product was presented from. Null if not using offerings or if fetched directly from store via getProducts.                                                                                                                                                                                                                                                                                                                         |
 | **`presentedOfferingContext`**    | <code><a href="#presentedofferingcontext">PresentedOfferingContext</a> \| null</code> | Offering context this package belongs to. Null if not using offerings or if fetched directly from store via getProducts.                                                                                                                                                                                                                                                                                                                                         |
 
@@ -1530,8 +1602,8 @@ Used only for Google
 | **`id`**                          | <code>string</code>                                                                   | Identifier of the subscription option If this <a href="#subscriptionoption">SubscriptionOption</a> represents a base plan, this will be the basePlanId. If it represents an offer, it will be basePlanId:offerId                                                                                                                           |
 | **`storeProductId`**              | <code>string</code>                                                                   | Identifier of the StoreProduct associated with this SubscriptionOption This will be subId:basePlanId                                                                                                                                                                                                                                       |
 | **`productId`**                   | <code>string</code>                                                                   | Identifer of the subscription associated with this SubscriptionOption This will be subId                                                                                                                                                                                                                                                   |
-| **`pricingPhases`**               | <code>PricingPhase[]</code>                                                           | Pricing phases defining a user's payment plan for the product over time.                                                                                                                                                                                                                                                                   |
-| **`tags`**                        | <code>string[]</code>                                                                 | Tags defined on the base plan or offer. Empty for Amazon.                                                                                                                                                                                                                                                                                  |
+| **`pricingPhases`**               | <code>{}</code>                                                                       | Pricing phases defining a user's payment plan for the product over time.                                                                                                                                                                                                                                                                   |
+| **`tags`**                        | <code>{}</code>                                                                       | Tags defined on the base plan or offer. Empty for Amazon.                                                                                                                                                                                                                                                                                  |
 | **`isBasePlan`**                  | <code>boolean</code>                                                                  | True if this <a href="#subscriptionoption">SubscriptionOption</a> represents a subscription base plan (rather than an offer).                                                                                                                                                                                                              |
 | **`billingPeriod`**               | <code><a href="#period">Period</a> \| null</code>                                     | The subscription period of fullPricePhase (after free and intro trials).                                                                                                                                                                                                                                                                   |
 | **`isPrepaid`**                   | <code>boolean</code>                                                                  | True if the subscription is pre-paid.                                                                                                                                                                                                                                                                                                      |
@@ -1613,7 +1685,7 @@ Type containing information of installment subscriptions. Currently only support
 
 | Prop                     | Type                                                          | Description                                                                                                           |
 | ------------------------ | ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| **`productIdentifiers`** | <code>string[]</code>                                         | Array of product identifiers to obtain                                                                                |
+| **`productIdentifiers`** | <code>{}</code>                                               | Array of product identifiers to obtain                                                                                |
 | **`type`**               | <code><a href="#product_category">PRODUCT_CATEGORY</a></code> | Optional type of products to fetch, can be SUBSCRIPTION or NON_SUBSCRIPTION. SUBSCRIPTION by default. Ignored in iOS. |
 
 
@@ -1731,16 +1803,16 @@ Holds the introductory price status
 | **`discount`** | <code><a href="#purchasesstoreproductdiscount">PurchasesStoreProductDiscount</a></code> | The <a href="#purchasesstoreproductdiscount">`PurchasesStoreProductDiscount`</a> to apply to the product. |
 
 
-#### PurchasesWinBackOffer
-
-Holds the information about a Win-Back Offer in Apple's App <a href="#store">Store</a>.
-
-
 #### GetEligibleWinBackOffersForProductOptions
 
 | Prop          | Type                                                                    | Description                                                |
 | ------------- | ----------------------------------------------------------------------- | ---------------------------------------------------------- |
 | **`product`** | <code><a href="#purchasesstoreproduct">PurchasesStoreProduct</a></code> | The product you want to fetch eligible win-back offers for |
+
+
+#### PurchasesWinBackOffer
+
+Holds the information about a Win-Back Offer in Apple's App <a href="#store">Store</a>.
 
 
 #### GetEligibleWinBackOffersForPackageOptions
