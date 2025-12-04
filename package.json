@@ -10,7 +10,7 @@
     "android/src/main/",
     "android/build.gradle",
     "dist/",
-    "RevenuecatPurchasesCapacitorUI.podspec",
+    "RevenuecatPurchasesCapacitor.podspec",
     "ios/Sources",
     "Package.swift"
   ],
