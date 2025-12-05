@@ -2,17 +2,18 @@ files_with_version_number = {
     './.version' => ['{x}'],
     './package.json' => ['"version": "{x}"'],
     './purchases-capacitor-ui/package.json' => ['"version": "{x}"'],
-    './ios/Plugin/PurchasesPlugin.swift' => ['platformVersion = "{x}"'],
+    './ios/Sources/RevenuecatPurchasesCapacitor/PurchasesPlugin.swift' => ['platformVersion = "{x}"'],
     './android/src/main/java/com/revenuecat/purchases/capacitor/PurchasesPlugin.kt' => ['PLUGIN_VERSION = "{x}"']
 }
 files_to_update_phc_version = {
     'RevenuecatPurchasesCapacitor.podspec' => ["'PurchasesHybridCommon', '{x}'"],
-    'ios/Podfile' => ["'PurchasesHybridCommon', '{x}'"],
     'android/build.gradle' => ['com.revenuecat.purchases:purchases-hybrid-common:{x}'],
     'package.json' => ['"@revenuecat/purchases-typescript-internal-esm": "{x}"'],
     './purchases-capacitor-ui/package.json' => ['"@revenuecat/purchases-typescript-internal-esm": "{x}"'],
     'purchases-capacitor-ui/RevenuecatPurchasesCapacitorUi.podspec' => ["'PurchasesHybridCommonUI', '{x}'"],
-    'purchases-capacitor-ui/android/build.gradle' => ['com.revenuecat.purchases:purchases-hybrid-common-ui:{x}']
+    'purchases-capacitor-ui/android/build.gradle' => ['com.revenuecat.purchases:purchases-hybrid-common-ui:{x}'],
+    'Package.swift' => ['.package(url: "https://github.com/RevenueCat/purchases-hybrid-common.git", exact: "{x}")'],
+    'purchases-capacitor-ui/Package.swift' => ['.package(url: "https://github.com/RevenueCat/purchases-hybrid-common.git", exact: "{x}")'],
 }
 repo_name = 'purchases-capacitor'
 changelog_latest_path = './CHANGELOG.latest.md'
