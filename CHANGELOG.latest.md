@@ -5,16 +5,15 @@
 
 ## RevenueCat SDK
 ### 📦 Dependency Updates
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 17.21.0 (#613) via RevenueCat Git Bot (@RCGitBot)
-  * [Android 9.15.0](https://github.com/RevenueCat/purchases-android/releases/tag/9.15.0)
-  * [Android 9.14.1](https://github.com/RevenueCat/purchases-android/releases/tag/9.14.1)
-  * [iOS 5.49.0](https://github.com/RevenueCat/purchases-ios/releases/tag/5.49.0)
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 17.20.0 (#611) via RevenueCat Git Bot (@RCGitBot)
-  * [Android 9.15.0](https://github.com/RevenueCat/purchases-android/releases/tag/9.15.0)
-  * [Android 9.14.1](https://github.com/RevenueCat/purchases-android/releases/tag/9.14.1)
-  * [iOS 5.49.0](https://github.com/RevenueCat/purchases-ios/releases/tag/5.49.0)
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 17.21.2 (#616) via RevenueCat Git Bot (@RCGitBot)
+  * [Android 9.15.1](https://github.com/RevenueCat/purchases-android/releases/tag/9.15.1)
+  * [iOS 5.49.2](https://github.com/RevenueCat/purchases-ios/releases/tag/5.49.2)
+  * [iOS 5.49.1](https://github.com/RevenueCat/purchases-ios/releases/tag/5.49.1)
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 17.21.1 (#615) via RevenueCat Git Bot (@RCGitBot)
+  * [Android 9.15.1](https://github.com/RevenueCat/purchases-android/releases/tag/9.15.1)
+  * [iOS 5.49.2](https://github.com/RevenueCat/purchases-ios/releases/tag/5.49.2)
+  * [iOS 5.49.1](https://github.com/RevenueCat/purchases-ios/releases/tag/5.49.1)
 
 ### 🔄 Other Changes
-* Bump fastlane from 2.229.0 to 2.229.1 (#612) via dependabot[bot] (@dependabot[bot])
-* Bump fastlane from 2.228.0 to 2.229.0 (#609) via dependabot[bot] (@dependabot[bot])
-* Bump fastlane-plugin-revenuecat_internal from `083ced9` to `efca663` (#610) via dependabot[bot] (@dependabot[bot])
+* Updated Typescript and @types/node version to fix incompatible versions (#619) via Rick (@rickvdl)
+* Update CircleCI resource class from M1 to M4 and Xcode version from 15.2 to 16.4 (#617) via Rick (@rickvdl)
