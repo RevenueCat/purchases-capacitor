@@ -4,16 +4,14 @@
 
 
 ## RevenueCat SDK
+### ✨ New Features
+* Add SPM support (#608) via Rick (@rickvdl)
 ### 📦 Dependency Updates
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 17.21.2 (#616) via RevenueCat Git Bot (@RCGitBot)
-  * [Android 9.15.1](https://github.com/RevenueCat/purchases-android/releases/tag/9.15.1)
-  * [iOS 5.49.2](https://github.com/RevenueCat/purchases-ios/releases/tag/5.49.2)
-  * [iOS 5.49.1](https://github.com/RevenueCat/purchases-ios/releases/tag/5.49.1)
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 17.21.1 (#615) via RevenueCat Git Bot (@RCGitBot)
-  * [Android 9.15.1](https://github.com/RevenueCat/purchases-android/releases/tag/9.15.1)
-  * [iOS 5.49.2](https://github.com/RevenueCat/purchases-ios/releases/tag/5.49.2)
-  * [iOS 5.49.1](https://github.com/RevenueCat/purchases-ios/releases/tag/5.49.1)
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 17.23.0 (#622) via RevenueCat Git Bot (@RCGitBot)
+  * [Android 9.15.3](https://github.com/RevenueCat/purchases-android/releases/tag/9.15.3)
+  * [Android 9.15.2](https://github.com/RevenueCat/purchases-android/releases/tag/9.15.2)
+  * [iOS 5.50.0](https://github.com/RevenueCat/purchases-ios/releases/tag/5.50.0)
+  * [iOS 5.49.3](https://github.com/RevenueCat/purchases-ios/releases/tag/5.49.3)
 
 ### 🔄 Other Changes
-* Updated Typescript and @types/node version to fix incompatible versions (#619) via Rick (@rickvdl)
-* Update CircleCI resource class from M1 to M4 and Xcode version from 15.2 to 16.4 (#617) via Rick (@rickvdl)
+* Bump fastlane-plugin-revenuecat_internal from `efca663` to `76a3a08` (#623) via dependabot[bot] (@dependabot[bot])
