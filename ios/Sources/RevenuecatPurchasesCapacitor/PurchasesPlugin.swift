@@ -234,7 +234,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
     @objc func getCurrentOfferingForPlacement(_ call: CAPPluginCall) {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
         guard let placementIdentifier = call.getOrRejectString("placementIdentifier") else { return }
-        CommonFunctionality.getCurrentOffering(forPlacement: placementIdentifier, completion: self.getCompletionBlockHandler(call))
+        CommonFunctionality.getCurrentOffering(forPlacement: placementIdentifier, completion: self.getNullableCompletionBlockHandler(call))
     }
 
     @objc func syncAttributesAndOfferingsIfNeeded(_ call: CAPPluginCall) {

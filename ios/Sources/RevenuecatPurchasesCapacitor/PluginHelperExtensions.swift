@@ -20,6 +20,27 @@ internal extension PurchasesPlugin {
         call.reject("\(error.message)", "\(error.code)", error.error)
     }
 
+    func getNullableCompletionBlockHandler(_ call: CAPPluginCall,
+                                           wrapperKey: String? = nil) -> (([String: Any]?, ErrorContainer?) -> Void) {
+        func handleResponse(response: [String: Any]?, error: ErrorContainer?) {
+            if let error {
+                rejectWithErrorContainer(call, error: error)
+            } else if let response {
+                let mapToResolve: [String: Any] = {
+                    if let wrapperKey {
+                        return [wrapperKey: response]
+                    } else {
+                        return response
+                    }
+                }()
+                call.resolve(mapToResolve)
+            } else {
+                call.resolve()
+            }
+        }
+        return handleResponse
+    }
+
     func getCompletionBlockHandler(_ call: CAPPluginCall,
                                    wrapperKey: String? = nil) -> (([String: Any]?, ErrorContainer?) -> Void) {
         func handleResponse(response: [String: Any]?, error: ErrorContainer?) {
