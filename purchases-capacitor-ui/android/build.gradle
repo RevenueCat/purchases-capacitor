@@ -9,7 +9,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.13.2'
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.20'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.20'
     }
 }
 
@@ -52,5 +52,5 @@ dependencies {
     implementation project(':capacitor-android')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation 'com.revenuecat.purchases:purchases-hybrid-common-ui:17.25.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.20"
-} 
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:2.2.20"
+}
