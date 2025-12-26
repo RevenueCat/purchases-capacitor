@@ -9,7 +9,7 @@ aliases:
   base-mac-job: &base-mac-job
     resource_class: m4pro.medium
     macos:
-      xcode: '16.4.0'
+      xcode: '26.2.0'
     shell: /bin/bash --login -o pipefail
 
   release-tags: &release-tags
