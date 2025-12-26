@@ -66,7 +66,7 @@
     "@revenuecat/purchases-typescript-internal-esm": "17.25.0"
   },
   "peerDependencies": {
-    "@capacitor/core": "^8.0.0"
+    "@capacitor/core": ">=8.0.0"
   },
   "devDependencies": {
     "@capacitor/cli": "^8.0.0",
