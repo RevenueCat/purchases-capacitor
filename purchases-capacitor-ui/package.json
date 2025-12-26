@@ -61,24 +61,24 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@capacitor/core": "^7.0.0",
+    "@capacitor/core": "^8.0.0",
     "@revenuecat/purchases-capacitor": "^10.2.4",
     "@revenuecat/purchases-typescript-internal-esm": "17.25.0"
   },
   "peerDependencies": {
-    "@capacitor/core": "^7.0.0"
+    "@capacitor/core": "^8.0.0"
   },
   "devDependencies": {
-    "@capacitor/cli": "^7.0.0",
-    "@capacitor/docgen": "^0.3.0",
+    "@capacitor/cli": "^8.0.0",
+    "@capacitor/docgen": "^0.3.1",
     "@ionic/eslint-config": "^0.4.0",
     "@ionic/prettier-config": "^4.0.0",
-    "@types/node": "^24.0.0",
-    "eslint": "^8.57.0",
-    "prettier": "^3.4.2",
-    "prettier-plugin-java": "^2.6.6",
-    "rimraf": "^6.0.1",
-    "rollup": "^4.30.1",
-    "typescript": "^5.2.2"
+    "@types/node": "^24.10.1",
+    "eslint": "^8.57.1",
+    "prettier": "^3.6.2",
+    "prettier-plugin-java": "^2.7.7",
+    "rimraf": "^6.1.0",
+    "rollup": "^4.53.2",
+    "typescript": "^5.9.3"
   }
 }
