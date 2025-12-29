@@ -1,5 +1,5 @@
 ext {
-    androidxAppCompatVersion = project.hasProperty('androidxAppCompatVersion') ? rootProject.ext.androidxAppCompatVersion : '1.4.2'
+    androidxAppCompatVersion = project.hasProperty('androidxAppCompatVersion') ? rootProject.ext.androidxAppCompatVersion : '1.7.1'
 }
 
 buildscript {
@@ -9,7 +9,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.13.2'
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.20'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.20'
     }
 }
 
@@ -17,11 +17,11 @@ apply plugin: 'com.android.library'
 apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
-    namespace "com.revenuecat.purchases.capacitor.ui"
-    compileSdkVersion project.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : 35
+    namespace = "com.revenuecat.purchases.capacitor.ui"
+    compileSdk = project.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : 36
     defaultConfig {
         minSdkVersion project.hasProperty('minSdkVersion') ? rootProject.ext.minSdkVersion : 24
-        targetSdkVersion project.hasProperty('targetSdkVersion') ? rootProject.ext.targetSdkVersion : 35
+        targetSdkVersion project.hasProperty('targetSdkVersion') ? rootProject.ext.targetSdkVersion : 36
         versionCode 1
         versionName "1.0"
     }
@@ -32,7 +32,7 @@ android {
         }
     }
     lintOptions {
-        abortOnError false
+        abortOnError = false
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -52,5 +52,5 @@ dependencies {
     implementation project(':capacitor-android')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation 'com.revenuecat.purchases:purchases-hybrid-common-ui:17.25.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.20"
-} 
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:2.2.20"
+}
