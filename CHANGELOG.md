@@ -1,3 +1,7 @@
+## 12.0.0
+### 💥 Breaking Changes
+* [EXTERNAL] Add support for Capacitor 8 (#632) via @dudynets (#636)
+
 ## 11.3.2
 ## RevenueCat SDK
 ### 📦 Dependency Updates
