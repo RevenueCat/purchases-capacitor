@@ -37,6 +37,14 @@ Automatically bumps version, edit changelog, and create pull request
 
 Make github release
 
+### temporary_bump_version
+
+```sh
+[bundle exec] fastlane temporary_bump_version
+```
+
+Temporarily bumps the version of the package to the next snapshot version, but does not commit or push the changes
+
 ### release
 
 ```sh
