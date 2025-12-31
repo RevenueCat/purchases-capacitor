@@ -1,6 +1,6 @@
 {
   "name": "@revenuecat/purchases-capacitor-ui",
-  "version": "12.0.0",
+  "version": "12.0.1",
   "description": "UI components for RevenueCat Capacitor SDK",
   "main": "dist/esm/index.js",
   "module": "dist/esm/index.js",

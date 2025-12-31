@@ -1,3 +1,9 @@
+## 12.0.1
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 17.26.0 (#638) via RevenueCat Git Bot (@RCGitBot)
+  * [iOS 5.52.0](https://github.com/RevenueCat/purchases-ios/releases/tag/5.52.0)
+
 ## 12.0.0
 ### 💥 Breaking Changes
 * [EXTERNAL] Add support for Capacitor 8 (#632) via @dudynets (#636)
