@@ -88,7 +88,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
         CAPPluginMethod(name: "removeShouldPurchasePromoProductListener", returnType: CAPPluginReturnPromise),
     ] 
     private let platformFlavor = "capacitor"
-    private let platformVersion = "12.0.4"
+    private let platformVersion = "12.0.5"
 
     private let customerInfoKey = "customerInfo"
     private let transactionKey = "transaction"
