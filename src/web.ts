@@ -351,6 +351,10 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     return this.mockReturningFunctionIfEnabled('isConfigured', mockResult);
   }
 
+  overridePreferredUILocale(_options: { locale: string | null }): Promise<void> {
+    return this.mockNonReturningFunctionIfEnabled('overridePreferredUILocale');
+  }
+
   getVirtualCurrencies(): Promise<{ virtualCurrencies: PurchasesVirtualCurrencies }> {
     return this.mockReturningFunctionIfEnabled('getVirtualCurrencies', {
       virtualCurrencies: this.mockEmptyVirtualCurrencies,

@@ -86,6 +86,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
         CAPPluginMethod(name: "removeCustomerInfoUpdateListener", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "addShouldPurchasePromoProductListener", returnType: CAPPluginReturnCallback),
         CAPPluginMethod(name: "removeShouldPurchasePromoProductListener", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "overridePreferredUILocale", returnType: CAPPluginReturnNone),
     ] 
     private let platformFlavor = "capacitor"
     private let platformVersion = "12.0.5"
@@ -130,6 +131,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
         let entitlementVerificationMode = call.getString("entitlementVerificationMode")
         let diagnosticsEnabled = call.getBool("diagnosticsEnabled") ?? false
         let automaticDeviceIdentifierCollectionEnabled = call.getBool("automaticDeviceIdentifierCollectionEnabled") ?? true
+        let preferredLocale = call.getString("preferredUILocaleOverride")
 
         let purchases = Purchases.configure(apiKey: apiKey,
                                             appUserID: appUserID,
@@ -142,7 +144,8 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
                                             shouldShowInAppMessagesAutomatically: shouldShowInAppMessagesAutomatically,
                                             verificationMode: entitlementVerificationMode,
                                             diagnosticsEnabled: diagnosticsEnabled,
-                                            automaticDeviceIdentifierCollectionEnabled: automaticDeviceIdentifierCollectionEnabled)
+                                            automaticDeviceIdentifierCollectionEnabled: automaticDeviceIdentifierCollectionEnabled,
+                                            preferredLocale: preferredLocale)
         purchases.delegate = self
         call.resolve()
     }
@@ -662,6 +665,13 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
         call.resolve([
             "isConfigured": Purchases.isConfigured
         ])
+    }
+
+    @objc func overridePreferredUILocale(_ call: CAPPluginCall) {
+        guard self.rejectIfPurchasesNotConfigured(call) else { return }
+        let locale = call.getString("locale")
+        CommonFunctionality.overridePreferredLocale(locale)
+        call.resolve()
     }
 
     public func purchases(_ purchases: Purchases, receivedUpdated customerInfo: CustomerInfo) {

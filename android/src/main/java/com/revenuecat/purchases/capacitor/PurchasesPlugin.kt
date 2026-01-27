@@ -73,6 +73,7 @@ import com.revenuecat.purchases.hybridcommon.setProxyURLString as setProxyURLStr
 import com.revenuecat.purchases.hybridcommon.setPushToken as setPushTokenCommon
 import com.revenuecat.purchases.hybridcommon.syncAttributesAndOfferingsIfNeeded as syncAttributesAndOfferingsIfNeededCommon
 import com.revenuecat.purchases.hybridcommon.syncPurchases as syncPurchasesCommon
+import com.revenuecat.purchases.hybridcommon.overridePreferredLocale as overridePreferredLocaleCommon
 
 @Suppress("unused")
 @CapacitorPlugin(name = "Purchases")
@@ -106,6 +107,7 @@ class PurchasesPlugin : Plugin() {
         val pendingTransactionsForPrepaidPlansEnabled = call.getBoolean("pendingTransactionsForPrepaidPlansEnabled")
         val diagnosticsEnabled = call.getBoolean("diagnosticsEnabled")
         val automaticDeviceIdentifierCollectionEnabled = call.getBoolean("automaticDeviceIdentifierCollectionEnabled")
+        val preferredLocale = call.getString("preferredUILocaleOverride")
 
         configure(
             context.applicationContext,
@@ -119,6 +121,7 @@ class PurchasesPlugin : Plugin() {
             pendingTransactionsForPrepaidPlansEnabled = pendingTransactionsForPrepaidPlansEnabled,
             diagnosticsEnabled = diagnosticsEnabled,
             automaticDeviceIdentifierCollectionEnabled = automaticDeviceIdentifierCollectionEnabled,
+            preferredLocale = preferredLocale,
         )
         Purchases.sharedInstance.updatedCustomerInfoListener = UpdatedCustomerInfoListener { customerInfo ->
             customerInfo.mapAsync { map ->
@@ -693,6 +696,14 @@ class PurchasesPlugin : Plugin() {
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun isConfigured(call: PluginCall) {
         call.resolveWithMap(mapOf("isConfigured" to Purchases.isConfigured))
+    }
+
+    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    fun overridePreferredUILocale(call: PluginCall) {
+        if (rejectIfNotConfigured(call)) return
+        val locale = call.getString("locale")
+        overridePreferredLocaleCommon(locale)
+        call.resolve()
     }
 
     //================================================================================
