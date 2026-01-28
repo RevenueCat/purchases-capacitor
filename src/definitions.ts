@@ -905,4 +905,14 @@ export interface PurchasesPlugin {
    * @returns promise with boolean response
    */
   isConfigured(): Promise<{ isConfigured: boolean }>;
+
+  /**
+   * Override the preferred UI locale for RevenueCat UI components at runtime. This affects both API requests
+   * and UI rendering. If the locale changes, this will automatically clear the offerings cache and trigger
+   * a background refetch to get paywall templates with the correct localizations.
+   *
+   * @param options The locale string (e.g., "es-ES", "en-US") or null to use system default.
+   * @returns {Promise<void>} The promise will be rejected if configure has not been called yet.
+   */
+  overridePreferredUILocale(options: { locale: string | null }): Promise<void>;
 }
