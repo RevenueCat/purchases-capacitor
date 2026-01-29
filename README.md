@@ -123,6 +123,7 @@ This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package
 * [`beginRefundRequestForProduct(...)`](#beginrefundrequestforproduct)
 * [`showInAppMessages(...)`](#showinappmessages)
 * [`isConfigured()`](#isconfigured)
+* [`overridePreferredUILocale(...)`](#overridepreferreduilocale)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 * [Enums](#enums)
@@ -1250,6 +1251,23 @@ isConfigured() => Promise<{ isConfigured: boolean; }>
 Check if configure has finished and Purchases has been configured.
 
 **Returns:** <code>Promise&lt;{ isConfigured: boolean; }&gt;</code>
+
+--------------------
+
+
+### overridePreferredUILocale(...)
+
+```typescript
+overridePreferredUILocale(options: { locale: string | null; }) => Promise<void>
+```
+
+Override the preferred UI locale for RevenueCat UI components at runtime. This affects both API requests
+and UI rendering. If the locale changes, this will automatically clear the offerings cache and trigger
+a background refetch to get paywall templates with the correct localizations.
+
+| Param         | Type                                     | Description                                                               |
+| ------------- | ---------------------------------------- | ------------------------------------------------------------------------- |
+| **`options`** | <code>{ locale: string \| null; }</code> | The locale string (e.g., "es-ES", "en-US") or null to use system default. |
 
 --------------------
 
