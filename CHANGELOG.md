@@ -1,4 +1,8 @@
 ## 12.1.0
+> [!WARNING]
+> In previous versions of the SDK, there was a discrepancy in the `pricePer{week/month/year}` StoreProduct APIs between platforms. On iOS, the value was expressed as a decimal number, while on Android it was expressed in micros. As of this release, this discrepancy has been fixed and both platforms now return the value as a decimal number.
+
+
 ## RevenueCat SDK
 ### ✨ New Features
 * Add preferred locale override APIs (#660) via Antonio Pallares (@ajpallares)
