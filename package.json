@@ -1,6 +1,6 @@
 {
   "name": "@revenuecat/purchases-capacitor",
-  "version": "12.1.0",
+  "version": "12.1.1",
   "description": "Capacitor in-app purchases and subscriptions made easy. Support for iOS and Android.",
   "main": "dist/esm/index.js",
   "module": "dist/esm/index.js",
