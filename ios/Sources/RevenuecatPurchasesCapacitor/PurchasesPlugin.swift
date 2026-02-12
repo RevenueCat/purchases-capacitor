@@ -89,7 +89,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
         CAPPluginMethod(name: "overridePreferredUILocale", returnType: CAPPluginReturnNone),
     ] 
     private let platformFlavor = "capacitor"
-    private let platformVersion = "12.1.1"
+    private let platformVersion = "12.1.2"
 
     private let customerInfoKey = "customerInfo"
     private let transactionKey = "transaction"
