@@ -63,7 +63,7 @@
   "dependencies": {
     "@capacitor/core": "^8.0.0",
     "@revenuecat/purchases-capacitor": "^10.2.4",
-    "@revenuecat/purchases-typescript-internal-esm": "17.37.0"
+    "@revenuecat/purchases-typescript-internal-esm": "17.40.0"
   },
   "peerDependencies": {
     "@capacitor/core": ">=8.0.0"
