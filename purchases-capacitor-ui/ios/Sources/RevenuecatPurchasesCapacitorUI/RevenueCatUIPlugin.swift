@@ -340,9 +340,7 @@ private extension RevenueCatUIPlugin {
 
 /// Type alias for PaywallProxy to avoid direct reference to the concrete type
 private protocol PaywallProxyType: AnyObject {
-    func presentPaywall(options: [String: Any], paywallResultHandler: @escaping (String) -> Void)
     func presentPaywall(options: [String: Any], purchaseLogicBridge: HybridPurchaseLogicBridge?, paywallResultHandler: @escaping (String) -> Void)
-    func presentPaywallIfNeeded(options: [String: Any], paywallResultHandler: @escaping (String) -> Void)
     func presentPaywallIfNeeded(options: [String: Any], purchaseLogicBridge: HybridPurchaseLogicBridge?, paywallResultHandler: @escaping (String) -> Void)
 }
 
