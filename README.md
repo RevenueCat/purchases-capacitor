@@ -1464,6 +1464,7 @@ For more info see https://docs.revenuecat.com/docs/entitlements
 | **`twoMonth`**          | <code><a href="#purchasespackage">PurchasesPackage</a> \| null</code> | Two month package type configured in the RevenueCat dashboard, if available.                                                                                                                                                                                                                               |
 | **`monthly`**           | <code><a href="#purchasespackage">PurchasesPackage</a> \| null</code> | Monthly package type configured in the RevenueCat dashboard, if available.                                                                                                                                                                                                                                 |
 | **`weekly`**            | <code><a href="#purchasespackage">PurchasesPackage</a> \| null</code> | Weekly package type configured in the RevenueCat dashboard, if available.                                                                                                                                                                                                                                  |
+| **`webCheckoutUrl`**    | <code>string \| null</code>                                           | URL to use for web checkout for this offering. iOS and Android only. Null if not available.                                                                                                                                                                                                                |
 
 
 #### PurchasesPackage
@@ -1478,6 +1479,7 @@ For more info see https://docs.revenuecat.com/docs/entitlements
 | **`product`**                  | <code><a href="#purchasesstoreproduct">PurchasesStoreProduct</a></code>       | Product assigned to this package.                                                                                        |
 | **`offeringIdentifier`**       | <code>string</code>                                                           | Offering this package belongs to.                                                                                        |
 | **`presentedOfferingContext`** | <code><a href="#presentedofferingcontext">PresentedOfferingContext</a></code> | Offering context this package belongs to. Null if not using offerings or if fetched directly from store via getProducts. |
+| **`webCheckoutUrl`**           | <code>string \| null</code>                                                   | URL to use for web checkout for this package. iOS and Android only. Null if not available.                               |
 
 
 #### PurchasesStoreProduct
