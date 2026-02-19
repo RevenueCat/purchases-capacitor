@@ -271,10 +271,7 @@ const RevenueCatUI: RevenueCatUIPlugin = {
       }
     : undefined,
 
-  addListener(
-    eventName: 'paywallDisplayed' | 'paywallDismissed',
-    listener: () => void,
-  ): Promise<PluginListenerHandle> {
+  addListener(eventName: 'paywallDisplayed' | 'paywallDismissed', listener: () => void): Promise<PluginListenerHandle> {
     return nativePlugin.addListener(eventName, listener);
   },
 

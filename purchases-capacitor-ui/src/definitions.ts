@@ -70,10 +70,7 @@ export interface PaywallListener {
   /** Called when a purchase begins for a package. */
   onPurchaseStarted?: (args: { packageBeingPurchased: PurchasesPackage }) => void;
   /** Called when a purchase completes successfully. */
-  onPurchaseCompleted?: (args: {
-    customerInfo: CustomerInfo;
-    storeTransaction: PurchasesStoreTransaction;
-  }) => void;
+  onPurchaseCompleted?: (args: { customerInfo: CustomerInfo; storeTransaction: PurchasesStoreTransaction }) => void;
   /** Called when a purchase fails with an error. */
   onPurchaseError?: (args: { error: PurchasesError }) => void;
   /** Called when the user cancels a purchase. */
@@ -94,10 +91,7 @@ export interface PaywallListener {
    *
    * If this callback is not provided, the purchase proceeds automatically.
    */
-  onPurchaseInitiated?: (args: {
-    packageBeingPurchased: PurchasesPackage;
-    resumable: PurchaseResumable;
-  }) => void;
+  onPurchaseInitiated?: (args: { packageBeingPurchased: PurchasesPackage; resumable: PurchaseResumable }) => void;
 }
 
 /**

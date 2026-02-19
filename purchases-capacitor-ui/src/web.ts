@@ -47,10 +47,7 @@ export class RevenueCatUIWeb extends WebPlugin implements RevenueCatUIPlugin {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async resumePurchaseInitiated(_options: {
-    requestId: string;
-    shouldProceed: boolean;
-  }): Promise<void> {
+  async resumePurchaseInitiated(_options: { requestId: string; shouldProceed: boolean }): Promise<void> {
     return this.mockNonReturningFunctionIfEnabled('resumePurchaseInitiated');
   }
 
