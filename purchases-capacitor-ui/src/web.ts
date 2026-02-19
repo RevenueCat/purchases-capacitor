@@ -46,6 +46,7 @@ export class RevenueCatUIWeb extends WebPlugin implements RevenueCatUIPlugin {
     return this.mockNonReturningFunctionIfEnabled('presentCustomerCenter');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async resumePurchaseInitiated(_options: {
     requestId: string;
     shouldProceed: boolean;
@@ -53,6 +54,7 @@ export class RevenueCatUIWeb extends WebPlugin implements RevenueCatUIPlugin {
     return this.mockNonReturningFunctionIfEnabled('resumePurchaseInitiated');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async resumePurchaseLogicPurchase(_options: {
     requestId: string;
     result: string;
@@ -61,6 +63,7 @@ export class RevenueCatUIWeb extends WebPlugin implements RevenueCatUIPlugin {
     return this.mockNonReturningFunctionIfEnabled('resumePurchaseLogicPurchase');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async resumePurchaseLogicRestore(_options: {
     requestId: string;
     result: string;
