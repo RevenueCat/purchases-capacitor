@@ -15,10 +15,11 @@ import {
   PurchaseDiscountedPackageOptions,
   Purchases,
 } from '@revenuecat/purchases-capacitor';
-import { RevenueCatUI } from '@revenuecat/purchases-capacitor-ui';
+import { RevenueCatUI, PURCHASE_LOGIC_RESULT } from '@revenuecat/purchases-capacitor-ui';
+import type { PaywallListener, PurchaseLogic } from '@revenuecat/purchases-capacitor-ui';
 
 import {REVENUECAT_API_KEY} from '../constants';
-import {ENTITLEMENT_VERIFICATION_MODE, IN_APP_MESSAGE_TYPE,} from '@revenuecat/purchases-typescript-internal-esm';
+import {ENTITLEMENT_VERIFICATION_MODE, IN_APP_MESSAGE_TYPE, PURCHASES_ARE_COMPLETED_BY_TYPE, STOREKIT_VERSION} from '@revenuecat/purchases-typescript-internal-esm';
 import {App, URLOpenListenerEvent} from "@capacitor/app";
 import {Dialog} from "@capacitor/dialog";
 
@@ -89,11 +90,22 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
   };
 
   const configure = async () => {
+    await configureInternal(PURCHASES_ARE_COMPLETED_BY_TYPE.REVENUECAT);
+  };
+
+  const configureMyApp = async () => {
+    await configureInternal(PURCHASES_ARE_COMPLETED_BY_TYPE.MY_APP);
+  };
+
+  const configureInternal = async (completedByType: PURCHASES_ARE_COMPLETED_BY_TYPE) => {
     await Purchases.configure({
       apiKey: REVENUECAT_API_KEY,
       entitlementVerificationMode: ENTITLEMENT_VERIFICATION_MODE.INFORMATIONAL,
       pendingTransactionsForPrepaidPlansEnabled: true,
       diagnosticsEnabled: true,
+      purchasesAreCompletedBy: completedByType === PURCHASES_ARE_COMPLETED_BY_TYPE.MY_APP
+        ? { type: PURCHASES_ARE_COMPLETED_BY_TYPE.MY_APP, storeKitVersion: STOREKIT_VERSION.STOREKIT_2 }
+        : PURCHASES_ARE_COMPLETED_BY_TYPE.REVENUECAT,
     });
     await Purchases.addCustomerInfoUpdateListener(customerInfo => {
       console.log(
@@ -101,7 +113,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
       );
     });
     await listenForDeepLinks();
-    updateLastFunctionWithoutContent('configure');
+    updateLastFunctionWithoutContent(`configure (${completedByType})`);
   };
 
   const changeSimulatesAskToBuyInSandbox = async () => {
@@ -755,6 +767,164 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     updateLastFunctionWithoutContent('presentCustomerCenter');
   };
 
+  // --- Sample: PaywallListener ---
+  const presentPaywallWithListener = async () => {
+    const offerings = await Purchases.getOfferings();
+    const offering = offerings.current;
+    if (offering == null) {
+      updateLastFunction('presentPaywallWithListener', 'No current offering available');
+      return;
+    }
+
+    const events: string[] = [];
+    const listener: PaywallListener = {
+      onPurchaseStarted: ({ packageBeingPurchased }) => {
+        events.push(`Purchase started: ${packageBeingPurchased.identifier}`);
+        console.log('[PaywallListener] onPurchaseStarted', packageBeingPurchased);
+      },
+      onPurchaseCompleted: ({ customerInfo, storeTransaction }) => {
+        events.push(`Purchase completed: ${storeTransaction.transactionIdentifier}`);
+        console.log('[PaywallListener] onPurchaseCompleted', customerInfo, storeTransaction);
+      },
+      onPurchaseError: ({ error }) => {
+        events.push(`Purchase error: ${error.message}`);
+        console.log('[PaywallListener] onPurchaseError', error);
+      },
+      onPurchaseCancelled: () => {
+        events.push('Purchase cancelled');
+        console.log('[PaywallListener] onPurchaseCancelled');
+      },
+      onRestoreStarted: () => {
+        events.push('Restore started');
+        console.log('[PaywallListener] onRestoreStarted');
+      },
+      onRestoreCompleted: ({ customerInfo }) => {
+        events.push(`Restore completed: ${Object.keys(customerInfo.entitlements.active).length} active entitlements`);
+        console.log('[PaywallListener] onRestoreCompleted', customerInfo);
+      },
+      onRestoreError: ({ error }) => {
+        events.push(`Restore error: ${error.message}`);
+        console.log('[PaywallListener] onRestoreError', error);
+      },
+      onPurchaseInitiated: ({ packageBeingPurchased, resumable }) => {
+        events.push(`Purchase initiated (gating): ${packageBeingPurchased.identifier}`);
+        console.log('[PaywallListener] onPurchaseInitiated - proceeding');
+        // Proceed with the purchase. You could show an auth dialog here
+        // and call resumable.resume(false) to cancel instead.
+        resumable.resume(true);
+      },
+    };
+
+    const result = await RevenueCatUI.presentPaywall({
+      offering,
+      listener,
+    });
+    updateLastFunction('presentPaywallWithListener', {
+      result: result.result,
+      events,
+    });
+  };
+
+  // --- Sample: PurchaseLogic (custom purchase handler) ---
+  const presentPaywallWithPurchaseLogic = async () => {
+    const offerings = await Purchases.getOfferings();
+    const offering = offerings.current;
+    if (offering == null) {
+      updateLastFunction('presentPaywallWithPurchaseLogic', 'No current offering available');
+      return;
+    }
+
+    const events: string[] = [];
+    const purchaseLogic: PurchaseLogic = {
+      performPurchase: async ({ packageToPurchase }) => {
+        events.push(`performPurchase called for: ${packageToPurchase.identifier}`);
+        console.log('[PurchaseLogic] performPurchase', packageToPurchase);
+        // In a real app, you would perform the purchase using your own
+        // payment system here, then return the result.
+        // For this demo, we use RevenueCat's purchase methods.
+        try {
+          await Purchases.purchasePackage({ aPackage: packageToPurchase });
+          events.push('purchasePackage succeeded');
+          return { result: PURCHASE_LOGIC_RESULT.SUCCESS };
+        } catch (e: any) {
+          if (e?.userCancelled) {
+            events.push('purchasePackage cancelled by user');
+            return { result: PURCHASE_LOGIC_RESULT.CANCELLATION };
+          }
+          events.push(`purchasePackage error: ${e?.message ?? e}`);
+          return { result: PURCHASE_LOGIC_RESULT.ERROR };
+        }
+      },
+      performRestore: async () => {
+        events.push('performRestore called');
+        console.log('[PurchaseLogic] performRestore');
+        // In a real app, you would restore purchases using your own
+        // system here. For this demo, we use RevenueCat's restore method.
+        try {
+          await Purchases.restorePurchases();
+          events.push('restorePurchases succeeded');
+          return { result: PURCHASE_LOGIC_RESULT.SUCCESS };
+        } catch (e: any) {
+          events.push(`restorePurchases error: ${e?.message ?? e}`);
+          return { result: PURCHASE_LOGIC_RESULT.ERROR };
+        }
+      },
+    };
+
+    const result = await RevenueCatUI.presentPaywall({
+      offering,
+      purchaseLogic,
+    });
+    updateLastFunction('presentPaywallWithPurchaseLogic', {
+      result: result.result,
+      events,
+    });
+  };
+
+  // --- Sample: presentPaywallIfNeeded with listener ---
+  const presentPaywallIfNeededWithListener = async () => {
+    const events: string[] = [];
+    const listener: PaywallListener = {
+      onPurchaseStarted: ({ packageBeingPurchased }) => {
+        events.push(`Purchase started: ${packageBeingPurchased.identifier}`);
+        console.log('[PaywallIfNeeded] onPurchaseStarted', packageBeingPurchased);
+      },
+      onPurchaseCompleted: ({ customerInfo, storeTransaction }) => {
+        events.push(`Purchase completed: ${storeTransaction.transactionIdentifier}`);
+        console.log('[PaywallIfNeeded] onPurchaseCompleted', customerInfo, storeTransaction);
+      },
+      onPurchaseError: ({ error }) => {
+        events.push(`Purchase error: ${error.message}`);
+        console.log('[PaywallIfNeeded] onPurchaseError', error);
+      },
+      onPurchaseCancelled: () => {
+        events.push('Purchase cancelled');
+        console.log('[PaywallIfNeeded] onPurchaseCancelled');
+      },
+      onRestoreStarted: () => {
+        events.push('Restore started');
+        console.log('[PaywallIfNeeded] onRestoreStarted');
+      },
+      onRestoreCompleted: ({ customerInfo }) => {
+        events.push(`Restore completed: ${Object.keys(customerInfo.entitlements.active).length} active`);
+        console.log('[PaywallIfNeeded] onRestoreCompleted', customerInfo);
+      },
+      onRestoreError: ({ error }) => {
+        events.push(`Restore error: ${error.message}`);
+        console.log('[PaywallIfNeeded] onRestoreError', error);
+      },
+    };
+
+    const result = await RevenueCatUI.presentPaywallIfNeeded({
+      requiredEntitlementIdentifier: 'pro',
+      listener,
+    });
+    updateLastFunction('presentPaywallIfNeededWithListener', {
+      result: result.result,
+      events,
+    });
+  };
+
   const listenForDeepLinks = async () => {
     await App.addListener('appUrlOpen', async (event: URLOpenListenerEvent) => {
       const url = event.url;
@@ -785,7 +955,10 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
 
       <div id="button_actions">
         <IonButton size="small" onClick={configure}>
-          Configure
+          Configure (RevenueCat)
+        </IonButton>
+        <IonButton size="small" onClick={configureMyApp}>
+          Configure (My App)
         </IonButton>
         <IonButton
           size="small"
@@ -985,6 +1158,15 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         <IonItemDivider/>
         <IonButton size="small" onClick={presentPaywallCurrentOffering}>
           Present paywall for current offering
+        </IonButton>
+        <IonButton size="small" onClick={presentPaywallWithListener}>
+          Present paywall with listener
+        </IonButton>
+        <IonButton size="small" onClick={presentPaywallWithPurchaseLogic}>
+          Present paywall with purchase logic
+        </IonButton>
+        <IonButton size="small" onClick={presentPaywallIfNeededWithListener}>
+          Present paywall if needed (with listener)
         </IonButton>
         <IonButton size="small" onClick={presentCustomerCenter}>
           Present customer center

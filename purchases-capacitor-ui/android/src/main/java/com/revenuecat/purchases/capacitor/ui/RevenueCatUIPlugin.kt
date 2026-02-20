@@ -10,9 +10,11 @@ import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
 import com.revenuecat.purchases.PresentedOfferingContext
+import com.revenuecat.purchases.hybridcommon.ui.PaywallListenerWrapper
 import com.revenuecat.purchases.hybridcommon.ui.PaywallResultListener
 import com.revenuecat.purchases.hybridcommon.ui.PaywallSource
 import com.revenuecat.purchases.hybridcommon.ui.PresentPaywallOptions
+import com.revenuecat.purchases.hybridcommon.ui.HybridPurchaseLogicBridge
 import com.revenuecat.purchases.hybridcommon.ui.presentPaywallFromFragment
 import com.revenuecat.purchases.ui.revenuecatui.customercenter.ShowCustomerCenter
 import org.json.JSONObject
@@ -81,6 +83,50 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
         )
     }
 
+    @PluginMethod
+    fun resumePurchaseInitiated(call: PluginCall) {
+        call.withRequiredRequestId { requestId ->
+            val shouldProceed = call.getBoolean("shouldProceed") ?: true
+            PaywallListenerWrapper.resumePurchasePackageInitiated(requestId, shouldProceed)
+        }
+    }
+
+    @PluginMethod
+    fun resumePurchaseLogicPurchase(call: PluginCall) {
+        resolvePurchaseLogicResult(call)
+    }
+
+    @PluginMethod
+    fun resumePurchaseLogicRestore(call: PluginCall) {
+        resolvePurchaseLogicResult(call)
+    }
+
+    private fun resolvePurchaseLogicResult(call: PluginCall) {
+        val requestId = call.getString("requestId")
+        if (requestId == null) {
+            call.reject("PAYWALL_ERROR", "Missing requestId")
+            return
+        }
+        val resultString = call.getString("result")
+        if (resultString == null) {
+            call.reject("PAYWALL_ERROR", "Missing result")
+            return
+        }
+        val errorMessage = call.getObject("error")?.optString("message")
+        HybridPurchaseLogicBridge.resolveResult(requestId, resultString, errorMessage)
+        call.resolve()
+    }
+
+    private fun PluginCall.withRequiredRequestId(block: (String) -> Unit) {
+        val requestId = getString("requestId")
+        if (requestId == null) {
+            reject("PAYWALL_ERROR", "Missing requestId")
+            return
+        }
+        block(requestId)
+        resolve()
+    }
+
     /**
      * Shared implementation for presenting a paywall
      */
@@ -111,6 +157,9 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
             return
         }
 
+        val hasPaywallListener = call.getBoolean("hasPaywallListener") ?: false
+        val hasPurchaseLogic = call.getBoolean("hasPurchaseLogic") ?: false
+
         val presentedOfferingContext = presentedOfferingContext?.let { jsContext ->
             val offeringId = jsContext.optString("offeringIdentifier").takeUnless { it.isNullOrEmpty() }
             if (offeringId == null) { return@let null }
@@ -140,15 +189,84 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
             PaywallSource.DefaultOffering
         }
 
+        val listener = if (hasPaywallListener) createPaywallListenerWrapper() else null
+        val purchaseLogic = if (hasPurchaseLogic) createPurchaseLogicBridge() else null
+
         val options = PresentPaywallOptions(
             paywallSource = paywallSource,
             requiredEntitlementIdentifier = requiredEntitlementIdentifier,
             shouldDisplayDismissButton = displayCloseButton,
-            paywallResultListener = this
+            paywallResultListener = this,
+            paywallListener = listener,
+            purchaseLogic = purchaseLogic,
         )
 
         presentPaywallFromFragment(currentActivity, options)
         notifyListeners("paywallDisplayed", JSObject())
+    }
+
+    private fun createPaywallListenerWrapper(): PaywallListenerWrapper {
+        return object : PaywallListenerWrapper() {
+            override fun onPurchaseStarted(rcPackage: Map<String, Any?>) {
+                notifyListeners("onPurchaseStarted", JSObject().apply {
+                    put("packageBeingPurchased", JSONObject(rcPackage))
+                })
+            }
+
+            override fun onPurchaseCompleted(
+                customerInfo: Map<String, Any?>,
+                storeTransaction: Map<String, Any?>,
+            ) {
+                notifyListeners("onPurchaseCompleted", JSObject().apply {
+                    put("customerInfo", JSONObject(customerInfo))
+                    put("storeTransaction", JSONObject(storeTransaction))
+                })
+            }
+
+            override fun onPurchaseError(error: Map<String, Any?>) {
+                notifyListeners("onPurchaseError", JSObject().apply {
+                    put("error", JSONObject(error))
+                })
+            }
+
+            override fun onPurchaseCancelled() {
+                notifyListeners("onPurchaseCancelled", JSObject())
+            }
+
+            override fun onRestoreStarted() {
+                notifyListeners("onRestoreStarted", JSObject())
+            }
+
+            override fun onRestoreCompleted(customerInfo: Map<String, Any?>) {
+                notifyListeners("onRestoreCompleted", JSObject().apply {
+                    put("customerInfo", JSONObject(customerInfo))
+                })
+            }
+
+            override fun onRestoreError(error: Map<String, Any?>) {
+                notifyListeners("onRestoreError", JSObject().apply {
+                    put("error", JSONObject(error))
+                })
+            }
+
+            override fun onPurchasePackageInitiated(rcPackage: Map<String, Any?>, requestId: String) {
+                notifyListeners("onPurchaseInitiated", JSObject().apply {
+                    put("package", JSONObject(rcPackage))
+                    put("requestId", requestId)
+                })
+            }
+        }
+    }
+
+    private fun createPurchaseLogicBridge(): HybridPurchaseLogicBridge {
+        return HybridPurchaseLogicBridge(
+            onPerformPurchase = { eventData ->
+                notifyListeners("onPerformPurchaseRequest", JSObject(JSONObject(eventData).toString()))
+            },
+            onPerformRestore = { eventData ->
+                notifyListeners("onPerformRestoreRequest", JSObject(JSONObject(eventData).toString()))
+            },
+        )
     }
 
     @PluginMethod

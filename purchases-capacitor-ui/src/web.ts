@@ -46,6 +46,29 @@ export class RevenueCatUIWeb extends WebPlugin implements RevenueCatUIPlugin {
     return this.mockNonReturningFunctionIfEnabled('presentCustomerCenter');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async resumePurchaseInitiated(_options: { requestId: string; shouldProceed: boolean }): Promise<void> {
+    return this.mockNonReturningFunctionIfEnabled('resumePurchaseInitiated');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async resumePurchaseLogicPurchase(_options: {
+    requestId: string;
+    result: string;
+    error?: { code?: string; message?: string };
+  }): Promise<void> {
+    return this.mockNonReturningFunctionIfEnabled('resumePurchaseLogicPurchase');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async resumePurchaseLogicRestore(_options: {
+    requestId: string;
+    result: string;
+    error?: { code?: string; message?: string };
+  }): Promise<void> {
+    return this.mockNonReturningFunctionIfEnabled('resumePurchaseLogicRestore');
+  }
+
   addListener(eventName: string, listener: (...args: any[]) => void): Promise<PluginListenerHandle> {
     if (eventName !== 'paywallDisplayed' && eventName !== 'paywallDismissed') {
       console.warn(`Unsupported event: ${eventName}`);
