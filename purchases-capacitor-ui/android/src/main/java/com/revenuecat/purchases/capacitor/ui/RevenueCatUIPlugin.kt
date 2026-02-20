@@ -102,15 +102,19 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
     }
 
     private fun resolvePurchaseLogicResult(call: PluginCall) {
-        call.withRequiredRequestId { requestId ->
-            val resultString = call.getString("result")
-            if (resultString == null) {
-                call.reject("PAYWALL_ERROR", "Missing result")
-                return@withRequiredRequestId
-            }
-            val errorMessage = call.getObject("error")?.optString("message")
-            HybridPurchaseLogicBridge.resolveResult(requestId, resultString, errorMessage)
+        val requestId = call.getString("requestId")
+        if (requestId == null) {
+            call.reject("PAYWALL_ERROR", "Missing requestId")
+            return
         }
+        val resultString = call.getString("result")
+        if (resultString == null) {
+            call.reject("PAYWALL_ERROR", "Missing result")
+            return
+        }
+        val errorMessage = call.getObject("error")?.optString("message")
+        HybridPurchaseLogicBridge.resolveResult(requestId, resultString, errorMessage)
+        call.resolve()
     }
 
     private fun PluginCall.withRequiredRequestId(block: (String) -> Unit) {
