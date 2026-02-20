@@ -841,15 +841,33 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         console.log('[PurchaseLogic] performPurchase', packageToPurchase);
         // In a real app, you would perform the purchase using your own
         // payment system here, then return the result.
-        // For this demo, we simulate a cancellation.
-        return { result: PURCHASE_LOGIC_RESULT.CANCELLATION };
+        // For this demo, we use RevenueCat's purchase methods.
+        try {
+          await Purchases.purchasePackage({ aPackage: packageToPurchase });
+          events.push('purchasePackage succeeded');
+          return { result: PURCHASE_LOGIC_RESULT.SUCCESS };
+        } catch (e: any) {
+          if (e?.userCancelled) {
+            events.push('purchasePackage cancelled by user');
+            return { result: PURCHASE_LOGIC_RESULT.CANCELLATION };
+          }
+          events.push(`purchasePackage error: ${e?.message ?? e}`);
+          return { result: PURCHASE_LOGIC_RESULT.ERROR };
+        }
       },
       performRestore: async () => {
         events.push('performRestore called');
         console.log('[PurchaseLogic] performRestore');
         // In a real app, you would restore purchases using your own
-        // system here. For this demo, we simulate success.
-        return { result: PURCHASE_LOGIC_RESULT.SUCCESS };
+        // system here. For this demo, we use RevenueCat's restore method.
+        try {
+          await Purchases.restorePurchases();
+          events.push('restorePurchases succeeded');
+          return { result: PURCHASE_LOGIC_RESULT.SUCCESS };
+        } catch (e: any) {
+          events.push(`restorePurchases error: ${e?.message ?? e}`);
+          return { result: PURCHASE_LOGIC_RESULT.ERROR };
+        }
       },
     };
 
