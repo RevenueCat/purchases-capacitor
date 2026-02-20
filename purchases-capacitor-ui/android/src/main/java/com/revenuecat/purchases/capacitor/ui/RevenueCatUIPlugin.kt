@@ -85,48 +85,42 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
 
     @PluginMethod
     fun resumePurchaseInitiated(call: PluginCall) {
-        val requestId = call.getString("requestId")
-        if (requestId == null) {
-            call.reject("PAYWALL_ERROR", "Missing requestId")
-            return
+        call.withRequiredRequestId { requestId ->
+            val shouldProceed = call.getBoolean("shouldProceed") ?: true
+            PaywallListenerWrapper.resumePurchasePackageInitiated(requestId, shouldProceed)
         }
-        val shouldProceed = call.getBoolean("shouldProceed") ?: true
-        PaywallListenerWrapper.resumePurchasePackageInitiated(requestId, shouldProceed)
-        call.resolve()
     }
 
     @PluginMethod
     fun resumePurchaseLogicPurchase(call: PluginCall) {
-        val requestId = call.getString("requestId")
-        if (requestId == null) {
-            call.reject("PAYWALL_ERROR", "Missing requestId")
-            return
-        }
-        val resultString = call.getString("result")
-        if (resultString == null) {
-            call.reject("PAYWALL_ERROR", "Missing result")
-            return
-        }
-        val errorMessage = call.getObject("error")?.optString("message")
-        HybridPurchaseLogicBridge.resolveResult(requestId, resultString, errorMessage)
-        call.resolve()
+        resolvePurchaseLogicResult(call)
     }
 
     @PluginMethod
     fun resumePurchaseLogicRestore(call: PluginCall) {
-        val requestId = call.getString("requestId")
+        resolvePurchaseLogicResult(call)
+    }
+
+    private fun resolvePurchaseLogicResult(call: PluginCall) {
+        call.withRequiredRequestId { requestId ->
+            val resultString = call.getString("result")
+            if (resultString == null) {
+                call.reject("PAYWALL_ERROR", "Missing result")
+                return@withRequiredRequestId
+            }
+            val errorMessage = call.getObject("error")?.optString("message")
+            HybridPurchaseLogicBridge.resolveResult(requestId, resultString, errorMessage)
+        }
+    }
+
+    private fun PluginCall.withRequiredRequestId(block: (String) -> Unit) {
+        val requestId = getString("requestId")
         if (requestId == null) {
-            call.reject("PAYWALL_ERROR", "Missing requestId")
+            reject("PAYWALL_ERROR", "Missing requestId")
             return
         }
-        val resultString = call.getString("result")
-        if (resultString == null) {
-            call.reject("PAYWALL_ERROR", "Missing result")
-            return
-        }
-        val errorMessage = call.getObject("error")?.optString("message")
-        HybridPurchaseLogicBridge.resolveResult(requestId, resultString, errorMessage)
-        call.resolve()
+        block(requestId)
+        resolve()
     }
 
     /**

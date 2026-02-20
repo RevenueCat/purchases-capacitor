@@ -167,49 +167,45 @@ public class RevenueCatUIPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func resumePurchaseInitiated(_ call: CAPPluginCall) {
-        guard let requestId = call.getString("requestId") else {
-            call.reject("Missing requestId", "PAYWALL_ERROR")
-            return
+        call.withRequiredRequestId { requestId in
+            let shouldProceed = call.getBool("shouldProceed") ?? true
+            if #available(iOS 15.0, *) {
+                PaywallProxy.resumePurchasePackageInitiated(requestId: requestId, shouldProceed: shouldProceed)
+            }
         }
-        let shouldProceed = call.getBool("shouldProceed") ?? true
-        if #available(iOS 15.0, *) {
-            PaywallProxy.resumePurchasePackageInitiated(requestId: requestId, shouldProceed: shouldProceed)
-        }
-        call.resolve()
     }
 
     @objc func resumePurchaseLogicPurchase(_ call: CAPPluginCall) {
-        guard let requestId = call.getString("requestId") else {
-            call.reject("Missing requestId", "PAYWALL_ERROR")
-            return
-        }
-        let resultStr = call.getString("result") ?? HybridPurchaseLogicBridge.resultError
-        let errorMessage = (call.getObject("error") as? [String: Any])?["message"] as? String
-        if #available(iOS 15.0, *) {
-            HybridPurchaseLogicBridge.resolveResult(
-                requestId: requestId,
-                resultString: resultStr,
-                errorMessage: errorMessage
-            )
-        }
-        call.resolve()
+        resolvePurchaseLogicResult(call)
     }
 
     @objc func resumePurchaseLogicRestore(_ call: CAPPluginCall) {
-        guard let requestId = call.getString("requestId") else {
-            call.reject("Missing requestId", "PAYWALL_ERROR")
+        resolvePurchaseLogicResult(call)
+    }
+
+    private func resolvePurchaseLogicResult(_ call: CAPPluginCall) {
+        call.withRequiredRequestId { requestId in
+            let resultStr = call.getString("result") ?? HybridPurchaseLogicBridge.resultError
+            let errorMessage = (call.getObject("error") as? [String: Any])?["message"] as? String
+            if #available(iOS 15.0, *) {
+                HybridPurchaseLogicBridge.resolveResult(
+                    requestId: requestId,
+                    resultString: resultStr,
+                    errorMessage: errorMessage
+                )
+            }
+        }
+    }
+}
+
+private extension CAPPluginCall {
+    func withRequiredRequestId(_ block: (String) -> Void) {
+        guard let requestId = getString("requestId") else {
+            reject("Missing requestId", "PAYWALL_ERROR")
             return
         }
-        let resultStr = call.getString("result") ?? HybridPurchaseLogicBridge.resultError
-        let errorMessage = (call.getObject("error") as? [String: Any])?["message"] as? String
-        if #available(iOS 15.0, *) {
-            HybridPurchaseLogicBridge.resolveResult(
-                requestId: requestId,
-                resultString: resultStr,
-                errorMessage: errorMessage
-            )
-        }
-        call.resolve()
+        block(requestId)
+        resolve()
     }
 }
 
