@@ -1,3 +1,8 @@
+## 12.2.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Use `proguard-android-optimize.txt` (#695) via Toni Rico (@tonidero)
+
 ## 12.2.0
 ## RevenueCat SDK
 ### ✨ New Features
