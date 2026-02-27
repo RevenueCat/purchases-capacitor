@@ -1,0 +1,19 @@
+{
+  "name": "maestro-test-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc && cp src/index.html dist/",
+    "sync": "npx cap sync"
+  },
+  "dependencies": {
+    "@capacitor/core": "^8.0.0",
+    "@capacitor/ios": "^8.0.0",
+    "@revenuecat/purchases-capacitor": "*",
+    "@revenuecat/purchases-capacitor-ui": "*"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.0.0",
+    "typescript": "~5.2.0"
+  }
+}
