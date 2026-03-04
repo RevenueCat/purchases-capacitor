@@ -47,6 +47,14 @@ parameters:
 
 commands:
 
+  trust-github-key:
+    steps:
+      - run:
+          name: Trust GitHub key
+          command: |
+            mkdir -p ~/.ssh
+            ssh-keyscan -t ed25519,ecdsa,rsa github.com >> ~/.ssh/known_hosts 2>/dev/null
+
   install-nvm:
     steps:
       - node/install:
@@ -183,7 +191,7 @@ jobs:
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
       - yarn-dependencies-mac
-      - revenuecat/trust-github-key
+      - trust-github-key
       - copy-npm-rc
       - run:
           name: release
@@ -196,7 +204,7 @@ jobs:
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
-      - revenuecat/trust-github-key
+      - trust-github-key
       - revenuecat/setup-git-credentials
       - run:
           name: Updating to next version of phc
@@ -215,7 +223,7 @@ jobs:
     shell: /bin/bash --login -o pipefail
     steps:
       - checkout
-      - revenuecat/trust-github-key
+      - trust-github-key
       - revenuecat/setup-git-credentials
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
@@ -269,7 +277,7 @@ jobs:
           cache-version: v1
       - yarn-dependencies-mac
       - yarn-dependencies-ui-mac
-      - revenuecat/trust-github-key
+      - trust-github-key
       - copy-npm-rc-ui
       - run:
           name: Release UI package
