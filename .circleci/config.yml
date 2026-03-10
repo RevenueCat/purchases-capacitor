@@ -118,18 +118,6 @@ commands:
             sdk env install
             echo -e '\nexport JAVA_HOME="/home/circleci/.sdkman/candidates/java/current"' >> $BASH_ENV
 
-  copy-npm-rc:
-    steps:
-      - run:
-          name: Copy npmrc sample file to final location
-          command: cp .npmrc.SAMPLE .npmrc
-
-  copy-npm-rc-ui:
-    steps:
-      - run:
-          name: Copy npmrc sample file to UI package location
-          command: cp .npmrc.SAMPLE purchases-capacitor-ui/.npmrc
-
 jobs:
   run-tests-ios:
     <<: *base-mac-job
@@ -183,7 +171,10 @@ jobs:
           cache-version: v1
       - yarn-dependencies-mac
       - revenuecat/trust-github-key
-      - copy-npm-rc
+      - run:
+          name: Get NPM OIDC token
+          command: |
+            export NPM_ID_TOKEN=$(circleci run oidc get --claims '{"aud": "npm:registry.npmjs.org"}')
       - run:
           name: release
           command: bundle exec fastlane release
@@ -269,7 +260,10 @@ jobs:
       - yarn-dependencies-mac
       - yarn-dependencies-ui-mac
       - revenuecat/trust-github-key
-      - copy-npm-rc-ui
+      - run:
+          name: Get NPM OIDC token
+          command: |
+            export NPM_ID_TOKEN=$(circleci run oidc get --claims '{"aud": "npm:registry.npmjs.org"}')
       - run:
           name: Release UI package
           command: bundle exec fastlane release_purchases_capacitor_ui
