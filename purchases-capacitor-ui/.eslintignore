@@ -1,4 +1,5 @@
 build
 dist
 example
-node_modules 
+node_modules
+api-report
