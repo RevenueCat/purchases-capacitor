@@ -710,8 +710,8 @@ class PurchasesPlugin : Plugin() {
     @PluginMethod(returnType = PluginMethod.RETURN_NONE)
     fun trackCustomPaywallImpression(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
-        val paywallId = call.getString("paywallId")
-        trackCustomPaywallImpressionCommon(paywallId)
+        val data = mapOf<String, Any?>("paywallId" to call.getString("paywallId"))
+        trackCustomPaywallImpressionCommon(data)
         call.resolve()
     }
 
