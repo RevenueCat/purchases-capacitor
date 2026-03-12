@@ -1,4 +1,5 @@
 build
 dist
 example
-node_modules 
+apitesters
+node_modules
