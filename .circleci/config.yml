@@ -165,7 +165,7 @@ jobs:
           name: Build purchase tester
           command: bundle exec fastlane build_purchase_tester
 
-  analyse_js:
+  run-api-tests:
     docker:
       - image: cimg/ruby:3.1.2
     steps:
@@ -257,7 +257,7 @@ jobs:
           command: git diff --exit-code api-report/ purchases-capacitor-ui/api-report/
 
   # UI Package Jobs
-  analyse_js_ui:
+  run-api-tests-ui:
     description: "Run API tests for purchases-capacitor-ui package"
     docker:
       - image: cimg/ruby:3.1.2
@@ -328,7 +328,7 @@ workflows:
         equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
       # Testing phase - runs on all branches
-      - analyse_js
+      - run-api-tests
       - run-tests-ios
       - run-tests-android
       - run-lint
@@ -336,7 +336,7 @@ workflows:
       # API change detection
       - check-api-changes
       # UI Package jobs
-      - analyse_js_ui
+      - run-api-tests-ui
       - run-lint-ui
       - dry-run-release-ui
 
@@ -344,11 +344,11 @@ workflows:
       - hold:
           type: approval
           requires:
-            - analyse_js
+            - run-api-tests
             - run-tests-ios
             - run-tests-android
             - run-lint
-            - analyse_js_ui
+            - run-api-tests-ui
             - run-lint-ui
             - check-api-changes
           <<: *release-branches

@@ -3,9 +3,12 @@ import {
   INTRO_ELIGIBILITY_STATUS,
   PACKAGE_TYPE,
   PRODUCT_CATEGORY,
+  PRODUCT_TYPE,
   PRORATION_MODE,
+  PURCHASE_TYPE,
   REFUND_REQUEST_STATUS,
   OFFER_PAYMENT_MODE,
+  PAYWALL_RESULT,
   PERIOD_UNIT,
   RECURRENCE_MODE,
   LOG_LEVEL,
@@ -13,6 +16,8 @@ import {
   ENTITLEMENT_VERIFICATION_MODE,
   PURCHASES_ARE_COMPLETED_BY_TYPE,
   STOREKIT_VERSION,
+  VERIFICATION_RESULT,
+  WebPurchaseRedemptionResultType,
 } from '../src/definitions';
 
 function checkBillingFeature(feature: BILLING_FEATURE): boolean {
@@ -195,6 +200,75 @@ function checkStoreKitVersion(version: STOREKIT_VERSION): boolean {
     case STOREKIT_VERSION.STOREKIT_1:
       return true;
     case STOREKIT_VERSION.STOREKIT_2:
+      return true;
+  }
+}
+
+function checkVerificationResult(result: VERIFICATION_RESULT): boolean {
+  switch (result) {
+    case VERIFICATION_RESULT.NOT_REQUESTED:
+      return true;
+    case VERIFICATION_RESULT.VERIFIED:
+      return true;
+    case VERIFICATION_RESULT.FAILED:
+      return true;
+    case VERIFICATION_RESULT.VERIFIED_ON_DEVICE:
+      return true;
+  }
+}
+
+function checkProductType(type: PRODUCT_TYPE): boolean {
+  switch (type) {
+    case PRODUCT_TYPE.CONSUMABLE:
+      return true;
+    case PRODUCT_TYPE.NON_CONSUMABLE:
+      return true;
+    case PRODUCT_TYPE.NON_RENEWABLE_SUBSCRIPTION:
+      return true;
+    case PRODUCT_TYPE.AUTO_RENEWABLE_SUBSCRIPTION:
+      return true;
+    case PRODUCT_TYPE.PREPAID_SUBSCRIPTION:
+      return true;
+    case PRODUCT_TYPE.UNKNOWN:
+      return true;
+  }
+}
+
+function checkPurchaseType(type: PURCHASE_TYPE): boolean {
+  switch (type) {
+    case PURCHASE_TYPE.INAPP:
+      return true;
+    case PURCHASE_TYPE.SUBS:
+      return true;
+  }
+}
+
+function checkPaywallResult(result: PAYWALL_RESULT): boolean {
+  switch (result) {
+    case PAYWALL_RESULT.NOT_PRESENTED:
+      return true;
+    case PAYWALL_RESULT.CANCELLED:
+      return true;
+    case PAYWALL_RESULT.PURCHASED:
+      return true;
+    case PAYWALL_RESULT.RESTORED:
+      return true;
+    case PAYWALL_RESULT.ERROR:
+      return true;
+  }
+}
+
+function checkWebPurchaseRedemptionResultType(type: WebPurchaseRedemptionResultType): boolean {
+  switch (type) {
+    case WebPurchaseRedemptionResultType.SUCCESS:
+      return true;
+    case WebPurchaseRedemptionResultType.ERROR:
+      return true;
+    case WebPurchaseRedemptionResultType.PURCHASE_BELONGS_TO_OTHER_USER:
+      return true;
+    case WebPurchaseRedemptionResultType.INVALID_TOKEN:
+      return true;
+    case WebPurchaseRedemptionResultType.EXPIRED:
       return true;
   }
 }

@@ -29,6 +29,8 @@ import type {
   PurchasesCallbackId,
   PurchasesError,
   PurchasesPlugin,
+  PurchaseParams,
+  ShouldPurchasePromoProductListener,
 } from '../src/definitions';
 
 import { PURCHASES_ARE_COMPLETED_BY_TYPE, STOREKIT_VERSION, WebPurchaseRedemptionResultType } from '../src/definitions';
@@ -79,6 +81,17 @@ async function checkConfigure(plugin: PurchasesPlugin) {
     apiKey,
     appUserID,
     entitlementVerificationMode: 'DISABLED' as ENTITLEMENT_VERIFICATION_MODE,
+  });
+
+  await plugin.configure({
+    apiKey,
+    appUserID,
+    userDefaultsSuiteName: 'suite',
+    storeKitVersion: STOREKIT_VERSION.STOREKIT_2,
+    pendingTransactionsForPrepaidPlansEnabled: true,
+    diagnosticsEnabled: true,
+    automaticDeviceIdentifierCollectionEnabled: false,
+    preferredUILocaleOverride: 'en-US',
   });
 
   const isConfiguredResult: { isConfigured: boolean } = await plugin.isConfigured();
@@ -335,6 +348,38 @@ async function checkVirtualCurrencies(plugin: PurchasesPlugin) {
   await plugin.invalidateVirtualCurrenciesCache();
   const cachedResult: { cachedVirtualCurrencies: PurchasesVirtualCurrencies | null } =
     await plugin.getCachedVirtualCurrencies();
+}
+
+function checkMakePurchaseResult(result: MakePurchaseResult) {
+  const productIdentifier: string = result.productIdentifier;
+  const customerInfo: CustomerInfo = result.customerInfo;
+  const transaction: PurchasesStoreTransaction = result.transaction;
+}
+
+function checkPurchaseParams(
+  pack: PurchasesPackage,
+  product: PurchasesStoreProduct,
+  subscriptionOption: SubscriptionOption,
+  googleProductChangeInfo: GoogleProductChangeInfo,
+  winBackOffer: PurchasesWinBackOffer,
+  discount: PurchasesPromotionalOffer,
+) {
+  const params1: PurchaseParams = { itemToPurchase: pack };
+  const params2: PurchaseParams = { itemToPurchase: product };
+  const params3: PurchaseParams = { itemToPurchase: subscriptionOption };
+  const params4: PurchaseParams = {
+    itemToPurchase: pack,
+    googleProductChangeInfo,
+    googleIsPersonalizedPrice: true,
+    winBackOffer,
+    discount,
+  };
+}
+
+function checkShouldPurchasePromoProductListener() {
+  const listener: ShouldPurchasePromoProductListener = (deferredPurchase: () => Promise<MakePurchaseResult>) => {
+    deferredPurchase();
+  };
 }
 
 async function checkLocaleAndPaywallImpression(plugin: PurchasesPlugin) {

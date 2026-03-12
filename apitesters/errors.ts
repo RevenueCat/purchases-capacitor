@@ -73,6 +73,8 @@ function checkErrorCodes(errorCode: PURCHASES_ERROR_CODE): boolean | undefined {
       return true;
     case PURCHASES_ERROR_CODE.OFFLINE_CONNECTION_ERROR:
       return true;
+    case PURCHASES_ERROR_CODE.TEST_STORE_SIMULATED_PURCHASE_ERROR:
+      return true;
   }
 }
 

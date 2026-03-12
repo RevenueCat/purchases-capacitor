@@ -24,7 +24,9 @@ import type {
   InstallmentsInfo,
   GoogleProductChangeInfo,
   PurchasesWinBackOffer,
+  PurchasesVirtualCurrency,
   Storefront,
+  PRODUCT_TYPE,
 } from '../src/definitions';
 
 function checkProduct(product: PurchasesStoreProduct) {
@@ -48,6 +50,7 @@ function checkProduct(product: PurchasesStoreProduct) {
   const subscriptionOptions: SubscriptionOption[] | null = product.subscriptionOptions;
   const presentedOfferingIdentifier: string | null = product.presentedOfferingIdentifier;
   const presentedOfferingContext: PresentedOfferingContext | null = product.presentedOfferingContext;
+  const productType: PRODUCT_TYPE = product.productType;
 }
 
 function checkDiscount(discount: PurchasesStoreProductDiscount) {
@@ -75,6 +78,7 @@ function checkPackage(pack: PurchasesPackage) {
   const product: PurchasesStoreProduct = pack.product;
   const offeringIdentifier: string = pack.offeringIdentifier;
   const presentedOfferingContext: PresentedOfferingContext = pack.presentedOfferingContext;
+  const webCheckoutUrl: string | null = pack.webCheckoutUrl;
 }
 
 function checkOffering(offering: PurchasesOffering) {
@@ -89,6 +93,7 @@ function checkOffering(offering: PurchasesOffering) {
   const twoMonth: PurchasesPackage | null = offering.twoMonth;
   const monthly: PurchasesPackage | null = offering.monthly;
   const weekly: PurchasesPackage | null = offering.weekly;
+  const webCheckoutUrl: string | null = offering.webCheckoutUrl;
 }
 
 function checkOfferings(offerings: PurchasesOfferings) {
@@ -184,4 +189,11 @@ function checkWinBackOffer(offer: PurchasesWinBackOffer) {
 
 function checkStorefront(storefront: Storefront) {
   const countryCode: string = storefront.countryCode;
+}
+
+function checkVirtualCurrency(currency: PurchasesVirtualCurrency) {
+  const balance: number = currency.balance;
+  const name: string = currency.name;
+  const code: string = currency.code;
+  const serverDescription: string | null = currency.serverDescription;
 }
