@@ -66,6 +66,7 @@ This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package
 * [`getOfferings()`](#getofferings)
 * [`getCurrentOfferingForPlacement(...)`](#getcurrentofferingforplacement)
 * [`syncAttributesAndOfferingsIfNeeded()`](#syncattributesandofferingsifneeded)
+* [`setAppstackAttributionParams(...)`](#setappstackattributionparams)
 * [`getProducts(...)`](#getproducts)
 * [`purchaseStoreProduct(...)`](#purchasestoreproduct)
 * [`purchaseDiscountedProduct(...)`](#purchasediscountedproduct)
@@ -331,6 +332,27 @@ syncAttributesAndOfferingsIfNeeded() => Promise<PurchasesOfferings>
 Syncs subscriber attributes and then fetches the configured offerings for this user. This method is intended to
 be called when using Targeting Rules with Custom Attributes. Any subscriber attributes should be set before
 calling this method to ensure the returned offerings are applied with the latest subscriber attributes.
+
+**Returns:** <code>Promise&lt;<a href="#purchasesofferings">PurchasesOfferings</a>&gt;</code>
+
+--------------------
+
+
+### setAppstackAttributionParams(...)
+
+```typescript
+setAppstackAttributionParams(options: { data: Record<string, any>; }) => Promise<PurchasesOfferings>
+```
+
+Sets attribution data from Appstack's attribution params, then syncs subscriber attributes and fetches
+fresh offerings so that Appstack-based targeting is applied before the promise resolves.
+
+Pass the object received from the Appstack Attribution SDK's `getAttributionParams()` directly.
+The SDK extracts relevant attribution info and sets the appropriate subscriber attributes.
+
+| Param         | Type                                                                    |
+| ------------- | ----------------------------------------------------------------------- |
+| **`options`** | <code>{ data: <a href="#record">Record</a>&lt;string, any&gt;; }</code> |
 
 **Returns:** <code>Promise&lt;<a href="#purchasesofferings">PurchasesOfferings</a>&gt;</code>
 
@@ -1868,6 +1890,13 @@ Listener used on updated customer info
 #### PurchasesCallbackId
 
 <code>string</code>
+
+
+#### Record
+
+Construct a type with a set of properties K of type T
+
+<code>{ [P in K]: T; }</code>
 
 
 #### MakePurchaseResult

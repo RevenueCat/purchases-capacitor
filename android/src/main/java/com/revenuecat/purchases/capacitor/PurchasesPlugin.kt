@@ -71,6 +71,7 @@ import com.revenuecat.purchases.hybridcommon.setOnesignalUserID as setOnesignalU
 import com.revenuecat.purchases.hybridcommon.setPhoneNumber as setPhoneNumberCommon
 import com.revenuecat.purchases.hybridcommon.setProxyURLString as setProxyURLStringCommon
 import com.revenuecat.purchases.hybridcommon.setPushToken as setPushTokenCommon
+import com.revenuecat.purchases.hybridcommon.setAppstackAttributionParams as setAppstackAttributionParamsCommon
 import com.revenuecat.purchases.hybridcommon.syncAttributesAndOfferingsIfNeeded as syncAttributesAndOfferingsIfNeededCommon
 import com.revenuecat.purchases.hybridcommon.syncPurchases as syncPurchasesCommon
 import com.revenuecat.purchases.hybridcommon.overridePreferredLocale as overridePreferredLocaleCommon
@@ -219,6 +220,20 @@ class PurchasesPlugin : Plugin() {
     fun syncAttributesAndOfferingsIfNeeded(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         syncAttributesAndOfferingsIfNeededCommon(getOnResult(call))
+    }
+
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
+    fun setAppstackAttributionParams(call: PluginCall) {
+        if (rejectIfNotConfigured(call)) return
+        val data = call.getObjectOrReject("data") ?: return
+        val dataMap = HashMap<String, Any>()
+        data.keys().forEach { key ->
+            val value = data.get(key)
+            if (value != null && value != org.json.JSONObject.NULL) {
+                dataMap[key] = value
+            }
+        }
+        setAppstackAttributionParamsCommon(dataMap, getOnResult(call))
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)

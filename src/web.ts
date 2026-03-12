@@ -108,6 +108,13 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     };
     return this.mockReturningFunctionIfEnabled('syncAttributesAndOfferingsIfNeeded', mockOfferings);
   }
+  setAppstackAttributionParams(_options: { data: Record<string, any> }): Promise<PurchasesOfferings> {
+    const mockOfferings: PurchasesOfferings = {
+      all: {},
+      current: null,
+    };
+    return this.mockReturningFunctionIfEnabled('setAppstackAttributionParams', mockOfferings);
+  }
   getProducts(_options: GetProductOptions): Promise<{ products: PurchasesStoreProduct[] }> {
     const mockProducts = { products: [] };
     return this.mockReturningFunctionIfEnabled('getProducts', mockProducts);

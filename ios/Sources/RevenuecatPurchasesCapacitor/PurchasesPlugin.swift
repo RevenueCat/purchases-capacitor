@@ -26,6 +26,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
         CAPPluginMethod(name: "getOfferings", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getCurrentOfferingForPlacement", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "syncAttributesAndOfferingsIfNeeded", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setAppstackAttributionParams", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getProducts", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "purchaseStoreProduct", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "purchaseDiscountedProduct", returnType: CAPPluginReturnPromise),
@@ -243,6 +244,12 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
     @objc func syncAttributesAndOfferingsIfNeeded(_ call: CAPPluginCall) {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
         CommonFunctionality.syncAttributesAndOfferingsIfNeeded(completion: self.getCompletionBlockHandler(call))
+    }
+
+    @objc func setAppstackAttributionParams(_ call: CAPPluginCall) {
+        guard self.rejectIfPurchasesNotConfigured(call) else { return }
+        guard let data = call.getOrRejectObject("data") else { return }
+        CommonFunctionality.setAppstackAttributionParams(data, completion: self.getCompletionBlockHandler(call))
     }
 
     @objc func getProducts(_ call: CAPPluginCall) {

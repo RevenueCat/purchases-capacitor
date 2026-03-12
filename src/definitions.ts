@@ -327,6 +327,19 @@ export interface PurchasesPlugin {
   syncAttributesAndOfferingsIfNeeded(): Promise<PurchasesOfferings>;
 
   /**
+   * Sets attribution data from Appstack's attribution params, then syncs subscriber attributes and fetches
+   * fresh offerings so that Appstack-based targeting is applied before the promise resolves.
+   *
+   * Pass the object received from the Appstack Attribution SDK's `getAttributionParams()` directly.
+   * The SDK extracts relevant attribution info and sets the appropriate subscriber attributes.
+   *
+   * @param {object} options.data The attribution params from the Appstack Attribution SDK.
+   * @returns {Promise<PurchasesOfferings>} Promise of offerings targeted with Appstack data. The promise will be
+   * rejected if configure has not been called yet.
+   */
+  setAppstackAttributionParams(options: { data: Record<string, any> }): Promise<PurchasesOfferings>;
+
+  /**
    * Fetch the product info
    * @returns {Promise<PurchasesStoreProduct[]>} A promise containing an array of products. The promise will be rejected
    * if the products are not properly configured in RevenueCat or if there is another error retrieving them.
