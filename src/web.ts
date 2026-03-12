@@ -371,6 +371,10 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     });
   }
 
+  trackCustomPaywallImpression(_options?: { paywallId?: string | null }): Promise<void> {
+    return this.mockNonReturningFunctionIfEnabled('trackCustomPaywallImpression');
+  }
+
   // Mock helpers
 
   private mockEmptyCustomerInfo: CustomerInfo = {

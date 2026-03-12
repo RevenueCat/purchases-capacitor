@@ -87,7 +87,8 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
         CAPPluginMethod(name: "addShouldPurchasePromoProductListener", returnType: CAPPluginReturnCallback),
         CAPPluginMethod(name: "removeShouldPurchasePromoProductListener", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "overridePreferredUILocale", returnType: CAPPluginReturnNone),
-    ] 
+        CAPPluginMethod(name: "trackCustomPaywallImpression", returnType: CAPPluginReturnNone),
+    ]
     private let platformFlavor = "capacitor"
     private let platformVersion = "12.2.4"
 
@@ -671,6 +672,13 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
         let locale = call.getString("locale")
         CommonFunctionality.overridePreferredLocale(locale)
+        call.resolve()
+    }
+
+    @objc func trackCustomPaywallImpression(_ call: CAPPluginCall) {
+        guard self.rejectIfPurchasesNotConfigured(call) else { return }
+        let paywallId = call.getString("paywallId")
+        CommonFunctionality.trackCustomPaywallImpression(paywallId: paywallId)
         call.resolve()
     }
 

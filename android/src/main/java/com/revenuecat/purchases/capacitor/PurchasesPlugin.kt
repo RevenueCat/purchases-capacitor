@@ -74,6 +74,7 @@ import com.revenuecat.purchases.hybridcommon.setPushToken as setPushTokenCommon
 import com.revenuecat.purchases.hybridcommon.syncAttributesAndOfferingsIfNeeded as syncAttributesAndOfferingsIfNeededCommon
 import com.revenuecat.purchases.hybridcommon.syncPurchases as syncPurchasesCommon
 import com.revenuecat.purchases.hybridcommon.overridePreferredLocale as overridePreferredLocaleCommon
+import com.revenuecat.purchases.hybridcommon.trackCustomPaywallImpression as trackCustomPaywallImpressionCommon
 
 @Suppress("unused")
 @CapacitorPlugin(name = "Purchases")
@@ -703,6 +704,14 @@ class PurchasesPlugin : Plugin() {
         if (rejectIfNotConfigured(call)) return
         val locale = call.getString("locale")
         overridePreferredLocaleCommon(locale)
+        call.resolve()
+    }
+
+    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    fun trackCustomPaywallImpression(call: PluginCall) {
+        if (rejectIfNotConfigured(call)) return
+        val paywallId = call.getString("paywallId")
+        trackCustomPaywallImpressionCommon(paywallId)
         call.resolve()
     }
 
