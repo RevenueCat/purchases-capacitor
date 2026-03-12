@@ -27,10 +27,11 @@ import type {
   PurchasesAreCompletedBy,
   PurchasesAreCompletedByMyApp,
   PurchasesCallbackId,
+  PurchasesError,
   PurchasesPlugin,
 } from '../src/definitions';
 
-import { PURCHASES_ARE_COMPLETED_BY_TYPE, STOREKIT_VERSION } from '../src/definitions';
+import { PURCHASES_ARE_COMPLETED_BY_TYPE, STOREKIT_VERSION, WebPurchaseRedemptionResultType } from '../src/definitions';
 
 async function checkConfigure(plugin: PurchasesPlugin) {
   const apiKey: string = '';
@@ -288,9 +289,40 @@ async function checkWebRedemption(plugin: PurchasesPlugin) {
     await plugin.parseAsWebPurchaseRedemption({ urlString: 'https://example.com' });
 
   const redemption = {} as WebPurchaseRedemption;
+  const redemptionLink: string = redemption.redemptionLink;
+
   const redeemResult: WebPurchaseRedemptionResult = await plugin.redeemWebPurchase({
     webPurchaseRedemption: redemption,
   });
+}
+
+function checkWebPurchaseRedemptionResult(result: WebPurchaseRedemptionResult) {
+  if (result.result === WebPurchaseRedemptionResultType.SUCCESS) {
+    const customerInfo: CustomerInfo = result.customerInfo;
+  } else if (result.result === WebPurchaseRedemptionResultType.ERROR) {
+    const error: PurchasesError = result.error;
+  } else if (result.result === WebPurchaseRedemptionResultType.PURCHASE_BELONGS_TO_OTHER_USER) {
+    // no additional fields
+  } else if (result.result === WebPurchaseRedemptionResultType.INVALID_TOKEN) {
+    // no additional fields
+  } else if (result.result === WebPurchaseRedemptionResultType.EXPIRED) {
+    const obfuscatedEmail: string = result.obfuscatedEmail;
+  }
+}
+
+function checkWebPurchaseRedemptionResultType(type: WebPurchaseRedemptionResultType): boolean {
+  switch (type) {
+    case WebPurchaseRedemptionResultType.SUCCESS:
+      return true;
+    case WebPurchaseRedemptionResultType.ERROR:
+      return true;
+    case WebPurchaseRedemptionResultType.PURCHASE_BELONGS_TO_OTHER_USER:
+      return true;
+    case WebPurchaseRedemptionResultType.INVALID_TOKEN:
+      return true;
+    case WebPurchaseRedemptionResultType.EXPIRED:
+      return true;
+  }
 }
 
 async function checkMockAndSimulate(plugin: PurchasesPlugin) {

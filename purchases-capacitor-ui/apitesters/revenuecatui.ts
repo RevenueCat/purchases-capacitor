@@ -18,7 +18,7 @@ import type {
   PurchaseResumable,
   RevenueCatUIPlugin,
 } from '../src/definitions';
-import { PURCHASE_LOGIC_RESULT } from '../src/definitions';
+import { PURCHASE_LOGIC_RESULT, PaywallResultEnum } from '../src/definitions';
 
 async function checkPresentPaywall(plugin: RevenueCatUIPlugin) {
   const result1: PaywallResult = await plugin.presentPaywall();
@@ -120,6 +120,14 @@ async function checkPaywallResult() {
   const purchased: PaywallResult = { result: PAYWALL_RESULT.PURCHASED };
   const restored: PaywallResult = { result: PAYWALL_RESULT.RESTORED };
   const error: PaywallResult = { result: PAYWALL_RESULT.ERROR };
+}
+
+async function checkPaywallResultEnum() {
+  const notPresented: PaywallResult = { result: PaywallResultEnum.NOT_PRESENTED };
+  const cancelled: PaywallResult = { result: PaywallResultEnum.CANCELLED };
+  const purchased: PaywallResult = { result: PaywallResultEnum.PURCHASED };
+  const restored: PaywallResult = { result: PaywallResultEnum.RESTORED };
+  const error: PaywallResult = { result: PaywallResultEnum.ERROR };
 }
 
 async function checkCombinedOptions(plugin: RevenueCatUIPlugin) {

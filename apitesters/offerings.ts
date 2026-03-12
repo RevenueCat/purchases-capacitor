@@ -22,6 +22,9 @@ import type {
   SubscriptionOption,
   UpgradeInfo,
   InstallmentsInfo,
+  GoogleProductChangeInfo,
+  PurchasesWinBackOffer,
+  Storefront,
 } from '../src/definitions';
 
 function checkProduct(product: PurchasesStoreProduct) {
@@ -157,4 +160,28 @@ function checkPresentedOfferingContext(presentedOfferingContext: PresentedOfferi
 function checkPresentedOfferingTargetingContext(targetingContext: PresentedOfferingTargetingContext) {
   const revision: number = targetingContext.revision;
   const ruleId: string = targetingContext.ruleId;
+}
+
+function checkUpgradeInfo(upgradeInfo: UpgradeInfo) {
+  const oldSKU: string = upgradeInfo.oldSKU;
+  const prorationMode: PRORATION_MODE | undefined = upgradeInfo.prorationMode;
+}
+
+function checkGoogleProductChangeInfo(info: GoogleProductChangeInfo) {
+  const oldProductIdentifier: string = info.oldProductIdentifier;
+  const prorationMode: PRORATION_MODE | undefined = info.prorationMode;
+}
+
+function checkWinBackOffer(offer: PurchasesWinBackOffer) {
+  const identifier: string = offer.identifier;
+  const price: number = offer.price;
+  const priceString: string = offer.priceString;
+  const cycles: number = offer.cycles;
+  const period: string = offer.period;
+  const periodUnit: string = offer.periodUnit;
+  const periodNumberOfUnits: number = offer.periodNumberOfUnits;
+}
+
+function checkStorefront(storefront: Storefront) {
+  const countryCode: string = storefront.countryCode;
 }
