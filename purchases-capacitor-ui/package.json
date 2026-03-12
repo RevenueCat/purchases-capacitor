@@ -58,6 +58,7 @@
     "build": "npm run clean && tsc && rollup -c ../rollup.config.js",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
+    "apitest": "tsc -p apitesters",
     "prepublishOnly": "npm run build",
     "extract-api": "api-extractor run --local --verbose"
   },
