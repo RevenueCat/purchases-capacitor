@@ -144,6 +144,22 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     updateLastFunction('syncAttributesAndOfferingsIfNeeded', offerings);
   };
 
+  const setAppstackAttributionParams = async () => {
+    const { value, cancelled } = await Dialog.prompt({
+      title: 'Set Appstack Attribution Params',
+      message: 'Enter JSON data',
+      inputPlaceholder: '{"appstack_id": "test_id"}',
+    });
+    if (cancelled) return;
+    try {
+      const data = JSON.parse(value || '{}');
+      const offerings = await Purchases.setAppstackAttributionParams({ data });
+      updateLastFunction('setAppstackAttributionParams', offerings);
+    } catch (e: any) {
+      updateLastFunction('setAppstackAttributionParams', e?.message ?? e);
+    }
+  };
+
   const getProducts = async () => {
     const productIds = ['annual_freetrial', 'unknown_product'];
     const products = await Purchases.getProducts({
@@ -977,6 +993,9 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         </IonButton>
         <IonButton size="small" onClick={syncAttributesAndOfferingsIfNeeded}>
           Sync attributes and offerings
+        </IonButton>
+        <IonButton size="small" onClick={setAppstackAttributionParams}>
+          Set Appstack Attribution Params
         </IonButton>
         <IonButton size="small" onClick={getProducts}>
           Get products
