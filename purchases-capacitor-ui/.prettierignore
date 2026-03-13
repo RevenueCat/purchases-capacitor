@@ -4,4 +4,5 @@ example
 node_modules
 android/build
 ios/build
-*.log 
+*.log
+api-report
