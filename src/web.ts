@@ -46,6 +46,7 @@ import type {
   PurchaseSubscriptionOptionOptions,
   SyncAmazonPurchaseOptions,
   SyncObserverModeAmazonPurchaseOptions,
+  TrackCustomPaywallImpressionOptions,
 } from './definitions';
 
 export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
@@ -369,6 +370,10 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     return this.mockReturningFunctionIfEnabled('getCachedVirtualCurrencies', {
       cachedVirtualCurrencies: this.mockEmptyVirtualCurrencies,
     });
+  }
+
+  trackCustomPaywallImpression(_options?: TrackCustomPaywallImpressionOptions): Promise<void> {
+    return this.mockNonReturningFunctionIfEnabled('trackCustomPaywallImpression');
   }
 
   // Mock helpers
