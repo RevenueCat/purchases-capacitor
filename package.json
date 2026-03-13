@@ -76,6 +76,6 @@
     }
   },
   "dependencies": {
-    "@revenuecat/purchases-typescript-internal-esm": "17.49.0"
+    "@revenuecat/purchases-typescript-internal-esm": "17.50.0"
   }
 }
