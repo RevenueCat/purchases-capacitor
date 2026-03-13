@@ -927,5 +927,14 @@ export interface PurchasesPlugin {
    * @param options Optional parameters for the impression. Include `paywallId` to identify which paywall was shown.
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet.
    */
-  trackCustomPaywallImpression(options?: { paywallId?: string | null }): Promise<void>;
+  trackCustomPaywallImpression(options?: TrackCustomPaywallImpressionOptions): Promise<void>;
+}
+
+/**
+ * @experimental
+ * Options for tracking a custom paywall impression.
+ */
+export interface TrackCustomPaywallImpressionOptions {
+  /** The identifier of the paywall that was shown. */
+  paywallId?: string | null;
 }

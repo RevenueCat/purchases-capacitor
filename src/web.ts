@@ -46,6 +46,7 @@ import type {
   PurchaseSubscriptionOptionOptions,
   SyncAmazonPurchaseOptions,
   SyncObserverModeAmazonPurchaseOptions,
+  TrackCustomPaywallImpressionOptions,
 } from './definitions';
 
 export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
@@ -371,7 +372,7 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     });
   }
 
-  trackCustomPaywallImpression(_options?: { paywallId?: string | null }): Promise<void> {
+  trackCustomPaywallImpression(_options?: TrackCustomPaywallImpressionOptions): Promise<void> {
     return this.mockNonReturningFunctionIfEnabled('trackCustomPaywallImpression');
   }
 
