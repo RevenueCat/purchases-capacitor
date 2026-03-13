@@ -165,6 +165,17 @@ jobs:
           name: Build purchase tester
           command: bundle exec fastlane build_purchase_tester
 
+  run-api-tests:
+    docker:
+      - image: cimg/ruby:3.1.2
+    steps:
+      - checkout
+      - yarn-dependencies-unix
+      - run: yarn build
+      - run:
+          name: API Tests
+          command: yarn apitest
+
   run-lint:
     docker:
       - image: cimg/ruby:3.1.2
@@ -224,6 +235,19 @@ jobs:
           command: bundle exec fastlane automatic_bump github_rate_limit:10
 
   # UI Package Jobs
+  run-api-tests-ui:
+    description: "Run API tests for purchases-capacitor-ui package"
+    docker:
+      - image: cimg/ruby:3.1.2
+    steps:
+      - checkout
+      - yarn-dependencies-unix
+      - yarn-dependencies-ui-unix
+      - run: yarn build
+      - run:
+          name: API Tests (UI)
+          command: cd purchases-capacitor-ui && npm run apitest
+
   run-lint-ui:
     description: "Run linting for purchases-capacitor-ui package"
     docker:
@@ -282,11 +306,13 @@ workflows:
         equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
       # Testing phase - runs on all branches
+      - run-api-tests
       - run-tests-ios
       - run-tests-android
       - run-lint
       - build-purchase-tester
       # UI Package jobs
+      - run-api-tests-ui
       - run-lint-ui
       - dry-run-release-ui
 
@@ -294,9 +320,11 @@ workflows:
       - hold:
           type: approval
           requires:
+            - run-api-tests
             - run-tests-ios
             - run-tests-android
             - run-lint
+            - run-api-tests-ui
             - run-lint-ui
           <<: *release-branches
       - revenuecat/tag-current-branch:
