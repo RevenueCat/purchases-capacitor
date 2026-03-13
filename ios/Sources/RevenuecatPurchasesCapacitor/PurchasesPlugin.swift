@@ -677,11 +677,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
 
     @objc func trackCustomPaywallImpression(_ call: CAPPluginCall) {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
-        var data: [String: Any] = [:]
-        if let paywallId = call.getString("paywallId") {
-            data["paywallId"] = paywallId
-        }
-        CommonFunctionality.trackCustomPaywallImpression(data)
+        CommonFunctionality.trackCustomPaywallImpression(call.options as? [String: Any] ?? [:])
         call.resolve()
     }
 

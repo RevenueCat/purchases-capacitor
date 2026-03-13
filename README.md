@@ -124,6 +124,7 @@ This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package
 * [`showInAppMessages(...)`](#showinappmessages)
 * [`isConfigured()`](#isconfigured)
 * [`overridePreferredUILocale(...)`](#overridepreferreduilocale)
+* [`trackCustomPaywallImpression(...)`](#trackcustompaywallimpression)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 * [Enums](#enums)
@@ -1272,6 +1273,19 @@ a background refetch to get paywall templates with the correct localizations.
 --------------------
 
 
+### trackCustomPaywallImpression(...)
+
+```typescript
+trackCustomPaywallImpression(options?: TrackCustomPaywallImpressionOptions | undefined) => Promise<void>
+```
+
+| Param         | Type                                                                                                | Description                                                                                      |
+| ------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| **`options`** | <code><a href="#trackcustompaywallimpressionoptions">TrackCustomPaywallImpressionOptions</a></code> | Optional parameters for the impression. Include `paywallId` to identify which paywall was shown. |
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -1786,6 +1800,13 @@ Holds the information about a Win-Back Offer in Apple's App <a href="#store">Sto
 | **`winBackOffer`** | <code><a href="#purchaseswinbackoffer">PurchasesWinBackOffer</a></code> | Win-back offer to apply to this purchase. Retrieve this using getEligibleWinBackOffersForPackage. |
 
 
+#### TrackCustomPaywallImpressionOptions
+
+| Prop            | Type                        | Description                                   |
+| --------------- | --------------------------- | --------------------------------------------- |
+| **`paywallId`** | <code>string \| null</code> | The identifier of the paywall that was shown. |
+
+
 ### Type Aliases
 
 
@@ -1841,7 +1862,7 @@ The result of a redemption attempt.
 
 The supported stores for purchases.
 
-<code>"PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "RC_BILLING" | "EXTERNAL" | "PADDLE" | "TEST_STORE" | "GALAXY" | "UNKNOWN_STORE"</code>
+<code>"PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "RC_BILLING" | "EXTERNAL" | "PADDLE" | "TEST_STORE" | "UNKNOWN_STORE"</code>
 
 
 #### OwnershipType
