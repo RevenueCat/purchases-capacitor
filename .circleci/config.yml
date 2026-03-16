@@ -223,6 +223,28 @@ jobs:
           name: Create automatic PR
           command: bundle exec fastlane automatic_bump github_rate_limit:10
 
+  check-api-changes:
+    description: "Check for unexpected API changes in purchases-capacitor and purchases-capacitor-ui"
+    docker:
+      - image: cimg/ruby:3.1.2
+    steps:
+      - checkout
+      - yarn-dependencies-unix
+      - yarn-dependencies-ui-unix
+      - run: yarn build
+      - run:
+          name: Extract API (main package)
+          command: yarn extract-api
+      - run:
+          name: Build UI package
+          command: cd purchases-capacitor-ui && npm run build
+      - run:
+          name: Extract API (UI package)
+          command: cd purchases-capacitor-ui && npm run extract-api
+      - run:
+          name: Check for API changes
+          command: git diff --exit-code api-report/ purchases-capacitor-ui/api-report/
+
   # UI Package Jobs
   run-lint-ui:
     description: "Run linting for purchases-capacitor-ui package"
@@ -286,6 +308,8 @@ workflows:
       - run-tests-android
       - run-lint
       - build-purchase-tester
+      # API change detection
+      - check-api-changes
       # UI Package jobs
       - run-lint-ui
       - dry-run-release-ui
@@ -298,6 +322,7 @@ workflows:
             - run-tests-android
             - run-lint
             - run-lint-ui
+            - check-api-changes
           <<: *release-branches
       - revenuecat/tag-current-branch:
           requires:
