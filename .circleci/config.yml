@@ -224,22 +224,7 @@ jobs:
           command: bundle exec fastlane automatic_bump github_rate_limit:10
 
   check-api-changes:
-    description: "Check for unexpected API changes in purchases-capacitor"
-    docker:
-      - image: cimg/ruby:3.1.2
-    steps:
-      - checkout
-      - yarn-dependencies-unix
-      - run: yarn build
-      - run:
-          name: Extract API
-          command: yarn extract-api
-      - run:
-          name: Check for API changes
-          command: git diff --exit-code api-report/
-
-  check-api-changes-ui:
-    description: "Check for unexpected API changes in purchases-capacitor-ui"
+    description: "Check for unexpected API changes in purchases-capacitor and purchases-capacitor-ui"
     docker:
       - image: cimg/ruby:3.1.2
     steps:
@@ -248,14 +233,17 @@ jobs:
       - yarn-dependencies-ui-unix
       - run: yarn build
       - run:
+          name: Extract API (main package)
+          command: yarn extract-api
+      - run:
           name: Build UI package
           command: cd purchases-capacitor-ui && npm run build
       - run:
-          name: Extract API
+          name: Extract API (UI package)
           command: cd purchases-capacitor-ui && npm run extract-api
       - run:
           name: Check for API changes
-          command: git diff --exit-code purchases-capacitor-ui/api-report/
+          command: git diff --exit-code api-report/ purchases-capacitor-ui/api-report/
 
   # UI Package Jobs
   run-lint-ui:
@@ -322,7 +310,6 @@ workflows:
       - build-purchase-tester
       # API change detection
       - check-api-changes
-      - check-api-changes-ui
       # UI Package jobs
       - run-lint-ui
       - dry-run-release-ui
@@ -336,7 +323,6 @@ workflows:
             - run-lint
             - run-lint-ui
             - check-api-changes
-            - check-api-changes-ui
           <<: *release-branches
       - revenuecat/tag-current-branch:
           requires:
