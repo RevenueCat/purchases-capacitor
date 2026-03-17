@@ -3,6 +3,7 @@ import type { PluginListenerHandle } from '@capacitor/core';
 
 import type {
   PaywallListener,
+  PaywallPresentationMode,
   PaywallResult,
   PresentPaywallIfNeededOptions,
   PresentPaywallOptions,
@@ -19,12 +20,14 @@ import { PURCHASE_LOGIC_RESULT } from './definitions';
 interface RevenueCatUINativePlugin {
   presentPaywall(options: {
     offering?: any;
+    presentationMode?: PaywallPresentationMode;
     displayCloseButton?: boolean;
     hasPaywallListener?: boolean;
     hasPurchaseLogic?: boolean;
   }): Promise<PaywallResult>;
   presentPaywallIfNeeded(options: {
     offering?: any;
+    presentationMode?: PaywallPresentationMode;
     displayCloseButton?: boolean;
     requiredEntitlementIdentifier: string;
     hasPaywallListener?: boolean;
@@ -52,6 +55,14 @@ interface RevenueCatUINativePlugin {
 const nativePlugin = registerPlugin<RevenueCatUINativePlugin>('RevenueCatUI', {
   web: () => import('./web').then((m) => new m.RevenueCatUIWeb()),
 });
+
+function assertValidPresentationMode(mode: unknown): asserts mode is PaywallPresentationMode | undefined {
+  if (mode === undefined || mode === 'sheet' || mode === 'fullScreen') {
+    return;
+  }
+
+  throw new Error(`Invalid presentationMode "${String(mode)}". Expected "sheet" or "fullScreen".`);
+}
 
 function serializeResultForNative(result: PurchaseLogicResult): {
   result: string;
@@ -229,6 +240,8 @@ async function presentWithListenerSupport(
 
 const RevenueCatUI: RevenueCatUIPlugin = {
   async presentPaywall(options?: PresentPaywallOptions): Promise<PaywallResult> {
+    assertValidPresentationMode(options?.presentationMode);
+
     const listener = options?.listener;
     const purchaseLogic = options?.purchaseLogic;
 
@@ -245,6 +258,8 @@ const RevenueCatUI: RevenueCatUIPlugin = {
   },
 
   async presentPaywallIfNeeded(options: PresentPaywallIfNeededOptions): Promise<PaywallResult> {
+    assertValidPresentationMode(options?.presentationMode);
+
     const listener = options?.listener;
     const purchaseLogic = options?.purchaseLogic;
 

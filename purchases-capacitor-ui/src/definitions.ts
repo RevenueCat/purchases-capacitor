@@ -135,12 +135,20 @@ export enum PURCHASE_LOGIC_RESULT {
   ERROR = 'ERROR',
 }
 
+export type PaywallPresentationMode = 'sheet' | 'fullScreen';
+
 export interface PresentPaywallOptions {
   /**
    * The offering to present.
    * If not provided, the current offering will be used.
    */
   offering?: PurchasesOffering;
+
+  /**
+   * iOS only. Controls how the paywall is presented.
+   * Defaults to `'sheet'`. Ignored on Android and web.
+   */
+  presentationMode?: PaywallPresentationMode;
 
   /**
    * Whether to display a close button on the paywall.

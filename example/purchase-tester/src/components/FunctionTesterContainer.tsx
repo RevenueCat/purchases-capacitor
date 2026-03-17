@@ -762,6 +762,23 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     updateLastFunction('presentPaywallCurrentOffering', result);
   };
 
+  const presentPaywallCurrentOfferingFullscreen = async () => {
+    const offerings = await Purchases.getOfferings();
+    const offering = offerings.current;
+    if (offering == null) {
+      updateLastFunction(
+        'presentPaywallCurrentOfferingFullscreen',
+        'No current offering available',
+      );
+      return;
+    }
+    const result = await RevenueCatUI.presentPaywall({
+      offering,
+      presentationMode: 'fullScreen',
+    });
+    updateLastFunction('presentPaywallCurrentOfferingFullscreen', result);
+  };
+
   const presentCustomerCenter = async () => {
     await RevenueCatUI.presentCustomerCenter();
     updateLastFunctionWithoutContent('presentCustomerCenter');
@@ -1158,6 +1175,9 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         <IonItemDivider/>
         <IonButton size="small" onClick={presentPaywallCurrentOffering}>
           Present paywall for current offering
+        </IonButton>
+        <IonButton size="small" onClick={presentPaywallCurrentOfferingFullscreen}>
+          Present paywall fullscreen (iOS)
         </IonButton>
         <IonButton size="small" onClick={presentPaywallWithListener}>
           Present paywall with listener

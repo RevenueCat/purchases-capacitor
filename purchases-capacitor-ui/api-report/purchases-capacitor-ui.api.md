@@ -47,6 +47,9 @@ export interface PaywallResult {
 }
 
 // @public (undocumented)
+export type PaywallPresentationMode = 'sheet' | 'fullScreen';
+
+// @public (undocumented)
 export interface PresentPaywallIfNeededOptions extends PresentPaywallOptions {
     requiredEntitlementIdentifier: string;
 }
@@ -56,6 +59,7 @@ export interface PresentPaywallOptions {
     displayCloseButton?: boolean;
     listener?: PaywallListener;
     offering?: PurchasesOffering;
+    presentationMode?: PaywallPresentationMode;
     purchaseLogic?: PurchaseLogic;
 }
 

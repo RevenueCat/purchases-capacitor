@@ -72,6 +72,10 @@ public class RevenueCatUIPlugin: CAPPlugin, CAPBridgedPlugin {
                 "shouldBlockTouchEvents": true
             ]
 
+            guard self.applyPresentationMode(from: call, to: &options) else {
+                return
+            }
+
             if let offeringOptions = offeringOptions {
                 options.merge(offeringOptions) { _, offeringOption in
                     offeringOption
@@ -121,6 +125,10 @@ public class RevenueCatUIPlugin: CAPPlugin, CAPBridgedPlugin {
                 "shouldBlockTouchEvents": true,
                 "requiredEntitlementIdentifier": requiredEntitlementIdentifier
             ]
+
+            guard self.applyPresentationMode(from: call, to: &options) else {
+                return
+            }
 
             if let offeringOptions = offeringOptions {
                 options.merge(offeringOptions) { _, offeringOption in
@@ -194,6 +202,23 @@ public class RevenueCatUIPlugin: CAPPlugin, CAPBridgedPlugin {
                     errorMessage: errorMessage
                 )
             }
+        }
+    }
+
+    private func applyPresentationMode(from call: CAPPluginCall, to options: inout [String: Any]) -> Bool {
+        guard let presentationMode = call.getString("presentationMode") else {
+            return true
+        }
+
+        switch presentationMode {
+        case "sheet":
+            return true
+        case "fullScreen":
+            options["useFullScreenPresentation"] = true
+            return true
+        default:
+            call.reject("Invalid presentationMode. Expected 'sheet' or 'fullScreen'.", "PAYWALL_ERROR")
+            return false
         }
     }
 }
