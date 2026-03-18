@@ -135,15 +135,17 @@ export enum PURCHASE_LOGIC_RESULT {
   ERROR = 'ERROR',
 }
 
-export type IOSPaywallPresentationStyle = typeof IOS_PAYWALL_PRESENTATION_STYLE[keyof typeof IOS_PAYWALL_PRESENTATION_STYLE];
+export type IOSPaywallPresentationStyle =
+  (typeof IOS_PAYWALL_PRESENTATION_STYLE)[keyof typeof IOS_PAYWALL_PRESENTATION_STYLE];
 export const IOS_PAYWALL_PRESENTATION_STYLE = {
-  FULL_SCREEN: "FULL_SCREEN",
-  SHEET: "SHEET",
+  FULL_SCREEN: 'FULL_SCREEN',
+  SHEET: 'SHEET',
 } as const;
 
-export type AndroidPaywallPresentationStyle = typeof ANDROID_PAYWALL_PRESENTATION_STYLE[keyof typeof ANDROID_PAYWALL_PRESENTATION_STYLE];
+export type AndroidPaywallPresentationStyle =
+  (typeof ANDROID_PAYWALL_PRESENTATION_STYLE)[keyof typeof ANDROID_PAYWALL_PRESENTATION_STYLE];
 export const ANDROID_PAYWALL_PRESENTATION_STYLE = {
-  FULL_SCREEN: "FULL_SCREEN",
+  FULL_SCREEN: 'FULL_SCREEN',
 } as const;
 
 export interface PaywallPresentationConfiguration {

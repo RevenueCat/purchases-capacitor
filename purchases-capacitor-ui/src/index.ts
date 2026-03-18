@@ -67,17 +67,13 @@ function assertValidPresentationConfiguration(
     return;
   }
   if (typeof config !== 'object' || config === null) {
-    throw new Error(
-      `Invalid presentationConfiguration: expected an object or undefined.`,
-    );
+    throw new Error(`Invalid presentationConfiguration: expected an object or undefined.`);
   }
   const { ios, android } = config as Record<string, unknown>;
   const validIos = Object.values(IOS_PAYWALL_PRESENTATION_STYLE) as string[];
   const validAndroid = Object.values(ANDROID_PAYWALL_PRESENTATION_STYLE) as string[];
   if (ios !== undefined && !validIos.includes(ios as string)) {
-    throw new Error(
-      `Invalid presentationConfiguration.ios "${String(ios)}". Expected one of: ${validIos.join(', ')}.`,
-    );
+    throw new Error(`Invalid presentationConfiguration.ios "${String(ios)}". Expected one of: ${validIos.join(', ')}.`);
   }
   if (android !== undefined && !validAndroid.includes(android as string)) {
     throw new Error(
@@ -86,9 +82,9 @@ function assertValidPresentationConfiguration(
   }
 }
 
-function resolveNativePresentationOptions(
-  config?: PaywallPresentationConfiguration,
-): { useFullScreenPresentation?: boolean } {
+function resolveNativePresentationOptions(config?: PaywallPresentationConfiguration): {
+  useFullScreenPresentation?: boolean;
+} {
   if (!config) {
     return {};
   }
@@ -289,12 +285,7 @@ const RevenueCatUI: RevenueCatUIPlugin = {
       return nativePlugin.presentPaywall(nativeOpts);
     }
 
-    return presentWithListenerSupport(
-      (opts) => nativePlugin.presentPaywall(opts),
-      nativeOpts,
-      listener,
-      purchaseLogic,
-    );
+    return presentWithListenerSupport((opts) => nativePlugin.presentPaywall(opts), nativeOpts, listener, purchaseLogic);
   },
 
   async presentPaywallIfNeeded(options: PresentPaywallIfNeededOptions): Promise<PaywallResult> {
