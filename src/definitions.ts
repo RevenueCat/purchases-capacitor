@@ -917,7 +917,6 @@ export interface PurchasesPlugin {
   overridePreferredUILocale(options: { locale: string | null }): Promise<void>;
 
   /**
-   * @experimental
    * Tracks an impression of a custom paywall. Use this to record when a user views your custom paywall
    * so that RevenueCat can track paywall analytics.
    *
@@ -931,10 +930,14 @@ export interface PurchasesPlugin {
 }
 
 /**
- * @experimental
  * Options for tracking a custom paywall impression.
  */
 export interface TrackCustomPaywallImpressionOptions {
   /** The identifier of the paywall that was shown. */
   paywallId?: string | null;
+  /**
+   * An optional identifier for the offering associated with the custom paywall.
+   * If not provided, the SDK will use the current offering identifier from the cache.
+   */
+  offeringId?: string | null;
 }
