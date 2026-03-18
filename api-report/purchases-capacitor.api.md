@@ -278,6 +278,7 @@ export interface PurchasesPlugin {
     // @deprecated (undocumented)
     syncObserverModeAmazonPurchase(options: SyncObserverModeAmazonPurchaseOptions): Promise<void>;
     syncPurchases(): Promise<void>;
+    trackCustomPaywallImpression(options?: TrackCustomPaywallImpressionOptions): Promise<void>;
 }
 
 // @public (undocumented)
@@ -305,6 +306,12 @@ export interface SyncAmazonPurchaseOptions {
 
 // @public @deprecated (undocumented)
 export type SyncObserverModeAmazonPurchaseOptions = SyncAmazonPurchaseOptions;
+
+// @public
+export interface TrackCustomPaywallImpressionOptions {
+    offeringId?: string | null;
+    paywallId?: string | null;
+}
 
 
 export * from "@revenuecat/purchases-typescript-internal-esm";
