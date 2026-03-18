@@ -273,13 +273,11 @@ const RevenueCatUI: RevenueCatUIPlugin = {
   async presentPaywall(options?: PresentPaywallOptions): Promise<PaywallResult> {
     assertValidPresentationConfiguration(options?.presentationConfiguration);
 
-    const listener = options?.listener;
-    const purchaseLogic = options?.purchaseLogic;
+    const { presentationConfiguration, listener, purchaseLogic, ...rest } = options ?? {};
     const nativeOpts = {
-      ...options,
-      ...resolveNativePresentationOptions(options?.presentationConfiguration),
+      ...rest,
+      ...resolveNativePresentationOptions(presentationConfiguration),
     };
-    delete (nativeOpts as any).presentationConfiguration;
 
     if (!listener && !purchaseLogic) {
       return nativePlugin.presentPaywall(nativeOpts);
@@ -291,16 +289,14 @@ const RevenueCatUI: RevenueCatUIPlugin = {
   async presentPaywallIfNeeded(options: PresentPaywallIfNeededOptions): Promise<PaywallResult> {
     assertValidPresentationConfiguration(options?.presentationConfiguration);
 
-    const listener = options?.listener;
-    const purchaseLogic = options?.purchaseLogic;
+    const { presentationConfiguration, listener, purchaseLogic, ...rest } = options;
     const nativeOpts = {
-      ...options,
-      ...resolveNativePresentationOptions(options?.presentationConfiguration),
+      ...rest,
+      ...resolveNativePresentationOptions(presentationConfiguration),
     };
-    delete (nativeOpts as any).presentationConfiguration;
 
     if (!listener && !purchaseLogic) {
-      return nativePlugin.presentPaywallIfNeeded(nativeOpts as any);
+      return nativePlugin.presentPaywallIfNeeded(nativeOpts);
     }
 
     return presentWithListenerSupport(

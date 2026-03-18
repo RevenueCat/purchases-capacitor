@@ -72,9 +72,7 @@ public class RevenueCatUIPlugin: CAPPlugin, CAPBridgedPlugin {
                 "shouldBlockTouchEvents": true
             ]
 
-            guard self.applyPresentationMode(from: call, to: &options) else {
-                return
-            }
+            self.applyPresentationMode(from: call, to: &options)
 
             if let offeringOptions = offeringOptions {
                 options.merge(offeringOptions) { _, offeringOption in
@@ -126,9 +124,7 @@ public class RevenueCatUIPlugin: CAPPlugin, CAPBridgedPlugin {
                 "requiredEntitlementIdentifier": requiredEntitlementIdentifier
             ]
 
-            guard self.applyPresentationMode(from: call, to: &options) else {
-                return
-            }
+            self.applyPresentationMode(from: call, to: &options)
 
             if let offeringOptions = offeringOptions {
                 options.merge(offeringOptions) { _, offeringOption in
@@ -205,11 +201,10 @@ public class RevenueCatUIPlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
-    private func applyPresentationMode(from call: CAPPluginCall, to options: inout [String: Any]) -> Bool {
+    private func applyPresentationMode(from call: CAPPluginCall, to options: inout [String: Any]) {
         if call.getBool("useFullScreenPresentation") == true {
             options["useFullScreenPresentation"] = true
         }
-        return true
     }
 }
 
