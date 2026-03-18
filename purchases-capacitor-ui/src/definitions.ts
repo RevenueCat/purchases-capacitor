@@ -214,6 +214,13 @@ export interface PresentPaywallOptions {
    * `purchasesAreCompletedBy` is set to `MY_APP`.
    */
   purchaseLogic?: PurchaseLogic;
+
+  /**
+   * Optional custom variables for paywall text substitution.
+   * Variables can be referenced in paywalls using the `{{ custom.variable_name }}` syntax.
+   * Keys must start with a letter and contain only alphanumeric characters and underscores.
+   */
+  customVariables?: Record<string, string | number | boolean>;
 }
 
 export interface PresentPaywallIfNeededOptions extends PresentPaywallOptions {

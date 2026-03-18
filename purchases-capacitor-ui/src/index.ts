@@ -28,6 +28,7 @@ interface RevenueCatUINativePlugin {
     displayCloseButton?: boolean;
     hasPaywallListener?: boolean;
     hasPurchaseLogic?: boolean;
+    customVariables?: Record<string, string | number | boolean>;
   }): Promise<PaywallResult>;
   presentPaywallIfNeeded(options: {
     offering?: any;
@@ -36,6 +37,7 @@ interface RevenueCatUINativePlugin {
     requiredEntitlementIdentifier: string;
     hasPaywallListener?: boolean;
     hasPurchaseLogic?: boolean;
+    customVariables?: Record<string, string | number | boolean>;
   }): Promise<PaywallResult>;
   presentCustomerCenter(): Promise<void>;
   setMockWebResults?(options: { shouldMockWebResults: boolean }): Promise<void>;

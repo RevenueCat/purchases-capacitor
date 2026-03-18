@@ -73,6 +73,7 @@ public class RevenueCatUIPlugin: CAPPlugin, CAPBridgedPlugin {
             ]
 
             self.applyPresentationMode(from: call, to: &options)
+            self.applyCustomVariables(from: call, to: &options)
 
             if let offeringOptions = offeringOptions {
                 options.merge(offeringOptions) { _, offeringOption in
@@ -125,6 +126,7 @@ public class RevenueCatUIPlugin: CAPPlugin, CAPBridgedPlugin {
             ]
 
             self.applyPresentationMode(from: call, to: &options)
+            self.applyCustomVariables(from: call, to: &options)
 
             if let offeringOptions = offeringOptions {
                 options.merge(offeringOptions) { _, offeringOption in
@@ -204,6 +206,12 @@ public class RevenueCatUIPlugin: CAPPlugin, CAPBridgedPlugin {
     private func applyPresentationMode(from call: CAPPluginCall, to options: inout [String: Any]) {
         if call.getBool("useFullScreenPresentation") == true {
             options["useFullScreenPresentation"] = true
+        }
+    }
+
+    private func applyCustomVariables(from call: CAPPluginCall, to options: inout [String: Any]) {
+        if let customVariables = call.getObject("customVariables") {
+            options[PaywallProxy.PaywallOptionsKeys.customVariables] = customVariables
         }
     }
 }
