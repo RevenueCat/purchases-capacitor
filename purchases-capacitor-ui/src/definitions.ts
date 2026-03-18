@@ -135,7 +135,32 @@ export enum PURCHASE_LOGIC_RESULT {
   ERROR = 'ERROR',
 }
 
-export type PaywallPresentationMode = 'sheet' | 'fullScreen';
+export type IOSPaywallPresentationStyle = typeof IOS_PAYWALL_PRESENTATION_STYLE[keyof typeof IOS_PAYWALL_PRESENTATION_STYLE];
+export const IOS_PAYWALL_PRESENTATION_STYLE = {
+  FULL_SCREEN: "FULL_SCREEN",
+  SHEET: "SHEET",
+} as const;
+
+export type AndroidPaywallPresentationStyle = typeof ANDROID_PAYWALL_PRESENTATION_STYLE[keyof typeof ANDROID_PAYWALL_PRESENTATION_STYLE];
+export const ANDROID_PAYWALL_PRESENTATION_STYLE = {
+  FULL_SCREEN: "FULL_SCREEN",
+} as const;
+
+export interface PaywallPresentationConfiguration {
+  ios?: IOSPaywallPresentationStyle;
+  android?: AndroidPaywallPresentationStyle;
+}
+
+export const PaywallPresentationConfiguration = {
+  FULL_SCREEN: {
+    ios: IOS_PAYWALL_PRESENTATION_STYLE.FULL_SCREEN,
+    android: ANDROID_PAYWALL_PRESENTATION_STYLE.FULL_SCREEN,
+  } as PaywallPresentationConfiguration,
+  DEFAULT: {
+    ios: IOS_PAYWALL_PRESENTATION_STYLE.SHEET,
+    android: ANDROID_PAYWALL_PRESENTATION_STYLE.FULL_SCREEN,
+  } as PaywallPresentationConfiguration,
+} as const;
 
 export interface PresentPaywallOptions {
   /**
@@ -145,10 +170,12 @@ export interface PresentPaywallOptions {
   offering?: PurchasesOffering;
 
   /**
-   * iOS only. Controls how the paywall is presented.
-   * Defaults to `'sheet'`. Ignored on Android and web.
+   * Controls how the paywall is presented on each platform.
+   * Use `PaywallPresentationConfiguration.FULL_SCREEN` for full-screen on all platforms,
+   * or provide a custom configuration with per-platform styles.
+   * Defaults to sheet on iOS and full-screen on Android.
    */
-  presentationMode?: PaywallPresentationMode;
+  presentationConfiguration?: PaywallPresentationConfiguration;
 
   /**
    * Whether to display a close button on the paywall.

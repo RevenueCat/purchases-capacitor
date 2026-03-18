@@ -15,7 +15,7 @@ import {
   PurchaseDiscountedPackageOptions,
   Purchases,
 } from '@revenuecat/purchases-capacitor';
-import { RevenueCatUI, PURCHASE_LOGIC_RESULT } from '@revenuecat/purchases-capacitor-ui';
+import { RevenueCatUI, PURCHASE_LOGIC_RESULT, PaywallPresentationConfiguration } from '@revenuecat/purchases-capacitor-ui';
 import type { PaywallListener, PurchaseLogic } from '@revenuecat/purchases-capacitor-ui';
 
 import {REVENUECAT_API_KEY} from '../constants';
@@ -774,7 +774,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     }
     const result = await RevenueCatUI.presentPaywall({
       offering,
-      presentationMode: 'fullScreen',
+      presentationConfiguration: PaywallPresentationConfiguration.FULL_SCREEN,
     });
     updateLastFunction('presentPaywallCurrentOfferingFullscreen', result);
   };

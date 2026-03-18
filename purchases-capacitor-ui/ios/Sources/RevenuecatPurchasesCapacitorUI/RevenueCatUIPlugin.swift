@@ -206,20 +206,10 @@ public class RevenueCatUIPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     private func applyPresentationMode(from call: CAPPluginCall, to options: inout [String: Any]) -> Bool {
-        guard let presentationMode = call.getString("presentationMode") else {
-            return true
-        }
-
-        switch presentationMode {
-        case "sheet":
-            return true
-        case "fullScreen":
+        if call.getBool("useFullScreenPresentation") == true {
             options["useFullScreenPresentation"] = true
-            return true
-        default:
-            call.reject("Invalid presentationMode. Expected 'sheet' or 'fullScreen'.", "PAYWALL_ERROR")
-            return false
         }
+        return true
     }
 }
 

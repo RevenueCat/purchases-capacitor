@@ -75,9 +75,10 @@ const result = await RevenueCatUI.presentPaywall({
   displayCloseButton: true,
 });
 
-// Present a fullscreen paywall on iOS
+// Present a fullscreen paywall on all platforms
+import { PaywallPresentationConfiguration } from '@revenuecat/purchases-capacitor-ui';
 const result = await RevenueCatUI.presentPaywall({
-  presentationMode: 'fullScreen', // iOS only
+  presentationConfiguration: PaywallPresentationConfiguration.FULL_SCREEN,
 });
 
 // Present a paywall only if the user doesn't have a specific entitlement
