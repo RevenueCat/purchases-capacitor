@@ -1871,7 +1871,7 @@ The result of a redemption attempt.
 
 The supported stores for purchases.
 
-<code>"PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "RC_BILLING" | "EXTERNAL" | "PADDLE" | "TEST_STORE" | "UNKNOWN_STORE"</code>
+<code>"PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "RC_BILLING" | "EXTERNAL" | "PADDLE" | "TEST_STORE" | "GALAXY" | "UNKNOWN_STORE"</code>
 
 
 #### OwnershipType
