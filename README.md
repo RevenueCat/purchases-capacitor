@@ -124,6 +124,7 @@ This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package
 * [`showInAppMessages(...)`](#showinappmessages)
 * [`isConfigured()`](#isconfigured)
 * [`overridePreferredUILocale(...)`](#overridepreferreduilocale)
+* [`trackCustomPaywallImpression(...)`](#trackcustompaywallimpression)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 * [Enums](#enums)
@@ -1272,6 +1273,25 @@ a background refetch to get paywall templates with the correct localizations.
 --------------------
 
 
+### trackCustomPaywallImpression(...)
+
+```typescript
+trackCustomPaywallImpression(options?: TrackCustomPaywallImpressionOptions | undefined) => Promise<void>
+```
+
+Tracks an impression of a custom paywall. Use this to record when a user views your custom paywall
+so that RevenueCat can track paywall analytics.
+
+Call this method once per paywall display, ideally when the paywall first becomes visible to the user,
+not in callbacks that may fire multiple times for the same display.
+
+| Param         | Type                                                                                                | Description                                                                                      |
+| ------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| **`options`** | <code><a href="#trackcustompaywallimpressionoptions">TrackCustomPaywallImpressionOptions</a></code> | Optional parameters for the impression. Include `paywallId` to identify which paywall was shown. |
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -1784,6 +1804,16 @@ Holds the information about a Win-Back Offer in Apple's App <a href="#store">Sto
 | ------------------ | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | **`aPackage`**     | <code><a href="#purchasespackage">PurchasesPackage</a></code>           | The package you want to purchase                                                                  |
 | **`winBackOffer`** | <code><a href="#purchaseswinbackoffer">PurchasesWinBackOffer</a></code> | Win-back offer to apply to this purchase. Retrieve this using getEligibleWinBackOffersForPackage. |
+
+
+#### TrackCustomPaywallImpressionOptions
+
+Options for tracking a custom paywall impression.
+
+| Prop             | Type                        | Description                                                                                                                                                   |
+| ---------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`paywallId`**  | <code>string \| null</code> | The identifier of the paywall that was shown.                                                                                                                 |
+| **`offeringId`** | <code>string \| null</code> | An optional identifier for the offering associated with the custom paywall. If not provided, the SDK will use the current offering identifier from the cache. |
 
 
 ### Type Aliases

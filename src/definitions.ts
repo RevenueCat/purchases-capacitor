@@ -915,4 +915,29 @@ export interface PurchasesPlugin {
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet.
    */
   overridePreferredUILocale(options: { locale: string | null }): Promise<void>;
+
+  /**
+   * Tracks an impression of a custom paywall. Use this to record when a user views your custom paywall
+   * so that RevenueCat can track paywall analytics.
+   *
+   * Call this method once per paywall display, ideally when the paywall first becomes visible to the user,
+   * not in callbacks that may fire multiple times for the same display.
+   *
+   * @param options Optional parameters for the impression. Include `paywallId` to identify which paywall was shown.
+   * @returns {Promise<void>} The promise will be rejected if configure has not been called yet.
+   */
+  trackCustomPaywallImpression(options?: TrackCustomPaywallImpressionOptions): Promise<void>;
+}
+
+/**
+ * Options for tracking a custom paywall impression.
+ */
+export interface TrackCustomPaywallImpressionOptions {
+  /** The identifier of the paywall that was shown. */
+  paywallId?: string | null;
+  /**
+   * An optional identifier for the offering associated with the custom paywall.
+   * If not provided, the SDK will use the current offering identifier from the cache.
+   */
+  offeringId?: string | null;
 }
