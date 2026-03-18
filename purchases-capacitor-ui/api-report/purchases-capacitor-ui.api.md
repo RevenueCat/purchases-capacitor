@@ -17,7 +17,7 @@ export const ANDROID_PAYWALL_PRESENTATION_STYLE: {
     readonly FULL_SCREEN: "FULL_SCREEN";
 };
 
-// @public (undocumented)
+// @public
 export type AndroidPaywallPresentationStyle = (typeof ANDROID_PAYWALL_PRESENTATION_STYLE)[keyof typeof ANDROID_PAYWALL_PRESENTATION_STYLE];
 
 // @public (undocumented)
@@ -26,7 +26,7 @@ export const IOS_PAYWALL_PRESENTATION_STYLE: {
     readonly SHEET: "SHEET";
 };
 
-// @public (undocumented)
+// @public
 export type IOSPaywallPresentationStyle = (typeof IOS_PAYWALL_PRESENTATION_STYLE)[keyof typeof IOS_PAYWALL_PRESENTATION_STYLE];
 
 export { PAYWALL_RESULT }
@@ -58,15 +58,13 @@ export interface PaywallListener {
     onRestoreStarted?: () => void;
 }
 
-// @public (undocumented)
+// @public
 export interface PaywallPresentationConfiguration {
-    // (undocumented)
     android?: AndroidPaywallPresentationStyle;
-    // (undocumented)
     ios?: IOSPaywallPresentationStyle;
 }
 
-// @public (undocumented)
+// @public
 export const PaywallPresentationConfiguration: {
     readonly FULL_SCREEN: PaywallPresentationConfiguration;
     readonly DEFAULT: PaywallPresentationConfiguration;

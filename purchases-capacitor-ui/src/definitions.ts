@@ -135,29 +135,47 @@ export enum PURCHASE_LOGIC_RESULT {
   ERROR = 'ERROR',
 }
 
+/** Presentation styles available for paywalls on iOS. */
 export type IOSPaywallPresentationStyle =
   (typeof IOS_PAYWALL_PRESENTATION_STYLE)[keyof typeof IOS_PAYWALL_PRESENTATION_STYLE];
+/** @see {@link IOSPaywallPresentationStyle} */
 export const IOS_PAYWALL_PRESENTATION_STYLE = {
+  /** Presents the paywall in full-screen mode. */
   FULL_SCREEN: 'FULL_SCREEN',
+  /** Presents the paywall as a sheet. This is the default on iOS. */
   SHEET: 'SHEET',
 } as const;
 
+/** Presentation styles available for paywalls on Android. */
 export type AndroidPaywallPresentationStyle =
   (typeof ANDROID_PAYWALL_PRESENTATION_STYLE)[keyof typeof ANDROID_PAYWALL_PRESENTATION_STYLE];
+/** @see {@link AndroidPaywallPresentationStyle} */
 export const ANDROID_PAYWALL_PRESENTATION_STYLE = {
+  /** Presents the paywall in full-screen mode. This is the default on Android. */
   FULL_SCREEN: 'FULL_SCREEN',
 } as const;
 
+/**
+ * Per-platform configuration for how a paywall is presented.
+ * Use the convenience presets {@link PaywallPresentationConfiguration.FULL_SCREEN}
+ * or {@link PaywallPresentationConfiguration.DEFAULT}, or provide a custom
+ * configuration with per-platform styles.
+ */
 export interface PaywallPresentationConfiguration {
+  /** Presentation style on iOS. Defaults to sheet if not specified. */
   ios?: IOSPaywallPresentationStyle;
+  /** Presentation style on Android. Defaults to full-screen if not specified. */
   android?: AndroidPaywallPresentationStyle;
 }
 
+/** Convenience presets for {@link PaywallPresentationConfiguration}. */
 export const PaywallPresentationConfiguration = {
+  /** Full-screen presentation on all platforms. */
   FULL_SCREEN: {
     ios: IOS_PAYWALL_PRESENTATION_STYLE.FULL_SCREEN,
     android: ANDROID_PAYWALL_PRESENTATION_STYLE.FULL_SCREEN,
   } as PaywallPresentationConfiguration,
+  /** Default presentation: sheet on iOS, full-screen on Android. */
   DEFAULT: {
     ios: IOS_PAYWALL_PRESENTATION_STYLE.SHEET,
     android: ANDROID_PAYWALL_PRESENTATION_STYLE.FULL_SCREEN,
