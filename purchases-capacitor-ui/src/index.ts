@@ -3,6 +3,7 @@ import type { PluginListenerHandle } from '@capacitor/core';
 
 import type {
   PaywallListener,
+  PaywallPresentationConfiguration,
   PaywallResult,
   PresentPaywallIfNeededOptions,
   PresentPaywallOptions,
@@ -10,7 +11,11 @@ import type {
   PurchaseLogicResult,
   RevenueCatUIPlugin,
 } from './definitions';
-import { PURCHASE_LOGIC_RESULT } from './definitions';
+import {
+  IOS_PAYWALL_PRESENTATION_STYLE,
+  ANDROID_PAYWALL_PRESENTATION_STYLE,
+  PURCHASE_LOGIC_RESULT,
+} from './definitions';
 
 /**
  * Internal native plugin interface with native-only methods and events.
@@ -19,12 +24,14 @@ import { PURCHASE_LOGIC_RESULT } from './definitions';
 interface RevenueCatUINativePlugin {
   presentPaywall(options: {
     offering?: any;
+    useFullScreenPresentation?: boolean;
     displayCloseButton?: boolean;
     hasPaywallListener?: boolean;
     hasPurchaseLogic?: boolean;
   }): Promise<PaywallResult>;
   presentPaywallIfNeeded(options: {
     offering?: any;
+    useFullScreenPresentation?: boolean;
     displayCloseButton?: boolean;
     requiredEntitlementIdentifier: string;
     hasPaywallListener?: boolean;
@@ -52,6 +59,41 @@ interface RevenueCatUINativePlugin {
 const nativePlugin = registerPlugin<RevenueCatUINativePlugin>('RevenueCatUI', {
   web: () => import('./web').then((m) => new m.RevenueCatUIWeb()),
 });
+
+function assertValidPresentationConfiguration(
+  config: unknown,
+): asserts config is PaywallPresentationConfiguration | undefined {
+  if (config === undefined) {
+    return;
+  }
+  if (typeof config !== 'object' || config === null) {
+    throw new Error(`Invalid presentationConfiguration: expected an object or undefined.`);
+  }
+  const { ios, android } = config as Record<string, unknown>;
+  const validIos = Object.values(IOS_PAYWALL_PRESENTATION_STYLE) as string[];
+  const validAndroid = Object.values(ANDROID_PAYWALL_PRESENTATION_STYLE) as string[];
+  if (ios !== undefined && !validIos.includes(ios as string)) {
+    throw new Error(`Invalid presentationConfiguration.ios "${String(ios)}". Expected one of: ${validIos.join(', ')}.`);
+  }
+  if (android !== undefined && !validAndroid.includes(android as string)) {
+    throw new Error(
+      `Invalid presentationConfiguration.android "${String(android)}". Expected one of: ${validAndroid.join(', ')}.`,
+    );
+  }
+}
+
+function resolveNativePresentationOptions(config?: PaywallPresentationConfiguration): {
+  useFullScreenPresentation?: boolean;
+} {
+  if (!config) {
+    return {};
+  }
+  // iOS full-screen takes precedence as the flag that the native bridge understands
+  if (config.ios === IOS_PAYWALL_PRESENTATION_STYLE.FULL_SCREEN) {
+    return { useFullScreenPresentation: true };
+  }
+  return {};
+}
 
 function serializeResultForNative(result: PurchaseLogicResult): {
   result: string;
@@ -229,32 +271,37 @@ async function presentWithListenerSupport(
 
 const RevenueCatUI: RevenueCatUIPlugin = {
   async presentPaywall(options?: PresentPaywallOptions): Promise<PaywallResult> {
-    const listener = options?.listener;
-    const purchaseLogic = options?.purchaseLogic;
+    assertValidPresentationConfiguration(options?.presentationConfiguration);
+
+    const { presentationConfiguration, listener, purchaseLogic, ...rest } = options ?? {};
+    const nativeOpts = {
+      ...rest,
+      ...resolveNativePresentationOptions(presentationConfiguration),
+    };
 
     if (!listener && !purchaseLogic) {
-      return nativePlugin.presentPaywall(options ?? {});
+      return nativePlugin.presentPaywall(nativeOpts);
     }
 
-    return presentWithListenerSupport(
-      (opts) => nativePlugin.presentPaywall(opts),
-      { ...options },
-      listener,
-      purchaseLogic,
-    );
+    return presentWithListenerSupport((opts) => nativePlugin.presentPaywall(opts), nativeOpts, listener, purchaseLogic);
   },
 
   async presentPaywallIfNeeded(options: PresentPaywallIfNeededOptions): Promise<PaywallResult> {
-    const listener = options?.listener;
-    const purchaseLogic = options?.purchaseLogic;
+    assertValidPresentationConfiguration(options?.presentationConfiguration);
+
+    const { presentationConfiguration, listener, purchaseLogic, ...rest } = options;
+    const nativeOpts = {
+      ...rest,
+      ...resolveNativePresentationOptions(presentationConfiguration),
+    };
 
     if (!listener && !purchaseLogic) {
-      return nativePlugin.presentPaywallIfNeeded(options);
+      return nativePlugin.presentPaywallIfNeeded(nativeOpts);
     }
 
     return presentWithListenerSupport(
       (opts) => nativePlugin.presentPaywallIfNeeded(opts),
-      { ...options },
+      nativeOpts,
       listener,
       purchaseLogic,
     );

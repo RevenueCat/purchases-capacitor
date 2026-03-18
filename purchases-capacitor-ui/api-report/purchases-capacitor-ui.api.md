@@ -12,6 +12,23 @@ import type { PurchasesOffering } from '@revenuecat/purchases-typescript-interna
 import type { PurchasesPackage } from '@revenuecat/purchases-typescript-internal-esm';
 import type { PurchasesStoreTransaction } from '@revenuecat/purchases-typescript-internal-esm';
 
+// @public (undocumented)
+export const ANDROID_PAYWALL_PRESENTATION_STYLE: {
+    readonly FULL_SCREEN: "FULL_SCREEN";
+};
+
+// @public (undocumented)
+export type AndroidPaywallPresentationStyle = (typeof ANDROID_PAYWALL_PRESENTATION_STYLE)[keyof typeof ANDROID_PAYWALL_PRESENTATION_STYLE];
+
+// @public (undocumented)
+export const IOS_PAYWALL_PRESENTATION_STYLE: {
+    readonly FULL_SCREEN: "FULL_SCREEN";
+    readonly SHEET: "SHEET";
+};
+
+// @public (undocumented)
+export type IOSPaywallPresentationStyle = (typeof IOS_PAYWALL_PRESENTATION_STYLE)[keyof typeof IOS_PAYWALL_PRESENTATION_STYLE];
+
 export { PAYWALL_RESULT }
 export { PAYWALL_RESULT as PaywallResultEnum }
 
@@ -42,6 +59,20 @@ export interface PaywallListener {
 }
 
 // @public (undocumented)
+export interface PaywallPresentationConfiguration {
+    // (undocumented)
+    android?: AndroidPaywallPresentationStyle;
+    // (undocumented)
+    ios?: IOSPaywallPresentationStyle;
+}
+
+// @public (undocumented)
+export const PaywallPresentationConfiguration: {
+    readonly FULL_SCREEN: PaywallPresentationConfiguration;
+    readonly DEFAULT: PaywallPresentationConfiguration;
+};
+
+// @public (undocumented)
 export interface PaywallResult {
     result: PAYWALL_RESULT;
 }
@@ -56,6 +87,7 @@ export interface PresentPaywallOptions {
     displayCloseButton?: boolean;
     listener?: PaywallListener;
     offering?: PurchasesOffering;
+    presentationConfiguration?: PaywallPresentationConfiguration;
     purchaseLogic?: PurchaseLogic;
 }
 
