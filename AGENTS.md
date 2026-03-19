@@ -113,7 +113,7 @@ cd ios && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin
 
 | Platform | Minimum Version |
 |----------|-----------------|
-| Capacitor | 7.0.0 |
+| Capacitor | 8.0.0 |
 | iOS | 13.0+ |
 | Android | API 23+ |
 
