@@ -192,6 +192,10 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
         val listener = if (hasPaywallListener) createPaywallListenerWrapper() else null
         val purchaseLogic = if (hasPurchaseLogic) createPurchaseLogicBridge() else null
 
+        val customVariables = call.getObject("customVariables")?.let { jsObj ->
+            jsObj.keys().asSequence().associateWith { key -> jsObj.get(key) }
+        }
+
         val options = PresentPaywallOptions(
             paywallSource = paywallSource,
             requiredEntitlementIdentifier = requiredEntitlementIdentifier,
@@ -199,6 +203,7 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
             paywallResultListener = this,
             paywallListener = listener,
             purchaseLogic = purchaseLogic,
+            customVariables = customVariables,
         )
 
         presentPaywallFromFragment(currentActivity, options)
