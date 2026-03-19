@@ -82,6 +82,7 @@ export interface PresentPaywallIfNeededOptions extends PresentPaywallOptions {
 
 // @public (undocumented)
 export interface PresentPaywallOptions {
+    customVariables?: Record<string, string | number | boolean>;
     displayCloseButton?: boolean;
     listener?: PaywallListener;
     offering?: PurchasesOffering;

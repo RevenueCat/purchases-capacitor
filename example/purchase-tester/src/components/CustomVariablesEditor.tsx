@@ -55,6 +55,7 @@ function parseValue(raw: string, type: VariableType): VariableValue | null {
       if (raw.toLowerCase() === 'false') return false;
       return null;
     case 'number': {
+      if (raw.trim() === '') return null;
       const n = Number(raw);
       return isNaN(n) ? null : n;
     }
