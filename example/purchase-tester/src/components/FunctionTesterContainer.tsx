@@ -40,7 +40,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
   const [lastFunctionContent, setLastFunctionContent] = useState('No content');
   const [simulatesAskToBuyInSandbox, setSimulatesAskToBuyInSandbox] =
     useState(false);
-  const [customVariables, setCustomVariables] = useState<Record<string, string>>({});
+  const [customVariables, setCustomVariables] = useState<Record<string, string | number | boolean>>({});
   const resolvedCustomVariables = Object.keys(customVariables).length > 0 ? customVariables : undefined;
 
   const prettifyJson = (objectToPrettify: object) => {
