@@ -15,13 +15,14 @@ import {
   PurchaseDiscountedPackageOptions,
   Purchases,
 } from '@revenuecat/purchases-capacitor';
-import { RevenueCatUI, PURCHASE_LOGIC_RESULT } from '@revenuecat/purchases-capacitor-ui';
+import { RevenueCatUI, PURCHASE_LOGIC_RESULT, PaywallPresentationConfiguration } from '@revenuecat/purchases-capacitor-ui';
 import type { PaywallListener, PurchaseLogic } from '@revenuecat/purchases-capacitor-ui';
 
 import {REVENUECAT_API_KEY} from '../constants';
 import {ENTITLEMENT_VERIFICATION_MODE, IN_APP_MESSAGE_TYPE, PURCHASES_ARE_COMPLETED_BY_TYPE, STOREKIT_VERSION} from '@revenuecat/purchases-typescript-internal-esm';
 import {App, URLOpenListenerEvent} from "@capacitor/app";
 import {Dialog} from "@capacitor/dialog";
+import CustomVariablesEditor from './CustomVariablesEditor';
 
 interface ContainerProps {}
 
@@ -39,6 +40,8 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
   const [lastFunctionContent, setLastFunctionContent] = useState('No content');
   const [simulatesAskToBuyInSandbox, setSimulatesAskToBuyInSandbox] =
     useState(false);
+  const [customVariables, setCustomVariables] = useState<Record<string, string | number | boolean>>({});
+  const resolvedCustomVariables = Object.keys(customVariables).length > 0 ? customVariables : undefined;
 
   const prettifyJson = (objectToPrettify: object) => {
     return JSON.stringify(objectToPrettify, null, 2);
@@ -567,6 +570,18 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     updateLastFunction('getCachedVirtualCurrencies', cachedVirtualCurrencies);
   };
 
+  const trackCustomPaywallImpression = async () => {
+    const paywallId = window.prompt('Paywall ID (leave empty for none)')?.trim() || undefined;
+    const offeringId = window.prompt('Offering ID (leave empty for none)')?.trim() || undefined;
+
+    if (!paywallId && !offeringId) {
+      await Purchases.trackCustomPaywallImpression();
+    } else {
+      await Purchases.trackCustomPaywallImpression({ paywallId, offeringId });
+    }
+    updateLastFunctionWithoutContent(`trackCustomPaywallImpression (paywallId: ${paywallId ?? 'nil'}, offeringId: ${offeringId ?? 'nil'})`);
+  };
+
   const purchaseProductForWinBackTesting = async () => {
     try {
       const products = await Purchases.getProducts({
@@ -758,8 +773,27 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     }
     const result = await RevenueCatUI.presentPaywall({
       offering: offering,
+      customVariables: resolvedCustomVariables,
     });
     updateLastFunction('presentPaywallCurrentOffering', result);
+  };
+
+  const presentPaywallCurrentOfferingFullscreen = async () => {
+    const offerings = await Purchases.getOfferings();
+    const offering = offerings.current;
+    if (offering == null) {
+      updateLastFunction(
+        'presentPaywallCurrentOfferingFullscreen',
+        'No current offering available',
+      );
+      return;
+    }
+    const result = await RevenueCatUI.presentPaywall({
+      offering,
+      presentationConfiguration: PaywallPresentationConfiguration.FULL_SCREEN,
+      customVariables: resolvedCustomVariables,
+    });
+    updateLastFunction('presentPaywallCurrentOfferingFullscreen', result);
   };
 
   const presentCustomerCenter = async () => {
@@ -818,6 +852,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     const result = await RevenueCatUI.presentPaywall({
       offering,
       listener,
+      customVariables: resolvedCustomVariables,
     });
     updateLastFunction('presentPaywallWithListener', {
       result: result.result,
@@ -874,6 +909,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     const result = await RevenueCatUI.presentPaywall({
       offering,
       purchaseLogic,
+      customVariables: resolvedCustomVariables,
     });
     updateLastFunction('presentPaywallWithPurchaseLogic', {
       result: result.result,
@@ -918,6 +954,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     const result = await RevenueCatUI.presentPaywallIfNeeded({
       requiredEntitlementIdentifier: 'pro',
       listener,
+      customVariables: resolvedCustomVariables,
     });
     updateLastFunction('presentPaywallIfNeededWithListener', {
       result: result.result,
@@ -1143,6 +1180,9 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         <IonButton size="small" onClick={getCachedVirtualCurrencies}>
           Get cached virtual currencies
         </IonButton>
+        <IonButton size="small" onClick={trackCustomPaywallImpression}>
+          Track Custom Paywall Impression
+        </IonButton>
         <IonButton size="small" onClick={purchaseProductForWinBackTesting}>
           Purchase Product for WinBack Testing
         </IonButton>
@@ -1156,8 +1196,15 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
           Fetch & Redeem WinBackOffer for Package
         </IonButton>
         <IonItemDivider/>
+        <CustomVariablesEditor
+          variables={customVariables}
+          onVariablesChanged={setCustomVariables}
+        />
         <IonButton size="small" onClick={presentPaywallCurrentOffering}>
           Present paywall for current offering
+        </IonButton>
+        <IonButton size="small" onClick={presentPaywallCurrentOfferingFullscreen}>
+          Present paywall fullscreen (iOS)
         </IonButton>
         <IonButton size="small" onClick={presentPaywallWithListener}>
           Present paywall with listener

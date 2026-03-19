@@ -61,21 +61,30 @@ await Purchases.configure({
 ### Presenting Paywalls
 
 ```typescript
+import { Purchases } from '@revenuecat/purchases-capacitor';
 import { RevenueCatUI } from '@revenuecat/purchases-capacitor-ui';
+
+const offering = (await Purchases.getOfferings()).current;
 
 // Present a paywall with the default offering
 const result = await RevenueCatUI.presentPaywall();
 
 // Present a paywall with a specific offering
 const result = await RevenueCatUI.presentPaywall({
-  offeringIdentifier: 'premium',
+  offering,
   displayCloseButton: true,
+});
+
+// Present a fullscreen paywall on all platforms
+import { PaywallPresentationConfiguration } from '@revenuecat/purchases-capacitor-ui';
+const result = await RevenueCatUI.presentPaywall({
+  presentationConfiguration: PaywallPresentationConfiguration.FULL_SCREEN,
 });
 
 // Present a paywall only if the user doesn't have a specific entitlement
 const result = await RevenueCatUI.presentPaywallIfNeeded({
   requiredEntitlementIdentifier: 'pro_access',
-  offeringIdentifier: 'premium',
+  offering,
 });
 ```
 

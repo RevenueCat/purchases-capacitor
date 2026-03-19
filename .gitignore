@@ -2,6 +2,9 @@
 dist
 node_modules
 
+# api-extractor temp files
+temp
+
 # iOS files
 Pods
 Podfile.lock
