@@ -10,5 +10,5 @@
     "noUnusedParameters": false,
     "noEmit": true
   },
-  "include": ["./*"]
+  "include": ["src/*"]
 }
