@@ -31,6 +31,7 @@ import type {
   PurchasesPlugin,
   PurchaseParams,
   ShouldPurchasePromoProductListener,
+  TrackCustomPaywallImpressionOptions,
 } from '@revenuecat/purchases-capacitor';
 
 import {
@@ -389,4 +390,26 @@ function checkShouldPurchasePromoProductListener() {
 async function checkLocaleAndPaywallImpression(plugin: PurchasesPlugin) {
   await plugin.overridePreferredUILocale({ locale: 'en-US' });
   await plugin.overridePreferredUILocale({ locale: null });
+}
+
+async function checkTrackCustomPaywallImpression(plugin: PurchasesPlugin) {
+  await plugin.trackCustomPaywallImpression();
+  await plugin.trackCustomPaywallImpression({});
+  await plugin.trackCustomPaywallImpression({ paywallId: 'my-paywall' });
+  await plugin.trackCustomPaywallImpression({ offeringId: 'my-offering' });
+  await plugin.trackCustomPaywallImpression({
+    paywallId: 'my-paywall',
+    offeringId: 'my-offering',
+  });
+  await plugin.trackCustomPaywallImpression({ paywallId: null, offeringId: null });
+}
+
+function checkTrackCustomPaywallImpressionOptions() {
+  const options1: TrackCustomPaywallImpressionOptions = {};
+  const options2: TrackCustomPaywallImpressionOptions = { paywallId: 'my-paywall' };
+  const options3: TrackCustomPaywallImpressionOptions = { offeringId: 'my-offering' };
+  const options4: TrackCustomPaywallImpressionOptions = {
+    paywallId: 'my-paywall',
+    offeringId: 'my-offering',
+  };
 }

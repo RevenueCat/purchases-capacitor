@@ -8,7 +8,10 @@ import type {
 import { PAYWALL_RESULT } from '@revenuecat/purchases-typescript-internal-esm';
 
 import type {
+  AndroidPaywallPresentationStyle,
+  IOSPaywallPresentationStyle,
   PaywallListener,
+  PaywallPresentationConfiguration,
   PaywallResult,
   PresentPaywallIfNeededOptions,
   PresentPaywallOptions,
@@ -16,13 +19,20 @@ import type {
   PurchaseLogicResult,
   PurchaseResumable,
 } from '@revenuecat/purchases-capacitor-ui';
-import { PURCHASE_LOGIC_RESULT } from '@revenuecat/purchases-capacitor-ui';
+import {
+  ANDROID_PAYWALL_PRESENTATION_STYLE,
+  IOS_PAYWALL_PRESENTATION_STYLE,
+  PaywallPresentationConfiguration as PaywallPresentationConfigurationPresets,
+  PURCHASE_LOGIC_RESULT,
+} from '@revenuecat/purchases-capacitor-ui';
 
 function checkPresentPaywallOptions(options: PresentPaywallOptions) {
   const offering: PurchasesOffering | undefined = options.offering;
   const displayCloseButton: boolean | undefined = options.displayCloseButton;
   const listener: PaywallListener | undefined = options.listener;
   const purchaseLogic: PurchaseLogic | undefined = options.purchaseLogic;
+  const presentationConfiguration: PaywallPresentationConfiguration | undefined = options.presentationConfiguration;
+  const customVariables: Record<string, string | number | boolean> | undefined = options.customVariables;
 }
 
 function checkPresentPaywallIfNeededOptions(options: PresentPaywallIfNeededOptions) {
@@ -31,6 +41,37 @@ function checkPresentPaywallIfNeededOptions(options: PresentPaywallIfNeededOptio
   const displayCloseButton: boolean | undefined = options.displayCloseButton;
   const listener: PaywallListener | undefined = options.listener;
   const purchaseLogic: PurchaseLogic | undefined = options.purchaseLogic;
+  const presentationConfiguration: PaywallPresentationConfiguration | undefined = options.presentationConfiguration;
+  const customVariables: Record<string, string | number | boolean> | undefined = options.customVariables;
+}
+
+function checkPaywallPresentationConfiguration() {
+  const config1: PaywallPresentationConfiguration = {};
+  const config2: PaywallPresentationConfiguration = {
+    ios: IOS_PAYWALL_PRESENTATION_STYLE.FULL_SCREEN,
+  };
+  const config3: PaywallPresentationConfiguration = {
+    ios: IOS_PAYWALL_PRESENTATION_STYLE.SHEET,
+  };
+  const config4: PaywallPresentationConfiguration = {
+    android: ANDROID_PAYWALL_PRESENTATION_STYLE.FULL_SCREEN,
+  };
+  const config5: PaywallPresentationConfiguration = {
+    ios: IOS_PAYWALL_PRESENTATION_STYLE.FULL_SCREEN,
+    android: ANDROID_PAYWALL_PRESENTATION_STYLE.FULL_SCREEN,
+  };
+
+  const fullScreen: PaywallPresentationConfiguration = PaywallPresentationConfigurationPresets.FULL_SCREEN;
+  const defaultConfig: PaywallPresentationConfiguration = PaywallPresentationConfigurationPresets.DEFAULT;
+}
+
+function checkIOSPaywallPresentationStyle() {
+  const fullScreen: IOSPaywallPresentationStyle = IOS_PAYWALL_PRESENTATION_STYLE.FULL_SCREEN;
+  const sheet: IOSPaywallPresentationStyle = IOS_PAYWALL_PRESENTATION_STYLE.SHEET;
+}
+
+function checkAndroidPaywallPresentationStyle() {
+  const fullScreen: AndroidPaywallPresentationStyle = ANDROID_PAYWALL_PRESENTATION_STYLE.FULL_SCREEN;
 }
 
 function checkPaywallResult(result: PaywallResult) {

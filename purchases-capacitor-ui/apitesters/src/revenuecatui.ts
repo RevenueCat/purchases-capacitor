@@ -10,6 +10,7 @@ import { PAYWALL_RESULT } from '@revenuecat/purchases-typescript-internal-esm';
 
 import type {
   PaywallListener,
+  PaywallPresentationConfiguration,
   PaywallResult,
   PresentPaywallIfNeededOptions,
   PresentPaywallOptions,
@@ -18,7 +19,12 @@ import type {
   PurchaseResumable,
   RevenueCatUIPlugin,
 } from '@revenuecat/purchases-capacitor-ui';
-import { PURCHASE_LOGIC_RESULT, PaywallResultEnum } from '@revenuecat/purchases-capacitor-ui';
+import {
+  IOS_PAYWALL_PRESENTATION_STYLE,
+  PaywallPresentationConfiguration as PaywallPresentationConfigurationPresets,
+  PURCHASE_LOGIC_RESULT,
+  PaywallResultEnum,
+} from '@revenuecat/purchases-capacitor-ui';
 
 async function checkPresentPaywall(plugin: RevenueCatUIPlugin) {
   const result1: PaywallResult = await plugin.presentPaywall();
@@ -130,6 +136,38 @@ async function checkPaywallResultEnum() {
   const error: PaywallResult = { result: PaywallResultEnum.ERROR };
 }
 
+async function checkPresentationConfiguration(plugin: RevenueCatUIPlugin) {
+  const result1: PaywallResult = await plugin.presentPaywall({
+    presentationConfiguration: PaywallPresentationConfigurationPresets.FULL_SCREEN,
+  });
+
+  const result2: PaywallResult = await plugin.presentPaywall({
+    presentationConfiguration: PaywallPresentationConfigurationPresets.DEFAULT,
+  });
+
+  const result3: PaywallResult = await plugin.presentPaywall({
+    presentationConfiguration: {
+      ios: IOS_PAYWALL_PRESENTATION_STYLE.SHEET,
+    },
+  });
+
+  const result4: PaywallResult = await plugin.presentPaywallIfNeeded({
+    requiredEntitlementIdentifier: 'pro',
+    presentationConfiguration: PaywallPresentationConfigurationPresets.FULL_SCREEN,
+  });
+}
+
+async function checkCustomVariables(plugin: RevenueCatUIPlugin) {
+  const result: PaywallResult = await plugin.presentPaywall({
+    customVariables: { name: 'John', discount: 10, isVip: true },
+  });
+
+  const result2: PaywallResult = await plugin.presentPaywallIfNeeded({
+    requiredEntitlementIdentifier: 'pro',
+    customVariables: { planName: 'Premium' },
+  });
+}
+
 async function checkCombinedOptions(plugin: RevenueCatUIPlugin) {
   const offering = {} as PurchasesOffering;
   const listener: PaywallListener = {};
@@ -143,6 +181,8 @@ async function checkCombinedOptions(plugin: RevenueCatUIPlugin) {
     displayCloseButton: true,
     listener,
     purchaseLogic,
+    presentationConfiguration: PaywallPresentationConfigurationPresets.FULL_SCREEN,
+    customVariables: { name: 'John' },
   });
 
   const result2: PaywallResult = await plugin.presentPaywallIfNeeded({
@@ -151,5 +191,7 @@ async function checkCombinedOptions(plugin: RevenueCatUIPlugin) {
     displayCloseButton: false,
     listener,
     purchaseLogic,
+    presentationConfiguration: PaywallPresentationConfigurationPresets.DEFAULT,
+    customVariables: { discount: 20 },
   });
 }
