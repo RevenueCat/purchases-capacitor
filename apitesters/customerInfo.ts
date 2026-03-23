@@ -9,7 +9,7 @@ import type {
   PurchasesSubscriptionInfo,
   Store,
   VERIFICATION_RESULT,
-} from '../src/definitions';
+} from '@revenuecat/purchases-capacitor';
 
 function checkLoginResult(result: LogInResult) {
   const customerInfo: CustomerInfo = result.customerInfo;

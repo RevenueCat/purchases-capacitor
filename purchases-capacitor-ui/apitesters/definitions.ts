@@ -15,8 +15,8 @@ import type {
   PurchaseLogic,
   PurchaseLogicResult,
   PurchaseResumable,
-} from '../src/definitions';
-import { PURCHASE_LOGIC_RESULT } from '../src/definitions';
+} from '@revenuecat/purchases-capacitor-ui';
+import { PURCHASE_LOGIC_RESULT } from '@revenuecat/purchases-capacitor-ui';
 
 function checkPresentPaywallOptions(options: PresentPaywallOptions) {
   const offering: PurchasesOffering | undefined = options.offering;

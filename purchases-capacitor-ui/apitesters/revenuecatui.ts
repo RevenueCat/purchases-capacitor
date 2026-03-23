@@ -17,8 +17,8 @@ import type {
   PurchaseLogicResult,
   PurchaseResumable,
   RevenueCatUIPlugin,
-} from '../src/definitions';
-import { PURCHASE_LOGIC_RESULT, PaywallResultEnum } from '../src/definitions';
+} from '@revenuecat/purchases-capacitor-ui';
+import { PURCHASE_LOGIC_RESULT, PaywallResultEnum } from '@revenuecat/purchases-capacitor-ui';
 
 async function checkPresentPaywall(plugin: RevenueCatUIPlugin) {
   const result1: PaywallResult = await plugin.presentPaywall();

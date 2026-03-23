@@ -1,0 +1,9 @@
+{
+  "name": "purchases-capacitor-ui-apitesters",
+  "version": "0.0.0",
+  "private": true,
+  "description": "API tests for @revenuecat/purchases-capacitor-ui",
+  "dependencies": {
+    "@revenuecat/purchases-capacitor-ui": "file:.."
+  }
+}

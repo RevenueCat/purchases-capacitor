@@ -27,7 +27,7 @@ import type {
   PurchasesVirtualCurrency,
   Storefront,
   PRODUCT_TYPE,
-} from '../src/definitions';
+} from '@revenuecat/purchases-capacitor';
 
 function checkProduct(product: PurchasesStoreProduct) {
   const identifier: string = product.identifier;

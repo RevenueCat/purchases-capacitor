@@ -1,6 +1,6 @@
 import { PAYWALL_RESULT } from '@revenuecat/purchases-typescript-internal-esm';
 
-import { PURCHASE_LOGIC_RESULT } from '../src/definitions';
+import { PURCHASE_LOGIC_RESULT } from '@revenuecat/purchases-capacitor-ui';
 
 function checkPurchaseLogicResult(result: PURCHASE_LOGIC_RESULT): boolean {
   switch (result) {

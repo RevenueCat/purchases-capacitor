@@ -1,5 +1,5 @@
-import type { ErrorInfo, PurchasesError } from '../src/definitions';
-import { PURCHASES_ERROR_CODE } from '../src/definitions';
+import type { ErrorInfo, PurchasesError } from '@revenuecat/purchases-capacitor';
+import { PURCHASES_ERROR_CODE } from '@revenuecat/purchases-capacitor';
 
 function checkErrorCodes(errorCode: PURCHASES_ERROR_CODE): boolean | undefined {
   switch (errorCode) {

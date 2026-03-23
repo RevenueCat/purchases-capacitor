@@ -31,9 +31,9 @@ import type {
   PurchasesPlugin,
   PurchaseParams,
   ShouldPurchasePromoProductListener,
-} from '../src/definitions';
+} from '@revenuecat/purchases-capacitor';
 
-import { PURCHASES_ARE_COMPLETED_BY_TYPE, STOREKIT_VERSION, WebPurchaseRedemptionResultType } from '../src/definitions';
+import { PURCHASES_ARE_COMPLETED_BY_TYPE, STOREKIT_VERSION, WebPurchaseRedemptionResultType } from '@revenuecat/purchases-capacitor';
 
 async function checkConfigure(plugin: PurchasesPlugin) {
   const apiKey: string = '';

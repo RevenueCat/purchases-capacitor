@@ -1,4 +1,4 @@
-import type { PurchasesPlugin } from '../src/definitions';
+import type { PurchasesPlugin } from '@revenuecat/purchases-capacitor';
 
 async function checkAttributes(plugin: PurchasesPlugin) {
   const attributes: { [key: string]: string | null } = {};

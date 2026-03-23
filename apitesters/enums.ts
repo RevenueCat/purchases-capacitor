@@ -18,7 +18,7 @@ import {
   STOREKIT_VERSION,
   VERIFICATION_RESULT,
   WebPurchaseRedemptionResultType,
-} from '../src/definitions';
+} from '@revenuecat/purchases-capacitor';
 
 function checkBillingFeature(feature: BILLING_FEATURE): boolean {
   switch (feature) {

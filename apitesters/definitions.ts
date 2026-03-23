@@ -21,7 +21,7 @@ import type {
   GoogleProductChangeInfo,
   PurchasesPromotionalOffer,
   PurchasesWinBackOffer,
-} from '../src/definitions';
+} from '@revenuecat/purchases-capacitor';
 
 function checkGetProductOptions() {
   const options: GetProductOptions = {
