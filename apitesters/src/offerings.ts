@@ -25,6 +25,7 @@ import type {
   GoogleProductChangeInfo,
   PurchasesWinBackOffer,
   PurchasesVirtualCurrency,
+  PurchasesVirtualCurrencies,
   Storefront,
   PRODUCT_TYPE,
 } from '@revenuecat/purchases-capacitor';
@@ -189,6 +190,10 @@ function checkWinBackOffer(offer: PurchasesWinBackOffer) {
 
 function checkStorefront(storefront: Storefront) {
   const countryCode: string = storefront.countryCode;
+}
+
+function checkVirtualCurrencies(currencies: PurchasesVirtualCurrencies) {
+  const all: { [key: string]: PurchasesVirtualCurrency } = currencies.all;
 }
 
 function checkVirtualCurrency(currency: PurchasesVirtualCurrency) {
