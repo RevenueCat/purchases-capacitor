@@ -362,6 +362,11 @@ workflows:
           requires:
             - make-release
           <<: *release-tags
+      - revenuecat/merge-release-pr:
+          repo_name: purchases-capacitor
+          requires:
+            - make-release-ui
+          <<: *release-tags
 
   danger:
     jobs:
