@@ -408,6 +408,7 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
       productIdentifier: productIdentifier,
       purchaseDate: new Date().toISOString(),
       transactionIdentifier: '',
+      purchaseToken: null,
     };
   }
 
