@@ -47,7 +47,7 @@
     "jsdom": "^22.1.0",
     "terser": "^5.19.2",
     "typescript": "^5.1.6",
-    "vite": "^4.3.9",
+    "vite": "~5.4.20",
     "vitest": "^0.32.2"
   },
   "description": "An Ionic project"
