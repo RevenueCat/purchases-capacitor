@@ -1402,11 +1402,12 @@ The EntitlementInfo object gives you access to all of the information about the 
 
 Represents a non-subscription transaction in the <a href="#store">Store</a>.
 
-| Prop                        | Type                | Description                                          |
-| --------------------------- | ------------------- | ---------------------------------------------------- |
-| **`transactionIdentifier`** | <code>string</code> | Id of the transaction.                               |
-| **`productIdentifier`**     | <code>string</code> | Product Id associated with the transaction.          |
-| **`purchaseDate`**          | <code>string</code> | Purchase date of the transaction in ISO 8601 format. |
+| Prop                        | Type                        | Description                                          |
+| --------------------------- | --------------------------- | ---------------------------------------------------- |
+| **`transactionIdentifier`** | <code>string</code>         | Id of the transaction.                               |
+| **`productIdentifier`**     | <code>string</code>         | Product Id associated with the transaction.          |
+| **`purchaseDate`**          | <code>string</code>         | Purchase date of the transaction in ISO 8601 format. |
+| **`purchaseToken`**         | <code>string \| null</code> | Purchase token of the transaction. Android only.     |
 
 
 #### PurchasesSubscriptionInfo
@@ -1871,7 +1872,7 @@ The result of a redemption attempt.
 
 The supported stores for purchases.
 
-<code>"PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "RC_BILLING" | "EXTERNAL" | "PADDLE" | "TEST_STORE" | "UNKNOWN_STORE"</code>
+<code>"PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "RC_BILLING" | "EXTERNAL" | "PADDLE" | "TEST_STORE" | "GALAXY" | "UNKNOWN_STORE"</code>
 
 
 #### OwnershipType
