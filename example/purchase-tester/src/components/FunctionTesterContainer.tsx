@@ -1003,11 +1003,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
 
   // --- Sample: presentPaywallIfNeeded with listener ---
   const presentPaywallIfNeededWithListener = async () => {
-    const { offering, unavailableReason } = await getConfiguredOffering();
-    if (offering == null) {
-      updateLastFunction('presentPaywallIfNeededWithListener', unavailableReason ?? 'No configured offering available');
-      return;
-    }
+    const { offering } = await getConfiguredOffering();
 
     const events: string[] = [];
     const listener: PaywallListener = {
