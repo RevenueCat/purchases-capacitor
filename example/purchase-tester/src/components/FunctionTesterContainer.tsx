@@ -1039,7 +1039,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
 
     const result = await RevenueCatUI.presentPaywallIfNeeded({
       requiredEntitlementIdentifier: 'pro',
-      offering,
+      offering: offering ?? undefined,
       listener,
       customVariables: resolvedCustomVariables,
     });
