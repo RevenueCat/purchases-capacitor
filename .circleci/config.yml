@@ -185,6 +185,24 @@ jobs:
       - run: yarn build
       - run: yarn lint
 
+  typecheck-purchase-tester:
+    description: "Build the purchase-tester web app to catch TypeScript errors"
+    docker:
+      - image: cimg/ruby:3.1.2
+    steps:
+      - checkout
+      - yarn-dependencies-unix
+      - yarn-dependencies-ui-unix
+      - run:
+          name: Build main package
+          command: yarn build
+      - run:
+          name: Build UI package
+          command: cd purchases-capacitor-ui && npm run build
+      - run:
+          name: Build purchase tester
+          command: cd example/purchase-tester && yarn && yarn build
+
   make-release:
     description: "Publishes the new version and creates a github release"
     <<: *base-mac-job
@@ -333,6 +351,7 @@ workflows:
       - run-tests-android
       - run-lint
       - build-purchase-tester
+      - typecheck-purchase-tester
       # API change detection
       - check-api-changes
       # UI Package jobs
