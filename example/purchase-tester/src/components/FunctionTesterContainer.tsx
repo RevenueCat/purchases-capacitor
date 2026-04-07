@@ -5,8 +5,12 @@ import {
   IonCardContent,
   IonCardHeader,
   IonCardSubtitle,
+  IonItem,
   IonCardTitle,
   IonItemDivider,
+  IonLabel,
+  IonSelect,
+  IonSelectOption,
 } from '@ionic/react';
 import React, {useEffect, useState} from 'react';
 import {
@@ -15,10 +19,14 @@ import {
   PurchaseDiscountedPackageOptions,
   Purchases,
 } from '@revenuecat/purchases-capacitor';
+import type { PurchasesOffering, PurchasesOfferings } from '@revenuecat/purchases-capacitor';
 import { RevenueCatUI, PURCHASE_LOGIC_RESULT, PaywallPresentationConfiguration } from '@revenuecat/purchases-capacitor-ui';
 import type { PaywallListener, PurchaseLogic } from '@revenuecat/purchases-capacitor-ui';
 
-import {REVENUECAT_API_KEY} from '../constants';
+import {
+  REVENUECAT_API_KEY,
+  REVENUECAT_OFFERING_IDENTIFIER,
+} from '../constants';
 import {ENTITLEMENT_VERIFICATION_MODE, IN_APP_MESSAGE_TYPE, PURCHASES_ARE_COMPLETED_BY_TYPE, STOREKIT_VERSION} from '@revenuecat/purchases-typescript-internal-esm';
 import {App, URLOpenListenerEvent} from "@capacitor/app";
 import {Dialog} from "@capacitor/dialog";
@@ -41,6 +49,11 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
   const [simulatesAskToBuyInSandbox, setSimulatesAskToBuyInSandbox] =
     useState(false);
   const [customVariables, setCustomVariables] = useState<Record<string, string | number | boolean>>({});
+  const [availableOfferings, setAvailableOfferings] = useState<PurchasesOffering[]>([]);
+  const [currentOfferingIdentifier, setCurrentOfferingIdentifier] = useState<string | null>(null);
+  const [selectedOfferingIdentifier, setSelectedOfferingIdentifier] = useState(
+    REVENUECAT_OFFERING_IDENTIFIER ?? '',
+  );
   const resolvedCustomVariables = Object.keys(customVariables).length > 0 ? customVariables : undefined;
 
   const prettifyJson = (objectToPrettify: object) => {
@@ -64,14 +77,64 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     setLastFunctionContent(`${lastFunctionExecuted} does not return content`);
   };
 
-  const getPackageAndOfferForCurrentOfferingFirstPackage = async () => {
+  const syncOfferingsState = (offerings: PurchasesOfferings) => {
+    const loadedOfferings = Object.values(offerings.all ?? {});
+    setAvailableOfferings(loadedOfferings);
+    setCurrentOfferingIdentifier(offerings.current?.identifier ?? null);
+    setSelectedOfferingIdentifier((currentSelectedOfferingIdentifier: string) => {
+      const preferredOfferingIdentifier =
+        currentSelectedOfferingIdentifier ||
+        REVENUECAT_OFFERING_IDENTIFIER ||
+        offerings.current?.identifier ||
+        loadedOfferings[0]?.identifier ||
+        '';
+
+      if (preferredOfferingIdentifier && offerings.all?.[preferredOfferingIdentifier]) {
+        return preferredOfferingIdentifier;
+      }
+
+      return offerings.current?.identifier || loadedOfferings[0]?.identifier || '';
+    });
+  };
+
+  const loadOfferings = async () => {
     const offerings = await Purchases.getOfferings();
+    syncOfferingsState(offerings);
+    return offerings;
+  };
+
+  const getConfiguredOffering = async () => {
+    const offerings = await loadOfferings();
+    const preferredOfferingIdentifier =
+      selectedOfferingIdentifier || REVENUECAT_OFFERING_IDENTIFIER;
+
+    if (!preferredOfferingIdentifier) {
+      return {
+        offering: offerings.current,
+        unavailableReason: 'No current offering available',
+      };
+    }
+
+    const offering = offerings.all?.[preferredOfferingIdentifier] ?? null;
+    if (offering != null) {
+      return { offering, unavailableReason: null };
+    }
+
+    const availableOfferingIdentifiers = Object.keys(offerings.all ?? {});
+    return {
+      offering: null,
+      unavailableReason: `Selected offering "${preferredOfferingIdentifier}" not found. Available offerings: ${availableOfferingIdentifiers.join(', ') || '(none)'}`,
+    };
+  };
+
+  const getPackageAndOfferForCurrentOfferingFirstPackage = async () => {
+    const { offering, unavailableReason } = await getConfiguredOffering();
     const packageToBuy =
-      offerings.current &&
-      offerings.current.availablePackages &&
-      offerings.current.availablePackages[0];
+      offering &&
+      offering.availablePackages &&
+      offering.availablePackages[0];
     if (packageToBuy == null) {
-      return Promise.reject('No package found in current offering');
+      return Promise.reject(unavailableReason ?? 'No package found in configured offering');
     }
     const productToBuy = packageToBuy.product;
     const discountToApply = productToBuy.discounts && productToBuy.discounts[0];
@@ -116,7 +179,13 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
       );
     });
     await listenForDeepLinks();
-    updateLastFunctionWithoutContent(`configure (${completedByType})`);
+    void loadOfferings().catch(error => {
+      console.log('Could not load offerings after configure', error);
+    });
+    const offeringSuffix = REVENUECAT_OFFERING_IDENTIFIER
+      ? `, offering: ${REVENUECAT_OFFERING_IDENTIFIER}`
+      : '';
+    updateLastFunctionWithoutContent(`configure (${completedByType}${offeringSuffix})`);
   };
 
   const changeSimulatesAskToBuyInSandbox = async () => {
@@ -129,7 +198,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
   };
 
   const getOfferings = async () => {
-    const offerings = await Purchases.getOfferings();
+    const offerings = await loadOfferings();
     updateLastFunction('getOfferings', offerings);
   };
 
@@ -144,6 +213,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
 
   const syncAttributesAndOfferingsIfNeeded = async () => {
     const offerings = await Purchases.syncAttributesAndOfferingsIfNeeded();
+    syncOfferingsState(offerings);
     updateLastFunction('syncAttributesAndOfferingsIfNeeded', offerings);
   };
 
@@ -157,15 +227,15 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
   };
 
   const purchaseStoreProduct = async () => {
-    const offerings = await Purchases.getOfferings();
+    const { offering, unavailableReason } = await getConfiguredOffering();
     const productToBuy =
-      offerings.current &&
-      offerings.current.availablePackages &&
-      offerings.current.availablePackages[0].product;
+      offering &&
+      offering.availablePackages &&
+      offering.availablePackages[0].product;
     if (productToBuy == null) {
       updateLastFunction(
         'purchaseStoreProduct',
-        'No product found in current offering',
+        unavailableReason ?? 'No product found in configured offering',
       );
       return;
     }
@@ -176,15 +246,15 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
   };
 
   const purchaseDiscountedProduct = async () => {
-    const offerings = await Purchases.getOfferings();
+    const { offering, unavailableReason } = await getConfiguredOffering();
     const productToBuy =
-      offerings.current &&
-      offerings.current.availablePackages &&
-      offerings.current.availablePackages[0].product;
+      offering &&
+      offering.availablePackages &&
+      offering.availablePackages[0].product;
     if (productToBuy == null) {
       updateLastFunction(
         'purchaseDiscountedProduct',
-        'No product found in current offering',
+        unavailableReason ?? 'No product found in configured offering',
       );
       return;
     }
@@ -215,15 +285,15 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
   };
 
   const purchasePackage = async () => {
-    const offerings = await Purchases.getOfferings();
+    const { offering, unavailableReason } = await getConfiguredOffering();
     const packageToBuy =
-      offerings.current &&
-      offerings.current.availablePackages &&
-      offerings.current.availablePackages[0];
+      offering &&
+      offering.availablePackages &&
+      offering.availablePackages[0];
     if (packageToBuy == null) {
       updateLastFunction(
         'purchasePackage',
-        'No package found in current offering',
+        unavailableReason ?? 'No package found in configured offering',
       );
       return;
     }
@@ -649,12 +719,12 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
 
   const purchasePackageForWinBackTesting = async () => {
     try {
-      const offering = (await Purchases.getOfferings()).current;
+      const { offering, unavailableReason } = await getConfiguredOffering();
       if (!offering || !offering.availablePackages) {
         console.log('No offering or packages available');
         updateLastFunction(
           'purchasePackageForWinBackTesting',
-          'no offering or packages available',
+          unavailableReason ?? 'no offering or packages available',
         );
         return;
       }
@@ -686,12 +756,12 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
   };
 
   const fetchAndRedeemWinBackOfferForPackage = async () => {
-    const offering = (await Purchases.getOfferings()).current;
+    const { offering, unavailableReason } = await getConfiguredOffering();
     if (!offering || !offering.availablePackages) {
       console.log('No offering or packages available');
       updateLastFunction(
         'fetchAndRedeemWinBackOfferForPackage',
-        'no offering or packages available',
+        unavailableReason ?? 'no offering or packages available',
       );
       return;
     }
@@ -762,12 +832,11 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
   };
 
   const presentPaywallCurrentOffering = async () => {
-    const offerings = await Purchases.getOfferings();
-    const offering = offerings.current;
+    const { offering, unavailableReason } = await getConfiguredOffering();
     if (offering == null) {
       updateLastFunction(
         'presentPaywallCurrentOffering',
-        'No current offering available',
+        unavailableReason ?? 'No configured offering available',
       );
       return;
     }
@@ -779,12 +848,11 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
   };
 
   const presentPaywallCurrentOfferingFullscreen = async () => {
-    const offerings = await Purchases.getOfferings();
-    const offering = offerings.current;
+    const { offering, unavailableReason } = await getConfiguredOffering();
     if (offering == null) {
       updateLastFunction(
         'presentPaywallCurrentOfferingFullscreen',
-        'No current offering available',
+        unavailableReason ?? 'No configured offering available',
       );
       return;
     }
@@ -796,6 +864,24 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     updateLastFunction('presentPaywallCurrentOfferingFullscreen', result);
   };
 
+  const presentPaywallCurrentOfferingSheet = async () => {
+    const { offering, unavailableReason } = await getConfiguredOffering();
+    if (offering == null) {
+      updateLastFunction(
+        'presentPaywallCurrentOfferingSheet',
+        unavailableReason ?? 'No configured offering available',
+      );
+      return;
+    }
+    const result = await RevenueCatUI.presentPaywall({
+      offering,
+      displayCloseButton: true,
+      presentationConfiguration: PaywallPresentationConfiguration.DEFAULT,
+      customVariables: resolvedCustomVariables,
+    });
+    updateLastFunction('presentPaywallCurrentOfferingSheet', result);
+  };
+
   const presentCustomerCenter = async () => {
     await RevenueCatUI.presentCustomerCenter();
     updateLastFunctionWithoutContent('presentCustomerCenter');
@@ -803,10 +889,9 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
 
   // --- Sample: PaywallListener ---
   const presentPaywallWithListener = async () => {
-    const offerings = await Purchases.getOfferings();
-    const offering = offerings.current;
+    const { offering, unavailableReason } = await getConfiguredOffering();
     if (offering == null) {
-      updateLastFunction('presentPaywallWithListener', 'No current offering available');
+      updateLastFunction('presentPaywallWithListener', unavailableReason ?? 'No configured offering available');
       return;
     }
 
@@ -862,10 +947,9 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
 
   // --- Sample: PurchaseLogic (custom purchase handler) ---
   const presentPaywallWithPurchaseLogic = async () => {
-    const offerings = await Purchases.getOfferings();
-    const offering = offerings.current;
+    const { offering, unavailableReason } = await getConfiguredOffering();
     if (offering == null) {
-      updateLastFunction('presentPaywallWithPurchaseLogic', 'No current offering available');
+      updateLastFunction('presentPaywallWithPurchaseLogic', unavailableReason ?? 'No configured offering available');
       return;
     }
 
@@ -919,6 +1003,8 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
 
   // --- Sample: presentPaywallIfNeeded with listener ---
   const presentPaywallIfNeededWithListener = async () => {
+    const { offering } = await getConfiguredOffering();
+
     const events: string[] = [];
     const listener: PaywallListener = {
       onPurchaseStarted: ({ packageBeingPurchased }) => {
@@ -953,6 +1039,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
 
     const result = await RevenueCatUI.presentPaywallIfNeeded({
       requiredEntitlementIdentifier: 'pro',
+      offering: offering ?? undefined,
       listener,
       customVariables: resolvedCustomVariables,
     });
@@ -991,6 +1078,33 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
       </IonCard>
 
       <div id="button_actions">
+        <IonCard>
+          <IonCardHeader>
+            <IonCardTitle>Offering Selection</IonCardTitle>
+            <IonCardSubtitle>
+              {`Current: ${currentOfferingIdentifier ?? '(none)'}`}
+            </IonCardSubtitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <IonItem>
+              <IonLabel>Paywall offering</IonLabel>
+              <IonSelect
+                value={selectedOfferingIdentifier}
+                placeholder="Current offering"
+                onIonChange={(event) => setSelectedOfferingIdentifier(event.detail.value ?? '')}
+              >
+                <IonSelectOption value="">
+                  {`Current offering${currentOfferingIdentifier ? ` (${currentOfferingIdentifier})` : ''}`}
+                </IonSelectOption>
+                {availableOfferings.map((offering) => (
+                  <IonSelectOption key={offering.identifier} value={offering.identifier}>
+                    {`${offering.identifier} (${offering.availablePackages?.length ?? 0} packages)`}
+                  </IonSelectOption>
+                ))}
+              </IonSelect>
+            </IonItem>
+          </IonCardContent>
+        </IonCard>
         <IonButton size="small" onClick={configure}>
           Configure (RevenueCat)
         </IonButton>
@@ -1002,7 +1116,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
           onClick={changeSimulatesAskToBuyInSandbox}
         >{`Set simulatesAskToBuyInSandbox to ${!simulatesAskToBuyInSandbox}`}</IonButton>
         <IonButton size="small" onClick={getOfferings}>
-          Get offerings
+          Get offerings / refresh selector
         </IonButton>
         <IonButton
           size="small"
@@ -1201,10 +1315,13 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
           onVariablesChanged={setCustomVariables}
         />
         <IonButton size="small" onClick={presentPaywallCurrentOffering}>
-          Present paywall for current offering
+          Present paywall for selected offering
         </IonButton>
         <IonButton size="small" onClick={presentPaywallCurrentOfferingFullscreen}>
-          Present paywall fullscreen (iOS)
+          Present selected paywall fullscreen (iOS)
+        </IonButton>
+        <IonButton size="small" onClick={presentPaywallCurrentOfferingSheet}>
+          Present selected paywall as sheet (iOS)
         </IonButton>
         <IonButton size="small" onClick={presentPaywallWithListener}>
           Present paywall with listener

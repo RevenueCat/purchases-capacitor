@@ -29,6 +29,7 @@
     "native"
   ],
   "scripts": {
+    "prepare": "husky",
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
     "verify:ios": "xcodebuild -scheme RevenuecatPurchasesCapacitor -destination generic/platform=iOS && npm run verify:ios:cocoapods",
     "verify:ios:cocoapods": "cd ios/CocoapodsInstallationTest && pod install && xcodebuild -workspace CocoapodsInstallationTest.xcworkspace -scheme CocoapodsInstallationTest -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=\"\" build",
@@ -46,7 +47,15 @@
     "prepublishOnly": "npm run build",
     "extract-api": "api-extractor run --local --verbose"
   },
+  "lint-staged": {
+    "*.{ts,js,java,html,css}": [
+      "eslint --fix",
+      "prettier --write --plugin=prettier-plugin-java"
+    ]
+  },
   "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "@capacitor/android": "^8.0.0",
     "@capacitor/core": "^8.0.0",
     "@capacitor/docgen": "^0.3.1",
@@ -79,6 +88,6 @@
     }
   },
   "dependencies": {
-    "@revenuecat/purchases-typescript-internal-esm": "17.54.0"
+    "@revenuecat/purchases-typescript-internal-esm": "17.55.1"
   }
 }
