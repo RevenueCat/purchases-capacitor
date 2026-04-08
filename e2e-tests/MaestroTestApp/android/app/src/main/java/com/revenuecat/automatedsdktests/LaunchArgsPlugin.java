@@ -8,6 +8,7 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 
 @CapacitorPlugin(name = "LaunchArgs")
 public class LaunchArgsPlugin extends Plugin {
+
     @PluginMethod
     public void getTestFlow(PluginCall call) {
         String testFlow = getActivity().getIntent().getStringExtra("e2e_test_flow");

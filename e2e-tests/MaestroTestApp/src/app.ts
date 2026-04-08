@@ -52,7 +52,9 @@ async function init() {
     try {
       const result = await LaunchArgs.getTestFlow();
       testFlow = result.value;
-    } catch (_) { /* launch args not available */ }
+    } catch (_) {
+      /* launch args not available */
+    }
 
     const navigateFn = testFlow ? TEST_FLOW_SCREEN_MAP[testFlow] : null;
     if (navigateFn) {
