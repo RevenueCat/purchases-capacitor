@@ -1,7 +1,18 @@
 import { Purchases, LOG_LEVEL } from '@revenuecat/purchases-capacitor';
 import { RevenueCatUI } from '@revenuecat/purchases-capacitor-ui';
+import { registerPlugin } from '@capacitor/core';
 
 const API_KEY = 'MAESTRO_TESTS_REVENUECAT_API_KEY';
+
+interface LaunchArgsPlugin {
+  getTestFlow(): Promise<{ value: string | null }>;
+}
+
+const LaunchArgs = registerPlugin<LaunchArgsPlugin>('LaunchArgs');
+
+const TEST_FLOW_SCREEN_MAP: Record<string, () => void> = {
+  purchase_through_paywall: () => showPurchaseScreen(),
+};
 
 let hasProEntitlement = false;
 
@@ -37,7 +48,18 @@ async function init() {
       updateEntitlementsLabel();
     });
 
-    showTestCases();
+    let testFlow: string | null = null;
+    try {
+      const result = await LaunchArgs.getTestFlow();
+      testFlow = result.value;
+    } catch (_) {}
+
+    const navigateFn = testFlow ? TEST_FLOW_SCREEN_MAP[testFlow] : null;
+    if (navigateFn) {
+      navigateFn();
+    } else {
+      showTestCases();
+    }
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error('Failed to initialize:', message);
