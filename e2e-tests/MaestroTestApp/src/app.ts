@@ -1,6 +1,6 @@
+import { registerPlugin } from '@capacitor/core';
 import { Purchases, LOG_LEVEL } from '@revenuecat/purchases-capacitor';
 import { RevenueCatUI } from '@revenuecat/purchases-capacitor-ui';
-import { registerPlugin } from '@capacitor/core';
 
 const API_KEY = 'MAESTRO_TESTS_REVENUECAT_API_KEY';
 
@@ -52,7 +52,7 @@ async function init() {
     try {
       const result = await LaunchArgs.getTestFlow();
       testFlow = result.value;
-    } catch (_) {}
+    } catch (_) { /* launch args not available */ }
 
     const navigateFn = testFlow ? TEST_FLOW_SCREEN_MAP[testFlow] : null;
     if (navigateFn) {
