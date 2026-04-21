@@ -55,15 +55,6 @@ function showTestCases() {
 }
 
 async function showPurchaseScreen() {
-  try {
-    const { customerInfo } = await Purchases.getCustomerInfo();
-    hasProEntitlement = customerInfo.entitlements.active['pro'] !== undefined;
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    console.error('Failed to get customer info:', message);
-    showError(message);
-  }
-
   document.getElementById('app')!.innerHTML = `
     <div class="center">
       <p id="entitlements-label">Entitlements: ${hasProEntitlement ? 'pro' : 'none'}</p>
@@ -71,6 +62,16 @@ async function showPurchaseScreen() {
       <button id="back-btn" style="background-color: #888; margin-top: 16px;">Back</button>
     </div>
   `;
+
+  try {
+    const { customerInfo } = await Purchases.getCustomerInfo();
+    hasProEntitlement = customerInfo.entitlements.active['pro'] !== undefined;
+    updateEntitlementsLabel();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('Failed to get customer info:', message);
+    showError(message);
+  }
 
   document.getElementById('paywall-btn')!.addEventListener('click', async () => {
     clearError();
@@ -81,9 +82,6 @@ async function showPurchaseScreen() {
       console.error('Failed to present paywall:', message);
       showError(message);
     }
-    const updatedInfo = await Purchases.getCustomerInfo();
-    hasProEntitlement = updatedInfo.customerInfo.entitlements.active['pro'] !== undefined;
-    updateEntitlementsLabel();
   });
 
   document.getElementById('back-btn')!.addEventListener('click', showTestCases);
