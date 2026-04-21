@@ -1,3 +1,53 @@
+## 13.0.1
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 18.1.0 (#765) via RevenueCat Git Bot (@RCGitBot)
+  * [Android 10.2.0](https://github.com/RevenueCat/purchases-android/releases/tag/10.2.0)
+  * [iOS 5.68.0](https://github.com/RevenueCat/purchases-ios/releases/tag/5.68.0)
+
+### 🔄 Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `20911d1` to `a1eed48` (#764) via dependabot[bot] (@dependabot[bot])
+
+## 13.0.0
+## RevenueCat SDK
+> [!WARNING]  
+> If you don't have any login system in your app, please make sure your one-time purchase products have been correctly configured in the RevenueCat dashboard as either consumable or non-consumable. If they're incorrect as consumables, RevenueCat will consume these purchases. This means that customers won't be able to restore them from version 13.0.0 onward.
+> Non-consumables are products that are meant to be bought only once, for example, lifetime subscriptions. Please see more information in our [docs](https://www.revenuecat.com/docs/known-store-issues/play-billing-library/restore-consumable-purchases-bc8)
+
+### 💥 Breaking Changes
+This release updates to Billing Library 8.3.0 with min SDK supported of Android 6 (API 23), previously min was 21. It also removes a previous workaround used to be able to restore consumed one time products which is not available anymore.
+
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 18.0.0 (#761) via RevenueCat Git Bot (@RCGitBot)
+  * [Android 10.1.2](https://github.com/RevenueCat/purchases-android/releases/tag/10.1.2)
+  * [Android 10.1.1](https://github.com/RevenueCat/purchases-android/releases/tag/10.1.1)
+  * [Android 10.1.0](https://github.com/RevenueCat/purchases-android/releases/tag/10.1.0)
+  * [Android 10.0.2](https://github.com/RevenueCat/purchases-android/releases/tag/10.0.2)
+  * [Android 10.0.1](https://github.com/RevenueCat/purchases-android/releases/tag/10.0.1)
+  * [Android 9.29.1](https://github.com/RevenueCat/purchases-android/releases/tag/9.29.1)
+  * [Android 10.0.0](https://github.com/RevenueCat/purchases-android/releases/tag/10.0.0)
+  * [iOS 5.67.2](https://github.com/RevenueCat/purchases-ios/releases/tag/5.67.2)
+
+### 🔄 Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `894bb1b` to `20911d1` (#760) via dependabot[bot] (@dependabot[bot])
+* Update CODEOWNERS default owner to @RevenueCat/sdk (#758) via Antonio Pallares (@ajpallares)
+* Bump fastlane-plugin-revenuecat_internal from `ceecf91` to `894bb1b` (#759) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `6289be1` to `ceecf91` (#756) via dependabot[bot] (@dependabot[bot])
+
+## 12.3.2
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 17.55.1 (#753) via RevenueCat Git Bot (@RCGitBot)
+  * [Android 9.29.0](https://github.com/RevenueCat/purchases-android/releases/tag/9.29.0)
+  * [iOS 5.67.1](https://github.com/RevenueCat/purchases-ios/releases/tag/5.67.1)
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 17.55.0 (#752) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* fix(purchase-tester): repair build-purchase-tester TypeScript error (#751) via Antonio Pallares (@ajpallares)
+* Bump fastlane-plugin-revenuecat_internal from `5d6e93f` to `6289be1` (#750) via dependabot[bot] (@dependabot[bot])
+* chore: add Husky + lint-staged for pre-commit formatting (#749) via Facundo Menzella (@facumenzella)
+* feat(purchase-tester): add offering selector to sample app (#748) via Facundo Menzella (@facumenzella)
+* Bump fastlane-plugin-revenuecat_internal from `f11fe40` to `5d6e93f` (#747) via dependabot[bot] (@dependabot[bot])
+
 ## 12.3.1
 ## RevenueCat SDK
 ### 📦 Dependency Updates
