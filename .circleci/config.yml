@@ -408,11 +408,9 @@ workflows:
       - dry-run-release-ui
       - run-maestro-e2e-tests-ios:
           context:
-            - maestro-e2e-tests
             - e2e-tests
       - run-maestro-e2e-tests-android:
           context:
-            - maestro-e2e-tests
             - e2e-tests
 
       # Hold and deploy phase - only on release branches
@@ -468,7 +466,6 @@ workflows:
     jobs:
       - run-maestro-e2e-tests-ios:
           context:
-            - maestro-e2e-tests
             - e2e-tests
 
   maestro-e2e-tests-android:
@@ -478,7 +475,6 @@ workflows:
     jobs:
       - run-maestro-e2e-tests-android:
           context:
-            - maestro-e2e-tests
             - e2e-tests
 
   update-hybrid-common-versions:
