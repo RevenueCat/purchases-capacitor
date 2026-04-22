@@ -10,9 +10,15 @@ interface LaunchArgsPlugin {
 
 const LaunchArgs = registerPlugin<LaunchArgsPlugin>('LaunchArgs');
 
-const TEST_FLOW_SCREEN_MAP: Record<string, () => void> = {
-  purchase_through_paywall: showPurchaseScreen,
-};
+interface TestCase {
+  title: string;
+  flowKey: string;
+  show: () => void;
+}
+
+const TEST_CASES: TestCase[] = [
+  { title: 'Purchase through paywall', flowKey: 'purchase_through_paywall', show: showPurchaseScreen },
+];
 
 let hasProEntitlement: boolean | null = null;
 
@@ -61,9 +67,9 @@ async function init() {
       /* launch args not available */
     }
 
-    const navigateFn = testFlow ? TEST_FLOW_SCREEN_MAP[testFlow] : null;
-    if (navigateFn) {
-      navigateFn();
+    const match = testFlow ? TEST_CASES.find((tc) => tc.flowKey === testFlow) : null;
+    if (match) {
+      match.show();
     } else {
       showTestCases();
     }
@@ -76,11 +82,14 @@ async function init() {
 }
 
 function showTestCases() {
-  document.getElementById('app')!.innerHTML = `
-    <h1>Test Cases</h1>
-    <button id="purchase-btn">Purchase through paywall</button>
-  `;
-  document.getElementById('purchase-btn')!.addEventListener('click', showPurchaseScreen);
+  const app = document.getElementById('app')!;
+  app.innerHTML = '<h1>Test Cases</h1>';
+  TEST_CASES.forEach((tc) => {
+    const btn = document.createElement('button');
+    btn.textContent = tc.title;
+    btn.addEventListener('click', tc.show);
+    app.appendChild(btn);
+  });
 }
 
 async function showPurchaseScreen() {

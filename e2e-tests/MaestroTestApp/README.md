@@ -68,10 +68,11 @@ to the web layer:
 
 1. Add a new screen function in [`src/app.ts`](src/app.ts) (or reuse an
    existing one).
-2. Register it in the `TEST_FLOW_SCREEN_MAP` keyed by the argument value you
-   plan to pass from Maestro.
-3. In the Maestro YAML, set `launchApp.arguments.e2e_test_flow` to that same
-   value.
+2. Add an entry to `TEST_CASES` in [`src/app.ts`](src/app.ts) with the title
+   shown in the Test Cases list, the `flowKey` you plan to pass from Maestro,
+   and the screen function to invoke.
+3. In the Maestro YAML, set `launchApp.arguments.e2e_test_flow` to the same
+   `flowKey`.
 
 ## RevenueCat Project
 
