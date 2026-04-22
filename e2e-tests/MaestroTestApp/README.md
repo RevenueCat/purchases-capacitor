@@ -7,7 +7,6 @@ A minimal Capacitor app used by Maestro end-to-end tests to verify RevenueCat SD
 - Node.js & npm
 - Xcode (iOS) / Android Studio (Android)
 - [Maestro](https://maestro.mobile.dev/) CLI
-- CocoaPods (`gem install cocoapods`)
 
 ## Setup
 
