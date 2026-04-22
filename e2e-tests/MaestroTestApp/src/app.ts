@@ -54,12 +54,12 @@ async function init() {
 function showTestCases() {
   document.getElementById('app')!.innerHTML = `
     <h1>Test Cases</h1>
-    <button id="purchase-btn">Purchase through paywall</button>
+    <button id="purchase-through-paywall-btn">Purchase through paywall</button>
   `;
-  document.getElementById('purchase-btn')!.addEventListener('click', showPurchaseScreen);
+  document.getElementById('purchase-through-paywall-btn')!.addEventListener('click', showPurchaseThroughPaywallScreen);
 }
 
-async function showPurchaseScreen() {
+async function showPurchaseThroughPaywallScreen() {
   document.getElementById('app')!.innerHTML = `
     <div class="center">
       <p id="entitlements-label">${entitlementsText()}</p>
