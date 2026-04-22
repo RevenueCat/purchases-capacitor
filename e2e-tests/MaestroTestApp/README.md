@@ -66,11 +66,12 @@ to the web layer:
 
 ### Adding a new test flow
 
-1. Add a new screen function in [`src/app.ts`](src/app.ts) (or reuse an
-   existing one).
-2. Add an entry to `TEST_CASES` in [`src/app.ts`](src/app.ts), keyed by the
-   flow value you plan to pass from Maestro, with the title shown in the Test
-   Cases list and the screen function to invoke.
+1. Create `src/screens/<your_test_case>.ts` exporting a `show*` function
+   (see [`src/screens/purchase_through_paywall.ts`](src/screens/purchase_through_paywall.ts)
+   as a template).
+2. Register it in [`src/test_cases.ts`](src/test_cases.ts), keyed by the flow
+   value you plan to pass from Maestro, with the title shown in the Test Cases
+   list and the screen function to invoke.
 3. In the Maestro YAML, set `launchApp.arguments.e2e_test_flow` to the same
    key.
 
