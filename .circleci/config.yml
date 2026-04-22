@@ -205,15 +205,14 @@ jobs:
       xcode: '26.3.0'
     steps:
       - checkout
-      - run:
-          name: Install Node 22
-          command: |
-            brew install node@22
-            brew unlink node || true
-            brew link --overwrite node@22
-            node --version
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
+      - yarn-dependencies-mac
+      - yarn-dependencies-ui-mac
+      - run: yarn build
+      - run:
+          name: Build UI package
+          command: cd purchases-capacitor-ui && npm run build
       - revenuecat/install-maestro
       - run:
           name: Boot iOS Simulator
@@ -241,13 +240,15 @@ jobs:
           command: |
             gem install bundler --no-document
             bundle install
+      - yarn-dependencies-unix
+      - yarn-dependencies-ui-unix
+      - run: yarn build
+      - run:
+          name: Build UI package
+          command: cd purchases-capacitor-ui && npm run build
       - run:
           name: Build Maestro app (Android)
-          command: |
-            nvm install 22
-            nvm use 22
-            node --version
-            bundle exec fastlane build_maestro_app_android
+          command: bundle exec fastlane build_maestro_app_android
           no_output_timeout: 15m
       - android/create_avd:
           avd_name: test-e2e
