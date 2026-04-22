@@ -457,24 +457,6 @@ workflows:
     jobs:
       - bump
 
-  maestro-e2e-tests-ios:
-    when:
-      or:
-        - equal: ["maestro_e2e_tests", << pipeline.schedule.name >>]
-    jobs:
-      - run-maestro-e2e-tests-ios:
-          context:
-            - e2e-tests
-
-  maestro-e2e-tests-android:
-    when:
-      or:
-        - equal: ["maestro_e2e_tests", << pipeline.schedule.name >>]
-    jobs:
-      - run-maestro-e2e-tests-android:
-          context:
-            - e2e-tests
-
   update-hybrid-common-versions:
     when:
       equal: [ upgrade-hybrid-common, << pipeline.parameters.action >> ]
