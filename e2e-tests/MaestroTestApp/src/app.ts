@@ -12,13 +12,12 @@ const LaunchArgs = registerPlugin<LaunchArgsPlugin>('LaunchArgs');
 
 interface TestCase {
   title: string;
-  flowKey: string;
   show: () => void;
 }
 
-const TEST_CASES: TestCase[] = [
-  { title: 'Purchase through paywall', flowKey: 'purchase_through_paywall', show: showPurchaseScreen },
-];
+const TEST_CASES: Record<string, TestCase> = {
+  purchase_through_paywall: { title: 'Purchase through paywall', show: showPurchaseScreen },
+};
 
 let hasProEntitlement: boolean | null = null;
 
@@ -67,7 +66,7 @@ async function init() {
       /* launch args not available */
     }
 
-    const match = testFlow ? TEST_CASES.find((tc) => tc.flowKey === testFlow) : null;
+    const match = testFlow ? TEST_CASES[testFlow] : null;
     if (match) {
       match.show();
     } else {
@@ -84,7 +83,7 @@ async function init() {
 function showTestCases() {
   const app = document.getElementById('app')!;
   app.innerHTML = '<h1>Test Cases</h1>';
-  TEST_CASES.forEach((tc) => {
+  Object.values(TEST_CASES).forEach((tc) => {
     const btn = document.createElement('button');
     btn.textContent = tc.title;
     btn.addEventListener('click', tc.show);
