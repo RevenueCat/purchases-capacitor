@@ -65,8 +65,8 @@ async function init() {
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error('Failed to initialize:', message);
-    showError(message);
     showTestCases();
+    showError(message);
   }
 }
 
