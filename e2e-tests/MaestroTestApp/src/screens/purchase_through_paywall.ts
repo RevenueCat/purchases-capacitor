@@ -3,7 +3,7 @@ import { RevenueCatUI } from '@revenuecat/purchases-capacitor-ui';
 import { clearError, showError } from '../helpers';
 import { showTestCases } from '../test_cases_screen';
 
-export async function showPurchaseThroughPaywall() {
+export async function showPurchaseThroughPaywallScreen() {
   let hasProEntitlement: boolean | null = null;
   let listenerId: string | null = null;
 

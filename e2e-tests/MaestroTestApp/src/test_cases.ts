@@ -6,7 +6,7 @@
 // Mirrors the pattern used by purchases-flutter (lib/test_cases.dart) and
 // cordova-plugin-purchases (www/js/test_cases.js).
 
-import { showPurchaseThroughPaywall } from './screens/purchase_through_paywall';
+import { showPurchaseThroughPaywallScreen } from './screens/purchase_through_paywall';
 
 export interface TestCase {
   title: string;
@@ -14,5 +14,5 @@ export interface TestCase {
 }
 
 export const TEST_CASES: Record<string, TestCase> = {
-  purchase_through_paywall: { title: 'Purchase through paywall', show: showPurchaseThroughPaywall },
+  purchase_through_paywall: { title: 'Purchase through paywall', show: showPurchaseThroughPaywallScreen },
 };
