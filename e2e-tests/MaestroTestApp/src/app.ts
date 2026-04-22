@@ -14,11 +14,16 @@ const TEST_FLOW_SCREEN_MAP: Record<string, () => void> = {
   purchase_through_paywall: () => showPurchaseScreen(),
 };
 
-let hasProEntitlement = false;
+let hasProEntitlement: boolean | null = null;
+
+function entitlementsText(): string {
+  if (hasProEntitlement === null) return 'Entitlements: loading';
+  return `Entitlements: ${hasProEntitlement ? 'pro' : 'none'}`;
+}
 
 function updateEntitlementsLabel() {
   const label = document.getElementById('entitlements-label');
-  if (label) label.textContent = `Entitlements: ${hasProEntitlement ? 'pro' : 'none'}`;
+  if (label) label.textContent = entitlementsText();
 }
 
 function showError(message: string) {
@@ -81,7 +86,7 @@ function showTestCases() {
 async function showPurchaseScreen() {
   document.getElementById('app')!.innerHTML = `
     <div class="center">
-      <p id="entitlements-label">Entitlements: ${hasProEntitlement ? 'pro' : 'none'}</p>
+      <p id="entitlements-label">${entitlementsText()}</p>
       <button id="paywall-btn">Present Paywall</button>
       <button id="back-btn" style="background-color: #888; margin-top: 16px;">Back</button>
     </div>
