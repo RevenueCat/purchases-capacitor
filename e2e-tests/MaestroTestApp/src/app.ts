@@ -11,7 +11,7 @@ interface LaunchArgsPlugin {
 const LaunchArgs = registerPlugin<LaunchArgsPlugin>('LaunchArgs');
 
 const TEST_FLOW_SCREEN_MAP: Record<string, () => void> = {
-  purchase_through_paywall: () => showPurchaseScreen(),
+  purchase_through_paywall: showPurchaseScreen,
 };
 
 let hasProEntitlement: boolean | null = null;
