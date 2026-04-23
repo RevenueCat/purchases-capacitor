@@ -1,4 +1,4 @@
-export function showError(message: string) {
+export function showError(message: string): void {
   let el = document.getElementById('error-message');
   if (!el) {
     el = document.createElement('p');
@@ -10,7 +10,7 @@ export function showError(message: string) {
   el.textContent = `Error: ${message}`;
 }
 
-export function clearError() {
+export function clearError(): void {
   const el = document.getElementById('error-message');
   if (el) el.remove();
 }

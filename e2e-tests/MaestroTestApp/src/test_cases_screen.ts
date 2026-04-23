@@ -1,6 +1,6 @@
 import { TEST_CASES } from './test_cases';
 
-export function showTestCases() {
+export function showTestCases(): void {
   const app = document.getElementById('app')!;
   app.innerHTML = '<h1>Test Cases</h1>';
   Object.values(TEST_CASES).forEach((tc) => {

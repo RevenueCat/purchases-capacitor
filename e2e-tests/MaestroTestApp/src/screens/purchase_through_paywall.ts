@@ -1,9 +1,10 @@
-import { CustomerInfo, Purchases } from '@revenuecat/purchases-capacitor';
+import { Purchases, type CustomerInfo } from '@revenuecat/purchases-capacitor';
 import { RevenueCatUI } from '@revenuecat/purchases-capacitor-ui';
+
 import { clearError, showError } from '../helpers';
 import { showTestCases } from '../test_cases_screen';
 
-export async function showPurchaseThroughPaywallScreen() {
+export async function showPurchaseThroughPaywallScreen(): Promise<void> {
   let hasProEntitlement: boolean | null = null;
   let listenerId: string | null = null;
 

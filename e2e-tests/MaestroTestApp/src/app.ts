@@ -1,5 +1,6 @@
 import { registerPlugin } from '@capacitor/core';
 import { LOG_LEVEL, Purchases } from '@revenuecat/purchases-capacitor';
+
 import { showError } from './helpers';
 import { TEST_CASES } from './test_cases';
 import { showTestCases } from './test_cases_screen';
