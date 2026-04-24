@@ -137,14 +137,14 @@ This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package
 ### configure(...)
 
 ```typescript
-configure(configuration: PurchasesConfiguration) => Promise<void>
+configure(configuration: PurchasesConfigurationWithLayoutDirection) => Promise<void>
 ```
 
 Sets up Purchases with your API key and an app user id.
 
-| Param               | Type                                                                      | Description                                                                                                                                                   |
-| ------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`configuration`** | <code><a href="#purchasesconfiguration">PurchasesConfiguration</a></code> | RevenueCat configuration object including the API key and other optional parameters. See {@link <a href="#purchasesconfiguration">PurchasesConfiguration</a>} |
+| Param               | Type                                                                                                            | Description                                                                                                                                                   |
+| ------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`configuration`** | <code><a href="#purchasesconfigurationwithlayoutdirection">PurchasesConfigurationWithLayoutDirection</a></code> | RevenueCat configuration object including the API key and other optional parameters. See {@link <a href="#purchasesconfiguration">PurchasesConfiguration</a>} |
 
 --------------------
 
@@ -1259,16 +1259,15 @@ Check if configure has finished and Purchases has been configured.
 ### overridePreferredUILocale(...)
 
 ```typescript
-overridePreferredUILocale(options: { locale: string | null; }) => Promise<void>
+overridePreferredUILocale(options: { locale: string | null; honorLayoutDirection?: boolean; }) => Promise<void>
 ```
 
-Override the preferred UI locale for RevenueCat UI components at runtime. This affects both API requests
-and UI rendering. If the locale changes, this will automatically clear the offerings cache and trigger
-a background refetch to get paywall templates with the correct localizations.
+Override the preferred UI locale for RevenueCat UI components at runtime.
+If honorLayoutDirection is true, RevenueCat UI components will also derive layout direction from this locale.
 
-| Param         | Type                                     | Description                                                               |
-| ------------- | ---------------------------------------- | ------------------------------------------------------------------------- |
-| **`options`** | <code>{ locale: string \| null; }</code> | The locale string (e.g., "es-ES", "en-US") or null to use system default. |
+| Param         | Type                                                                     | Description                                                               |
+| ------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| **`options`** | <code>{ locale: string \| null; honorLayoutDirection?: boolean; }</code> | The locale string (e.g., "es-ES", "en-US") or null to use system default. |
 
 --------------------
 
@@ -1402,11 +1401,11 @@ The EntitlementInfo object gives you access to all of the information about the 
 
 Represents a non-subscription transaction in the <a href="#store">Store</a>.
 
-| Prop                        | Type                        | Description                                          |
-| --------------------------- | --------------------------- | ---------------------------------------------------- |
-| **`transactionIdentifier`** | <code>string</code>         | Id of the transaction.                               |
-| **`productIdentifier`**     | <code>string</code>         | Product Id associated with the transaction.          |
-| **`purchaseDate`**          | <code>string</code>         | Purchase date of the transaction in ISO 8601 format. |
+| Prop                        | Type                | Description                                          |
+| --------------------------- | ------------------- | ---------------------------------------------------- |
+| **`transactionIdentifier`** | <code>string</code> | Id of the transaction.                               |
+| **`productIdentifier`**     | <code>string</code> | Product Id associated with the transaction.          |
+| **`purchaseDate`**          | <code>string</code> | Purchase date of the transaction in ISO 8601 format. |
 | **`purchaseToken`**         | <code>string \| null</code> | Purchase token of the transaction. Android only.     |
 
 
@@ -1818,6 +1817,11 @@ Options for tracking a custom paywall impression.
 
 
 ### Type Aliases
+
+
+#### PurchasesConfigurationWithLayoutDirection
+
+<code><a href="#purchasesconfiguration">PurchasesConfiguration</a> & { /** * Whether RevenueCat UI components should also derive layout direction from * preferredUILocaleOverride. Defaults to false. */ preferredUILocaleOverrideHonorsLayoutDirection?: boolean; }</code>
 
 
 #### PurchasesAreCompletedBy

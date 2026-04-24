@@ -91,6 +91,11 @@ export const Purchases: PurchasesPlugin;
 // @public (undocumented)
 export type PurchasesCallbackId = string;
 
+// @public
+export type PurchasesConfigurationWithLayoutDirection = PurchasesConfiguration & {
+    preferredUILocaleOverrideHonorsLayoutDirection?: boolean;
+};
+
 // @public (undocumented)
 export interface PurchasesPlugin {
     addCustomerInfoUpdateListener(customerInfoUpdateListener: CustomerInfoUpdateListener): Promise<PurchasesCallbackId>;
@@ -118,7 +123,7 @@ export interface PurchasesPlugin {
         [productId: string]: IntroEligibility;
     }>;
     collectDeviceIdentifiers(): Promise<void>;
-    configure(configuration: PurchasesConfiguration): Promise<void>;
+    configure(configuration: PurchasesConfigurationWithLayoutDirection): Promise<void>;
     enableAdServicesAttributionTokenCollection(): Promise<void>;
     getAppUserID(): Promise<{
         appUserID: string;
@@ -163,6 +168,7 @@ export interface PurchasesPlugin {
         customerInfo: CustomerInfo;
     }>;
     overridePreferredUILocale(options: {
+        honorLayoutDirection?: boolean;
         locale: string | null;
     }): Promise<void>;
     parseAsWebPurchaseRedemption(options: {

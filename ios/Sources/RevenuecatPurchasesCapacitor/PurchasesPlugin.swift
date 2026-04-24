@@ -1,6 +1,7 @@
 // swiftlint:disable file_length type_body_length
 
 import Foundation
+import ObjectiveC
 import Capacitor
 import PurchasesHybridCommon
 import RevenueCat
@@ -133,6 +134,8 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
         let diagnosticsEnabled = call.getBool("diagnosticsEnabled") ?? false
         let automaticDeviceIdentifierCollectionEnabled = call.getBool("automaticDeviceIdentifierCollectionEnabled") ?? true
         let preferredLocale = call.getString("preferredUILocaleOverride")
+        let preferredLocaleHonorsLayoutDirection =
+            call.getBool("preferredUILocaleOverrideHonorsLayoutDirection") ?? false
 
         let purchases = Purchases.configure(apiKey: apiKey,
                                             appUserID: appUserID,
@@ -148,6 +151,9 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
                                             automaticDeviceIdentifierCollectionEnabled: automaticDeviceIdentifierCollectionEnabled,
                                             preferredLocale: preferredLocale)
         purchases.delegate = self
+        if preferredLocaleHonorsLayoutDirection {
+            self.overridePreferredLocale(preferredLocale, honorLayoutDirection: true)
+        }
         call.resolve()
     }
 
@@ -671,8 +677,29 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
     @objc func overridePreferredUILocale(_ call: CAPPluginCall) {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
         let locale = call.getString("locale")
-        CommonFunctionality.overridePreferredLocale(locale)
+        let honorLayoutDirection = call.getBool("honorLayoutDirection") ?? false
+        self.overridePreferredLocale(locale, honorLayoutDirection: honorLayoutDirection)
         call.resolve()
+    }
+
+    private func overridePreferredLocale(_ locale: String?, honorLayoutDirection: Bool) {
+        guard honorLayoutDirection else {
+            CommonFunctionality.overridePreferredLocale(locale)
+            return
+        }
+
+        let selector = NSSelectorFromString("overridePreferredUILocale:honorLayoutDirection:")
+        let purchases = Purchases.shared
+        guard purchases.responds(to: selector),
+              let method = class_getInstanceMethod(type(of: purchases), selector) else {
+            CommonFunctionality.overridePreferredLocale(locale)
+            return
+        }
+
+        typealias OverridePreferredLocaleImp = @convention(c) (AnyObject, Selector, NSString?, Bool) -> Void
+        let implementation = method_getImplementation(method)
+        let function = unsafeBitCast(implementation, to: OverridePreferredLocaleImp.self)
+        function(purchases, selector, locale as NSString?, honorLayoutDirection)
     }
 
     @objc func trackCustomPaywallImpression(_ call: CAPPluginCall) {

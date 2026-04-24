@@ -11,7 +11,6 @@ import type {
   LogHandler,
   LogInResult,
   MakePurchaseResult,
-  PurchasesConfiguration,
   PurchasesEntitlementInfo,
   PurchasesOffering,
   PurchasesOfferings,
@@ -41,6 +40,7 @@ import type {
   PurchasePackageOptions,
   PurchasePackageWithWinBackOfferOptions,
   PurchaseProductWithWinBackOfferOptions,
+  PurchasesConfigurationWithLayoutDirection,
   PurchasesPlugin,
   PurchaseStoreProductOptions,
   PurchaseSubscriptionOptionOptions,
@@ -53,7 +53,7 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
   private shouldMockWebResults = false;
   private webNotSupportedErrorMessage = 'Web not supported in this plugin.';
 
-  configure(_configuration: PurchasesConfiguration): Promise<void> {
+  configure(_configuration: PurchasesConfigurationWithLayoutDirection): Promise<void> {
     return this.mockNonReturningFunctionIfEnabled('configure');
   }
 
@@ -352,7 +352,7 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     return this.mockReturningFunctionIfEnabled('isConfigured', mockResult);
   }
 
-  overridePreferredUILocale(_options: { locale: string | null }): Promise<void> {
+  overridePreferredUILocale(_options: { locale: string | null; honorLayoutDirection?: boolean }): Promise<void> {
     return this.mockNonReturningFunctionIfEnabled('overridePreferredUILocale');
   }
 

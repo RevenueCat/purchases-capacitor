@@ -389,6 +389,7 @@ function checkShouldPurchasePromoProductListener() {
 
 async function checkLocaleAndPaywallImpression(plugin: PurchasesPlugin) {
   await plugin.overridePreferredUILocale({ locale: 'en-US' });
+  await plugin.overridePreferredUILocale({ locale: 'ar-SA', honorLayoutDirection: true });
   await plugin.overridePreferredUILocale({ locale: null });
 }
 

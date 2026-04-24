@@ -32,6 +32,14 @@ export * from '@revenuecat/purchases-typescript-internal-esm';
 
 export type PurchasesCallbackId = string;
 
+export type PurchasesConfigurationWithLayoutDirection = PurchasesConfiguration & {
+  /**
+   * Whether RevenueCat UI components should also derive layout direction from
+   * preferredUILocaleOverride. Defaults to false.
+   */
+  preferredUILocaleOverrideHonorsLayoutDirection?: boolean;
+};
+
 export interface GetProductOptions {
   /**
    * Array of product identifiers to obtain
@@ -199,7 +207,7 @@ export interface PurchasesPlugin {
    * Sets up Purchases with your API key and an app user id.
    * @param {PurchasesConfiguration} configuration RevenueCat configuration object including the API key and other optional parameters. See {@link PurchasesConfiguration}
    */
-  configure(configuration: PurchasesConfiguration): Promise<void>;
+  configure(configuration: PurchasesConfigurationWithLayoutDirection): Promise<void>;
 
   /**
    * Fetches the virtual currencies for the current subscriber.
@@ -907,14 +915,13 @@ export interface PurchasesPlugin {
   isConfigured(): Promise<{ isConfigured: boolean }>;
 
   /**
-   * Override the preferred UI locale for RevenueCat UI components at runtime. This affects both API requests
-   * and UI rendering. If the locale changes, this will automatically clear the offerings cache and trigger
-   * a background refetch to get paywall templates with the correct localizations.
+   * Override the preferred UI locale for RevenueCat UI components at runtime.
+   * If honorLayoutDirection is true, RevenueCat UI components will also derive layout direction from this locale.
    *
    * @param options The locale string (e.g., "es-ES", "en-US") or null to use system default.
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet.
    */
-  overridePreferredUILocale(options: { locale: string | null }): Promise<void>;
+  overridePreferredUILocale(options: { locale: string | null; honorLayoutDirection?: boolean }): Promise<void>;
 
   /**
    * Tracks an impression of a custom paywall. Use this to record when a user views your custom paywall

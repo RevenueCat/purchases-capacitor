@@ -109,6 +109,8 @@ class PurchasesPlugin : Plugin() {
         val diagnosticsEnabled = call.getBoolean("diagnosticsEnabled")
         val automaticDeviceIdentifierCollectionEnabled = call.getBoolean("automaticDeviceIdentifierCollectionEnabled")
         val preferredLocale = call.getString("preferredUILocaleOverride")
+        val preferredLocaleHonorsLayoutDirection =
+            call.getBoolean("preferredUILocaleOverrideHonorsLayoutDirection", false)
 
         configure(
             context.applicationContext,
@@ -124,6 +126,9 @@ class PurchasesPlugin : Plugin() {
             automaticDeviceIdentifierCollectionEnabled = automaticDeviceIdentifierCollectionEnabled,
             preferredLocale = preferredLocale,
         )
+        if (preferredLocaleHonorsLayoutDirection == true) {
+            overridePreferredLocale(preferredLocale, honorLayoutDirection = true)
+        }
         Purchases.sharedInstance.updatedCustomerInfoListener = UpdatedCustomerInfoListener { customerInfo ->
             customerInfo.mapAsync { map ->
                 for (callbackId in customerInfoListeners) {
@@ -703,8 +708,24 @@ class PurchasesPlugin : Plugin() {
     fun overridePreferredUILocale(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val locale = call.getString("locale")
-        overridePreferredLocaleCommon(locale)
+        val honorLayoutDirection = call.getBoolean("honorLayoutDirection", false) == true
+        overridePreferredLocale(locale, honorLayoutDirection)
         call.resolve()
+    }
+
+    private fun overridePreferredLocale(locale: String?, honorLayoutDirection: Boolean) {
+        if (!honorLayoutDirection) {
+            overridePreferredLocaleCommon(locale)
+            return
+        }
+
+        runCatching {
+            Purchases::class.java
+                .getMethod("overridePreferredUILocale", String::class.java, java.lang.Boolean.TYPE)
+                .invoke(Purchases.sharedInstance, locale, true)
+        }.getOrElse {
+            overridePreferredLocaleCommon(locale)
+        }
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_NONE)
