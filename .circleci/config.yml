@@ -199,6 +199,70 @@ jobs:
           name: release
           command: bundle exec fastlane release
 
+  run-maestro-e2e-tests-ios:
+    <<: *base-mac-job
+    macos:
+      xcode: '26.4.1'
+    steps:
+      - checkout
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - run:
+          name: Start booting iOS Simulator
+          command: xcrun simctl boot "iPhone 17" || true
+      - yarn-dependencies-mac
+      - yarn-dependencies-ui-mac
+      - run:
+          name: Replace Maestro test app API key
+          command: bundle exec fastlane change_maestro_test_app_api_key
+      - run:
+          name: Build Maestro test app (iOS)
+          command: bundle exec fastlane build_maestro_test_app platform:ios
+          no_output_timeout: 15m
+      - revenuecat/install-maestro
+      - run:
+          name: Wait for iOS Simulator boot to finish
+          command: xcrun simctl bootstatus "iPhone 17" -b
+      - run:
+          name: Run Maestro E2E Tests (iOS)
+          command: bundle exec fastlane run_maestro_e2e_tests_ios
+          no_output_timeout: 15m
+      - store_test_results:
+          path: fastlane/test_output
+      - store_artifacts:
+          path: fastlane/test_output
+
+  run-maestro-e2e-tests-android:
+    machine:
+      image: android:2025.10.1
+    resource_class: xlarge
+    shell: /bin/bash --login -o pipefail
+    steps:
+      - checkout
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
+      - yarn-dependencies-unix
+      - yarn-dependencies-ui-unix
+      - run:
+          name: Replace Maestro test app API key
+          command: bundle exec fastlane change_maestro_test_app_api_key
+      - android/create_avd:
+          avd_name: test-e2e
+          system_image: system-images;android-34;google_apis;x86_64
+          install: true
+      - android/start_emulator:
+          avd_name: test-e2e
+          post_emulator_launch_assemble_command: bundle exec fastlane build_maestro_test_app platform:android
+      - revenuecat/install-maestro
+      - run:
+          name: Run Maestro E2E Tests (Android)
+          command: bundle exec fastlane run_maestro_e2e_tests_android
+          no_output_timeout: 15m
+      - store_test_results:
+          path: fastlane/test_output
+      - store_artifacts:
+          path: fastlane/test_output
+
   update-hybrid-common-versions:
     description: "Creates a PR updating purchases-hybrid-common to latest release"
     <<: *base-mac-job
@@ -339,6 +403,12 @@ workflows:
       - run-api-tests-ui
       - run-lint-ui
       - dry-run-release-ui
+      - run-maestro-e2e-tests-ios:
+          context:
+            - e2e-tests
+      - run-maestro-e2e-tests-android:
+          context:
+            - e2e-tests
 
       # Hold and deploy phase - only on release branches
       - hold:

@@ -241,6 +241,58 @@ lane :update_hybrid_common do |options|
   )
 end
 
+desc "Replace the Maestro test app API key placeholder"
+lane :change_maestro_test_app_api_key do |options|
+  new_api_key = options[:api_key] || ENV["RC_E2E_TEST_API_KEY_PRODUCTION_TEST_STORE"]
+  if new_api_key.to_s.empty?
+    UI.user_error!("Missing api_key parameter or RC_E2E_TEST_API_KEY_PRODUCTION_TEST_STORE environment variable")
+  end
+  replace_text_in_files(
+    previous_text: "MAESTRO_TESTS_REVENUECAT_API_KEY",
+    new_text: new_api_key,
+    paths_of_files_to_update: ['./e2e-tests/MaestroTestApp/src/app.ts']
+  )
+  app_ts = File.expand_path('e2e-tests/MaestroTestApp/src/app.ts', get_root_folder)
+  UI.user_error!("API key placeholder was not replaced in #{app_ts}") if File.read(app_ts).include?("MAESTRO_TESTS_REVENUECAT_API_KEY")
+end
+
+desc "Build the Maestro E2E test app for the given platform (platform:ios or platform:android)"
+lane :build_maestro_test_app do |options|
+  platform = options[:platform].to_s.downcase
+  UI.user_error!("Missing or invalid `platform` option (use ios or android)") unless %w[ios android].include?(platform)
+
+  Dir.chdir(get_root_folder) do
+    sh("yarn && yarn build")
+  end
+  Dir.chdir(File.expand_path('purchases-capacitor-ui', get_root_folder)) do
+    sh("yarn && yarn build")
+  end
+  Dir.chdir(File.expand_path('e2e-tests/MaestroTestApp', get_root_folder)) do
+    sh("npm install")
+    sh("npm run build")
+    sh("npx cap sync #{platform}")
+    if platform == "ios"
+      sh("xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Debug -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 17' -derivedDataPath build")
+    else
+      Dir.chdir("android") { sh("./gradlew assembleDebug") }
+    end
+  end
+end
+
+desc "Run maestro E2E tests on iOS (build_maestro_test_app must have been run beforehand and a booted simulator is required)"
+lane :run_maestro_e2e_tests_ios do
+  app_path = File.expand_path("e2e-tests/MaestroTestApp/build/Build/Products/Debug-iphonesimulator/App.app", get_root_folder)
+  sh("xcrun simctl install booted #{app_path}")
+  run_maestro_e2e_tests(flow_dir: "../e2e-tests/maestro/", output_dir: "test_output")
+end
+
+desc "Run maestro E2E tests on Android (build_maestro_test_app must have been run beforehand and a running emulator is required)"
+lane :run_maestro_e2e_tests_android do
+  apk_path = File.expand_path("e2e-tests/MaestroTestApp/android/app/build/outputs/apk/debug/app-debug.apk", get_root_folder)
+  sh("adb install #{apk_path}")
+  run_maestro_e2e_tests(flow_dir: "../e2e-tests/maestro/", output_dir: "test_output")
+end
+
 desc "Tag current branch with current version number"
 lane :tag_current_branch do |options|
   version_number = current_version_number
