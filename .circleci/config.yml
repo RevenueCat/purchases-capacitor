@@ -212,10 +212,6 @@ jobs:
           command: xcrun simctl boot "iPhone 17" || true
       - yarn-dependencies-mac
       - yarn-dependencies-ui-mac
-      - run: yarn build
-      - run:
-          name: Build UI package
-          command: cd purchases-capacitor-ui && npm run build
       - revenuecat/install-maestro
       - run:
           name: Wait for iOS Simulator boot to finish
@@ -240,17 +236,20 @@ jobs:
           cache-version: v1
       - yarn-dependencies-unix
       - yarn-dependencies-ui-unix
-      - run: yarn build
       - run:
-          name: Build UI package
-          command: cd purchases-capacitor-ui && npm run build
+          name: Replace Maestro test app API key
+          command: bundle exec fastlane change_maestro_test_app_api_key
       - android/create_avd:
           avd_name: test-e2e
           system_image: system-images;android-34;google_apis;x86_64
           install: true
       - android/start_emulator:
           avd_name: test-e2e
-          post_emulator_launch_assemble_command: bundle exec fastlane build_maestro_app_android
+          # Build the Maestro test app while the emulator finishes booting
+          # so its startup overlaps with the build instead of running serially.
+          # run_maestro_e2e_tests_android skips the build step when the APK
+          # already exists, so the build only runs here.
+          post_emulator_launch_assemble_command: bundle exec fastlane build_maestro_test_app platform:android
       - revenuecat/install-maestro
       - run:
           name: Run Maestro E2E Tests (Android)
