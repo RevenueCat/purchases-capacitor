@@ -279,24 +279,16 @@ lane :build_maestro_test_app do |options|
   end
 end
 
-desc "Run maestro E2E tests on iOS (booted simulator required)"
+desc "Run maestro E2E tests on iOS (build_maestro_test_app must have been run beforehand and a booted simulator is required)"
 lane :run_maestro_e2e_tests_ios do
   app_path = File.expand_path("e2e-tests/MaestroTestApp/build/Build/Products/Debug-iphonesimulator/App.app", get_root_folder)
-  unless File.directory?(app_path)
-    change_maestro_test_app_api_key
-    build_maestro_test_app(platform: "ios")
-  end
   sh("xcrun simctl install booted #{app_path}")
   run_maestro_e2e_tests(flow_dir: "../e2e-tests/maestro/", output_dir: "test_output")
 end
 
-desc "Run maestro E2E tests on Android (running emulator required)"
+desc "Run maestro E2E tests on Android (build_maestro_test_app must have been run beforehand and a running emulator is required)"
 lane :run_maestro_e2e_tests_android do
   apk_path = File.expand_path("e2e-tests/MaestroTestApp/android/app/build/outputs/apk/debug/app-debug.apk", get_root_folder)
-  unless File.exist?(apk_path)
-    change_maestro_test_app_api_key
-    build_maestro_test_app(platform: "android")
-  end
   sh("adb install #{apk_path}")
   run_maestro_e2e_tests(flow_dir: "../e2e-tests/maestro/", output_dir: "test_output")
 end

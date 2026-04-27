@@ -212,6 +212,13 @@ jobs:
           command: xcrun simctl boot "iPhone 17" || true
       - yarn-dependencies-mac
       - yarn-dependencies-ui-mac
+      - run:
+          name: Replace Maestro test app API key
+          command: bundle exec fastlane change_maestro_test_app_api_key
+      - run:
+          name: Build Maestro test app (iOS)
+          command: bundle exec fastlane build_maestro_test_app platform:ios
+          no_output_timeout: 15m
       - revenuecat/install-maestro
       - run:
           name: Wait for iOS Simulator boot to finish
