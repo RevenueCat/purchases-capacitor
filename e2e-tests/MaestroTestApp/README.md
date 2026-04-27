@@ -39,6 +39,42 @@ To run locally, either:
 - Replace the placeholder in `src/app.ts` with a valid API key (do **not** commit it), or
 - Export the env var and run the same `sed` command the Fastlane lane uses.
 
+## Test Flow Launch Argument
+
+To keep Maestro flows short and decoupled from the UI, the app reads an
+`e2e_test_flow` launch argument on startup and jumps straight to the matching
+screen. If the argument is absent or unknown, the app falls back to the
+"Test Cases" list.
+
+Maestro passes it via [`launchApp.arguments`](https://maestro.mobile.dev/api-reference/commands/launchapp):
+
+```yaml
+- launchApp:
+    arguments:
+        e2e_test_flow: purchase_through_paywall
+```
+
+Each platform has a thin `LaunchArgs` Capacitor plugin that exposes the value
+to the web layer:
+
+- **iOS** (`ios/App/App/LaunchArgsPlugin.swift`): reads the value from
+  `UserDefaults.standard` using the `e2e_test_flow` key. Maestro's `arguments`
+  map is forwarded to the process as `NSUserDefaults` entries.
+- **Android** (`android/app/src/main/java/com/revenuecat/automatedsdktests/LaunchArgsPlugin.java`):
+  reads the value from the launch `Intent`'s string extras using the
+  `e2e_test_flow` key. Maestro's `arguments` map is forwarded as Intent extras.
+
+### Adding a new test flow
+
+1. Create `src/screens/<your_test_case>.ts` exporting a `show*` function
+   (see [`src/screens/purchase_through_paywall.ts`](src/screens/purchase_through_paywall.ts)
+   as a template).
+2. Register it in [`src/test_cases.ts`](src/test_cases.ts), keyed by the flow
+   value you plan to pass from Maestro, with the title shown in the Test Cases
+   list and the screen function to invoke.
+3. In the Maestro YAML, set `launchApp.arguments.e2e_test_flow` to the same
+   key.
+
 ## RevenueCat Project
 
 The test uses a RevenueCat project configured with:
