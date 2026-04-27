@@ -250,8 +250,6 @@ jobs:
           install: true
       - android/start_emulator:
           avd_name: test-e2e
-          # Build the Maestro test app while the emulator finishes booting
-          # so its startup overlaps with the build instead of running serially.
           post_emulator_launch_assemble_command: bundle exec fastlane build_maestro_app_android
       - revenuecat/install-maestro
       - run:
