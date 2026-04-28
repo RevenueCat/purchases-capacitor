@@ -91,7 +91,7 @@ export const Purchases: PurchasesPlugin;
 // @public (undocumented)
 export type PurchasesCallbackId = string;
 
-// @public
+// @public (undocumented)
 export type PurchasesConfigurationWithLayoutDirection = PurchasesConfiguration & {
     preferredUILocaleOverrideHonorsLayoutDirection?: boolean;
 };
@@ -168,8 +168,8 @@ export interface PurchasesPlugin {
         customerInfo: CustomerInfo;
     }>;
     overridePreferredUILocale(options: {
-        honorLayoutDirection?: boolean;
         locale: string | null;
+        honorLayoutDirection?: boolean;
     }): Promise<void>;
     parseAsWebPurchaseRedemption(options: {
         urlString: string;
