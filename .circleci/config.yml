@@ -103,21 +103,6 @@ commands:
             - purchases-capacitor-ui/node_modules
           key: v2-mac-ui-dependencies-{{ checksum "purchases-capacitor-ui/package.json" }}
 
-  install-sdkman:
-    description: Install SDKMAN
-    steps:
-      - run:
-          name: Installing SDKMAN
-          command: |
-            curl -s "https://get.sdkman.io?rcupdate=false" | bash
-            echo -e '\nsource "/home/circleci/.sdkman/bin/sdkman-init.sh"' >> $BASH_ENV
-            source $BASH_ENV
-      - run:
-          name: Setup Java environment
-          command: |
-            sdk env install
-            echo -e '\nexport JAVA_HOME="/home/circleci/.sdkman/candidates/java/current"' >> $BASH_ENV
-
   copy-npm-rc:
     steps:
       - run:
