@@ -22,6 +22,7 @@ import type {
   PurchasesVirtualCurrencies,
   PurchasesWinBackOffer,
   REFUND_REQUEST_STATUS,
+  StoreProductChangeInfo,
   Storefront,
   SubscriptionOption,
   WebPurchaseRedemption,
@@ -51,8 +52,16 @@ export interface PurchaseStoreProductOptions {
   /**
    * Android only. Optional GoogleProductChangeInfo you
    * wish to upgrade from containing the oldProductIdentifier and the optional prorationMode.
+   * If both googleProductChangeInfo and storeProductChangeInfo are provided,
+   * storeProductChangeInfo is used and googleProductChangeInfo is ignored.
+   * @deprecated Use storeProductChangeInfo instead.
    */
   googleProductChangeInfo?: GoogleProductChangeInfo | null;
+  /**
+   * Android only. Optional StoreProductChangeInfo you
+   * wish to upgrade from containing the oldProductIdentifier and the optional replacementMode.
+   */
+  storeProductChangeInfo?: StoreProductChangeInfo | null;
   /**
    * Android and Google only. Optional boolean indicates personalized pricing on products available for purchase in the EU.
    * For compliance with EU regulations. User will see "This price has been customized for you" in the purchase dialog when true.
@@ -116,8 +125,16 @@ export interface PurchasePackageOptions {
   /**
    * Android only. Optional GoogleProductChangeInfo you
    * wish to upgrade from containing the oldProductIdentifier and the optional prorationMode.
+   * If both googleProductChangeInfo and storeProductChangeInfo are provided,
+   * storeProductChangeInfo is used and googleProductChangeInfo is ignored.
+   * @deprecated Use storeProductChangeInfo instead.
    */
   googleProductChangeInfo?: GoogleProductChangeInfo | null;
+  /**
+   * Android only. Optional StoreProductChangeInfo you
+   * wish to upgrade from containing the oldProductIdentifier and the optional replacementMode.
+   */
+  storeProductChangeInfo?: StoreProductChangeInfo | null;
   /**
    * Android and Google only. Optional boolean indicates personalized pricing on products available for purchase in the EU.
    * For compliance with EU regulations. User will see "This price has been customized for you" in the purchase dialog when true.
@@ -134,8 +151,16 @@ export interface PurchaseSubscriptionOptionOptions {
   /**
    * Android only. Optional GoogleProductChangeInfo you
    * wish to upgrade from containing the oldProductIdentifier and the optional prorationMode.
+   * If both googleProductChangeInfo and storeProductChangeInfo are provided,
+   * storeProductChangeInfo is used and googleProductChangeInfo is ignored.
+   * @deprecated Use storeProductChangeInfo instead.
    */
   googleProductChangeInfo?: GoogleProductChangeInfo | null;
+  /**
+   * Android only. Optional StoreProductChangeInfo you
+   * wish to upgrade from containing the oldProductIdentifier and the optional replacementMode.
+   */
+  storeProductChangeInfo?: StoreProductChangeInfo | null;
   /**
    * Android and Google only. Optional boolean indicates personalized pricing on products available for purchase in the EU.
    * For compliance with EU regulations. User will see "This price has been customized for you" in the purchase dialog when true.

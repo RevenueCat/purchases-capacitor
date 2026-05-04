@@ -28,6 +28,8 @@ import type {
   PurchasesVirtualCurrencies,
   Storefront,
   PRODUCT_TYPE,
+  StoreProductChangeInfo,
+  STORE_REPLACEMENT_MODE,
 } from '@revenuecat/purchases-capacitor';
 
 function checkProduct(product: PurchasesStoreProduct) {
@@ -176,6 +178,11 @@ function checkUpgradeInfo(upgradeInfo: UpgradeInfo) {
 function checkGoogleProductChangeInfo(info: GoogleProductChangeInfo) {
   const oldProductIdentifier: string = info.oldProductIdentifier;
   const prorationMode: PRORATION_MODE | undefined = info.prorationMode;
+}
+
+function checkStoreProductChangeInfo(info: StoreProductChangeInfo) {
+  const oldProductIdentifier: string = info.oldProductIdentifier;
+  const replacementMode: STORE_REPLACEMENT_MODE | undefined = info.replacementMode;
 }
 
 function checkWinBackOffer(offer: PurchasesWinBackOffer) {
