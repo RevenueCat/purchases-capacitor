@@ -18,8 +18,14 @@ import {
   PRODUCT_CATEGORY,
   PurchaseDiscountedPackageOptions,
   Purchases,
+  STORE_REPLACEMENT_MODE,
 } from '@revenuecat/purchases-capacitor';
-import type { PurchasesOffering, PurchasesOfferings } from '@revenuecat/purchases-capacitor';
+import type {
+  PurchasesOffering,
+  PurchasesOfferings,
+  PurchasesPackage,
+  SubscriptionOption,
+} from '@revenuecat/purchases-capacitor';
 import { RevenueCatUI, PURCHASE_LOGIC_RESULT, PaywallPresentationConfiguration } from '@revenuecat/purchases-capacitor-ui';
 import type { PaywallListener, PurchaseLogic } from '@revenuecat/purchases-capacitor-ui';
 
@@ -34,11 +40,17 @@ import CustomVariablesEditor from './CustomVariablesEditor';
 
 interface ContainerProps {}
 
+type ProductChangeTargetType = 'package' | 'product' | 'subscriptionOption';
+type CustomerInfoWithActiveSubscriptions = {
+  activeSubscriptions: string[];
+};
+
 const FunctionTesterContainer: React.FC<ContainerProps> = () => {
   useEffect(() => {
     (async function () {
       await Purchases.setMockWebResults({ shouldMockWebResults: true });
       await Purchases.setLogLevel({ level: LOG_LEVEL.VERBOSE });
+      await refreshCustomerInfo();
     })();
   }, []);
 
@@ -54,7 +66,26 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
   const [selectedOfferingIdentifier, setSelectedOfferingIdentifier] = useState(
     REVENUECAT_OFFERING_IDENTIFIER ?? '',
   );
+  const [productChangeOldProductIdentifier, setProductChangeOldProductIdentifier] = useState('');
+  const [productChangeTargetPackageIdentifier, setProductChangeTargetPackageIdentifier] = useState('');
+  const [productChangeTargetType, setProductChangeTargetType] = useState<ProductChangeTargetType>('package');
+  const [productChangeSubscriptionOptionId, setProductChangeSubscriptionOptionId] = useState('');
+  const [productChangeReplacementMode, setProductChangeReplacementMode] =
+    useState<STORE_REPLACEMENT_MODE | undefined>(undefined);
+  const [activeSubscriptionIdentifiers, setActiveSubscriptionIdentifiers] = useState<string[]>([]);
   const resolvedCustomVariables = Object.keys(customVariables).length > 0 ? customVariables : undefined;
+
+  const selectedOfferingForProductChange = availableOfferings.find(
+    offering => offering.identifier === (selectedOfferingIdentifier || currentOfferingIdentifier),
+  );
+  const productChangeTargetPackages =
+    selectedOfferingForProductChange?.availablePackages ?? [];
+  const selectedProductChangeTargetPackage =
+    productChangeTargetPackages.find(
+      aPackage => aPackage.identifier === productChangeTargetPackageIdentifier,
+    ) ?? productChangeTargetPackages[0] ?? null;
+  const productChangeSubscriptionOptions =
+    selectedProductChangeTargetPackage?.product.subscriptionOptions ?? [];
 
   const prettifyJson = (objectToPrettify: object) => {
     return JSON.stringify(objectToPrettify, null, 2);
@@ -75,6 +106,28 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
   const updateLastFunctionWithoutContent = (lastFunctionExecuted: string) => {
     setLastFunctionExecuted(lastFunctionExecuted);
     setLastFunctionContent(`${lastFunctionExecuted} does not return content`);
+  };
+
+  const syncCustomerInfoState = (customerInfo: CustomerInfoWithActiveSubscriptions) => {
+    setActiveSubscriptionIdentifiers(customerInfo.activeSubscriptions);
+    setProductChangeOldProductIdentifier((currentOldProductIdentifier) => {
+      if (currentOldProductIdentifier && customerInfo.activeSubscriptions.includes(currentOldProductIdentifier)) {
+        return currentOldProductIdentifier;
+      }
+      return customerInfo.activeSubscriptions[0] ?? '';
+    });
+  };
+
+  const refreshCustomerInfo = async () => {
+    try {
+      await Purchases.invalidateCustomerInfoCache();
+      const { customerInfo } = await Purchases.getCustomerInfo();
+      syncCustomerInfoState(customerInfo);
+      return customerInfo;
+    } catch (error) {
+      console.log('Could not refresh customer info', error);
+      return null;
+    }
   };
 
   const syncOfferingsState = (offerings: PurchasesOfferings) => {
@@ -174,11 +227,13 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         : PURCHASES_ARE_COMPLETED_BY_TYPE.REVENUECAT,
     });
     await Purchases.addCustomerInfoUpdateListener(customerInfo => {
+      syncCustomerInfoState(customerInfo);
       console.log(
         `Received customer info in listener: ${prettifyJson(customerInfo)}`,
       );
     });
     await listenForDeepLinks();
+    await refreshCustomerInfo();
     void loadOfferings().catch(error => {
       console.log('Could not load offerings after configure', error);
     });
@@ -242,6 +297,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     const purchaseResult = await Purchases.purchaseStoreProduct({
       product: productToBuy,
     });
+    await refreshCustomerInfo();
     updateLastFunction('purchaseStoreProduct', purchaseResult);
   };
 
@@ -281,6 +337,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
       product: productToBuy,
       discount: promotionalOffer,
     });
+    await refreshCustomerInfo();
     updateLastFunction('purchaseDiscountedProduct', purchaseResult);
   };
 
@@ -300,7 +357,99 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     const purchaseResult = await Purchases.purchasePackage({
       aPackage: packageToBuy,
     });
+    await refreshCustomerInfo();
     updateLastFunction('purchasePackage', purchaseResult);
+  };
+
+  const getProductChangeTargetPackage = async (): Promise<PurchasesPackage | null> => {
+    const { offering, unavailableReason } = await getConfiguredOffering();
+    const packages = offering?.availablePackages ?? [];
+    const packageToBuy =
+      packages.find(aPackage => aPackage.identifier === productChangeTargetPackageIdentifier) ??
+      packages[0] ??
+      null;
+    if (packageToBuy == null) {
+      updateLastFunction(
+        'purchaseWithStoreProductChangeInfo',
+        unavailableReason ?? 'No package found in configured offering',
+      );
+      return null;
+    }
+    return packageToBuy;
+  };
+
+  const getProductChangeSubscriptionOption = (
+    packageToBuy: PurchasesPackage,
+  ): SubscriptionOption | null => {
+    const subscriptionOptions = packageToBuy.product.subscriptionOptions ?? [];
+    const subscriptionOption =
+      subscriptionOptions.find(option => option.id === productChangeSubscriptionOptionId) ??
+      packageToBuy.product.defaultOption ??
+      subscriptionOptions[0] ??
+      null;
+    if (subscriptionOption == null) {
+      updateLastFunction(
+        'purchaseSubscriptionOptionWithStoreProductChangeInfo',
+        'Target package does not have a subscription option',
+      );
+      return null;
+    }
+    return subscriptionOption;
+  };
+
+  const getStoreProductChangeInfo = () => {
+    const oldProductIdentifier = productChangeOldProductIdentifier.trim();
+    if (!oldProductIdentifier) {
+      updateLastFunction(
+        'purchaseWithStoreProductChangeInfo',
+        'Old product identifier is required',
+      );
+      return null;
+    }
+    return {
+      oldProductIdentifier,
+      ...(productChangeReplacementMode != null && {
+        replacementMode: productChangeReplacementMode,
+      }),
+    };
+  };
+
+  const purchaseWithStoreProductChangeInfo = async () => {
+    const storeProductChangeInfo = getStoreProductChangeInfo();
+    if (storeProductChangeInfo == null) return;
+
+    const packageToBuy = await getProductChangeTargetPackage();
+    if (packageToBuy == null) return;
+
+    if (productChangeTargetType === 'package') {
+      const purchaseResult = await Purchases.purchasePackage({
+        aPackage: packageToBuy,
+        storeProductChangeInfo,
+      });
+      await refreshCustomerInfo();
+      updateLastFunction('purchasePackageWithStoreProductChangeInfo', purchaseResult);
+      return;
+    }
+
+    if (productChangeTargetType === 'product') {
+      const purchaseResult = await Purchases.purchaseStoreProduct({
+        product: packageToBuy.product,
+        storeProductChangeInfo,
+      });
+      await refreshCustomerInfo();
+      updateLastFunction('purchaseStoreProductWithStoreProductChangeInfo', purchaseResult);
+      return;
+    }
+
+    const subscriptionOption = getProductChangeSubscriptionOption(packageToBuy);
+    if (subscriptionOption == null) return;
+
+    const purchaseResult = await Purchases.purchaseSubscriptionOption({
+      subscriptionOption,
+      storeProductChangeInfo,
+    });
+    await refreshCustomerInfo();
+    updateLastFunction('purchaseSubscriptionOptionWithStoreProductChangeInfo', purchaseResult);
   };
 
   const purchaseDiscountedPackage = async () => {
@@ -310,6 +459,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
       const purchaseResult = await Purchases.purchaseDiscountedPackage(
         purchaseDiscountedPackageOptions,
       );
+      await refreshCustomerInfo();
       updateLastFunction('purchaseDiscountedPackage', purchaseResult);
     } catch (e: any) {
       updateLastFunction('purchaseDiscountedPackage', e);
@@ -317,7 +467,8 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
   };
 
   const restorePurchases = async () => {
-    const customerInfo = await Purchases.restorePurchases();
+    const { customerInfo } = await Purchases.restorePurchases();
+    syncCustomerInfoState(customerInfo);
     updateLastFunction('restorePurchases', customerInfo);
   };
 
@@ -349,7 +500,8 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
   };
 
   const getCustomerInfo = async () => {
-    const customerInfo = await Purchases.getCustomerInfo();
+    const { customerInfo } = await Purchases.getCustomerInfo();
+    syncCustomerInfoState(customerInfo);
     updateLastFunction('getCustomerInfo', customerInfo);
   };
 
@@ -662,6 +814,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         const purchaseResult = await Purchases.purchaseStoreProduct({
           product,
         });
+        await refreshCustomerInfo();
         console.log('Purchase successful:', purchaseResult);
         updateLastFunction('purchaseProductForWinBackTesting', JSON.stringify(purchaseResult));
       } else {
@@ -698,6 +851,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
           product,
           winBackOffer: eligibleWinBackOffers[0],
         });
+        await refreshCustomerInfo();
         console.log('Win-Back Offer purchase successful:', result);
         updateLastFunction(
           'fetchAndRedeemWinBackOfferForProduct',
@@ -746,6 +900,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
       await Purchases.purchasePackage({
         aPackage: targetPackage,
       });
+      await refreshCustomerInfo();
     } catch (err) {
       console.log(err);
       updateLastFunction(
@@ -809,6 +964,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
             aPackage: targetPackage,
             winBackOffer,
           });
+          await refreshCustomerInfo();
           console.log('Win-Back Offer purchase successful:', result);
           updateLastFunction(
             'fetchAndRedeemWinBackOfferForPackage',
@@ -844,6 +1000,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
       offering: offering,
       customVariables: resolvedCustomVariables,
     });
+    await refreshCustomerInfo();
     updateLastFunction('presentPaywallCurrentOffering', result);
   };
 
@@ -861,6 +1018,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
       presentationConfiguration: PaywallPresentationConfiguration.FULL_SCREEN,
       customVariables: resolvedCustomVariables,
     });
+    await refreshCustomerInfo();
     updateLastFunction('presentPaywallCurrentOfferingFullscreen', result);
   };
 
@@ -879,6 +1037,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
       presentationConfiguration: PaywallPresentationConfiguration.DEFAULT,
       customVariables: resolvedCustomVariables,
     });
+    await refreshCustomerInfo();
     updateLastFunction('presentPaywallCurrentOfferingSheet', result);
   };
 
@@ -902,6 +1061,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         console.log('[PaywallListener] onPurchaseStarted', packageBeingPurchased);
       },
       onPurchaseCompleted: ({ customerInfo, storeTransaction }) => {
+        syncCustomerInfoState(customerInfo);
         events.push(`Purchase completed: ${storeTransaction.transactionIdentifier}`);
         console.log('[PaywallListener] onPurchaseCompleted', customerInfo, storeTransaction);
       },
@@ -918,6 +1078,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         console.log('[PaywallListener] onRestoreStarted');
       },
       onRestoreCompleted: ({ customerInfo }) => {
+        syncCustomerInfoState(customerInfo);
         events.push(`Restore completed: ${Object.keys(customerInfo.entitlements.active).length} active entitlements`);
         console.log('[PaywallListener] onRestoreCompleted', customerInfo);
       },
@@ -939,6 +1100,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
       listener,
       customVariables: resolvedCustomVariables,
     });
+    await refreshCustomerInfo();
     updateLastFunction('presentPaywallWithListener', {
       result: result.result,
       events,
@@ -963,6 +1125,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         // For this demo, we use RevenueCat's purchase methods.
         try {
           await Purchases.purchasePackage({ aPackage: packageToPurchase });
+          await refreshCustomerInfo();
           events.push('purchasePackage succeeded');
           return { result: PURCHASE_LOGIC_RESULT.SUCCESS };
         } catch (e: any) {
@@ -980,7 +1143,8 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         // In a real app, you would restore purchases using your own
         // system here. For this demo, we use RevenueCat's restore method.
         try {
-          await Purchases.restorePurchases();
+          const { customerInfo } = await Purchases.restorePurchases();
+          syncCustomerInfoState(customerInfo);
           events.push('restorePurchases succeeded');
           return { result: PURCHASE_LOGIC_RESULT.SUCCESS };
         } catch (e: any) {
@@ -995,6 +1159,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
       purchaseLogic,
       customVariables: resolvedCustomVariables,
     });
+    await refreshCustomerInfo();
     updateLastFunction('presentPaywallWithPurchaseLogic', {
       result: result.result,
       events,
@@ -1012,6 +1177,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         console.log('[PaywallIfNeeded] onPurchaseStarted', packageBeingPurchased);
       },
       onPurchaseCompleted: ({ customerInfo, storeTransaction }) => {
+        syncCustomerInfoState(customerInfo);
         events.push(`Purchase completed: ${storeTransaction.transactionIdentifier}`);
         console.log('[PaywallIfNeeded] onPurchaseCompleted', customerInfo, storeTransaction);
       },
@@ -1028,6 +1194,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         console.log('[PaywallIfNeeded] onRestoreStarted');
       },
       onRestoreCompleted: ({ customerInfo }) => {
+        syncCustomerInfoState(customerInfo);
         events.push(`Restore completed: ${Object.keys(customerInfo.entitlements.active).length} active`);
         console.log('[PaywallIfNeeded] onRestoreCompleted', customerInfo);
       },
@@ -1043,6 +1210,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
       listener,
       customVariables: resolvedCustomVariables,
     });
+    await refreshCustomerInfo();
     updateLastFunction('presentPaywallIfNeededWithListener', {
       result: result.result,
       events,
@@ -1103,6 +1271,106 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
                 ))}
               </IonSelect>
             </IonItem>
+          </IonCardContent>
+        </IonCard>
+        <IonCard>
+          <IonCardHeader>
+            <IonCardTitle>Product Change</IonCardTitle>
+            <IonCardSubtitle>Uses storeProductChangeInfo</IonCardSubtitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <IonItem>
+              <IonLabel>Old product identifier</IonLabel>
+              <IonSelect
+                value={productChangeOldProductIdentifier}
+                placeholder="No active subscriptions"
+                onIonChange={(event) => setProductChangeOldProductIdentifier(event.detail.value ?? '')}
+              >
+                {activeSubscriptionIdentifiers.map((activeSubscriptionIdentifier) => (
+                  <IonSelectOption
+                    key={activeSubscriptionIdentifier}
+                    value={activeSubscriptionIdentifier}
+                  >
+                    {activeSubscriptionIdentifier}
+                  </IonSelectOption>
+                ))}
+              </IonSelect>
+            </IonItem>
+            <IonItem>
+              <IonLabel>Target package</IonLabel>
+              <IonSelect
+                value={selectedProductChangeTargetPackage?.identifier ?? ''}
+                placeholder="First package"
+                onIonChange={(event) => setProductChangeTargetPackageIdentifier(event.detail.value ?? '')}
+              >
+                {productChangeTargetPackages.map((aPackage) => (
+                  <IonSelectOption key={aPackage.identifier} value={aPackage.identifier}>
+                    {`${aPackage.identifier} (${aPackage.product.identifier})`}
+                  </IonSelectOption>
+                ))}
+              </IonSelect>
+            </IonItem>
+            <IonItem>
+              <IonLabel>Target purchase API</IonLabel>
+              <IonSelect
+                value={productChangeTargetType}
+                onIonChange={(event) => setProductChangeTargetType(event.detail.value)}
+              >
+                <IonSelectOption value="package">purchasePackage</IonSelectOption>
+                <IonSelectOption value="product">purchaseStoreProduct</IonSelectOption>
+                <IonSelectOption value="subscriptionOption">purchaseSubscriptionOption</IonSelectOption>
+              </IonSelect>
+            </IonItem>
+            {productChangeTargetType === 'subscriptionOption' && (
+              <IonItem>
+                <IonLabel>Subscription option</IonLabel>
+                <IonSelect
+                  value={
+                    productChangeSubscriptionOptionId ||
+                    selectedProductChangeTargetPackage?.product.defaultOption?.id ||
+                    productChangeSubscriptionOptions[0]?.id ||
+                    ''
+                  }
+                  placeholder="Default option"
+                  onIonChange={(event) => setProductChangeSubscriptionOptionId(event.detail.value ?? '')}
+                >
+                  {productChangeSubscriptionOptions.map((option) => (
+                    <IonSelectOption key={option.id} value={option.id}>
+                      {option.id}
+                    </IonSelectOption>
+                  ))}
+                </IonSelect>
+              </IonItem>
+            )}
+            <IonItem>
+              <IonLabel>Replacement mode</IonLabel>
+              <IonSelect
+                value={productChangeReplacementMode ?? ''}
+                onIonChange={(event) =>
+                  setProductChangeReplacementMode(event.detail.value || undefined)
+                }
+              >
+                <IonSelectOption value="">Undefined</IonSelectOption>
+                <IonSelectOption value={STORE_REPLACEMENT_MODE.WITH_TIME_PRORATION}>
+                  WITH_TIME_PRORATION
+                </IonSelectOption>
+                <IonSelectOption value={STORE_REPLACEMENT_MODE.CHARGE_PRORATED_PRICE}>
+                  CHARGE_PRORATED_PRICE
+                </IonSelectOption>
+                <IonSelectOption value={STORE_REPLACEMENT_MODE.WITHOUT_PRORATION}>
+                  WITHOUT_PRORATION
+                </IonSelectOption>
+                <IonSelectOption value={STORE_REPLACEMENT_MODE.CHARGE_FULL_PRICE}>
+                  CHARGE_FULL_PRICE
+                </IonSelectOption>
+                <IonSelectOption value={STORE_REPLACEMENT_MODE.DEFERRED}>
+                  DEFERRED
+                </IonSelectOption>
+              </IonSelect>
+            </IonItem>
+            <IonButton size="small" onClick={purchaseWithStoreProductChangeInfo}>
+              Purchase product change target
+            </IonButton>
           </IonCardContent>
         </IonCard>
         <IonButton size="small" onClick={configure}>
