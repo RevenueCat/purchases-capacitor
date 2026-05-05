@@ -28,6 +28,7 @@ import { PurchasesVirtualCurrencies } from '@revenuecat/purchases-typescript-int
 import type { PurchasesWinBackOffer } from '@revenuecat/purchases-typescript-internal-esm';
 import type { REFUND_REQUEST_STATUS } from '@revenuecat/purchases-typescript-internal-esm';
 import type { Storefront } from '@revenuecat/purchases-typescript-internal-esm';
+import type { StoreProductChangeInfo } from '@revenuecat/purchases-typescript-internal-esm';
 import type { SubscriptionOption } from '@revenuecat/purchases-typescript-internal-esm';
 import type { WebPurchaseRedemption } from '@revenuecat/purchases-typescript-internal-esm';
 import type { WebPurchaseRedemptionResult } from '@revenuecat/purchases-typescript-internal-esm';
@@ -70,7 +71,9 @@ export interface PurchaseDiscountedProductOptions {
 export interface PurchasePackageOptions {
     aPackage: PurchasesPackage;
     googleIsPersonalizedPrice?: boolean | null;
+    // @deprecated
     googleProductChangeInfo?: GoogleProductChangeInfo | null;
+    storeProductChangeInfo?: StoreProductChangeInfo | null;
 }
 
 // @public (undocumented)
@@ -284,14 +287,18 @@ export interface PurchasesPlugin {
 // @public (undocumented)
 export interface PurchaseStoreProductOptions {
     googleIsPersonalizedPrice?: boolean | null;
+    // @deprecated
     googleProductChangeInfo?: GoogleProductChangeInfo | null;
     product: PurchasesStoreProduct;
+    storeProductChangeInfo?: StoreProductChangeInfo | null;
 }
 
 // @public (undocumented)
 export interface PurchaseSubscriptionOptionOptions {
     googleIsPersonalizedPrice?: boolean | null;
+    // @deprecated
     googleProductChangeInfo?: GoogleProductChangeInfo | null;
+    storeProductChangeInfo?: StoreProductChangeInfo | null;
     subscriptionOption: SubscriptionOption;
 }
 
