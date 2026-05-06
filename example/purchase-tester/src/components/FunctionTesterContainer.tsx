@@ -1273,106 +1273,6 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
             </IonItem>
           </IonCardContent>
         </IonCard>
-        <IonCard>
-          <IonCardHeader>
-            <IonCardTitle>Product Change</IonCardTitle>
-            <IonCardSubtitle>Uses storeProductChangeInfo</IonCardSubtitle>
-          </IonCardHeader>
-          <IonCardContent>
-            <IonItem>
-              <IonLabel>Old product identifier</IonLabel>
-              <IonSelect
-                value={productChangeOldProductIdentifier}
-                placeholder="No active subscriptions"
-                onIonChange={(event) => setProductChangeOldProductIdentifier(event.detail.value ?? '')}
-              >
-                {activeSubscriptionIdentifiers.map((activeSubscriptionIdentifier) => (
-                  <IonSelectOption
-                    key={activeSubscriptionIdentifier}
-                    value={activeSubscriptionIdentifier}
-                  >
-                    {activeSubscriptionIdentifier}
-                  </IonSelectOption>
-                ))}
-              </IonSelect>
-            </IonItem>
-            <IonItem>
-              <IonLabel>Target package</IonLabel>
-              <IonSelect
-                value={selectedProductChangeTargetPackage?.identifier ?? ''}
-                placeholder="First package"
-                onIonChange={(event) => setProductChangeTargetPackageIdentifier(event.detail.value ?? '')}
-              >
-                {productChangeTargetPackages.map((aPackage) => (
-                  <IonSelectOption key={aPackage.identifier} value={aPackage.identifier}>
-                    {`${aPackage.identifier} (${aPackage.product.identifier})`}
-                  </IonSelectOption>
-                ))}
-              </IonSelect>
-            </IonItem>
-            <IonItem>
-              <IonLabel>Target purchase API</IonLabel>
-              <IonSelect
-                value={productChangeTargetType}
-                onIonChange={(event) => setProductChangeTargetType(event.detail.value)}
-              >
-                <IonSelectOption value="package">purchasePackage</IonSelectOption>
-                <IonSelectOption value="product">purchaseStoreProduct</IonSelectOption>
-                <IonSelectOption value="subscriptionOption">purchaseSubscriptionOption</IonSelectOption>
-              </IonSelect>
-            </IonItem>
-            {productChangeTargetType === 'subscriptionOption' && (
-              <IonItem>
-                <IonLabel>Subscription option</IonLabel>
-                <IonSelect
-                  value={
-                    productChangeSubscriptionOptionId ||
-                    selectedProductChangeTargetPackage?.product.defaultOption?.id ||
-                    productChangeSubscriptionOptions[0]?.id ||
-                    ''
-                  }
-                  placeholder="Default option"
-                  onIonChange={(event) => setProductChangeSubscriptionOptionId(event.detail.value ?? '')}
-                >
-                  {productChangeSubscriptionOptions.map((option) => (
-                    <IonSelectOption key={option.id} value={option.id}>
-                      {option.id}
-                    </IonSelectOption>
-                  ))}
-                </IonSelect>
-              </IonItem>
-            )}
-            <IonItem>
-              <IonLabel>Replacement mode</IonLabel>
-              <IonSelect
-                value={productChangeReplacementMode ?? ''}
-                onIonChange={(event) =>
-                  setProductChangeReplacementMode(event.detail.value || undefined)
-                }
-              >
-                <IonSelectOption value="">Undefined</IonSelectOption>
-                <IonSelectOption value={STORE_REPLACEMENT_MODE.WITH_TIME_PRORATION}>
-                  WITH_TIME_PRORATION
-                </IonSelectOption>
-                <IonSelectOption value={STORE_REPLACEMENT_MODE.CHARGE_PRORATED_PRICE}>
-                  CHARGE_PRORATED_PRICE
-                </IonSelectOption>
-                <IonSelectOption value={STORE_REPLACEMENT_MODE.WITHOUT_PRORATION}>
-                  WITHOUT_PRORATION
-                </IonSelectOption>
-                <IonSelectOption value={STORE_REPLACEMENT_MODE.CHARGE_FULL_PRICE}>
-                  CHARGE_FULL_PRICE
-                </IonSelectOption>
-                <IonSelectOption value={STORE_REPLACEMENT_MODE.DEFERRED}>
-                  DEFERRED
-                </IonSelectOption>
-              </IonSelect>
-            </IonItem>
-            <IonButton size="small" onClick={purchaseWithStoreProductChangeInfo}>
-              Purchase product change target
-            </IonButton>
-          </IonCardContent>
-        </IonCard>
         <IonButton size="small" onClick={configure}>
           Configure (RevenueCat)
         </IonButton>
@@ -1603,6 +1503,106 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         <IonButton size="small" onClick={presentCustomerCenter}>
           Present customer center
         </IonButton>
+        <IonCard>
+          <IonCardHeader>
+            <IonCardTitle>Product Change</IonCardTitle>
+            <IonCardSubtitle>Uses storeProductChangeInfo</IonCardSubtitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <IonItem>
+              <IonLabel>Old product identifier</IonLabel>
+              <IonSelect
+                value={productChangeOldProductIdentifier}
+                placeholder="No active subscriptions"
+                onIonChange={(event) => setProductChangeOldProductIdentifier(event.detail.value ?? '')}
+              >
+                {activeSubscriptionIdentifiers.map((activeSubscriptionIdentifier) => (
+                  <IonSelectOption
+                    key={activeSubscriptionIdentifier}
+                    value={activeSubscriptionIdentifier}
+                  >
+                    {activeSubscriptionIdentifier}
+                  </IonSelectOption>
+                ))}
+              </IonSelect>
+            </IonItem>
+            <IonItem>
+              <IonLabel>Target package</IonLabel>
+              <IonSelect
+                value={selectedProductChangeTargetPackage?.identifier ?? ''}
+                placeholder="First package"
+                onIonChange={(event) => setProductChangeTargetPackageIdentifier(event.detail.value ?? '')}
+              >
+                {productChangeTargetPackages.map((aPackage) => (
+                  <IonSelectOption key={aPackage.identifier} value={aPackage.identifier}>
+                    {`${aPackage.identifier} (${aPackage.product.identifier})`}
+                  </IonSelectOption>
+                ))}
+              </IonSelect>
+            </IonItem>
+            <IonItem>
+              <IonLabel>Target purchase API</IonLabel>
+              <IonSelect
+                value={productChangeTargetType}
+                onIonChange={(event) => setProductChangeTargetType(event.detail.value)}
+              >
+                <IonSelectOption value="package">purchasePackage</IonSelectOption>
+                <IonSelectOption value="product">purchaseStoreProduct</IonSelectOption>
+                <IonSelectOption value="subscriptionOption">purchaseSubscriptionOption</IonSelectOption>
+              </IonSelect>
+            </IonItem>
+            {productChangeTargetType === 'subscriptionOption' && (
+              <IonItem>
+                <IonLabel>Subscription option</IonLabel>
+                <IonSelect
+                  value={
+                    productChangeSubscriptionOptionId ||
+                    selectedProductChangeTargetPackage?.product.defaultOption?.id ||
+                    productChangeSubscriptionOptions[0]?.id ||
+                    ''
+                  }
+                  placeholder="Default option"
+                  onIonChange={(event) => setProductChangeSubscriptionOptionId(event.detail.value ?? '')}
+                >
+                  {productChangeSubscriptionOptions.map((option) => (
+                    <IonSelectOption key={option.id} value={option.id}>
+                      {option.id}
+                    </IonSelectOption>
+                  ))}
+                </IonSelect>
+              </IonItem>
+            )}
+            <IonItem>
+              <IonLabel>Replacement mode</IonLabel>
+              <IonSelect
+                value={productChangeReplacementMode ?? ''}
+                onIonChange={(event) =>
+                  setProductChangeReplacementMode(event.detail.value || undefined)
+                }
+              >
+                <IonSelectOption value="">Undefined</IonSelectOption>
+                <IonSelectOption value={STORE_REPLACEMENT_MODE.WITH_TIME_PRORATION}>
+                  WITH_TIME_PRORATION
+                </IonSelectOption>
+                <IonSelectOption value={STORE_REPLACEMENT_MODE.CHARGE_PRORATED_PRICE}>
+                  CHARGE_PRORATED_PRICE
+                </IonSelectOption>
+                <IonSelectOption value={STORE_REPLACEMENT_MODE.WITHOUT_PRORATION}>
+                  WITHOUT_PRORATION
+                </IonSelectOption>
+                <IonSelectOption value={STORE_REPLACEMENT_MODE.CHARGE_FULL_PRICE}>
+                  CHARGE_FULL_PRICE
+                </IonSelectOption>
+                <IonSelectOption value={STORE_REPLACEMENT_MODE.DEFERRED}>
+                  DEFERRED
+                </IonSelectOption>
+              </IonSelect>
+            </IonItem>
+            <IonButton size="small" onClick={purchaseWithStoreProductChangeInfo}>
+              Purchase product change target
+            </IonButton>
+          </IonCardContent>
+        </IonCard>
       </div>
     </div>
   );
