@@ -254,10 +254,11 @@ class PurchasesPlugin : Plugin() {
             type,
             googleBasePlanId = null,
             optionalPurchaseParams.oldProductIdentifier,
-            optionalPurchaseParams.prorationMode,
+            googleReplacementModeInt = null,
             optionalPurchaseParams.isPersonalizedPrice,
             presentedOfferingContext?.convertToAnyMap(),
             getOnResult(call),
+            storeReplacementModeString = optionalPurchaseParams.replacementMode,
         )
     }
 
@@ -284,9 +285,10 @@ class PurchasesPlugin : Plugin() {
             packageIdentifier,
             presentedOfferingContext.convertToAnyMap(),
             optionalPurchaseParams.oldProductIdentifier,
-            optionalPurchaseParams.prorationMode,
+            googleReplacementModeInt = null,
             optionalPurchaseParams.isPersonalizedPrice,
             getOnResult(call),
+            storeReplacementModeString = optionalPurchaseParams.replacementMode,
         )
     }
 
@@ -304,10 +306,11 @@ class PurchasesPlugin : Plugin() {
             productId,
             subscriptionOptionId,
             optionalPurchaseParams.oldProductIdentifier,
-            optionalPurchaseParams.prorationMode,
+            googleReplacementModeInt = null,
             optionalPurchaseParams.isPersonalizedPrice,
             presentedOfferingContext?.convertToAnyMap(),
             getOnResult(call),
+            storeReplacementModeString = optionalPurchaseParams.replacementMode,
         )
     }
 
@@ -870,22 +873,38 @@ class PurchasesPlugin : Plugin() {
 
     private data class PurchaseOptionalInfoParams(
         val oldProductIdentifier: String?,
-        val prorationMode: Int?,
+        val replacementMode: String?,
         val isPersonalizedPrice: Boolean?,
     ) {
         companion object {
             fun fromCall(call: PluginCall): PurchaseOptionalInfoParams {
                 val googleProductChangeInfo = call.getObject("googleProductChangeInfo")
+                val storeProductChangeInfo = call.getObject("storeProductChangeInfo")
+                val productChangeInfo = storeProductChangeInfo ?: googleProductChangeInfo
                 val googleIsPersonalizedPrice = call.getBoolean("googleIsPersonalizedPrice")
                 return PurchaseOptionalInfoParams(
-                    oldProductIdentifier = googleProductChangeInfo?.getString("oldProductIdentifier"),
-                    prorationMode = googleProductChangeInfo?.getInteger("prorationMode"),
+                    oldProductIdentifier = productChangeInfo?.getString("oldProductIdentifier"),
+                    replacementMode = if (storeProductChangeInfo != null) {
+                        storeProductChangeInfo.getString("replacementMode")
+                    } else {
+                        googleProductChangeInfo?.getInteger("prorationMode")?.toStoreReplacementMode()
+                    },
                     isPersonalizedPrice = googleIsPersonalizedPrice,
                 )
             }
         }
     }
 }
+
+private fun Int.toStoreReplacementMode(): String? =
+    when (this) {
+        1 -> "WITH_TIME_PRORATION"
+        2 -> "CHARGE_PRORATED_PRICE"
+        3 -> "WITHOUT_PRORATION"
+        5 -> "CHARGE_FULL_PRICE"
+        6 -> "DEFERRED"
+        else -> null
+    }
 
 private fun JSONObject.convertToAnyMap(): Map<String, Any?> =
     this.keys().asSequence<String>().associate { key ->
