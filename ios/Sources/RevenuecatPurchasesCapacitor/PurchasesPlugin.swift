@@ -90,7 +90,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
         CAPPluginMethod(name: "trackCustomPaywallImpression", returnType: CAPPluginReturnNone),
     ]
     private let platformFlavor = "capacitor"
-    private let platformVersion = "13.1.1"
+    private let platformVersion = "13.1.2"
 
     private let customerInfoKey = "customerInfo"
     private let transactionKey = "transaction"
