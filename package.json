@@ -88,6 +88,6 @@
     }
   },
   "dependencies": {
-    "@revenuecat/purchases-typescript-internal-esm": "18.9.1"
+    "@revenuecat/purchases-typescript-internal-esm": "18.10.0"
   }
 }
