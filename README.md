@@ -1402,12 +1402,14 @@ The EntitlementInfo object gives you access to all of the information about the 
 
 Represents a non-subscription transaction in the <a href="#store">Store</a>.
 
-| Prop                        | Type                        | Description                                          |
-| --------------------------- | --------------------------- | ---------------------------------------------------- |
-| **`transactionIdentifier`** | <code>string</code>         | Id of the transaction.                               |
-| **`productIdentifier`**     | <code>string</code>         | Product Id associated with the transaction.          |
-| **`purchaseDate`**          | <code>string</code>         | Purchase date of the transaction in ISO 8601 format. |
-| **`purchaseToken`**         | <code>string \| null</code> | Purchase token of the transaction. Android only.     |
+| Prop                        | Type                        | Description                                                                                              |
+| --------------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------- |
+| **`transactionIdentifier`** | <code>string</code>         | Id of the transaction.                                                                                   |
+| **`productIdentifier`**     | <code>string</code>         | Product Id associated with the transaction.                                                              |
+| **`purchaseDate`**          | <code>string</code>         | Purchase date of the transaction in ISO 8601 format.                                                     |
+| **`purchaseToken`**         | <code>string \| null</code> | Purchase token of the transaction. Android only.                                                         |
+| **`originalJson`**          | <code>string \| null</code> | The original purchase JSON provided by the store as a string. Android only, null on iOS and some stores. |
+| **`signature`**             | <code>string \| null</code> | The purchase signature. Google Play only, null on iOS and other stores.                                  |
 
 
 #### PurchasesSubscriptionInfo
