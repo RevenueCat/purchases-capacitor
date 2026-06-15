@@ -1828,9 +1828,9 @@ Options for tracking a custom paywall impression.
 
 | Prop             | Type                                                            | Description                                                                                                                                                              |
 | ---------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **`paywallId`**  | <code>string</code>                                             | The identifier of the paywall that was shown.                                                                                                                            |
+| **`paywallId`**  | <code>string \| null</code>                                     | The identifier of the paywall that was shown.                                                                                                                            |
 | **`offering`**   | <code><a href="#purchasesoffering">PurchasesOffering</a></code> | The offering associated with the custom paywall. Pass the offering object so RevenueCat can track placement and targeting context for placement-resolved offerings.      |
-| **`offeringId`** | <code>string</code>                                             | Deprecated. An optional identifier for the offering associated with the custom paywall. Pass `offering` instead so RevenueCat can track placement and targeting context. |
+| **`offeringId`** | <code>string \| null</code>                                     | Deprecated. An optional identifier for the offering associated with the custom paywall. Pass `offering` instead so RevenueCat can track placement and targeting context. |
 
 
 ### Type Aliases

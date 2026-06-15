@@ -960,7 +960,7 @@ export interface PurchasesPlugin {
  */
 export interface TrackCustomPaywallImpressionOptions {
   /** The identifier of the paywall that was shown. */
-  paywallId?: string;
+  paywallId?: string | null;
   /**
    * The offering associated with the custom paywall.
    *
@@ -976,5 +976,5 @@ export interface TrackCustomPaywallImpressionOptions {
    *
    * @deprecated Use `offering` instead.
    */
-  offeringId?: string;
+  offeringId?: string | null;
 }

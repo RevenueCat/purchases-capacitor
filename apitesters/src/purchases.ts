@@ -406,6 +406,7 @@ async function checkTrackCustomPaywallImpression(plugin: PurchasesPlugin) {
     paywallId: 'my-paywall',
     offeringId: 'my-offering',
   });
+  await plugin.trackCustomPaywallImpression({ paywallId: null, offeringId: null });
 }
 
 function checkTrackCustomPaywallImpressionOptions() {
@@ -417,4 +418,5 @@ function checkTrackCustomPaywallImpressionOptions() {
     offering: {} as PurchasesOffering,
   };
   const options5: TrackCustomPaywallImpressionOptions = { offeringId: 'my-offering' };
+  const options6: TrackCustomPaywallImpressionOptions = { paywallId: null, offeringId: null };
 }
