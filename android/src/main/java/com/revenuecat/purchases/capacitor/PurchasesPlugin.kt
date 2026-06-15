@@ -27,6 +27,7 @@ import com.revenuecat.purchases.hybridcommon.purchaseProduct
 import com.revenuecat.purchases.hybridcommon.showInAppMessagesIfNeeded
 import com.revenuecat.purchases.interfaces.UpdatedCustomerInfoListener
 import com.revenuecat.purchases.models.InAppMessageType
+import org.json.JSONArray
 import org.json.JSONObject
 import com.revenuecat.purchases.hybridcommon.canMakePayments as canMakePaymentsCommon
 import com.revenuecat.purchases.hybridcommon.checkTrialOrIntroductoryPriceEligibility as checkTrialOrIntroductoryPriceEligibilityCommon
@@ -713,7 +714,7 @@ class PurchasesPlugin : Plugin() {
     @PluginMethod(returnType = PluginMethod.RETURN_NONE)
     fun trackCustomPaywallImpression(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
-        trackCustomPaywallImpressionCommon(call.data.convertToMap())
+        trackCustomPaywallImpressionCommon(mapWithoutNullValues(call.data))
         call.resolve()
     }
 
@@ -723,6 +724,36 @@ class PurchasesPlugin : Plugin() {
 
     private val activity: Activity
         get() = bridge.activity
+
+    private fun mapWithoutNullValues(jsonObject: JSONObject): Map<String, Any> {
+        return jsonObject.keys().asSequence<String>().mapNotNull { key ->
+            valueWithoutNullValues(jsonObject.opt(key))?.let { key to it }
+        }.toMap()
+    }
+
+    private fun mapWithoutNullValues(map: Map<String, Any?>): Map<String, Any> {
+        return map.mapNotNull { (key, value) ->
+            valueWithoutNullValues(value)?.let { key to it }
+        }.toMap()
+    }
+
+    private fun valueWithoutNullValues(value: Any?): Any? {
+        return when (value) {
+            null, JSONObject.NULL -> null
+            is JSONObject -> mapWithoutNullValues(value)
+            is JSONArray -> (0 until value.length()).mapNotNull { index ->
+                valueWithoutNullValues(value.opt(index))
+            }
+            is Map<*, *> -> value.mapNotNull { (key, entryValue) ->
+                val filteredValue = valueWithoutNullValues(entryValue)
+                if (key is String && filteredValue != null) key to filteredValue else null
+            }.toMap()
+            is List<*> -> value.mapNotNull { item ->
+                valueWithoutNullValues(item)
+            }
+            else -> value
+        }
+    }
 
     private fun getOnResult(call: PluginCall, wrapperKey: String? = null): OnResult {
         return object : OnResult {

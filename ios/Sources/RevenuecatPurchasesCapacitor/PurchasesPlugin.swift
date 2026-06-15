@@ -677,7 +677,8 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
 
     @objc func trackCustomPaywallImpression(_ call: CAPPluginCall) {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
-        CommonFunctionality.trackCustomPaywallImpression(call.options as? [String: Any] ?? [:])
+        let data = (call.options as? [String: Any] ?? [:]).mappingNSNullToNil()
+        CommonFunctionality.trackCustomPaywallImpression(data)
         call.resolve()
     }
 
@@ -686,5 +687,25 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
             self?.bridge?.savedCall(withID: callbackId)?.resolve(CommonFunctionality.encode(customerInfo: customerInfo))
         }
         self.lastReceivedCustomerInfo = customerInfo
+    }
+
+}
+
+private extension Dictionary where Key == String, Value == Any {
+    func mappingNSNullToNil() -> [String: Any] {
+        compactMapValues { valueByMappingNSNullToNil($0) }
+    }
+}
+
+private func valueByMappingNSNullToNil(_ value: Any) -> Any? {
+    switch value {
+    case is NSNull:
+        return nil
+    case let dictionary as [String: Any]:
+        return dictionary.mappingNSNullToNil()
+    case let array as [Any]:
+        return array.compactMap { valueByMappingNSNullToNil($0) }
+    default:
+        return value
     }
 }

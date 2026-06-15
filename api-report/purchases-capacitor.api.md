@@ -316,8 +316,10 @@ export type SyncObserverModeAmazonPurchaseOptions = SyncAmazonPurchaseOptions;
 
 // @public
 export interface TrackCustomPaywallImpressionOptions {
-    offeringId?: string | null;
-    paywallId?: string | null;
+    offering?: PurchasesOffering;
+    // @deprecated
+    offeringId?: string;
+    paywallId?: string;
 }
 
 
