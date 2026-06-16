@@ -13,7 +13,12 @@ uplinks:
   npmjs:
     url: https://registry.npmjs.org/
 packages:
-  # Everything is publishable and readable; non-local packages proxy to npm.
+  # The core package is served purely locally (no uplink) so we can publish a
+  # version that may also already exist on npm without a conflict.
+  '@revenuecat/purchases-capacitor':
+    access: $all
+    publish: $all
+  # Everything else (incl. other @revenuecat packages) proxies to npm.
   '**':
     access: $all
     publish: $all

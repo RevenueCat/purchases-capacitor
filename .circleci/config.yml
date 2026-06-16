@@ -83,7 +83,7 @@ commands:
           key: v2-unix-ui-dependencies-{{ checksum "purchases-capacitor-ui/package.json" }}
       - run:
           name: Install UI package dependencies
-          command: cd purchases-capacitor-ui && npm install --legacy-peer-deps
+          command: cd purchases-capacitor-ui && npm install
       - save_cache:
           paths:
             - purchases-capacitor-ui/node_modules
@@ -97,7 +97,7 @@ commands:
           key: v2-mac-ui-dependencies-{{ checksum "purchases-capacitor-ui/package.json" }}
       - run:
           name: Install UI package dependencies
-          command: cd purchases-capacitor-ui && npm install --legacy-peer-deps
+          command: cd purchases-capacitor-ui && npm install
       - save_cache:
           paths:
             - purchases-capacitor-ui/node_modules
@@ -114,6 +114,36 @@ commands:
       - run:
           name: Copy npmrc sample file to UI package location
           command: cp .npmrc.SAMPLE purchases-capacitor-ui/.npmrc
+
+  publish-core-to-local-registry:
+    description: >
+      The UI package pins @revenuecat/purchases-capacitor to the exact SDK
+      version as a peerDependency. During release and dry-run flows that version
+      isn't on npm yet, so UI installs can't resolve the peer. This starts a
+      local Verdaccio registry, publishes the freshly built core package to it,
+      and scopes @revenuecat installs to it so the peer resolves locally for
+      real (instead of skipping peer resolution). Must run after the root
+      dependencies are installed and before any UI package install.
+    steps:
+      - run:
+          name: Install Verdaccio
+          command: npm install -g verdaccio@6
+      - run:
+          name: Start local registry (Verdaccio)
+          background: true
+          command: verdaccio --config .circleci/verdaccio.yaml --listen 4873
+      - run:
+          name: Publish core package to local registry
+          command: |
+            for i in $(seq 1 90); do curl -fs http://localhost:4873/-/ping > /dev/null && break; sleep 1; done
+            curl -fs http://localhost:4873/-/ping > /dev/null || { echo "Verdaccio did not start"; exit 1; }
+            TOKEN=$(curl -s -XPUT -H "Content-type: application/json" \
+              -d '{"name":"ci","password":"ci-verdaccio-password"}' \
+              http://localhost:4873/-/user/org.couchdb.user:ci \
+              | node -e "let d='';process.stdin.on('data',c=>d+=c).on('end',()=>process.stdout.write(JSON.parse(d).token))")
+            echo "//localhost:4873/:_authToken=${TOKEN}" >> ~/.npmrc
+            echo "@revenuecat:registry=http://localhost:4873/" >> ~/.npmrc
+            npm publish
 
 jobs:
   run-tests-ios:
@@ -196,6 +226,7 @@ jobs:
           name: Start booting iOS Simulator
           command: xcrun simctl boot "iPhone 17" || true
       - yarn-dependencies-mac
+      - publish-core-to-local-registry
       - yarn-dependencies-ui-mac
       - run:
           name: Replace Maestro test app API key
@@ -227,6 +258,7 @@ jobs:
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       - yarn-dependencies-unix
+      - publish-core-to-local-registry
       - yarn-dependencies-ui-unix
       - run:
           name: Replace Maestro test app API key
@@ -290,6 +322,7 @@ jobs:
     steps:
       - checkout
       - yarn-dependencies-unix
+      - publish-core-to-local-registry
       - yarn-dependencies-ui-unix
       - run: yarn build
       - run:
@@ -313,6 +346,7 @@ jobs:
     steps:
       - checkout
       - yarn-dependencies-unix
+      - publish-core-to-local-registry
       - yarn-dependencies-ui-unix
       - run: yarn build
       - run:
@@ -326,6 +360,7 @@ jobs:
     steps:
       - checkout
       - yarn-dependencies-unix
+      - publish-core-to-local-registry
       - yarn-dependencies-ui-unix
       - run: yarn build
       - run:
@@ -345,34 +380,9 @@ jobs:
           description: Running `npm publish --dry-run` for an existing version fails because the version is already published. This lane temporarily bumps the version to a next version just for testing the publish command.
           command: bundle exec fastlane temporary_bump_version
       - yarn-dependencies-unix
+      - publish-core-to-local-registry
+      - yarn-dependencies-ui-unix
       - run: yarn build
-      - run:
-          name: Install Verdaccio
-          command: npm install -g verdaccio@6
-      - run:
-          name: Start local registry (Verdaccio)
-          background: true
-          command: verdaccio --config .circleci/verdaccio.yaml --listen 4873
-      - run:
-          name: Publish core package to local registry
-          description: >
-            The UI package pins @revenuecat/purchases-capacitor to the exact SDK
-            version as a peerDependency, and after the temporary bump that version
-            isn't on npm yet. Publishing the freshly built core package to the local
-            registry lets the UI install resolve the peer for real, rather than
-            skipping peer resolution with --legacy-peer-deps.
-          command: |
-            for i in $(seq 1 90); do curl -fs http://localhost:4873/-/ping > /dev/null && break; sleep 1; done
-            curl -fs http://localhost:4873/-/ping > /dev/null || { echo "Verdaccio did not start"; exit 1; }
-            TOKEN=$(curl -s -XPUT -H "Content-type: application/json" \
-              -d '{"name":"ci","password":"ci-verdaccio-password"}' \
-              http://localhost:4873/-/user/org.couchdb.user:ci \
-              | node -e "let d='';process.stdin.on('data',c=>d+=c).on('end',()=>process.stdout.write(JSON.parse(d).token))")
-            echo "//localhost:4873/:_authToken=${TOKEN}" >> ~/.npmrc
-            npm publish --registry http://localhost:4873/
-      - run:
-          name: Install UI package dependencies from local registry
-          command: cd purchases-capacitor-ui && npm install --registry http://localhost:4873/
       - run:
           name: Build UI package
           command: cd purchases-capacitor-ui && npm run build
