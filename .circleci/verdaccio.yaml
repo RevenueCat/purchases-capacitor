@@ -1,0 +1,21 @@
+# Verdaccio config used by the `dry-run-release-ui` CI job to spin up a local
+# npm registry. After the temporary version bump, the UI package's exact
+# peerDependency on @revenuecat/purchases-capacitor points at a version that
+# isn't on npm yet. We publish the freshly built core package here so the UI
+# install can resolve the peer for real instead of skipping it.
+storage: /tmp/verdaccio/storage
+auth:
+  htpasswd:
+    file: /tmp/verdaccio/htpasswd
+    # Allow registering the throwaway CI user used to obtain a publish token.
+    max_users: 1000
+uplinks:
+  npmjs:
+    url: https://registry.npmjs.org/
+packages:
+  # Everything is publishable and readable; non-local packages proxy to npm.
+  '**':
+    access: $all
+    publish: $all
+    proxy: npmjs
+log: { type: stdout, format: pretty, level: warn }
