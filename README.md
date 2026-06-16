@@ -1826,11 +1826,11 @@ Holds the information about a Win-Back Offer in Apple's App <a href="#store">Sto
 
 Options for tracking a custom paywall impression.
 
-| Prop             | Type                                                            | Description                                                                                                                                                              |
-| ---------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **`paywallId`**  | <code>string \| null</code>                                     | The identifier of the paywall that was shown.                                                                                                                            |
-| **`offering`**   | <code><a href="#purchasesoffering">PurchasesOffering</a></code> | The offering associated with the custom paywall. Pass the offering object so RevenueCat can track placement and targeting context for placement-resolved offerings.      |
-| **`offeringId`** | <code>string \| null</code>                                     | Deprecated. An optional identifier for the offering associated with the custom paywall. Pass `offering` instead so RevenueCat can track placement and targeting context. |
+| Prop             | Type                                                                    | Description                                                                                                                                                              |
+| ---------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **`paywallId`**  | <code>string \| null</code>                                             | The identifier of the paywall that was shown.                                                                                                                            |
+| **`offering`**   | <code><a href="#purchasesoffering">PurchasesOffering</a> \| null</code> | The offering associated with the custom paywall. Pass the offering object so RevenueCat can track placement and targeting context for placement-resolved offerings.      |
+| **`offeringId`** | <code>string \| null</code>                                             | Deprecated. Pass `offering` instead so RevenueCat can track placement and targeting context. An optional identifier for the offering associated with the custom paywall. |
 
 
 ### Type Aliases
