@@ -1,7 +1,7 @@
 files_with_version_number = {
     './.version' => ['{x}'],
     './package.json' => ['"version": "{x}"'],
-    './purchases-capacitor-ui/package.json' => ['"version": "{x}"'],
+    './purchases-capacitor-ui/package.json' => ['"version": "{x}"', '"@revenuecat/purchases-capacitor": "{x}"'],
     './ios/Sources/RevenuecatPurchasesCapacitor/PurchasesPlugin.swift' => ['platformVersion = "{x}"'],
     './android/src/main/java/com/revenuecat/purchases/capacitor/PurchasesPlugin.kt' => ['PLUGIN_VERSION = "{x}"']
 }

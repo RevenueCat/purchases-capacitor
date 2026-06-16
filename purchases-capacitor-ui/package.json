@@ -59,17 +59,17 @@
     "build": "npm run clean && tsc && rollup -c ../rollup.config.js",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
-    "apitest": "npm run build && cd apitesters && npm install && tsc -p .",
+    "apitest": "npm run build && cd apitesters && npm install --legacy-peer-deps && tsc -p .",
     "prepublishOnly": "npm run build",
     "extract-api": "api-extractor run --local --verbose"
   },
   "dependencies": {
     "@capacitor/core": "^8.0.0",
-    "@revenuecat/purchases-capacitor": "^10.2.4",
     "@revenuecat/purchases-typescript-internal-esm": "18.15.1"
   },
   "peerDependencies": {
-    "@capacitor/core": ">=8.0.0"
+    "@capacitor/core": ">=8.0.0",
+    "@revenuecat/purchases-capacitor": "13.1.7"
   },
   "lint-staged": {
     "*.{ts,js,java,html,css}": [

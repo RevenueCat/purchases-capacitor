@@ -83,7 +83,7 @@ commands:
           key: v2-unix-ui-dependencies-{{ checksum "purchases-capacitor-ui/package.json" }}
       - run:
           name: Install UI package dependencies
-          command: cd purchases-capacitor-ui && npm install
+          command: cd purchases-capacitor-ui && npm install --legacy-peer-deps
       - save_cache:
           paths:
             - purchases-capacitor-ui/node_modules
@@ -97,7 +97,7 @@ commands:
           key: v2-mac-ui-dependencies-{{ checksum "purchases-capacitor-ui/package.json" }}
       - run:
           name: Install UI package dependencies
-          command: cd purchases-capacitor-ui && npm install
+          command: cd purchases-capacitor-ui && npm install --legacy-peer-deps
       - save_cache:
           paths:
             - purchases-capacitor-ui/node_modules
