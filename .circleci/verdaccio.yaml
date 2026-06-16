@@ -7,8 +7,8 @@ storage: /tmp/verdaccio/storage
 auth:
   htpasswd:
     file: /tmp/verdaccio/htpasswd
-    # Allow registering the throwaway CI user used to obtain a publish token.
-    max_users: 1000
+    # No user registration needed: we publish anonymously (see `publish: $all`).
+    max_users: -1
 uplinks:
   npmjs:
     url: https://registry.npmjs.org/

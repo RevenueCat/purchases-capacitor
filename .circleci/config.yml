@@ -137,11 +137,9 @@ commands:
           command: |
             for i in $(seq 1 90); do curl -fs http://localhost:4873/-/ping > /dev/null && break; sleep 1; done
             curl -fs http://localhost:4873/-/ping > /dev/null || { echo "Verdaccio did not start"; exit 1; }
-            TOKEN=$(curl -s -XPUT -H "Content-type: application/json" \
-              -d '{"name":"ci","password":"ci-verdaccio-password"}' \
-              http://localhost:4873/-/user/org.couchdb.user:ci \
-              | node -e "let d='';process.stdin.on('data',c=>d+=c).on('end',()=>process.stdout.write(JSON.parse(d).token))")
-            echo "//localhost:4873/:_authToken=${TOKEN}" >> ~/.npmrc
+            # Verdaccio's `publish: $all` permits anonymous publishing; npm only
+            # requires that *some* auth token is present, which it can't verify.
+            echo "//localhost:4873/:_authToken=anonymous" >> ~/.npmrc
             echo "@revenuecat:registry=http://localhost:4873/" >> ~/.npmrc
             npm publish
 
