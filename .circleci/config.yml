@@ -118,12 +118,12 @@ commands:
   publish-core-to-local-registry:
     description: >
       The UI package pins @revenuecat/purchases-capacitor to the exact SDK
-      version as a peerDependency. During release and dry-run flows that version
-      isn't on npm yet, so UI installs can't resolve the peer. This starts a
-      local Verdaccio registry, publishes the freshly built core package to it,
-      and scopes @revenuecat installs to it so the peer resolves locally for
-      real (instead of skipping peer resolution). Must run after the root
-      dependencies are installed and before any UI package install.
+      version as a peerDependency. During dry-run flows that version isn't on
+      npm yet, so UI installs can't resolve the peer. This starts a local
+      Verdaccio registry, publishes the freshly built core package to it, and
+      scopes @revenuecat installs to it so the peer resolves locally for real.
+      Must run after the root dependencies are installed and before any UI
+      package install.
     steps:
       - run:
           name: Install Verdaccio
@@ -137,11 +137,33 @@ commands:
           command: |
             for i in $(seq 1 90); do curl -fs http://localhost:4873/-/ping > /dev/null && break; sleep 1; done
             curl -fs http://localhost:4873/-/ping > /dev/null || { echo "Verdaccio did not start"; exit 1; }
-            # Verdaccio's `publish: $all` permits anonymous publishing; npm only
-            # requires that *some* auth token is present, which it can't verify.
+            # Route the @revenuecat scope to the local registry with a dummy token
+            # (Verdaccio's `publish: $all` allows anonymous publishing; npm only
+            # requires that *some* token is present, which it can't verify).
             echo "//localhost:4873/:_authToken=anonymous" >> ~/.npmrc
             echo "@revenuecat:registry=http://localhost:4873/" >> ~/.npmrc
-            npm publish
+            # Safety net: never let this publish reach the public npm registry.
+            # Abort unless the @revenuecat scope resolves to the local Verdaccio.
+            resolved="$(npm config get @revenuecat:registry)"
+            case "$resolved" in
+              http://localhost:4873/*) ;;
+              *) echo "Refusing to publish: @revenuecat registry resolved to '$resolved', not local Verdaccio"; exit 1 ;;
+            esac
+            npm publish --registry http://localhost:4873/
+
+  # Installs root deps, publishes the freshly built core to a local registry,
+  # then installs the UI package against it so its exact peer resolves for real.
+  ui-dependencies-unix:
+    steps:
+      - yarn-dependencies-unix
+      - publish-core-to-local-registry
+      - yarn-dependencies-ui-unix
+
+  ui-dependencies-mac:
+    steps:
+      - yarn-dependencies-mac
+      - publish-core-to-local-registry
+      - yarn-dependencies-ui-mac
 
 jobs:
   run-tests-ios:
@@ -223,9 +245,7 @@ jobs:
       - run:
           name: Start booting iOS Simulator
           command: xcrun simctl boot "iPhone 17" || true
-      - yarn-dependencies-mac
-      - publish-core-to-local-registry
-      - yarn-dependencies-ui-mac
+      - ui-dependencies-mac
       - run:
           name: Replace Maestro test app API key
           command: bundle exec fastlane change_maestro_test_app_api_key
@@ -255,9 +275,7 @@ jobs:
       - checkout
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
-      - yarn-dependencies-unix
-      - publish-core-to-local-registry
-      - yarn-dependencies-ui-unix
+      - ui-dependencies-unix
       - run:
           name: Replace Maestro test app API key
           command: bundle exec fastlane change_maestro_test_app_api_key
@@ -319,9 +337,7 @@ jobs:
       - image: cimg/ruby:3.1.2
     steps:
       - checkout
-      - yarn-dependencies-unix
-      - publish-core-to-local-registry
-      - yarn-dependencies-ui-unix
+      - ui-dependencies-unix
       - run: yarn build
       - run:
           name: Extract API (main package)
@@ -343,9 +359,7 @@ jobs:
       - image: cimg/ruby:3.1.2
     steps:
       - checkout
-      - yarn-dependencies-unix
-      - publish-core-to-local-registry
-      - yarn-dependencies-ui-unix
+      - ui-dependencies-unix
       - run: yarn build
       - run:
           name: API Tests (UI)
@@ -357,9 +371,7 @@ jobs:
       - image: cimg/ruby:3.1.2
     steps:
       - checkout
-      - yarn-dependencies-unix
-      - publish-core-to-local-registry
-      - yarn-dependencies-ui-unix
+      - ui-dependencies-unix
       - run: yarn build
       - run:
           name: Lint UI package
@@ -377,9 +389,7 @@ jobs:
           name: Temporarily bump version
           description: Running `npm publish --dry-run` for an existing version fails because the version is already published. This lane temporarily bumps the version to a next version just for testing the publish command.
           command: bundle exec fastlane temporary_bump_version
-      - yarn-dependencies-unix
-      - publish-core-to-local-registry
-      - yarn-dependencies-ui-unix
+      - ui-dependencies-unix
       - run: yarn build
       - run:
           name: Build UI package

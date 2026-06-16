@@ -1,8 +1,9 @@
-# Verdaccio config used by the `dry-run-release-ui` CI job to spin up a local
-# npm registry. After the temporary version bump, the UI package's exact
-# peerDependency on @revenuecat/purchases-capacitor points at a version that
-# isn't on npm yet. We publish the freshly built core package here so the UI
-# install can resolve the peer for real instead of skipping it.
+# Verdaccio config used by CI jobs to spin up a local npm registry (see the
+# `publish-core-to-local-registry` command in config.yml). The UI package's
+# exact peerDependency on @revenuecat/purchases-capacitor can point at a version
+# that isn't on npm yet (e.g. after a dry-run version bump). We publish the
+# freshly built core package here so the UI install can resolve the peer for
+# real instead of skipping it.
 storage: /tmp/verdaccio/storage
 auth:
   htpasswd:
