@@ -792,18 +792,6 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     updateLastFunction('getCachedVirtualCurrencies', cachedVirtualCurrencies);
   };
 
-  const trackCustomPaywallImpression = async () => {
-    const paywallId = window.prompt('Paywall ID (leave empty for none)')?.trim() || undefined;
-    const offeringId = window.prompt('Offering ID (leave empty for none)')?.trim() || undefined;
-
-    if (!paywallId && !offeringId) {
-      await Purchases.trackCustomPaywallImpression();
-    } else {
-      await Purchases.trackCustomPaywallImpression({ paywallId, offeringId });
-    }
-    updateLastFunctionWithoutContent(`trackCustomPaywallImpression (paywallId: ${paywallId ?? 'nil'}, offeringId: ${offeringId ?? 'nil'})`);
-  };
-
   const purchaseProductForWinBackTesting = async () => {
     try {
       const products = await Purchases.getProducts({
@@ -1462,8 +1450,8 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
         <IonButton size="small" onClick={getCachedVirtualCurrencies}>
           Get cached virtual currencies
         </IonButton>
-        <IonButton size="small" onClick={trackCustomPaywallImpression}>
-          Track Custom Paywall Impression
+        <IonButton size="small" routerLink="/custom-paywall-impression">
+          Custom Paywall Impression Testing
         </IonButton>
         <IonButton size="small" onClick={purchaseProductForWinBackTesting}>
           Purchase Product for WinBack Testing

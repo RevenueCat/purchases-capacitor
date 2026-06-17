@@ -397,19 +397,26 @@ async function checkTrackCustomPaywallImpression(plugin: PurchasesPlugin) {
   await plugin.trackCustomPaywallImpression({});
   await plugin.trackCustomPaywallImpression({ paywallId: 'my-paywall' });
   await plugin.trackCustomPaywallImpression({ offeringId: 'my-offering' });
+  await plugin.trackCustomPaywallImpression({ offering: {} as PurchasesOffering });
+  await plugin.trackCustomPaywallImpression({
+    paywallId: 'my-paywall',
+    offering: {} as PurchasesOffering,
+  });
   await plugin.trackCustomPaywallImpression({
     paywallId: 'my-paywall',
     offeringId: 'my-offering',
   });
-  await plugin.trackCustomPaywallImpression({ paywallId: null, offeringId: null });
+  await plugin.trackCustomPaywallImpression({ paywallId: null, offering: null, offeringId: null });
 }
 
 function checkTrackCustomPaywallImpressionOptions() {
   const options1: TrackCustomPaywallImpressionOptions = {};
   const options2: TrackCustomPaywallImpressionOptions = { paywallId: 'my-paywall' };
-  const options3: TrackCustomPaywallImpressionOptions = { offeringId: 'my-offering' };
+  const options3: TrackCustomPaywallImpressionOptions = { offering: {} as PurchasesOffering };
   const options4: TrackCustomPaywallImpressionOptions = {
     paywallId: 'my-paywall',
-    offeringId: 'my-offering',
+    offering: {} as PurchasesOffering,
   };
+  const options5: TrackCustomPaywallImpressionOptions = { offeringId: 'my-offering' };
+  const options6: TrackCustomPaywallImpressionOptions = { paywallId: null, offering: null, offeringId: null };
 }

@@ -948,7 +948,8 @@ export interface PurchasesPlugin {
    * Call this method once per paywall display, ideally when the paywall first becomes visible to the user,
    * not in callbacks that may fire multiple times for the same display.
    *
-   * @param options Optional parameters for the impression. Include `paywallId` to identify which paywall was shown.
+   * @param options Optional parameters for the impression. Include `paywallId` to identify which paywall was shown,
+   * and pass `offering` when available so the SDK can derive placement and targeting context.
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet.
    */
   trackCustomPaywallImpression(options?: TrackCustomPaywallImpressionOptions): Promise<void>;
@@ -961,8 +962,19 @@ export interface TrackCustomPaywallImpressionOptions {
   /** The identifier of the paywall that was shown. */
   paywallId?: string | null;
   /**
+   * The offering associated with the custom paywall.
+   *
+   * Pass the offering object so RevenueCat can track placement and targeting
+   * context for placement-resolved offerings.
+   */
+  offering?: PurchasesOffering | null;
+  /**
+   * Deprecated. Pass `offering` instead so RevenueCat can track placement and
+   * targeting context.
+   *
    * An optional identifier for the offering associated with the custom paywall.
-   * If not provided, the SDK will use the current offering identifier from the cache.
+   *
+   * @deprecated Use `offering` instead.
    */
   offeringId?: string | null;
 }

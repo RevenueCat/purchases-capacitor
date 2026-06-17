@@ -1,4 +1,8 @@
-import { IonApp, setupIonicReact } from '@ionic/react';
+import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
+import { IonReactRouter } from '@ionic/react-router';
+import type { ComponentType } from 'react';
+import { Route, type RouteProps } from 'react-router-dom';
+import CustomPaywallImpressionTestingScreen from './pages/CustomPaywallImpressionTestingScreen';
 import Home from './pages/Home';
 
 /* Core CSS required for Ionic components to work properly */
@@ -22,9 +26,16 @@ import './theme/variables.css';
 
 setupIonicReact();
 
+const RouterRoute = Route as unknown as ComponentType<RouteProps>;
+
 const App: React.FC = () => (
   <IonApp>
-    <Home />
+    <IonReactRouter>
+      <IonRouterOutlet>
+        <RouterRoute exact path="/" component={Home} />
+        <RouterRoute exact path="/custom-paywall-impression" component={CustomPaywallImpressionTestingScreen} />
+      </IonRouterOutlet>
+    </IonReactRouter>
   </IonApp>
 );
 

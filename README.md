@@ -1285,9 +1285,9 @@ so that RevenueCat can track paywall analytics.
 Call this method once per paywall display, ideally when the paywall first becomes visible to the user,
 not in callbacks that may fire multiple times for the same display.
 
-| Param         | Type                                                                                                | Description                                                                                      |
-| ------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| **`options`** | <code><a href="#trackcustompaywallimpressionoptions">TrackCustomPaywallImpressionOptions</a></code> | Optional parameters for the impression. Include `paywallId` to identify which paywall was shown. |
+| Param         | Type                                                                                                | Description                                                                                                                                                                                |
+| ------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **`options`** | <code><a href="#trackcustompaywallimpressionoptions">TrackCustomPaywallImpressionOptions</a></code> | Optional parameters for the impression. Include `paywallId` to identify which paywall was shown, and pass `offering` when available so the SDK can derive placement and targeting context. |
 
 --------------------
 
@@ -1826,10 +1826,11 @@ Holds the information about a Win-Back Offer in Apple's App <a href="#store">Sto
 
 Options for tracking a custom paywall impression.
 
-| Prop             | Type                        | Description                                                                                                                                                   |
-| ---------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`paywallId`**  | <code>string \| null</code> | The identifier of the paywall that was shown.                                                                                                                 |
-| **`offeringId`** | <code>string \| null</code> | An optional identifier for the offering associated with the custom paywall. If not provided, the SDK will use the current offering identifier from the cache. |
+| Prop             | Type                                                                    | Description                                                                                                                                                              |
+| ---------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **`paywallId`**  | <code>string \| null</code>                                             | The identifier of the paywall that was shown.                                                                                                                            |
+| **`offering`**   | <code><a href="#purchasesoffering">PurchasesOffering</a> \| null</code> | The offering associated with the custom paywall. Pass the offering object so RevenueCat can track placement and targeting context for placement-resolved offerings.      |
+| **`offeringId`** | <code>string \| null</code>                                             | Deprecated. Pass `offering` instead so RevenueCat can track placement and targeting context. An optional identifier for the offering associated with the custom paywall. |
 
 
 ### Type Aliases
