@@ -1,6 +1,6 @@
 {
   "name": "@revenuecat/purchases-capacitor-ui",
-  "version": "13.1.7",
+  "version": "13.2.0",
   "description": "UI components for RevenueCat Capacitor SDK",
   "main": "dist/esm/index.js",
   "module": "dist/esm/index.js",
@@ -69,7 +69,7 @@
   },
   "peerDependencies": {
     "@capacitor/core": ">=8.0.0",
-    "@revenuecat/purchases-capacitor": "13.1.7"
+    "@revenuecat/purchases-capacitor": "13.2.0"
   },
   "lint-staged": {
     "*.{ts,js,java,html,css}": [
