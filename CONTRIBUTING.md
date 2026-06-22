@@ -19,6 +19,12 @@ This guide provides instructions for contributing to this Capacitor plugin.
     brew install swiftlint
     ```
 
+1. Install the JDK via [mise](https://mise.jdx.dev/) (for Android builds). sdkman via `sdk env install` is also supported.
+
+    ```shell
+    mise install
+    ```
+
 ### Scripts
 
 #### `npm run build`
