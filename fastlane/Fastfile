@@ -184,7 +184,7 @@ lane :build_purchase_tester do |options|
     sh("yarn link")
   end
   Dir.chdir(File.expand_path('purchases-capacitor-ui', get_root_folder)) do
-    sh("yarn && yarn build")
+    sh("yarn install --frozen-lockfile && yarn build")
     sh("yarn link")
   end
   Dir.chdir(File.expand_path('example/purchase-tester', get_root_folder)) do
@@ -247,7 +247,7 @@ lane :update_hybrid_common do |options|
       sh("yarn install")
     end
     Dir.chdir(File.expand_path('purchases-capacitor-ui', get_root_folder)) do
-      sh("npm install")
+      sh("yarn install")
     end
     git_status = sh("git status --porcelain", log: true, error_callback: ->(_) {})
     if git_status.lines.length > 0
@@ -281,7 +281,7 @@ lane :build_maestro_test_app do |options|
     sh("yarn install --frozen-lockfile && yarn build")
   end
   Dir.chdir(File.expand_path('purchases-capacitor-ui', get_root_folder)) do
-    sh("yarn && yarn build")
+    sh("yarn install --frozen-lockfile && yarn build")
   end
   Dir.chdir(File.expand_path('e2e-tests/MaestroTestApp', get_root_folder)) do
     sh("npm install")

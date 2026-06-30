@@ -67,7 +67,7 @@ captures
 package-lock.json
 yarn.lock
 !/yarn.lock
-!/purchases-capacitor-ui/package-lock.json
+!/purchases-capacitor-ui/yarn.lock
 
 # fastlane
 report.xml

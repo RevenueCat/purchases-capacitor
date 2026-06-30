@@ -1,6 +1,7 @@
 {
   "name": "@revenuecat/purchases-capacitor-ui",
   "version": "13.2.0",
+  "packageManager": "yarn@1.22.22",
   "description": "UI components for RevenueCat Capacitor SDK",
   "main": "dist/esm/index.js",
   "module": "dist/esm/index.js",
@@ -59,7 +60,7 @@
     "build": "npm run clean && tsc && rollup -c ../rollup.config.js",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
-    "apitest": "npm run build && cd apitesters && npm install && tsc -p .",
+    "apitest": "yarn build && cd apitesters && yarn install && tsc -p .",
     "prepublishOnly": "npm run build",
     "extract-api": "api-extractor run --local --verbose"
   },

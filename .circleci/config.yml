@@ -80,28 +80,28 @@ commands:
     steps:
       - install-nvm
       - restore_cache:
-          key: v3-unix-ui-dependencies-{{ checksum "purchases-capacitor-ui/package-lock.json" }}
+          key: v4-unix-ui-dependencies-{{ checksum "purchases-capacitor-ui/yarn.lock" }}
       - run:
           name: Install UI package dependencies
-          command: cd purchases-capacitor-ui && npm ci
+          command: cd purchases-capacitor-ui && yarn install --frozen-lockfile
       - save_cache:
           paths:
             - purchases-capacitor-ui/node_modules
-          key: v3-unix-ui-dependencies-{{ checksum "purchases-capacitor-ui/package-lock.json" }}
+          key: v4-unix-ui-dependencies-{{ checksum "purchases-capacitor-ui/yarn.lock" }}
 
   yarn-dependencies-ui-mac:
     description: "Install yarn dependencies for UI package on Mac"
     steps:
       - install-nvm
       - restore_cache:
-          key: v3-mac-ui-dependencies-{{ checksum "purchases-capacitor-ui/package-lock.json" }}
+          key: v4-mac-ui-dependencies-{{ checksum "purchases-capacitor-ui/yarn.lock" }}
       - run:
           name: Install UI package dependencies
-          command: cd purchases-capacitor-ui && npm ci
+          command: cd purchases-capacitor-ui && yarn install --frozen-lockfile
       - save_cache:
           paths:
             - purchases-capacitor-ui/node_modules
-          key: v3-mac-ui-dependencies-{{ checksum "purchases-capacitor-ui/package-lock.json" }}
+          key: v4-mac-ui-dependencies-{{ checksum "purchases-capacitor-ui/yarn.lock" }}
 
   copy-npm-rc:
     steps:
@@ -345,10 +345,10 @@ jobs:
           command: yarn extract-api
       - run:
           name: Build UI package
-          command: cd purchases-capacitor-ui && npm run build
+          command: cd purchases-capacitor-ui && yarn build
       - run:
           name: Extract API (UI package)
-          command: cd purchases-capacitor-ui && npm run extract-api
+          command: cd purchases-capacitor-ui && yarn extract-api
       - run:
           name: Check for API changes
           command: git diff --exit-code api-report/ purchases-capacitor-ui/api-report/
@@ -364,7 +364,7 @@ jobs:
       - run: yarn build
       - run:
           name: API Tests (UI)
-          command: cd purchases-capacitor-ui && npm run apitest
+          command: cd purchases-capacitor-ui && yarn apitest
 
   run-lint-ui:
     description: "Run linting for purchases-capacitor-ui package"
@@ -376,7 +376,7 @@ jobs:
       - run: yarn build
       - run:
           name: Lint UI package
-          command: cd purchases-capacitor-ui && npm run lint
+          command: cd purchases-capacitor-ui && yarn lint
 
   dry-run-release-ui:
     description: "Validate purchases-capacitor-ui package can be published"
@@ -394,7 +394,7 @@ jobs:
       - run: yarn build
       - run:
           name: Build UI package
-          command: cd purchases-capacitor-ui && npm run build
+          command: cd purchases-capacitor-ui && yarn build
       - run:
           name: Dry run UI package release
           command: cd purchases-capacitor-ui && npm publish --dry-run
