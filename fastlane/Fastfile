@@ -180,11 +180,11 @@ end
 desc "Build purchase tester"
 lane :build_purchase_tester do |options|
   Dir.chdir(get_root_folder) do
-    sh("yarn && yarn build")
+    sh("yarn install --frozen-lockfile && yarn build")
     sh("yarn link")
   end
   Dir.chdir(File.expand_path('purchases-capacitor-ui', get_root_folder)) do
-    sh("yarn && yarn build")
+    sh("yarn install --frozen-lockfile && yarn build")
     sh("yarn link")
   end
   Dir.chdir(File.expand_path('example/purchase-tester', get_root_folder)) do
@@ -239,6 +239,22 @@ lane :update_hybrid_common do |options|
     open_pr: options[:open_pr] || false,
     automatic_release: options[:automatic_release] || false
   )
+
+  # Regenerate the lockfiles so CI's reproducible installs stay in sync after
+  # the dependency bump, and push them to the PR branch opened above.
+  if options[:open_pr]
+    Dir.chdir(get_root_folder) do
+      sh("yarn install")
+    end
+    Dir.chdir(File.expand_path('purchases-capacitor-ui', get_root_folder)) do
+      sh("yarn install")
+    end
+    git_status = sh("git status --porcelain", log: true, error_callback: ->(_) {})
+    if git_status.lines.length > 0
+      commit_current_changes(commit_message: 'Update lockfiles')
+      push_to_git_remote(set_upstream: true)
+    end
+  end
 end
 
 desc "Replace the Maestro test app API key placeholder"
@@ -262,10 +278,10 @@ lane :build_maestro_test_app do |options|
   UI.user_error!("Missing or invalid `platform` option (use ios or android)") unless %w[ios android].include?(platform)
 
   Dir.chdir(get_root_folder) do
-    sh("yarn && yarn build")
+    sh("yarn install --frozen-lockfile && yarn build")
   end
   Dir.chdir(File.expand_path('purchases-capacitor-ui', get_root_folder)) do
-    sh("yarn && yarn build")
+    sh("yarn install --frozen-lockfile && yarn build")
   end
   Dir.chdir(File.expand_path('e2e-tests/MaestroTestApp', get_root_folder)) do
     sh("npm install")
