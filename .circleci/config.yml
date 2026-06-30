@@ -56,24 +56,24 @@ commands:
     steps:
       - install-nvm
       - restore_cache:
-          key: v2-unix-dependencies-{{ checksum "package.json" }}
-      - run: yarn
+          key: v3-unix-dependencies-{{ checksum "yarn.lock" }}
+      - run: yarn install --frozen-lockfile
       - save_cache:
           paths:
             - node_modules
-          key: v2-unix-dependencies-{{ checksum "package.json" }}
+          key: v3-unix-dependencies-{{ checksum "yarn.lock" }}
 
   yarn-dependencies-mac:
     description: "Install yarn dependencies"
     steps:
       - install-nvm
       - restore_cache:
-          key: v2-mac-dependencies-{{ checksum "package.json" }}
-      - run: yarn
+          key: v3-mac-dependencies-{{ checksum "yarn.lock" }}
+      - run: yarn install --frozen-lockfile
       - save_cache:
           paths:
             - node_modules
-          key: v2-mac-dependencies-{{ checksum "package.json" }}
+          key: v3-mac-dependencies-{{ checksum "yarn.lock" }}
 
   yarn-dependencies-ui-unix:
     description: "Install yarn dependencies for UI package"
@@ -303,6 +303,7 @@ jobs:
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
+      - install-nvm
       - revenuecat/trust-github-key
       - revenuecat/setup-git-credentials
       - run:

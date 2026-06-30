@@ -66,6 +66,7 @@ captures
 # Lock files
 package-lock.json
 yarn.lock
+!/yarn.lock
 
 # fastlane
 report.xml
