@@ -240,15 +240,18 @@ lane :update_hybrid_common do |options|
     automatic_release: options[:automatic_release] || false
   )
 
-  # Regenerate yarn.lock so CI's --frozen-lockfile install stays reproducible
-  # after the dependency bump, and push it to the PR branch opened above.
+  # Regenerate the lockfiles so CI's reproducible installs stay in sync after
+  # the dependency bump, and push them to the PR branch opened above.
   if options[:open_pr]
     Dir.chdir(get_root_folder) do
       sh("yarn install")
     end
+    Dir.chdir(File.expand_path('purchases-capacitor-ui', get_root_folder)) do
+      sh("npm install")
+    end
     git_status = sh("git status --porcelain", log: true, error_callback: ->(_) {})
     if git_status.lines.length > 0
-      commit_current_changes(commit_message: 'Update yarn.lock')
+      commit_current_changes(commit_message: 'Update lockfiles')
       push_to_git_remote(set_upstream: true)
     end
   end

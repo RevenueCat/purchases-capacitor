@@ -80,28 +80,28 @@ commands:
     steps:
       - install-nvm
       - restore_cache:
-          key: v2-unix-ui-dependencies-{{ checksum "purchases-capacitor-ui/package.json" }}
+          key: v3-unix-ui-dependencies-{{ checksum "purchases-capacitor-ui/package-lock.json" }}
       - run:
           name: Install UI package dependencies
-          command: cd purchases-capacitor-ui && npm install
+          command: cd purchases-capacitor-ui && npm ci
       - save_cache:
           paths:
             - purchases-capacitor-ui/node_modules
-          key: v2-unix-ui-dependencies-{{ checksum "purchases-capacitor-ui/package.json" }}
+          key: v3-unix-ui-dependencies-{{ checksum "purchases-capacitor-ui/package-lock.json" }}
 
   yarn-dependencies-ui-mac:
     description: "Install yarn dependencies for UI package on Mac"
     steps:
       - install-nvm
       - restore_cache:
-          key: v2-mac-ui-dependencies-{{ checksum "purchases-capacitor-ui/package.json" }}
+          key: v3-mac-ui-dependencies-{{ checksum "purchases-capacitor-ui/package-lock.json" }}
       - run:
           name: Install UI package dependencies
-          command: cd purchases-capacitor-ui && npm install
+          command: cd purchases-capacitor-ui && npm ci
       - save_cache:
           paths:
             - purchases-capacitor-ui/node_modules
-          key: v2-mac-ui-dependencies-{{ checksum "purchases-capacitor-ui/package.json" }}
+          key: v3-mac-ui-dependencies-{{ checksum "purchases-capacitor-ui/package-lock.json" }}
 
   copy-npm-rc:
     steps:
