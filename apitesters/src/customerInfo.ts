@@ -79,6 +79,10 @@ function checkSubscriptionInfo(info: PurchasesSubscriptionInfo) {
   const storeTransactionId: string | null = info.storeTransactionId;
   const isActive: boolean = info.isActive;
   const willRenew: boolean = info.willRenew;
+  const autoResumeDate: string | null = info.autoResumeDate;
+  const displayName: string | null = info.displayName;
+  const managementURL: string | null = info.managementURL;
+  const productPlanIdentifier: string | null = info.productPlanIdentifier;
 }
 
 function checkTransaction(transaction: PurchasesStoreTransaction) {
