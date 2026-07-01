@@ -56,52 +56,52 @@ commands:
     steps:
       - install-nvm
       - restore_cache:
-          key: v2-unix-dependencies-{{ checksum "package.json" }}
-      - run: yarn
+          key: v3-unix-dependencies-{{ checksum "yarn.lock" }}
+      - run: yarn install --frozen-lockfile
       - save_cache:
           paths:
             - node_modules
-          key: v2-unix-dependencies-{{ checksum "package.json" }}
+          key: v3-unix-dependencies-{{ checksum "yarn.lock" }}
 
   yarn-dependencies-mac:
     description: "Install yarn dependencies"
     steps:
       - install-nvm
       - restore_cache:
-          key: v2-mac-dependencies-{{ checksum "package.json" }}
-      - run: yarn
+          key: v3-mac-dependencies-{{ checksum "yarn.lock" }}
+      - run: yarn install --frozen-lockfile
       - save_cache:
           paths:
             - node_modules
-          key: v2-mac-dependencies-{{ checksum "package.json" }}
+          key: v3-mac-dependencies-{{ checksum "yarn.lock" }}
 
   yarn-dependencies-ui-unix:
     description: "Install yarn dependencies for UI package"
     steps:
       - install-nvm
       - restore_cache:
-          key: v2-unix-ui-dependencies-{{ checksum "purchases-capacitor-ui/package.json" }}
+          key: v4-unix-ui-dependencies-{{ checksum "purchases-capacitor-ui/yarn.lock" }}
       - run:
           name: Install UI package dependencies
-          command: cd purchases-capacitor-ui && npm install
+          command: cd purchases-capacitor-ui && yarn install --frozen-lockfile
       - save_cache:
           paths:
             - purchases-capacitor-ui/node_modules
-          key: v2-unix-ui-dependencies-{{ checksum "purchases-capacitor-ui/package.json" }}
+          key: v4-unix-ui-dependencies-{{ checksum "purchases-capacitor-ui/yarn.lock" }}
 
   yarn-dependencies-ui-mac:
     description: "Install yarn dependencies for UI package on Mac"
     steps:
       - install-nvm
       - restore_cache:
-          key: v2-mac-ui-dependencies-{{ checksum "purchases-capacitor-ui/package.json" }}
+          key: v4-mac-ui-dependencies-{{ checksum "purchases-capacitor-ui/yarn.lock" }}
       - run:
           name: Install UI package dependencies
-          command: cd purchases-capacitor-ui && npm install
+          command: cd purchases-capacitor-ui && yarn install --frozen-lockfile
       - save_cache:
           paths:
             - purchases-capacitor-ui/node_modules
-          key: v2-mac-ui-dependencies-{{ checksum "purchases-capacitor-ui/package.json" }}
+          key: v4-mac-ui-dependencies-{{ checksum "purchases-capacitor-ui/yarn.lock" }}
 
   copy-npm-rc:
     steps:
@@ -115,55 +115,6 @@ commands:
           name: Copy npmrc sample file to UI package location
           command: cp .npmrc.SAMPLE purchases-capacitor-ui/.npmrc
 
-  publish-core-to-local-registry:
-    description: >
-      The UI package pins @revenuecat/purchases-capacitor to the exact SDK
-      version as a peerDependency. During dry-run flows that version isn't on
-      npm yet, so UI installs can't resolve the peer. This starts a local
-      Verdaccio registry, publishes the freshly built core package to it, and
-      scopes @revenuecat installs to it so the peer resolves locally for real.
-      Must run after the root dependencies are installed and before any UI
-      package install.
-    steps:
-      - run:
-          name: Install Verdaccio
-          command: npm install -g verdaccio@6
-      - run:
-          name: Start local registry (Verdaccio)
-          background: true
-          command: verdaccio --config .circleci/verdaccio.yaml --listen 4873
-      - run:
-          name: Publish core package to local registry
-          command: |
-            for i in $(seq 1 90); do curl -fs http://localhost:4873/-/ping > /dev/null && break; sleep 1; done
-            curl -fs http://localhost:4873/-/ping > /dev/null || { echo "Verdaccio did not start"; exit 1; }
-            # Route the @revenuecat scope to the local registry with a dummy token
-            # (Verdaccio's `publish: $all` allows anonymous publishing; npm only
-            # requires that *some* token is present, which it can't verify).
-            echo "//localhost:4873/:_authToken=anonymous" >> ~/.npmrc
-            echo "@revenuecat:registry=http://localhost:4873/" >> ~/.npmrc
-            # Safety net: never let this publish reach the public npm registry.
-            # Abort unless the @revenuecat scope resolves to the local Verdaccio.
-            resolved="$(npm config get @revenuecat:registry)"
-            case "$resolved" in
-              http://localhost:4873/*) ;;
-              *) echo "Refusing to publish: @revenuecat registry resolved to '$resolved', not local Verdaccio"; exit 1 ;;
-            esac
-            npm publish --registry http://localhost:4873/
-
-  # Installs root deps, publishes the freshly built core to a local registry,
-  # then installs the UI package against it so its exact peer resolves for real.
-  ui-dependencies-unix:
-    steps:
-      - yarn-dependencies-unix
-      - publish-core-to-local-registry
-      - yarn-dependencies-ui-unix
-
-  ui-dependencies-mac:
-    steps:
-      - yarn-dependencies-mac
-      - publish-core-to-local-registry
-      - yarn-dependencies-ui-mac
 
 jobs:
   run-tests-ios:
@@ -245,7 +196,8 @@ jobs:
       - run:
           name: Start booting iOS Simulator
           command: xcrun simctl boot "iPhone 17" || true
-      - ui-dependencies-mac
+      - yarn-dependencies-mac
+      - yarn-dependencies-ui-mac
       - run:
           name: Replace Maestro test app API key
           command: bundle exec fastlane change_maestro_test_app_api_key
@@ -275,7 +227,8 @@ jobs:
       - checkout
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
-      - ui-dependencies-unix
+      - yarn-dependencies-unix
+      - yarn-dependencies-ui-unix
       - run:
           name: Replace Maestro test app API key
           command: bundle exec fastlane change_maestro_test_app_api_key
@@ -303,6 +256,7 @@ jobs:
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
+      - install-nvm
       - revenuecat/trust-github-key
       - revenuecat/setup-git-credentials
       - run:
@@ -337,17 +291,18 @@ jobs:
       - image: cimg/ruby:3.1.2
     steps:
       - checkout
-      - ui-dependencies-unix
+      - yarn-dependencies-unix
+      - yarn-dependencies-ui-unix
       - run: yarn build
       - run:
           name: Extract API (main package)
           command: yarn extract-api
       - run:
           name: Build UI package
-          command: cd purchases-capacitor-ui && npm run build
+          command: cd purchases-capacitor-ui && yarn build
       - run:
           name: Extract API (UI package)
-          command: cd purchases-capacitor-ui && npm run extract-api
+          command: cd purchases-capacitor-ui && yarn extract-api
       - run:
           name: Check for API changes
           command: git diff --exit-code api-report/ purchases-capacitor-ui/api-report/
@@ -359,11 +314,12 @@ jobs:
       - image: cimg/ruby:3.1.2
     steps:
       - checkout
-      - ui-dependencies-unix
+      - yarn-dependencies-unix
+      - yarn-dependencies-ui-unix
       - run: yarn build
       - run:
           name: API Tests (UI)
-          command: cd purchases-capacitor-ui && npm run apitest
+          command: cd purchases-capacitor-ui && yarn apitest
 
   run-lint-ui:
     description: "Run linting for purchases-capacitor-ui package"
@@ -371,11 +327,12 @@ jobs:
       - image: cimg/ruby:3.1.2
     steps:
       - checkout
-      - ui-dependencies-unix
+      - yarn-dependencies-unix
+      - yarn-dependencies-ui-unix
       - run: yarn build
       - run:
           name: Lint UI package
-          command: cd purchases-capacitor-ui && npm run lint
+          command: cd purchases-capacitor-ui && yarn lint
 
   dry-run-release-ui:
     description: "Validate purchases-capacitor-ui package can be published"
@@ -389,11 +346,12 @@ jobs:
           name: Temporarily bump version
           description: Running `npm publish --dry-run` for an existing version fails because the version is already published. This lane temporarily bumps the version to a next version just for testing the publish command.
           command: bundle exec fastlane temporary_bump_version
-      - ui-dependencies-unix
+      - yarn-dependencies-unix
+      - yarn-dependencies-ui-unix
       - run: yarn build
       - run:
           name: Build UI package
-          command: cd purchases-capacitor-ui && npm run build
+          command: cd purchases-capacitor-ui && yarn build
       - run:
           name: Dry run UI package release
           command: cd purchases-capacitor-ui && npm publish --dry-run
