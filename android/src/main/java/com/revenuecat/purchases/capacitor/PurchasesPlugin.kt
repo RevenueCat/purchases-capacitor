@@ -9,6 +9,8 @@ import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
 import com.revenuecat.purchases.CustomerInfo
+import com.revenuecat.purchases.DangerousSettings
+import com.revenuecat.purchases.InternalRevenueCatAPI
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesAreCompletedBy
 import com.revenuecat.purchases.Store
@@ -92,6 +94,7 @@ class PurchasesPlugin : Plugin() {
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @OptIn(InternalRevenueCatAPI::class)
     fun configure(call: PluginCall) {
         val apiKey = call.getStringOrReject("apiKey") ?: return
         val appUserID = call.getString("appUserID")
@@ -110,6 +113,8 @@ class PurchasesPlugin : Plugin() {
         val diagnosticsEnabled = call.getBoolean("diagnosticsEnabled")
         val automaticDeviceIdentifierCollectionEnabled = call.getBoolean("automaticDeviceIdentifierCollectionEnabled")
         val preferredLocale = call.getString("preferredUILocaleOverride")
+        val useWorkflows = call.getObject("dangerousSettings")?.getBool("useWorkflows") ?: false
+        val dangerousSettings = if (useWorkflows) DangerousSettings.forWorkflows(true) else DangerousSettings()
 
         configure(
             context.applicationContext,
@@ -118,6 +123,7 @@ class PurchasesPlugin : Plugin() {
             purchasesAreCompletedBy,
             platformInfo,
             store,
+            dangerousSettings = dangerousSettings,
             shouldShowInAppMessagesAutomatically = shouldShowInAppMessages,
             verificationMode = entitlementVerificationMode,
             pendingTransactionsForPrepaidPlansEnabled = pendingTransactionsForPrepaidPlansEnabled,
