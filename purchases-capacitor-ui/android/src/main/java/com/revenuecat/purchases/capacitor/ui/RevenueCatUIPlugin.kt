@@ -254,6 +254,10 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
                 })
             }
 
+            override fun onWebCheckoutOpened() {
+                notifyListeners("onWebCheckoutOpened", JSObject())
+            }
+
             override fun onPurchasePackageInitiated(rcPackage: Map<String, Any?>, requestId: String) {
                 notifyListeners("onPurchaseInitiated", JSObject().apply {
                     put("package", JSONObject(rcPackage))
