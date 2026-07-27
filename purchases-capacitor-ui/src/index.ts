@@ -183,6 +183,14 @@ async function presentWithListenerSupport(
           }),
         );
       }
+      if (listener.onWebCheckoutOpened) {
+        const cb = listener.onWebCheckoutOpened;
+        handles.push(
+          await nativePlugin.addListener('onWebCheckoutOpened', () => {
+            cb();
+          }),
+        );
+      }
     }
 
     // Always register onPurchaseInitiated so we auto-resume when the user
