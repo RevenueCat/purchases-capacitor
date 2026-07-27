@@ -159,10 +159,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@revenuecat/purchases-typescript-internal-esm@18.23.0":
-  version "18.23.0"
-  resolved "https://registry.yarnpkg.com/@revenuecat/purchases-typescript-internal-esm/-/purchases-typescript-internal-esm-18.23.0.tgz#37f5da3504889eef4e35a8b674e09977353fd813"
-  integrity sha512-0A6BoL+3+3dBLmEvhxjS4625CnUaRA4OCTr0PxHD67tPSAD+DDuM5lNuNFe1xRx2B0626RgaQ3pd8TGHNDDyGw==
+"@revenuecat/purchases-typescript-internal-esm@18.24.0":
+  version "18.24.0"
+  resolved "https://registry.yarnpkg.com/@revenuecat/purchases-typescript-internal-esm/-/purchases-typescript-internal-esm-18.24.0.tgz#586f826405325c64ad391979ab0e595c3b256e12"
+  integrity sha512-CUn2Hz3d+7sF6i1W9KXvVpIbvoQg4pscni4kn4u8DyhTqFaazsJpvrg4k0Ae+Ba0INSUxolj4jmSGC+dlj5p9A==
 
 "@rollup/plugin-node-resolve@^16.0.1":
   version "16.0.3"
