@@ -56,6 +56,7 @@ export interface PaywallListener {
         error: PurchasesError;
     }) => void;
     onRestoreStarted?: () => void;
+    onWebCheckoutOpened?: () => void;
 }
 
 // @public

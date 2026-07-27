@@ -87,6 +87,7 @@ async function checkPaywallListener(plugin: RevenueCatUIPlugin) {
     onRestoreStarted: () => {},
     onRestoreCompleted: (args: { customerInfo: CustomerInfo }) => {},
     onRestoreError: (args: { error: PurchasesError }) => {},
+    onWebCheckoutOpened: () => {},
     onPurchaseInitiated: (args: { packageBeingPurchased: PurchasesPackage; resumable: PurchaseResumable }) => {
       args.resumable.resume();
       args.resumable.resume(true);
