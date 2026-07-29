@@ -115,6 +115,47 @@ commands:
           name: Copy npmrc sample file to UI package location
           command: cp .npmrc.SAMPLE purchases-capacitor-ui/.npmrc
 
+  override-android-agp-version:
+    description: >
+      Repoint the Maestro test app at a specific AGP/Gradle version, to verify the published plugin
+      modules configure cleanly under it. Mutates the ephemeral checkout only.
+    parameters:
+      agp_version:
+        type: string
+      gradle_version:
+        type: string
+      extra_gradle_properties:
+        type: string
+        default: ""
+    steps:
+      - run:
+          name: Override AGP << parameters.agp_version >> / Gradle << parameters.gradle_version >>
+          command: |
+            set -euo pipefail
+            cd e2e-tests/MaestroTestApp/android
+
+            # Gradle resolves a subproject's buildscript classpath parent-first, so overriding the
+            # app's AGP also governs the embedded plugin modules, despite their own lower self-pin.
+            # Matching any version (rather than a literal) keeps this from silently becoming a no-op
+            # when the pinned AGP is bumped. `-i.bak` works on both GNU and BSD sed.
+            sed -i.bak -E "s#(classpath ['\"]com\.android\.tools\.build:gradle:)[^'\"]+#\1<< parameters.agp_version >>#" build.gradle
+            grep -q "com.android.tools.build:gradle:<< parameters.agp_version >>" build.gradle \
+              || { echo "ERROR: AGP classpath line not found/replaced in build.gradle"; exit 1; }
+
+            sed -i.bak -E "s#^distributionUrl=.*#distributionUrl=https://services.gradle.org/distributions/gradle-<< parameters.gradle_version >>-all.zip#" gradle/wrapper/gradle-wrapper.properties
+            grep -q "gradle-<< parameters.gradle_version >>-all.zip" gradle/wrapper/gradle-wrapper.properties \
+              || { echo "ERROR: distributionUrl not replaced in gradle-wrapper.properties"; exit 1; }
+
+            # Set as Gradle properties rather than CLI args so build_maestro_test_app needs no changes.
+            # @capacitor/android's own module still uses legacy-only DSL, so keep the new DSL off.
+            printf '\nandroid.newDsl=false\n<< parameters.extra_gradle_properties >>\n' >> gradle.properties
+
+            rm -f build.gradle.bak gradle/wrapper/gradle-wrapper.properties.bak
+            echo "--- effective overrides ---"
+            grep "com.android.tools.build:gradle" build.gradle
+            grep "^distributionUrl" gradle/wrapper/gradle-wrapper.properties
+            tail -3 gradle.properties
+
 
 jobs:
   run-tests-ios:
@@ -139,6 +180,55 @@ jobs:
       - yarn-dependencies-unix
       - run: yarn build
       - run: yarn verify:android
+
+  verify-android-agp8:
+    description: >
+      Baseline: build the Maestro test app with the AGP version currently pinned by the repo.
+    executor:
+      name: android/android_machine
+      resource_class: large
+      tag: default
+    steps:
+      - checkout
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
+      - yarn-dependencies-unix
+      - yarn-dependencies-ui-unix
+      - run:
+          name: Build Maestro test app (Android, current pinned AGP)
+          command: bundle exec fastlane build_maestro_test_app platform:android
+          no_output_timeout: 15m
+
+  verify-android-agp-override:
+    description: >
+      Build the Maestro test app against an overridden AGP/Gradle version, so the published plugin
+      modules keep configuring cleanly on newer AGP (see issue #849).
+    parameters:
+      agp_version:
+        type: string
+      gradle_version:
+        type: string
+      extra_gradle_properties:
+        type: string
+        default: ""
+    executor:
+      name: android/android_machine
+      resource_class: large
+      tag: default
+    steps:
+      - checkout
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
+      - yarn-dependencies-unix
+      - yarn-dependencies-ui-unix
+      - override-android-agp-version:
+          agp_version: << parameters.agp_version >>
+          gradle_version: << parameters.gradle_version >>
+          extra_gradle_properties: << parameters.extra_gradle_properties >>
+      - run:
+          name: Build Maestro test app (Android, AGP << parameters.agp_version >>)
+          command: bundle exec fastlane build_maestro_test_app platform:android
+          no_output_timeout: 15m
 
   build-purchase-tester:
     <<: *base-mac-job
@@ -384,6 +474,17 @@ workflows:
       - run-tests-android
       - run-lint
       - build-purchase-tester
+      # AGP compatibility (issue #849): one job per AGP configuration
+      - verify-android-agp8
+      - verify-android-agp-override:
+          name: verify-android-agp9
+          agp_version: "9.2.1"
+          gradle_version: "9.4.1"
+      - verify-android-agp-override:
+          name: verify-android-agp9-legacy-kotlin
+          agp_version: "9.2.1"
+          gradle_version: "9.4.1"
+          extra_gradle_properties: "android.builtInKotlin=false"
       # API change detection
       - check-api-changes
       # UI Package jobs
@@ -408,6 +509,9 @@ workflows:
             - run-api-tests-ui
             - run-lint-ui
             - check-api-changes
+            - verify-android-agp8
+            - verify-android-agp9
+            - verify-android-agp9-legacy-kotlin
           <<: *release-branches
       - revenuecat/tag-current-branch:
           requires:
