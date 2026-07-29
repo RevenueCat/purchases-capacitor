@@ -20,7 +20,9 @@ buildscript {
 
 apply plugin: 'com.android.library'
 // AGP 9+ registers the `kotlin` extension itself (android.builtInKotlin) and errors out if the
-// Kotlin plugin is also applied.
+// Kotlin plugin is also applied. Must stay below `com.android.library`, since that apply is what
+// registers the extension. The kotlin-gradle-plugin classpath entry above is still required even
+// when this branch is skipped: the JvmTarget import needs it on older AGP.
 if (project.extensions.findByName('kotlin') == null) {
     apply plugin: 'org.jetbrains.kotlin.android'
 }

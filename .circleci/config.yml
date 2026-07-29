@@ -12,6 +12,17 @@ aliases:
       xcode: '26.2.0'
     shell: /bin/bash --login -o pipefail
 
+  base-android-job: &base-android-job
+    executor:
+      name: android/android_machine
+      resource_class: large
+      tag: default
+
+  # Keep both AGP 9 jobs on the same versions, so they stay comparable.
+  agp9-under-test: &agp9-under-test
+    agp_version: "9.2.1"
+    gradle_version: "9.4.1"
+
   release-tags: &release-tags
     filters:
       tags:
@@ -138,23 +149,24 @@ commands:
             # app's AGP also governs the embedded plugin modules, despite their own lower self-pin.
             # Matching any version (rather than a literal) keeps this from silently becoming a no-op
             # when the pinned AGP is bumped. `-i.bak` works on both GNU and BSD sed.
+            echo "--- effective overrides ---"
             sed -i.bak -E "s#(classpath ['\"]com\.android\.tools\.build:gradle:)[^'\"]+#\1<< parameters.agp_version >>#" build.gradle
-            grep -q "com.android.tools.build:gradle:<< parameters.agp_version >>" build.gradle \
+            grep "com.android.tools.build:gradle:<< parameters.agp_version >>" build.gradle \
               || { echo "ERROR: AGP classpath line not found/replaced in build.gradle"; exit 1; }
 
             sed -i.bak -E "s#^distributionUrl=.*#distributionUrl=https://services.gradle.org/distributions/gradle-<< parameters.gradle_version >>-all.zip#" gradle/wrapper/gradle-wrapper.properties
-            grep -q "gradle-<< parameters.gradle_version >>-all.zip" gradle/wrapper/gradle-wrapper.properties \
+            grep "gradle-<< parameters.gradle_version >>-all.zip" gradle/wrapper/gradle-wrapper.properties \
               || { echo "ERROR: distributionUrl not replaced in gradle-wrapper.properties"; exit 1; }
 
             # Set as Gradle properties rather than CLI args so build_maestro_test_app needs no changes.
-            # @capacitor/android's own module still uses legacy-only DSL, so keep the new DSL off.
-            printf '\nandroid.newDsl=false\n<< parameters.extra_gradle_properties >>\n' >> gradle.properties
+            # newDsl is off because @capacitor/android still uses legacy-only DSL upstream. Note this
+            # also means these jobs do NOT cover our own legacy-DSL migration, only the Kotlin plugin
+            # guard. Both the property and this gap disappear once Capacitor migrates; AGP 10 removes
+            # the opt-out entirely, at which point these jobs fail until that happens.
+            printf '\nandroid.newDsl=false\n%s\n' '<< parameters.extra_gradle_properties >>' >> gradle.properties
+            tail -3 gradle.properties
 
             rm -f build.gradle.bak gradle/wrapper/gradle-wrapper.properties.bak
-            echo "--- effective overrides ---"
-            grep "com.android.tools.build:gradle" build.gradle
-            grep "^distributionUrl" gradle/wrapper/gradle-wrapper.properties
-            tail -3 gradle.properties
 
 
 jobs:
@@ -169,10 +181,7 @@ jobs:
       - run: yarn verify:ios
 
   run-tests-android:
-    executor:
-      name: android/android_machine
-      resource_class: large
-      tag: default
+    <<: *base-android-job
     steps:
       - checkout
       - revenuecat/install-gem-unix-dependencies:
@@ -184,20 +193,21 @@ jobs:
   verify-android-agp8:
     description: >
       Baseline: build the Maestro test app with the AGP version currently pinned by the repo.
-    executor:
-      name: android/android_machine
-      resource_class: large
-      tag: default
+    <<: *base-android-job
     steps:
       - checkout
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       - yarn-dependencies-unix
       - yarn-dependencies-ui-unix
+      - revenuecat/restore-gradle-user-home-directory-from-cache:
+          cache_prefix: agp-pinned-v1
       - run:
           name: Build Maestro test app (Android, current pinned AGP)
           command: bundle exec fastlane build_maestro_test_app platform:android
           no_output_timeout: 15m
+      - revenuecat/save-gradle-user-home-directory-to-cache:
+          cache_prefix: agp-pinned-v1
 
   verify-android-agp-override:
     description: >
@@ -211,10 +221,7 @@ jobs:
       extra_gradle_properties:
         type: string
         default: ""
-    executor:
-      name: android/android_machine
-      resource_class: large
-      tag: default
+    <<: *base-android-job
     steps:
       - checkout
       - revenuecat/install-gem-unix-dependencies:
@@ -225,10 +232,16 @@ jobs:
           agp_version: << parameters.agp_version >>
           gradle_version: << parameters.gradle_version >>
           extra_gradle_properties: << parameters.extra_gradle_properties >>
+      # Restore after the override: the cache key hashes the build files it just rewrote, so each
+      # AGP/Gradle combination gets its own entry instead of thrashing a shared one.
+      - revenuecat/restore-gradle-user-home-directory-from-cache:
+          cache_prefix: agp<< parameters.agp_version >>-gradle<< parameters.gradle_version >>-v1
       - run:
           name: Build Maestro test app (Android, AGP << parameters.agp_version >>)
           command: bundle exec fastlane build_maestro_test_app platform:android
           no_output_timeout: 15m
+      - revenuecat/save-gradle-user-home-directory-to-cache:
+          cache_prefix: agp<< parameters.agp_version >>-gradle<< parameters.gradle_version >>-v1
 
   build-purchase-tester:
     <<: *base-mac-job
@@ -478,12 +491,10 @@ workflows:
       - verify-android-agp8
       - verify-android-agp-override:
           name: verify-android-agp9
-          agp_version: "9.2.1"
-          gradle_version: "9.4.1"
+          <<: *agp9-under-test
       - verify-android-agp-override:
           name: verify-android-agp9-legacy-kotlin
-          agp_version: "9.2.1"
-          gradle_version: "9.4.1"
+          <<: *agp9-under-test
           extra_gradle_properties: "android.builtInKotlin=false"
       # API change detection
       - check-api-changes
