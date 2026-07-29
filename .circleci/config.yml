@@ -159,11 +159,7 @@ commands:
               || { echo "ERROR: distributionUrl not replaced in gradle-wrapper.properties"; exit 1; }
 
             # Set as Gradle properties rather than CLI args so build_maestro_test_app needs no changes.
-            # newDsl is off because @capacitor/android still uses legacy-only DSL upstream. Note this
-            # also means these jobs do NOT cover our own legacy-DSL migration, only the Kotlin plugin
-            # guard. Both the property and this gap disappear once Capacitor migrates; AGP 10 removes
-            # the opt-out entirely, at which point these jobs fail until that happens.
-            printf '\nandroid.newDsl=false\n%s\n' '<< parameters.extra_gradle_properties >>' >> gradle.properties
+            printf '\n%s\n' '<< parameters.extra_gradle_properties >>' >> gradle.properties
             tail -3 gradle.properties
 
             rm -f build.gradle.bak gradle/wrapper/gradle-wrapper.properties.bak
@@ -489,13 +485,19 @@ workflows:
       - build-purchase-tester
       # AGP compatibility (issue #849): one job per AGP configuration
       - verify-android-agp8
+      # No properties: this is exactly what an AGP 9 consumer gets by default (built-in Kotlin and
+      # the new DSL both on).
       - verify-android-agp-override:
           name: verify-android-agp9
           <<: *agp9-under-test
+      # KGP cannot work with the new DSL (it casts the android extension to BaseExtension, which
+      # LibraryExtensionImpl is not), so opting out of built-in Kotlin means opting out of both.
       - verify-android-agp-override:
           name: verify-android-agp9-legacy-kotlin
           <<: *agp9-under-test
-          extra_gradle_properties: "android.builtInKotlin=false"
+          extra_gradle_properties: |-
+            android.builtInKotlin=false
+            android.newDsl=false
       # API change detection
       - check-api-changes
       # UI Package jobs
