@@ -1,14 +1,17 @@
 ## RevenueCat SDK
+### 🐞 Bugfixes
+* fix: support AGP 9 built-in Kotlin and new DSL (#860) via Álvaro Brey (@AlvaroBrey)
 ### 📦 Dependency Updates
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 18.22.2 (#847) via RevenueCat Git Bot (@RCGitBot)
-  * [Android 10.14.1](https://github.com/RevenueCat/purchases-android/releases/tag/10.14.1)
-  * [Android 10.14.0](https://github.com/RevenueCat/purchases-android/releases/tag/10.14.0)
-  * [Android 10.13.0](https://github.com/RevenueCat/purchases-android/releases/tag/10.13.0)
-  * [iOS 5.81.1](https://github.com/RevenueCat/purchases-ios/releases/tag/5.81.1)
-  * [iOS 5.81.0](https://github.com/RevenueCat/purchases-ios/releases/tag/5.81.0)
-  * [iOS 5.80.3](https://github.com/RevenueCat/purchases-ios/releases/tag/5.80.3)
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 18.26.0 (#858) via RevenueCat Git Bot (@RCGitBot)
+  * [Android 10.15.1](https://github.com/RevenueCat/purchases-android/releases/tag/10.15.1)
+  * [Android 10.15.0](https://github.com/RevenueCat/purchases-android/releases/tag/10.15.0)
+  * [iOS 5.81.3](https://github.com/RevenueCat/purchases-ios/releases/tag/5.81.3)
+  * [iOS 5.81.2](https://github.com/RevenueCat/purchases-ios/releases/tag/5.81.2)
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 18.25.0 (#857) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 18.24.0 (#854) via RevenueCat Git Bot (@RCGitBot)
+* [RENOVATE] Update dependency revenuecat to v4.5.1 (#855) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 18.23.0 (#851) via RevenueCat Git Bot (@RCGitBot)
 
 ### 🔄 Other Changes
-* Bump fastlane-plugin-revenuecat_internal from `9b928b6` to `b52fca5` (#848) via dependabot[bot] (@dependabot[bot])
-* chore: bump fastlane-plugin-revenuecat_internal to unblock hybrid bumps (#846) via Antonio Pallares (@ajpallares)
-* ci: bump orb to 4.5.0 and local Ruby images to 3.2.0 (#844) via Antonio Pallares (@ajpallares)
+* Bump fastlane-plugin-revenuecat_internal from `d392939` to `3421c88` (#859) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `b52fca5` to `d392939` (#853) via dependabot[bot] (@dependabot[bot])
