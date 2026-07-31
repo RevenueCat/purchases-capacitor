@@ -83,6 +83,8 @@ export interface PaywallListener {
   onRestoreError?: (args: { error: PurchasesError }) => void;
   /** Called when the user taps a web checkout CTA and leaves the app to complete payment externally. */
   onWebCheckoutOpened?: () => void;
+  /** Called when the paywall opens a URL from a button destination or a text link. Not called for web checkout. */
+  onUrlOpened?: (args: { url: string }) => void;
   /**
    * Called before the payment sheet is displayed, allowing the app to gate
    * the purchase flow (e.g., require authentication first).

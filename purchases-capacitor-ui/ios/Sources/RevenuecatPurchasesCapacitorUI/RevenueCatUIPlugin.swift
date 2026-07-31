@@ -275,6 +275,11 @@ private class PaywallDelegateAdapter: NSObject, PaywallViewControllerDelegateWra
         plugin?.notifyListeners("onWebCheckoutOpened", data: [:])
     }
 
+    func paywallViewController(_ controller: PaywallViewController,
+                                didOpenURL url: URL) {
+        plugin?.notifyListeners("onUrlOpened", data: ["url": url.absoluteString])
+    }
+
     func paywallViewControllerWasDismissed(_ controller: PaywallViewController) {
         plugin?.notifyListeners("paywallDismissed", data: [:])
     }

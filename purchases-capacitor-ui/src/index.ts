@@ -191,6 +191,14 @@ async function presentWithListenerSupport(
           }),
         );
       }
+      if (listener.onUrlOpened) {
+        const cb = listener.onUrlOpened;
+        handles.push(
+          await nativePlugin.addListener('onUrlOpened', (data: any) => {
+            cb({ url: data.url });
+          }),
+        );
+      }
     }
 
     // Always register onPurchaseInitiated so we auto-resume when the user
