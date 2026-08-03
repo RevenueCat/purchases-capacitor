@@ -183,6 +183,22 @@ async function presentWithListenerSupport(
           }),
         );
       }
+      if (listener.onWebCheckoutOpened) {
+        const cb = listener.onWebCheckoutOpened;
+        handles.push(
+          await nativePlugin.addListener('onWebCheckoutOpened', () => {
+            cb();
+          }),
+        );
+      }
+      if (listener.onUrlOpened) {
+        const cb = listener.onUrlOpened;
+        handles.push(
+          await nativePlugin.addListener('onUrlOpened', (data: any) => {
+            cb({ url: data.url });
+          }),
+        );
+      }
     }
 
     // Always register onPurchaseInitiated so we auto-resume when the user
