@@ -2,7 +2,6 @@ version: 2.1
 orbs:
   macos: circleci/macos@2.3.6
   android: circleci/android@3.0.2
-  node: circleci/node@5.1.0
   revenuecat: revenuecat/sdks-common-config@4.5.1
 
 aliases:
@@ -59,8 +58,8 @@ parameters:
 commands:
   install-nvm:
     steps:
-      - node/install:
-          install-yarn: true
+      - revenuecat/install-mise-tools:
+          tools: node
 
   yarn-dependencies-unix:
     description: "Install yarn dependencies"
@@ -170,6 +169,8 @@ jobs:
     <<: *base-mac-job
     steps:
       - checkout
+      - revenuecat/install-mise-tools:
+          tools: ruby
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
       - yarn-dependencies-mac
@@ -180,8 +181,8 @@ jobs:
     <<: *base-android-job
     steps:
       - checkout
-      - revenuecat/install-gem-unix-dependencies:
-          cache-version: v1
+      - revenuecat/install-mise-tools:
+          tools: java
       - yarn-dependencies-unix
       - run: yarn build
       - run: yarn verify:android
@@ -192,6 +193,8 @@ jobs:
     <<: *base-android-job
     steps:
       - checkout
+      - revenuecat/install-mise-tools:
+          tools: java,ruby
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       - yarn-dependencies-unix
@@ -220,6 +223,8 @@ jobs:
     <<: *base-android-job
     steps:
       - checkout
+      - revenuecat/install-mise-tools:
+          tools: java,ruby
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       - yarn-dependencies-unix
@@ -243,6 +248,8 @@ jobs:
     <<: *base-mac-job
     steps:
       - checkout
+      - revenuecat/install-mise-tools:
+          tools: ruby
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
       - yarn-dependencies-mac
@@ -275,6 +282,8 @@ jobs:
     <<: *base-mac-job
     steps:
       - checkout
+      - revenuecat/install-mise-tools:
+          tools: ruby
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
       - yarn-dependencies-mac
@@ -290,6 +299,8 @@ jobs:
       xcode: '26.4.1'
     steps:
       - checkout
+      - revenuecat/install-mise-tools:
+          tools: ruby
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
       - run:
@@ -324,6 +335,8 @@ jobs:
     shell: /bin/bash --login -o pipefail
     steps:
       - checkout
+      - revenuecat/install-mise-tools:
+          tools: java,ruby
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       - yarn-dependencies-unix
@@ -353,6 +366,8 @@ jobs:
     <<: *base-mac-job
     steps:
       - checkout
+      - revenuecat/install-mise-tools:
+          tools: ruby
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
       - install-nvm
@@ -375,6 +390,8 @@ jobs:
     shell: /bin/bash --login -o pipefail
     steps:
       - checkout
+      - revenuecat/install-mise-tools:
+          tools: ruby
       - revenuecat/trust-github-key
       - revenuecat/setup-git-credentials
       - revenuecat/install-gem-unix-dependencies:
@@ -439,6 +456,8 @@ jobs:
       - image: cimg/ruby:3.2.0
     steps:
       - checkout
+      - revenuecat/install-mise-tools:
+          tools: ruby
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       - run:
@@ -460,6 +479,8 @@ jobs:
     <<: *base-mac-job
     steps:
       - checkout
+      - revenuecat/install-mise-tools:
+          tools: ruby
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
       - yarn-dependencies-mac
@@ -527,6 +548,7 @@ workflows:
             - verify-android-agp9-legacy-kotlin
           <<: *release-branches
       - revenuecat/tag-current-branch:
+          ruby_version: "3.3.0"
           requires:
             - hold
           <<: *release-branches
@@ -538,13 +560,15 @@ workflows:
           <<: *release-tags
       - revenuecat/merge-release-pr:
           repo_name: purchases-capacitor
+          ruby_version: "3.3.0"
           requires:
             - make-release-ui
           <<: *release-tags
 
   danger:
     jobs:
-      - revenuecat/danger
+      - revenuecat/danger:
+          ruby_version: "3.3.0"
 
   weekly-run-workflow:
     when:
