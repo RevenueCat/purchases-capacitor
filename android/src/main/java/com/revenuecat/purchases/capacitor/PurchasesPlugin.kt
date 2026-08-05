@@ -86,7 +86,7 @@ class PurchasesPlugin : Plugin() {
 
     companion object {
         private const val PLATFORM_NAME = "capacitor"
-        private const val PLUGIN_VERSION = "13.3.0"
+        private const val PLUGIN_VERSION = "13.4.0"
 
         private const val CUSTOMER_INFO_KEY = "customerInfo"
     }
