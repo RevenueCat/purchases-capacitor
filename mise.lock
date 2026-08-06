@@ -3,3 +3,68 @@
 [[tools.java]]
 version = "liberica-21.0.6+10"
 backend = "core:java"
+
+[tools.java."platforms.linux-arm64"]
+checksum = "sha1:32b10a97672c3b0066837deaf430dd7b52618f69"
+url = "https://github.com/bell-sw/Liberica/releases/download/21.0.6%2B10/bellsoft-jdk21.0.6%2B10-linux-aarch64.tar.gz"
+
+[tools.java."platforms.linux-x64"]
+checksum = "sha1:854e27442efaf515c9f15dbc7f4382c7a18be48b"
+url = "https://github.com/bell-sw/Liberica/releases/download/21.0.6%2B10/bellsoft-jdk21.0.6%2B10-linux-amd64.tar.gz"
+
+[tools.java."platforms.macos-arm64"]
+checksum = "sha1:347d99da2efef158ce1c02c871737ef3254d1701"
+url = "https://github.com/bell-sw/Liberica/releases/download/21.0.6%2B10/bellsoft-jdk21.0.6%2B10-macos-aarch64.tar.gz"
+
+[tools.java."platforms.macos-x64"]
+checksum = "sha1:1018e317ae83cf72221f8ded2ab213347802cb5c"
+url = "https://github.com/bell-sw/Liberica/releases/download/21.0.6%2B10/bellsoft-jdk21.0.6%2B10-macos-amd64.tar.gz"
+
+[[tools.node]]
+version = "24.18.0"
+backend = "core:node"
+
+[tools.node."platforms.linux-arm64"]
+checksum = "sha256:6b4484c2190274175df9aa8f28e2d758a819cb1c1fe6ab481e2f95b463ab8508"
+url = "https://nodejs.org/dist/v24.18.0/node-v24.18.0-linux-arm64.tar.gz"
+
+[tools.node."platforms.linux-x64"]
+checksum = "sha256:783130984963db7ba9cbd01089eaf2c2efb055c7c1693c943174b967b3050cb8"
+url = "https://nodejs.org/dist/v24.18.0/node-v24.18.0-linux-x64.tar.gz"
+
+[tools.node."platforms.macos-arm64"]
+checksum = "sha256:e1a97e14c99c803e96c7339403282ea05a499c32f8d83defe9ef5ec66f979ed1"
+url = "https://nodejs.org/dist/v24.18.0/node-v24.18.0-darwin-arm64.tar.gz"
+
+[tools.node."platforms.macos-x64"]
+checksum = "sha256:dfd0dbd3e721503434df7b7205e719f61b3a3a31b2bcf9729b8b91fea240f080"
+url = "https://nodejs.org/dist/v24.18.0/node-v24.18.0-darwin-x64.tar.gz"
+
+[[tools.ruby]]
+version = "3.3.0"
+backend = "core:ruby"
+
+[tools.ruby.options]
+compile = "false"
+precompiled_url = "jdx/ruby"
+ruby_build_repo = "https://github.com/rbenv/ruby-build.git"
+ruby_install = "false"
+
+[tools.ruby."platforms.linux-arm64"]
+checksum = "sha256:d03e0e1dc566aa6512baffb9373be48d36d4fde3ca9b58e0184eb5113a507eda"
+url = "https://github.com/jdx/ruby/releases/download/3.3.0-4/ruby-3.3.0.arm64_linux.tar.gz"
+provenance = "github-attestations"
+
+[tools.ruby."platforms.linux-x64"]
+checksum = "sha256:7b2cec2a09b60b225b2b216938332ea009cf17dd21b9a2096aeaf963df957641"
+url = "https://github.com/jdx/ruby/releases/download/3.3.0-4/ruby-3.3.0.x86_64_linux.tar.gz"
+provenance = "github-attestations"
+
+[tools.ruby."platforms.macos-arm64"]
+checksum = "sha256:0f3be0a98f46c6771f546ae753a6affd5f87dda4e5fbb222424c39a7fa82a99a"
+url = "https://github.com/jdx/ruby/releases/download/3.3.0-4/ruby-3.3.0.macos.tar.gz"
+provenance = "github-attestations"
+
+[tools.ruby."platforms.macos-x64"]
+checksum = "sha256:96518814d9832bece92a85415a819d4893b307db5921ae1f0f751a9a89a56b7d"
+url = "https://cache.ruby-lang.org/pub/ruby/3.3/ruby-3.3.0.tar.gz"
