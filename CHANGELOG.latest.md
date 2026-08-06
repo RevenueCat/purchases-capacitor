@@ -1,10 +1,12 @@
 ## RevenueCat SDK
-### ✨ New Features
-* Enables support for multipage paywalls
-
 ### 📦 Dependency Updates
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 18.28.0 (#863) via RevenueCat Git Bot (@RCGitBot)
-  * [Android 10.16.0](https://github.com/RevenueCat/purchases-android/releases/tag/10.16.0)
-  * [iOS 5.83.0](https://github.com/RevenueCat/purchases-ios/releases/tag/5.83.0)
-  * [iOS 5.82.0](https://github.com/RevenueCat/purchases-ios/releases/tag/5.82.0)
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 18.27.0 (#862) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 18.29.0 (#864) via RevenueCat Git Bot (@RCGitBot)
+
+## RevenueCatUI SDK
+### ✨ New Features
+* Add onWebCheckoutOpened and onUrlOpened to the paywall listener (#856) via Álvaro Brey (@AlvaroBrey)
+
+### 🔄 Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `dd577ee` to `b4e1e7f` (#870) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `3421c88` to `dd577ee` (#868) via dependabot[bot] (@dependabot[bot])
+* Bump danger from 9.6.0 to 9.6.1 (#867) via dependabot[bot] (@dependabot[bot])
