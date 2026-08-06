@@ -1,5 +1,13 @@
 [settings]
 lockfile = true
 
+[settings.node]
+corepack = true
+
+[settings.ruby]
+compile = false
+
 [tools]
 java = "liberica-21.0.6"
+node = "24.18.0"
+ruby = "3.3.0"
