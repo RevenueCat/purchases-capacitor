@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   macos: circleci/macos@2.3.6
   android: circleci/android@3.0.2
-  revenuecat: revenuecat/sdks-common-config@4.5.1
+  revenuecat: revenuecat/sdks-common-config@4.6.0
 
 aliases:
   base-mac-job: &base-mac-job
