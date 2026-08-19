@@ -398,12 +398,14 @@ class PurchasesPlugin : Plugin() {
         val amazonUserID = call.getStringOrReject("amazonUserID") ?: return
         val isoCurrencyCode = call.getString("isoCurrencyCode")
         val price = call.getDouble("price")
+        val purchaseTime = call.data.optLong("purchaseTime", System.currentTimeMillis())
         Purchases.sharedInstance.syncAmazonPurchase(
             productID,
             receiptID,
             amazonUserID,
             isoCurrencyCode,
             price,
+            purchaseTime,
         )
         call.resolve()
     }

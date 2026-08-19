@@ -1764,13 +1764,14 @@ Holds the logIn result
 
 #### SyncAmazonPurchaseOptions
 
-| Prop                  | Type                        | Description                                                                     |
-| --------------------- | --------------------------- | ------------------------------------------------------------------------------- |
-| **`productID`**       | <code>string</code>         | Product ID associated to the purchase.                                          |
-| **`receiptID`**       | <code>string</code>         | ReceiptId that represents the Amazon purchase.                                  |
-| **`amazonUserID`**    | <code>string</code>         | Amazon's userID. This parameter will be ignored when syncing a Google purchase. |
-| **`isoCurrencyCode`** | <code>string \| null</code> | Product's currency code in ISO 4217 format.                                     |
-| **`price`**           | <code>number \| null</code> | Product's price.                                                                |
+| Prop                  | Type                        | Description                                                                                                                   |
+| --------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| **`productID`**       | <code>string</code>         | Product ID associated to the purchase.                                                                                        |
+| **`receiptID`**       | <code>string</code>         | ReceiptId that represents the Amazon purchase.                                                                                |
+| **`amazonUserID`**    | <code>string</code>         | Amazon's userID. This parameter will be ignored when syncing a Google purchase.                                               |
+| **`isoCurrencyCode`** | <code>string \| null</code> | Product's currency code in ISO 4217 format.                                                                                   |
+| **`price`**           | <code>number \| null</code> | Product's price.                                                                                                              |
+| **`purchaseTime`**    | <code>number \| null</code> | Time the product was purchased, in milliseconds since the epoch. If not provided, defaults to the current time. Android only. |
 
 
 #### IntroEligibility

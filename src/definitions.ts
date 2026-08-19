@@ -201,6 +201,11 @@ export interface SyncAmazonPurchaseOptions {
    * Product's price.
    */
   price?: number | null;
+  /**
+   * Time the product was purchased, in milliseconds since the epoch.
+   * If not provided, defaults to the current time. Android only.
+   */
+  purchaseTime?: number | null;
 }
 
 /**
