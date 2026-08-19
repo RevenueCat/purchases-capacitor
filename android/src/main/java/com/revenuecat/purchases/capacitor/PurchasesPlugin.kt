@@ -399,6 +399,28 @@ class PurchasesPlugin : Plugin() {
         val isoCurrencyCode = call.getString("isoCurrencyCode")
         val price = call.getDouble("price")
         val purchaseTime = call.data.optLong("purchaseTime", System.currentTimeMillis())
+        @Suppress("DEPRECATION")
+        Purchases.sharedInstance.syncAmazonPurchase(
+            productID,
+            receiptID,
+            amazonUserID,
+            isoCurrencyCode,
+            price,
+            purchaseTime,
+        )
+        call.resolve()
+    }
+
+    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    fun syncAmazonPurchaseWithTime(call: PluginCall) {
+        if (rejectIfNotConfigured(call)) return
+        val productID = call.getStringOrReject("productID") ?: return
+        val receiptID = call.getStringOrReject("receiptID") ?: return
+        val amazonUserID = call.getStringOrReject("amazonUserID") ?: return
+        val isoCurrencyCode = call.getString("isoCurrencyCode")
+        val price = call.getDouble("price")
+        val purchaseTime = call.data.getLong("purchaseTime")
+        @Suppress("DEPRECATION")
         Purchases.sharedInstance.syncAmazonPurchase(
             productID,
             receiptID,

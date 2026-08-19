@@ -409,6 +409,10 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
         self.rejectUnsupportedInIOS(call)
     }
 
+    @objc func syncAmazonPurchaseWithTime(_ call: CAPPluginCall) {
+        self.rejectUnsupportedInIOS(call)
+    }
+
     @objc func enableAdServicesAttributionTokenCollection(_ call: CAPPluginCall) {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
         if #available(iOS 14.3, *) {
