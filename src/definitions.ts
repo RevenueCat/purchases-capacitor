@@ -180,6 +180,9 @@ export interface PurchaseDiscountedPackageOptions {
   discount: PurchasesPromotionalOffer;
 }
 
+/**
+ * @deprecated Use SyncAmazonPurchaseWithTimeOptions instead. This interface will be removed in a future version.
+ */
 export interface SyncAmazonPurchaseOptions {
   /**
    * Product ID associated to the purchase.
@@ -201,6 +204,39 @@ export interface SyncAmazonPurchaseOptions {
    * Product's price.
    */
   price?: number | null;
+  /**
+   * Time the product was purchased, in milliseconds since the epoch.
+   * If not provided, defaults to the current time. Android only.
+   */
+  purchaseTime?: number | null;
+}
+
+export interface SyncAmazonPurchaseWithTimeOptions {
+  /**
+   * Product ID associated to the purchase.
+   */
+  productID: string;
+  /**
+   * ReceiptId that represents the Amazon purchase.
+   */
+  receiptID: string;
+  /**
+   * Amazon's userID. This parameter will be ignored when syncing a Google purchase.
+   */
+  amazonUserID: string;
+  /**
+   * Product's currency code in ISO 4217 format.
+   */
+  isoCurrencyCode?: string | null;
+  /**
+   * Product's price.
+   */
+  price?: number | null;
+  /**
+   * Time the product was purchased, in milliseconds since the epoch.
+   * This parameter is mandatory. Can be obtained from Amazon PurchaseResponse > Receipt > purchaseTime.
+   */
+  purchaseTime: number;
 }
 
 /**
@@ -505,6 +541,7 @@ export interface PurchasesPlugin {
   syncObserverModeAmazonPurchase(options: SyncObserverModeAmazonPurchaseOptions): Promise<void>;
 
   /**
+   * @deprecated - Use syncAmazonPurchaseWithTime instead. This method will be removed in a future version.
    * This method will send a purchase to the RevenueCat backend. This function should only be called if you are
    * in Amazon observer mode or performing a client side migration of your current users to RevenueCat.
    *
@@ -514,6 +551,19 @@ export interface PurchasesPlugin {
    * syncing purchases.
    */
   syncAmazonPurchase(options: SyncAmazonPurchaseOptions): Promise<void>;
+
+  /**
+   * This method will send a purchase to the RevenueCat backend. This function should only be called if you are
+   * in Amazon observer mode or performing a client side migration of your current users to RevenueCat.
+   *
+   * The receipt IDs are cached if successfully posted, so they are not posted more than once.
+   *
+   * Note: The purchaseTime parameter is mandatory. You can obtain it from Amazon PurchaseResponse > Receipt > purchaseTime.
+   *
+   * @returns {Promise<void>} The promise will be rejected if configure has not been called yet or if there's an error
+   * syncing purchases.
+   */
+  syncAmazonPurchaseWithTime(options: SyncAmazonPurchaseWithTimeOptions): Promise<void>;
 
   /**
    * Enable automatic collection of Apple Search Ad attribution on iOS. Disabled by default. Supported in iOS 14.3+ only

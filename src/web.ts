@@ -45,6 +45,7 @@ import type {
   PurchaseStoreProductOptions,
   PurchaseSubscriptionOptionOptions,
   SyncAmazonPurchaseOptions,
+  SyncAmazonPurchaseWithTimeOptions,
   SyncObserverModeAmazonPurchaseOptions,
   TrackCustomPaywallImpressionOptions,
 } from './definitions';
@@ -202,6 +203,9 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
   }
   syncAmazonPurchase(_options: SyncAmazonPurchaseOptions): Promise<void> {
     return this.mockNonReturningFunctionIfEnabled('syncAmazonPurchase');
+  }
+  syncAmazonPurchaseWithTime(_options: SyncAmazonPurchaseWithTimeOptions): Promise<void> {
+    return this.mockNonReturningFunctionIfEnabled('syncAmazonPurchaseWithTime');
   }
   enableAdServicesAttributionTokenCollection(): Promise<void> {
     return this.mockNonReturningFunctionIfEnabled('enableAdServicesAttributionTokenCollection');

@@ -84,6 +84,7 @@ This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package
 * [`syncPurchases()`](#syncpurchases)
 * [`syncObserverModeAmazonPurchase(...)`](#syncobservermodeamazonpurchase)
 * [`syncAmazonPurchase(...)`](#syncamazonpurchase)
+* [`syncAmazonPurchaseWithTime(...)`](#syncamazonpurchasewithtime)
 * [`enableAdServicesAttributionTokenCollection()`](#enableadservicesattributiontokencollection)
 * [`isAnonymous()`](#isanonymous)
 * [`checkTrialOrIntroductoryPriceEligibility(...)`](#checktrialorintroductorypriceeligibility)
@@ -607,14 +608,29 @@ syncObserverModeAmazonPurchase(options: SyncObserverModeAmazonPurchaseOptions) =
 syncAmazonPurchase(options: SyncAmazonPurchaseOptions) => Promise<void>
 ```
 
+| Param         | Type                                                                            |
+| ------------- | ------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#syncamazonpurchaseoptions">SyncAmazonPurchaseOptions</a></code> |
+
+--------------------
+
+
+### syncAmazonPurchaseWithTime(...)
+
+```typescript
+syncAmazonPurchaseWithTime(options: SyncAmazonPurchaseWithTimeOptions) => Promise<void>
+```
+
 This method will send a purchase to the RevenueCat backend. This function should only be called if you are
 in Amazon observer mode or performing a client side migration of your current users to RevenueCat.
 
 The receipt IDs are cached if successfully posted, so they are not posted more than once.
 
-| Param         | Type                                                                            |
-| ------------- | ------------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#syncamazonpurchaseoptions">SyncAmazonPurchaseOptions</a></code> |
+Note: The purchaseTime parameter is mandatory. You can obtain it from Amazon PurchaseResponse &gt; Receipt &gt; purchaseTime.
+
+| Param         | Type                                                                                            |
+| ------------- | ----------------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#syncamazonpurchasewithtimeoptions">SyncAmazonPurchaseWithTimeOptions</a></code> |
 
 --------------------
 
@@ -1764,13 +1780,26 @@ Holds the logIn result
 
 #### SyncAmazonPurchaseOptions
 
-| Prop                  | Type                        | Description                                                                     |
-| --------------------- | --------------------------- | ------------------------------------------------------------------------------- |
-| **`productID`**       | <code>string</code>         | Product ID associated to the purchase.                                          |
-| **`receiptID`**       | <code>string</code>         | ReceiptId that represents the Amazon purchase.                                  |
-| **`amazonUserID`**    | <code>string</code>         | Amazon's userID. This parameter will be ignored when syncing a Google purchase. |
-| **`isoCurrencyCode`** | <code>string \| null</code> | Product's currency code in ISO 4217 format.                                     |
-| **`price`**           | <code>number \| null</code> | Product's price.                                                                |
+| Prop                  | Type                        | Description                                                                                                                   |
+| --------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| **`productID`**       | <code>string</code>         | Product ID associated to the purchase.                                                                                        |
+| **`receiptID`**       | <code>string</code>         | ReceiptId that represents the Amazon purchase.                                                                                |
+| **`amazonUserID`**    | <code>string</code>         | Amazon's userID. This parameter will be ignored when syncing a Google purchase.                                               |
+| **`isoCurrencyCode`** | <code>string \| null</code> | Product's currency code in ISO 4217 format.                                                                                   |
+| **`price`**           | <code>number \| null</code> | Product's price.                                                                                                              |
+| **`purchaseTime`**    | <code>number \| null</code> | Time the product was purchased, in milliseconds since the epoch. If not provided, defaults to the current time. Android only. |
+
+
+#### SyncAmazonPurchaseWithTimeOptions
+
+| Prop                  | Type                        | Description                                                                                                                                                                |
+| --------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`productID`**       | <code>string</code>         | Product ID associated to the purchase.                                                                                                                                     |
+| **`receiptID`**       | <code>string</code>         | ReceiptId that represents the Amazon purchase.                                                                                                                             |
+| **`amazonUserID`**    | <code>string</code>         | Amazon's userID. This parameter will be ignored when syncing a Google purchase.                                                                                            |
+| **`isoCurrencyCode`** | <code>string \| null</code> | Product's currency code in ISO 4217 format.                                                                                                                                |
+| **`price`**           | <code>number \| null</code> | Product's price.                                                                                                                                                           |
+| **`purchaseTime`**    | <code>number</code>         | Time the product was purchased, in milliseconds since the epoch. This parameter is mandatory. Can be obtained from Amazon PurchaseResponse &gt; Receipt &gt; purchaseTime. |
 
 
 #### IntroEligibility
