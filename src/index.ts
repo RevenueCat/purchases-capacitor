@@ -36,12 +36,13 @@ function getNativeTrackCustomPaywallImpressionOptions(
   return nativeOptions;
 }
 
+const trackCustomPaywallImpression = (options?: TrackCustomPaywallImpressionOptions): Promise<void> =>
+  nativePlugin.trackCustomPaywallImpression(getNativeTrackCustomPaywallImpressionOptions(options));
+
 const Purchases = new Proxy(nativePlugin, {
   get(target, prop, receiver) {
     if (prop === 'trackCustomPaywallImpression') {
-      return (options?: TrackCustomPaywallImpressionOptions): Promise<void> => {
-        return target.trackCustomPaywallImpression(getNativeTrackCustomPaywallImpressionOptions(options));
-      };
+      return trackCustomPaywallImpression;
     }
 
     return Reflect.get(target, prop, receiver);
