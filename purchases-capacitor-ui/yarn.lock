@@ -263,9 +263,9 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@revenuecat/purchases-typescript-internal-esm@file:../local-phc/revenuecat-purchases-typescript-internal-esm-18.33.0-local.1.tgz":
-  version "18.33.0-local.1"
-  resolved "file:../local-phc/revenuecat-purchases-typescript-internal-esm-18.33.0-local.1.tgz#89d9d52bace19898379461a1fea721c96f2d2d64"
+"@revenuecat/purchases-typescript-internal-esm@file:../local-phc/revenuecat-purchases-typescript-internal-esm-18.33.0-local.2.tgz":
+  version "18.33.0-local.2"
+  resolved "file:../local-phc/revenuecat-purchases-typescript-internal-esm-18.33.0-local.2.tgz#aa51494328044231f44517b605773c80cee21b26"
 
 "@rollup/rollup-android-arm-eabi@4.62.2":
   version "4.62.2"
