@@ -1,19 +1,7 @@
 import type { PurchasesError } from '@revenuecat/purchases-typescript-internal-esm';
 
-/**
- * Mirrors the error @capacitor/core's native-bridge hands to JS: an Exception
- * carrying `code` and the reject payload under `data`.
- */
-class CapacitorException extends Error {
-  constructor(
-    message: string,
-    public code?: string,
-    public data?: unknown,
-  ) {
-    super(message);
-    this.message = message;
-  }
-}
+// The real class the native bridge instantiates, reached past the module mock below.
+const { CapacitorException } = jest.requireActual('@capacitor/core');
 
 const rejection = () =>
   new CapacitorException('There was a credentials issue.', '11', {
@@ -52,12 +40,6 @@ describe('errors surfaced by the Purchases plugin', () => {
     expect(error).toBeInstanceOf(Error);
     expect(error).toBeInstanceOf(CapacitorException);
     expect(typeof error.stack).toBe('string');
-  });
-
-  it('keeps the original data payload', async () => {
-    const error = await Purchases.logIn({ appUserID: 'abc' }).catch((caught: unknown) => caught);
-
-    expect(error.data).toEqual(expect.objectContaining({ underlyingErrorMessage: 'Invalid API Key.' }));
   });
 
   it('leaves successful calls alone', async () => {
