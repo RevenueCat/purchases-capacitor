@@ -1,5 +1,6 @@
 import { registerPlugin } from '@capacitor/core';
 import type { PluginListenerHandle } from '@capacitor/core';
+import { withNormalizedErrors } from '@revenuecat/purchases-typescript-internal-esm';
 
 import type {
   PaywallListener,
@@ -58,9 +59,11 @@ interface RevenueCatUINativePlugin {
   removeAllListeners(): Promise<void>;
 }
 
-const nativePlugin = registerPlugin<RevenueCatUINativePlugin>('RevenueCatUI', {
-  web: () => import('./web').then((m) => new m.RevenueCatUIWeb()),
-});
+const nativePlugin = withNormalizedErrors(
+  registerPlugin<RevenueCatUINativePlugin>('RevenueCatUI', {
+    web: () => import('./web').then((m) => new m.RevenueCatUIWeb()),
+  }),
+);
 
 function assertValidPresentationConfiguration(
   config: unknown,
