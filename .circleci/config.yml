@@ -274,7 +274,6 @@ jobs:
     steps:
       - checkout
       - yarn-dependencies-unix
-      - run: yarn build
       - run:
           name: Unit tests
           command: yarn test
