@@ -268,6 +268,17 @@ jobs:
           name: API Tests
           command: yarn apitest
 
+  run-unit-tests:
+    docker:
+      - image: cimg/ruby:3.2.0
+    steps:
+      - checkout
+      - yarn-dependencies-unix
+      - run: yarn build
+      - run:
+          name: Unit tests
+          command: yarn test
+
   run-lint:
     docker:
       - image: cimg/ruby:3.2.0
@@ -500,6 +511,7 @@ workflows:
     jobs:
       # Testing phase - runs on all branches
       - run-api-tests
+      - run-unit-tests
       - run-tests-ios
       - run-tests-android
       - run-lint
