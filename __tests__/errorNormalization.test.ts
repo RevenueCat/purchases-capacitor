@@ -42,6 +42,36 @@ describe('errors surfaced by the Purchases plugin', () => {
     expect(typeof error.stack).toBe('string');
   });
 
+  // Exact shape rather than individual fields, so removing or renaming anything a
+  // consumer already reads fails here rather than in someone's app.
+  it('exposes exactly the documented properties', async () => {
+    const error = await Purchases.logIn({ appUserID: 'abc' }).catch((caught: unknown) => caught);
+
+    const { ...ownProperties } = error as object;
+    expect(ownProperties).toEqual({
+      code: '11',
+      // Predates the normalizer; consumers read it, so it has to stay.
+      data: {
+        code: 11,
+        message: 'There was a credentials issue.',
+        readableErrorCode: 'InvalidCredentialsError',
+        readable_error_code: 'InvalidCredentialsError',
+        underlyingErrorMessage: 'Invalid API Key.',
+      },
+      userInfo: {
+        code: 11,
+        message: 'There was a credentials issue.',
+        readableErrorCode: 'InvalidCredentialsError',
+        readable_error_code: 'InvalidCredentialsError',
+        underlyingErrorMessage: 'Invalid API Key.',
+      },
+      readableErrorCode: 'InvalidCredentialsError',
+      underlyingErrorMessage: 'Invalid API Key.',
+      userCancelled: null,
+    });
+    expect((error as Error).message).toBe('There was a credentials issue.');
+  });
+
   it('leaves successful calls alone', async () => {
     await expect(Purchases.getCustomerInfo()).resolves.toEqual({ activeSubscriptions: [] });
   });
