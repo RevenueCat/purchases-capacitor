@@ -106,6 +106,13 @@ public extension PurchasesPlugin {
         call.resolve()
     }
 
+    @objc func setSingularDeviceID(_ call: CAPPluginCall) {
+        guard self.rejectIfPurchasesNotConfigured(call) else { return }
+        let singularDeviceID = call.getString("singularDeviceID")
+        CommonFunctionality.setSingularDeviceID(singularDeviceID)
+        call.resolve()
+    }
+
     @objc func setAirshipChannelID(_ call: CAPPluginCall) {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
         let airshipChannelID = call.getString("airshipChannelID")

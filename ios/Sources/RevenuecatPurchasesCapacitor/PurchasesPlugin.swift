@@ -68,6 +68,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
         CAPPluginMethod(name: "setFirebaseAppInstanceID", returnType: CAPPluginReturnNone),
         CAPPluginMethod(name: "setOnesignalID", returnType: CAPPluginReturnNone),
         CAPPluginMethod(name: "setOnesignalUserID", returnType: CAPPluginReturnNone),
+        CAPPluginMethod(name: "setSingularDeviceID", returnType: CAPPluginReturnNone),
         CAPPluginMethod(name: "setAirshipChannelID", returnType: CAPPluginReturnNone),
         CAPPluginMethod(name: "setMediaSource", returnType: CAPPluginReturnNone),
         CAPPluginMethod(name: "setCampaign", returnType: CAPPluginReturnNone),
