@@ -22,6 +22,7 @@ async function checkAttributes(plugin: PurchasesPlugin) {
   });
   await plugin.setOnesignalID({ onesignalID: stringOrNull });
   await plugin.setOnesignalUserID({ onesignalUserID: stringOrNull });
+  await plugin.setSingularDeviceID({ singularDeviceID: stringOrNull });
   await plugin.setAirshipChannelID({ airshipChannelID: stringOrNull });
   await plugin.setMediaSource({ mediaSource: stringOrNull });
   await plugin.setCampaign({ campaign: stringOrNull });

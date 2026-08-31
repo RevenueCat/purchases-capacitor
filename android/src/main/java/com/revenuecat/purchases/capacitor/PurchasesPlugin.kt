@@ -72,6 +72,7 @@ import com.revenuecat.purchases.hybridcommon.setOnesignalUserID as setOnesignalU
 import com.revenuecat.purchases.hybridcommon.setPhoneNumber as setPhoneNumberCommon
 import com.revenuecat.purchases.hybridcommon.setProxyURLString as setProxyURLStringCommon
 import com.revenuecat.purchases.hybridcommon.setPushToken as setPushTokenCommon
+import com.revenuecat.purchases.hybridcommon.setSingularDeviceID as setSingularDeviceIDCommon
 import com.revenuecat.purchases.hybridcommon.syncAttributesAndOfferingsIfNeeded as syncAttributesAndOfferingsIfNeededCommon
 import com.revenuecat.purchases.hybridcommon.syncPurchases as syncPurchasesCommon
 import com.revenuecat.purchases.hybridcommon.overridePreferredLocale as overridePreferredLocaleCommon
@@ -594,6 +595,14 @@ class PurchasesPlugin : Plugin() {
         if (rejectIfNotConfigured(call)) return
         val onesignalUserID = call.getString("onesignalUserID")
         setOnesignalUserIDCommon(onesignalUserID)
+        call.resolve()
+    }
+
+    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    fun setSingularDeviceID(call: PluginCall) {
+        if (rejectIfNotConfigured(call)) return
+        val singularDeviceID = call.getString("singularDeviceID")
+        setSingularDeviceIDCommon(singularDeviceID)
         call.resolve()
     }
 

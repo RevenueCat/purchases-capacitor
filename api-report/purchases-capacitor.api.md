@@ -273,6 +273,9 @@ export interface PurchasesPlugin {
     setSimulatesAskToBuyInSandbox(options: {
         simulatesAskToBuyInSandbox: boolean;
     }): Promise<void>;
+    setSingularDeviceID(options: {
+        singularDeviceID: string | null;
+    }): Promise<void>;
     showInAppMessages(options?: {
         messageTypes?: IN_APP_MESSAGE_TYPE[];
     }): Promise<void>;
