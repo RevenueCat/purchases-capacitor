@@ -1,6 +1,6 @@
 {
   "name": "@revenuecat/purchases-capacitor-ui",
-  "version": "13.4.2",
+  "version": "13.4.1",
   "packageManager": "yarn@1.22.22",
   "description": "UI components for RevenueCat Capacitor SDK",
   "main": "dist/esm/index.js",
@@ -66,11 +66,11 @@
   },
   "dependencies": {
     "@capacitor/core": "^8.0.0",
-    "@revenuecat/purchases-typescript-internal-esm": "18.33.1"
+    "@revenuecat/purchases-typescript-internal-esm": "file:../local-phc/revenuecat-purchases-typescript-internal-esm-18.33.0-local.5.tgz"
   },
   "peerDependencies": {
     "@capacitor/core": ">=8.0.0",
-    "@revenuecat/purchases-capacitor": "13.4.2"
+    "@revenuecat/purchases-capacitor": "13.4.1"
   },
   "lint-staged": {
     "*.{ts,js,java,html,css}": [

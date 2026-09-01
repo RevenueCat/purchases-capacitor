@@ -1,4 +1,5 @@
 import { registerPlugin } from '@capacitor/core';
+import { withNormalizedErrors } from '@revenuecat/purchases-typescript-internal-esm';
 
 import type { PurchasesPlugin, TrackCustomPaywallImpressionOptions } from './definitions';
 
@@ -6,9 +7,11 @@ type NativeTrackCustomPaywallImpressionOptions = Omit<TrackCustomPaywallImpressi
   presentedOfferingContext?: unknown;
 };
 
-const nativePlugin = registerPlugin<PurchasesPlugin>('Purchases', {
-  web: () => import('./web').then((m) => new m.PurchasesWeb()),
-});
+const nativePlugin = withNormalizedErrors(
+  registerPlugin<PurchasesPlugin>('Purchases', {
+    web: () => import('./web').then((m) => new m.PurchasesWeb()),
+  }),
+);
 
 function getNativeTrackCustomPaywallImpressionOptions(
   options?: TrackCustomPaywallImpressionOptions,
@@ -33,12 +36,13 @@ function getNativeTrackCustomPaywallImpressionOptions(
   return nativeOptions;
 }
 
+const trackCustomPaywallImpression = (options?: TrackCustomPaywallImpressionOptions): Promise<void> =>
+  nativePlugin.trackCustomPaywallImpression(getNativeTrackCustomPaywallImpressionOptions(options));
+
 const Purchases = new Proxy(nativePlugin, {
   get(target, prop, receiver) {
     if (prop === 'trackCustomPaywallImpression') {
-      return (options?: TrackCustomPaywallImpressionOptions): Promise<void> => {
-        return target.trackCustomPaywallImpression(getNativeTrackCustomPaywallImpressionOptions(options));
-      };
+      return trackCustomPaywallImpression;
     }
 
     return Reflect.get(target, prop, receiver);
