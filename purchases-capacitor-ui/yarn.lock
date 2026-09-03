@@ -263,10 +263,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@revenuecat/purchases-typescript-internal-esm@18.33.1":
-  version "18.33.1"
-  resolved "https://registry.yarnpkg.com/@revenuecat/purchases-typescript-internal-esm/-/purchases-typescript-internal-esm-18.33.1.tgz#f9ac1f5c530a9f170736177ce9666decdccf8622"
-  integrity sha512-X83gP4VXX4j98tZ+WW6daD40IHkPAoUUap5/rrdihLZUBeeHdWUIQlm59Syx06LwBbsvalMc1eSfMib7M5vAjA==
+"@revenuecat/purchases-typescript-internal-esm@18.34.0":
+  version "18.34.0"
+  resolved "https://registry.yarnpkg.com/@revenuecat/purchases-typescript-internal-esm/-/purchases-typescript-internal-esm-18.34.0.tgz#7dac5d35d265d8153e096465056f07dd6379971f"
+  integrity sha512-Q2p/i4jY368IKcdsrksz8pvqKo3czgLKKfuyJvhswcpW8CYTVL+6cG0kHOAvYe1JgORx12BnBGDR+4yIfJO1bw==
 
 "@rollup/rollup-android-arm-eabi@4.62.2":
   version "4.62.2"
