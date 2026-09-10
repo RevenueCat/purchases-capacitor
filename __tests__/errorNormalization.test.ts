@@ -1,6 +1,5 @@
 import type { PurchasesError } from '@revenuecat/purchases-typescript-internal-esm';
 
-// The real class the native bridge instantiates, reached past the module mock below.
 const { CapacitorException } = jest.requireActual('@capacitor/core');
 
 const rejection = () =>
@@ -41,16 +40,12 @@ describe('errors surfaced by the Purchases plugin', () => {
     expect(error).toBeInstanceOf(CapacitorException);
     expect(typeof error.stack).toBe('string');
   });
-
-  // Exact shape rather than individual fields, so removing or renaming anything a
-  // consumer already reads fails here rather than in someone's app.
   it('exposes exactly the documented properties', async () => {
     const error = await Purchases.logIn({ appUserID: 'abc' }).catch((caught: unknown) => caught);
 
     const { ...ownProperties } = error as object;
     expect(ownProperties).toEqual({
       code: '11',
-      // Predates the normalizer; consumers read it, so it has to stay.
       data: {
         code: 11,
         message: 'There was a credentials issue.',
