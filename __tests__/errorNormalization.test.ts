@@ -74,8 +74,6 @@ describe('errors surfaced by the Purchases plugin', () => {
     await expect(Purchases.getCustomerInfo()).resolves.toEqual({ activeSubscriptions: [] });
   });
 
-  // @capacitor/core attaches `remove` to the promise addListener returns, for the
-  // deprecated call style that does not await it.
   it('keeps remove on the promise addListener returns', () => {
     const returned = Purchases.addListener('customerInfoUpdated', () => undefined) as Promise<unknown> & {
       remove?: unknown;
