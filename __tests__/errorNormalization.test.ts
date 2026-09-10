@@ -31,7 +31,7 @@ describe('errors surfaced by the Purchases plugin', () => {
     expect(error.readableErrorCode).toBe('InvalidCredentialsError');
     expect(error.underlyingErrorMessage).toBe('Invalid API Key.');
     expect(error.userInfo.readableErrorCode).toBe('InvalidCredentialsError');
-    expect(error.userCancelled).toBeNull();
+    expect(error.userCancelled).toBe(false);
   });
 
   it('is still a real Error', async () => {
@@ -67,7 +67,7 @@ describe('errors surfaced by the Purchases plugin', () => {
       },
       readableErrorCode: 'InvalidCredentialsError',
       underlyingErrorMessage: 'Invalid API Key.',
-      userCancelled: null,
+      userCancelled: false,
     });
     expect((error as Error).message).toBe('There was a credentials issue.');
   });

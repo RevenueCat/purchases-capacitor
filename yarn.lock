@@ -669,9 +669,9 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@revenuecat/purchases-typescript-internal-esm@file:./local-phc/revenuecat-purchases-typescript-internal-esm-18.37.0-local.6.tgz":
+"@revenuecat/purchases-typescript-internal-esm@file:./local-phc/revenuecat-purchases-typescript-internal-esm-18.37.0-local.7.tgz":
   version "18.37.0"
-  resolved "file:./local-phc/revenuecat-purchases-typescript-internal-esm-18.37.0-local.6.tgz#9f127428fc6b20125bddbaca4ba4d9bacc20eafa"
+  resolved "file:./local-phc/revenuecat-purchases-typescript-internal-esm-18.37.0-local.7.tgz#f60d6cab1b830e2521acf7cc01d3cd6aaa4ab588"
 
 "@rollup/plugin-node-resolve@^16.0.1":
   version "16.0.3"
