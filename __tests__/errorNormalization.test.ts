@@ -2,6 +2,8 @@ import type { PurchasesError } from '@revenuecat/purchases-typescript-internal-e
 
 const { CapacitorException } = jest.requireActual('@capacitor/core');
 
+const removeListener = jest.fn();
+
 const rejection = () =>
   new CapacitorException('There was a credentials issue.', '11', {
     code: 11,
@@ -15,6 +17,7 @@ jest.mock('@capacitor/core', () => ({
   registerPlugin: () => ({
     logIn: () => Promise.reject(rejection()),
     getCustomerInfo: () => Promise.resolve({ activeSubscriptions: [] }),
+    addListener: () => Object.assign(Promise.resolve({ remove: removeListener }), { remove: removeListener }),
   }),
 }));
 
@@ -69,5 +72,15 @@ describe('errors surfaced by the Purchases plugin', () => {
 
   it('leaves successful calls alone', async () => {
     await expect(Purchases.getCustomerInfo()).resolves.toEqual({ activeSubscriptions: [] });
+  });
+
+  // @capacitor/core attaches `remove` to the promise addListener returns, for the
+  // deprecated call style that does not await it.
+  it('keeps remove on the promise addListener returns', () => {
+    const returned = Purchases.addListener('customerInfoUpdated', () => undefined) as Promise<unknown> & {
+      remove?: unknown;
+    };
+
+    expect(returned.remove).toBe(removeListener);
   });
 });
