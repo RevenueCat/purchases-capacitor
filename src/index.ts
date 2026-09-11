@@ -1,4 +1,5 @@
 import { registerPlugin } from '@capacitor/core';
+import { normalizePurchasesError } from '@revenuecat/purchases-typescript-internal-esm';
 
 import type { PurchasesPlugin, TrackCustomPaywallImpressionOptions } from './definitions';
 
@@ -9,6 +10,22 @@ type NativeTrackCustomPaywallImpressionOptions = Omit<TrackCustomPaywallImpressi
 const nativePlugin = registerPlugin<PurchasesPlugin>('Purchases', {
   web: () => import('./web').then((m) => new m.PurchasesWeb()),
 });
+
+function normalizeRejection(result: unknown): unknown {
+  if (!(result instanceof Promise)) {
+    return result;
+  }
+  const normalized = result.then(undefined, (error: unknown) => {
+    throw normalizePurchasesError(error);
+  });
+  // addListener resolves a promise that also carries `remove`, for callers on the
+  // deprecated non-awaited style; chaining would drop it.
+  const remove = (result as { remove?: unknown }).remove;
+  if (typeof remove === 'function') {
+    (normalized as { remove?: unknown }).remove = remove;
+  }
+  return normalized;
+}
 
 function getNativeTrackCustomPaywallImpressionOptions(
   options?: TrackCustomPaywallImpressionOptions,
@@ -35,13 +52,16 @@ function getNativeTrackCustomPaywallImpressionOptions(
 
 const Purchases = new Proxy(nativePlugin, {
   get(target, prop, receiver) {
-    if (prop === 'trackCustomPaywallImpression') {
-      return (options?: TrackCustomPaywallImpressionOptions): Promise<void> => {
-        return target.trackCustomPaywallImpression(getNativeTrackCustomPaywallImpressionOptions(options));
-      };
+    const value =
+      prop === 'trackCustomPaywallImpression'
+        ? (options?: TrackCustomPaywallImpressionOptions) =>
+            target.trackCustomPaywallImpression(getNativeTrackCustomPaywallImpressionOptions(options))
+        : Reflect.get(target, prop, receiver);
+    if (typeof value !== 'function') {
+      return value;
     }
-
-    return Reflect.get(target, prop, receiver);
+    return (...args: unknown[]) =>
+      normalizeRejection((value as (...callArgs: unknown[]) => unknown).apply(target, args));
   },
 }) as PurchasesPlugin;
 
