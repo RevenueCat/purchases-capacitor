@@ -93,6 +93,6 @@
     }
   },
   "dependencies": {
-    "@revenuecat/purchases-typescript-internal-esm": "file:./local-phc/revenuecat-purchases-typescript-internal-esm-18.38.0-local.8.tgz"
+    "@revenuecat/purchases-typescript-internal-esm": "file:./local-phc/revenuecat-purchases-typescript-internal-esm-18.38.0-local.9.tgz"
   }
 }
