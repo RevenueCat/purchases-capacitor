@@ -6,6 +6,7 @@
 
 import type { CustomerInfo } from '@revenuecat/purchases-typescript-internal-esm';
 import { PAYWALL_RESULT } from '@revenuecat/purchases-typescript-internal-esm';
+import { PaywallInteractionEvent } from '@revenuecat/purchases-typescript-internal-esm';
 import type { PluginListenerHandle } from '@capacitor/core';
 import type { PurchasesError } from '@revenuecat/purchases-typescript-internal-esm';
 import type { PurchasesOffering } from '@revenuecat/purchases-typescript-internal-esm';
@@ -32,8 +33,11 @@ export type IOSPaywallPresentationStyle = (typeof IOS_PAYWALL_PRESENTATION_STYLE
 export { PAYWALL_RESULT }
 export { PAYWALL_RESULT as PaywallResultEnum }
 
+export { PaywallInteractionEvent }
+
 // @public
 export interface PaywallListener {
+    onInteraction?: (event: PaywallInteractionEvent) => void;
     onPurchaseCancelled?: () => void;
     onPurchaseCompleted?: (args: {
         customerInfo: CustomerInfo;
