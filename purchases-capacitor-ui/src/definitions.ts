@@ -1,6 +1,7 @@
 import type { PluginListenerHandle } from '@capacitor/core';
 import type {
   CustomerInfo,
+  PaywallInteractionEvent,
   PurchasesError,
   PurchasesOffering,
   PurchasesPackage,
@@ -85,6 +86,11 @@ export interface PaywallListener {
   onWebCheckoutOpened?: () => void;
   /** Called when the paywall opens a URL from a button destination or a text link. Not called for web checkout. */
   onUrlOpened?: (args: { url: string }) => void;
+  /**
+   * Called when the user interacts with a paywall control such as a tab, a package or the purchase
+   * button. The event carries the documented snake_case `paywall_component_interacted` properties.
+   */
+  onInteraction?: (event: PaywallInteractionEvent) => void;
   /**
    * Called before the payment sheet is displayed, allowing the app to gate
    * the purchase flow (e.g., require authentication first).
@@ -237,6 +243,7 @@ export interface PresentPaywallIfNeededOptions extends PresentPaywallOptions {
 
 // Using the enum from purchases-typescript-internal-esm instead of defining our own
 export { PAYWALL_RESULT as PaywallResultEnum };
+export type { PaywallInteractionEvent } from '@revenuecat/purchases-typescript-internal-esm';
 
 export interface PaywallResult {
   /**

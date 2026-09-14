@@ -280,6 +280,11 @@ private class PaywallDelegateAdapter: NSObject, PaywallViewControllerDelegateWra
         plugin?.notifyListeners("onUrlOpened", data: ["url": url])
     }
 
+    func paywallViewController(_ controller: PaywallViewController,
+                                didTrackInteraction eventDictionary: [String: Any]) {
+        plugin?.notifyListeners("onInteraction", data: eventDictionary)
+    }
+
     func paywallViewControllerWasDismissed(_ controller: PaywallViewController) {
         plugin?.notifyListeners("paywallDismissed", data: [:])
     }
