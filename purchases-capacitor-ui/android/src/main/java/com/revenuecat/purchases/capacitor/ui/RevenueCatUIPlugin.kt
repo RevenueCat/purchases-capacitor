@@ -264,6 +264,10 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
                 })
             }
 
+            override fun onInteraction(event: Map<String, Any>) {
+                notifyListeners("onInteraction", JSObject.fromJSONObject(JSONObject(event)))
+            }
+
             override fun onPurchasePackageInitiated(rcPackage: Map<String, Any?>, requestId: String) {
                 notifyListeners("onPurchaseInitiated", JSObject().apply {
                     put("package", JSONObject(rcPackage))

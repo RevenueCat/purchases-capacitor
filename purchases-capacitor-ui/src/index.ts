@@ -199,6 +199,9 @@ async function presentWithListenerSupport(
           }),
         );
       }
+      if (listener.onInteraction) {
+        handles.push(await nativePlugin.addListener('onInteraction', listener.onInteraction));
+      }
     }
 
     // Always register onPurchaseInitiated so we auto-resume when the user

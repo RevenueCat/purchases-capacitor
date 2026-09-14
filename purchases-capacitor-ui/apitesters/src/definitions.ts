@@ -1,5 +1,6 @@
 import type {
   CustomerInfo,
+  PaywallInteractionEvent,
   PurchasesError,
   PurchasesOffering,
   PurchasesPackage,
@@ -89,6 +90,7 @@ function checkPaywallListener(listener: PaywallListener) {
   const onRestoreStarted: (() => void) | undefined = listener.onRestoreStarted;
   const onRestoreCompleted: ((args: { customerInfo: CustomerInfo }) => void) | undefined = listener.onRestoreCompleted;
   const onRestoreError: ((args: { error: PurchasesError }) => void) | undefined = listener.onRestoreError;
+  const onInteraction: ((event: PaywallInteractionEvent) => void) | undefined = listener.onInteraction;
   const onPurchaseInitiated:
     ((args: { packageBeingPurchased: PurchasesPackage; resumable: PurchaseResumable }) => void) | undefined =
     listener.onPurchaseInitiated;
