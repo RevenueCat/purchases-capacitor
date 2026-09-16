@@ -89,6 +89,7 @@ export interface PaywallListener {
   /**
    * Called when the user interacts with a paywall control such as a tab, a package or the purchase
    * button. The event carries the documented snake_case `paywall_component_interacted` properties.
+   * See https://rev.cat/paywall-interaction-events for the keys each component type sends.
    */
   onInteraction?: (event: PaywallInteractionEvent) => void;
   /**
