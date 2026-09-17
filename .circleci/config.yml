@@ -533,9 +533,13 @@ workflows:
             - e2e-tests
 
       # Hold and deploy phase - only on release branches
-      - hold:
+      - wait-for-pr-approval:
           type: approval
+          <<: *release-branches
+      - revenuecat/tag-current-branch:
+          ruby_version: "3.3.0"
           requires:
+            - wait-for-pr-approval
             - run-api-tests
             - run-tests-ios
             - run-tests-android
@@ -546,11 +550,6 @@ workflows:
             - verify-android-agp8
             - verify-android-agp9
             - verify-android-agp9-legacy-kotlin
-          <<: *release-branches
-      - revenuecat/tag-current-branch:
-          ruby_version: "3.3.0"
-          requires:
-            - hold
           <<: *release-branches
       - make-release:
           <<: *release-tags
