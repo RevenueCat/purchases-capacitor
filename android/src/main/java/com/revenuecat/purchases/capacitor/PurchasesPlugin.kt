@@ -81,9 +81,9 @@ import com.revenuecat.purchases.hybridcommon.trackCustomPaywallImpression as tra
 @Suppress("unused")
 @CapacitorPlugin(name = "Purchases")
 class PurchasesPlugin : Plugin() {
-    private val customerInfoListeners = mutableListOf<String>()
+    private val customerInfoListeners = linkedMapOf<String, PluginCall>()
     private val lastSeenCustomerInfo: CustomerInfo? = null
-    private var logHandlerCallbackId: String? = null
+    private var logHandlerCall: PluginCall? = null
 
     companion object {
         private const val PLATFORM_NAME = "capacitor"
@@ -128,8 +128,8 @@ class PurchasesPlugin : Plugin() {
         )
         Purchases.sharedInstance.updatedCustomerInfoListener = UpdatedCustomerInfoListener { customerInfo ->
             customerInfo.mapAsync { map ->
-                for (callbackId in customerInfoListeners) {
-                    bridge.getSavedCall(callbackId)?.resolveWithMap(map)
+                for (savedCall in customerInfoListeners.values) {
+                    savedCall.resolveWithMap(map)
                 }
             }
         }
@@ -191,7 +191,7 @@ class PurchasesPlugin : Plugin() {
     @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
     fun addCustomerInfoUpdateListener(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
-        customerInfoListeners.add(call.callbackId)
+        customerInfoListeners[call.callbackId] = call
         call.setKeepAlive(true)
         lastSeenCustomerInfo?.let { it.mapAsync { map -> call.resolveWithMap(map) } }
     }
@@ -200,9 +200,9 @@ class PurchasesPlugin : Plugin() {
     fun removeCustomerInfoUpdateListener(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val callbackIDToRemove = call.getStringOrReject("listenerToRemove") ?: return
-        val wasRemoved = customerInfoListeners.remove(callbackIDToRemove)
-        bridge?.getSavedCall(callbackIDToRemove)?.setKeepAlive(false)
-        call.resolveWithMap(mapOf("wasRemoved" to wasRemoved))
+        val savedCall = customerInfoListeners.remove(callbackIDToRemove)
+        savedCall?.setKeepAlive(false)
+        call.resolveWithMap(mapOf("wasRemoved" to (savedCall != null)))
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
@@ -366,9 +366,9 @@ class PurchasesPlugin : Plugin() {
 
     @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
     fun setLogHandler(call: PluginCall) {
-        bridge.getSavedCall(logHandlerCallbackId)?.setKeepAlive(false)
+        logHandlerCall?.setKeepAlive(false)
         call.setKeepAlive(true)
-        logHandlerCallbackId = call.callbackId
+        logHandlerCall = call
         setLogHandlerCommon {
             call.resolve(convertMapToJSObject(it))
         }
