@@ -21,6 +21,14 @@ let package = Package(
                 .product(name: "Cordova", package: "capacitor-swift-pm"),
                 .product(name: "PurchasesHybridCommon", package: "purchases-hybrid-common")
             ],
-            path: "ios/Sources/RevenuecatPurchasesCapacitor")
+            path: "ios/Sources/RevenuecatPurchasesCapacitor"),
+        .testTarget(
+            name: "RevenuecatPurchasesCapacitorTests",
+            dependencies: [
+                "RevenuecatPurchasesCapacitor",
+                .product(name: "Capacitor", package: "capacitor-swift-pm"),
+                .product(name: "PurchasesHybridCommon", package: "purchases-hybrid-common")
+            ],
+            path: "ios/Tests/RevenuecatPurchasesCapacitorTests")
     ]
 )
