@@ -552,6 +552,7 @@ workflows:
           requires:
             - wait-for-pr-approval
             - run-api-tests
+            - run-unit-tests
             - run-tests-ios
             - run-tests-android
             - run-lint
