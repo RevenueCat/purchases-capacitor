@@ -176,6 +176,7 @@ jobs:
       - yarn-dependencies-mac
       - run: yarn build
       - run: yarn verify:ios
+      - run: yarn test:ios
 
   run-tests-android:
     <<: *base-android-job
