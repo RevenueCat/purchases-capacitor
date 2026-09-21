@@ -13,11 +13,20 @@ const rejection = () =>
     underlyingErrorMessage: 'Invalid API Key.',
   });
 
+// Capacitor brands each method it hands back with the plugin method's name and a
+// custom toString.
+const nativeLogIn = () => Promise.reject(rejection());
+nativeLogIn.toString = () => 'logIn() { [capacitor code] }';
+Object.defineProperty(nativeLogIn, 'name', { value: 'logIn' });
+
+const trackCustomPaywallImpression = jest.fn(() => Promise.resolve());
+
 jest.mock('@capacitor/core', () => ({
   registerPlugin: () => ({
-    logIn: () => Promise.reject(rejection()),
+    logIn: nativeLogIn,
     getCustomerInfo: () => Promise.resolve({ activeSubscriptions: [] }),
     addListener: () => Object.assign(Promise.resolve({ remove: removeListener }), { remove: removeListener }),
+    trackCustomPaywallImpression,
   }),
 }));
 
@@ -74,8 +83,29 @@ describe('errors surfaced by the Purchases plugin', () => {
     await expect(Purchases.getCustomerInfo()).resolves.toEqual({ activeSubscriptions: [] });
   });
 
+  it('keeps the name and toString Capacitor brands its wrappers with', () => {
+    expect(Purchases.logIn.name).toBe('logIn');
+    expect(String(Purchases.logIn)).toBe(String(nativeLogIn));
+  });
+
+  it('still maps the offering for trackCustomPaywallImpression', async () => {
+    await Purchases.trackCustomPaywallImpression({
+      paywallId: 'pw',
+      offering: {
+        identifier: 'default',
+        availablePackages: [{ presentedOfferingContext: { offeringIdentifier: 'default' } }],
+      },
+    });
+
+    expect(trackCustomPaywallImpression).toHaveBeenCalledWith({
+      paywallId: 'pw',
+      offeringId: 'default',
+      presentedOfferingContext: { offeringIdentifier: 'default' },
+    });
+  });
+
   it('keeps remove on the promise addListener returns', () => {
-    const returned = Purchases.addListener('customerInfoUpdated', () => undefined) as Promise<unknown> & {
+    const returned = Purchases.addListener('anEvent', () => undefined) as Promise<unknown> & {
       remove?: unknown;
     };
 

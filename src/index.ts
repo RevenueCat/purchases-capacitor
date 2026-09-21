@@ -50,18 +50,24 @@ function getNativeTrackCustomPaywallImpressionOptions(
   return nativeOptions;
 }
 
+function toNativeArgs(prop: string | symbol, args: unknown[]): unknown[] {
+  if (prop !== 'trackCustomPaywallImpression') {
+    return args;
+  }
+  return [getNativeTrackCustomPaywallImpressionOptions(args[0] as TrackCustomPaywallImpressionOptions)];
+}
+
 const Purchases = new Proxy(nativePlugin, {
   get(target, prop, receiver) {
-    const value =
-      prop === 'trackCustomPaywallImpression'
-        ? (options?: TrackCustomPaywallImpressionOptions) =>
-            target.trackCustomPaywallImpression(getNativeTrackCustomPaywallImpressionOptions(options))
-        : Reflect.get(target, prop, receiver);
+    const value = Reflect.get(target, prop, receiver);
     if (typeof value !== 'function') {
       return value;
     }
-    return (...args: unknown[]) =>
-      normalizeRejection((value as (...callArgs: unknown[]) => unknown).apply(target, args));
+    // An apply trap keeps whatever Capacitor puts on the method it hands back, such as
+    // the `name` and `toString` that logs and crash reports read.
+    return new Proxy(value as (...callArgs: unknown[]) => unknown, {
+      apply: (method, _thisArg, args) => normalizeRejection(Reflect.apply(method, target, toNativeArgs(prop, args))),
+    });
   },
 }) as PurchasesPlugin;
 
