@@ -30,7 +30,7 @@ jest.mock('@capacitor/core', () => ({
   }),
 }));
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const { Purchases } = require('../src/index');
 
 describe('errors surfaced by the Purchases plugin', () => {

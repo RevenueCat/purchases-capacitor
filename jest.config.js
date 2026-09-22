@@ -1,4 +1,3 @@
-/* eslint-env node */
 const tsconfig = { module: 'commonjs', target: 'es2017', allowJs: true };
 
 module.exports = {

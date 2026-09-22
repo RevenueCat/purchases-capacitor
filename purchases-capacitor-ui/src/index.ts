@@ -334,7 +334,6 @@ const RevenueCatUI: RevenueCatUIPlugin = {
 
   setMockWebResults: nativePlugin.setMockWebResults
     ? async (options: { shouldMockWebResults: boolean }): Promise<void> => {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         return nativePlugin.setMockWebResults!(options);
       }
     : undefined,
