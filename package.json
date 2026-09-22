@@ -79,7 +79,7 @@
     "rimraf": "^6.1.0",
     "rollup": "^4.53.2",
     "ts-jest": "^29.1.2",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   },
   "peerDependencies": {
     "@capacitor/core": ">=8.0.0"
