@@ -742,10 +742,10 @@
   dependencies:
     "@tybys/wasm-util" "^0.10.3"
 
-"@revenuecat/purchases-typescript-internal-esm@19.4.0":
-  version "19.4.0"
-  resolved "https://registry.yarnpkg.com/@revenuecat/purchases-typescript-internal-esm/-/purchases-typescript-internal-esm-19.4.0.tgz#c97a0f1252080d7c5b777f6b15f8af8b50da8aa6"
-  integrity sha512-0PiFzpg859vTWxeoikkrlSXdGi2+GyxmUlCdNFWLatmrNOWUB4//iBtgfY+5+L4USWGaVEIPpdRvnsX8o1v89w==
+"@revenuecat/purchases-typescript-internal-esm@19.4.1":
+  version "19.4.1"
+  resolved "https://registry.yarnpkg.com/@revenuecat/purchases-typescript-internal-esm/-/purchases-typescript-internal-esm-19.4.1.tgz#b35a2fe404aed067e1eb478d04b5bcf328ea03fe"
+  integrity sha512-sTwpbyXwxOMH3+7ETXKU5kU4UgxId9Q+Inl+XzmDCN9hxh3nZl+hKaidj16uyWF4gKzC0v2K3Rj+AaPExlccXQ==
 
 "@rollup/plugin-node-resolve@^16.0.1":
   version "16.0.3"
