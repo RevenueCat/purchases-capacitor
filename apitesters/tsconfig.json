@@ -4,7 +4,7 @@
     "esModuleInterop": true,
     "lib": ["dom", "es2017"],
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "target": "es2017",
     "noUnusedLocals": false,
     "noUnusedParameters": false,

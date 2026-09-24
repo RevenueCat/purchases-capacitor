@@ -40,7 +40,7 @@
     "verify:web": "npm run build",
     "lint": "npm run eslint && npm run prettier -- --check",
     "fmt": "npm run eslint -- --fix && npm run prettier -- --write",
-    "eslint": "eslint . --ext ts",
+    "eslint": "eslint",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\" --plugin=prettier-plugin-java",
     "docgen": "docgen --api PurchasesPlugin --output-readme README.md --output-json dist/docs.json",
     "build": "npm run clean && npm run docgen && tsc",
@@ -51,8 +51,11 @@
     "extract-api": "api-extractor run --local --verbose"
   },
   "lint-staged": {
-    "*.{ts,js,java,html,css}": [
-      "eslint --fix",
+    "*.{ts,tsx}": [
+      "eslint --fix --no-warn-ignored",
+      "prettier --write"
+    ],
+    "*.{js,java,html,css}": [
       "prettier --write --plugin=prettier-plugin-java"
     ]
   },
@@ -61,13 +64,13 @@
     "@capacitor/core": "^8.0.0",
     "@capacitor/docgen": "^0.3.1",
     "@capacitor/ios": "^8.0.0",
-    "@ionic/eslint-config": "^0.4.0",
+    "@ionic/eslint-config": "^0.5.0",
     "@ionic/prettier-config": "^4.0.0",
     "@microsoft/api-extractor": "^7.43.1",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@types/jest": "^29.5.14",
     "@types/node": "^24.10.1",
-    "eslint": "^8.57.1",
+    "eslint": "^10.0.0",
     "husky": "^9.1.7",
     "jest": "^29.7.0",
     "lint-staged": "^16.4.0",
@@ -76,15 +79,12 @@
     "rimraf": "^6.1.0",
     "rollup": "^4.53.2",
     "ts-jest": "^29.1.2",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   },
   "peerDependencies": {
     "@capacitor/core": ">=8.0.0"
   },
   "prettier": "@ionic/prettier-config",
-  "eslintConfig": {
-    "extends": "@ionic/eslint-config/recommended"
-  },
   "capacitor": {
     "ios": {
       "src": "ios"
