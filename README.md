@@ -1398,13 +1398,13 @@ The EntitlementInfo object gives you access to all of the information about the 
 | **`identifier`**                   | <code>string</code>                                                 | The entitlement identifier configured in the RevenueCat dashboard                                                                                                                                                                                   |
 | **`isActive`**                     | <code>boolean</code>                                                | True if the user has access to this entitlement                                                                                                                                                                                                     |
 | **`willRenew`**                    | <code>boolean</code>                                                | True if the underlying subscription is set to renew at the end of the billing period (expirationDate).                                                                                                                                              |
-| **`periodType`**                   | <code>string</code>                                                 | The last period type this entitlement was in. Either: NORMAL, INTRO, TRIAL, PREPAID.                                                                                                                                                                |
+| **`periodType`**                   | <code><a href="#periodtype">PeriodType</a></code>                   | The last period type this entitlement was in. Either: NORMAL, INTRO, TRIAL, PREPAID.                                                                                                                                                                |
 | **`latestPurchaseDate`**           | <code>string</code>                                                 | The latest purchase or renewal date for the entitlement in ISO8601 format.                                                                                                                                                                          |
 | **`latestPurchaseDateMillis`**     | <code>number</code>                                                 | The latest purchase or renewal date for the entitlement in milliseconds.                                                                                                                                                                            |
 | **`originalPurchaseDate`**         | <code>string</code>                                                 | The first date this entitlement was purchased in ISO8601 format.                                                                                                                                                                                    |
 | **`originalPurchaseDateMillis`**   | <code>number</code>                                                 | The first date this entitlement was purchased in milliseconds.                                                                                                                                                                                      |
-| **`expirationDate`**               | <code>string \| null</code>                                         | The expiration date for the entitlement in ISO8601, can be `null` for lifetime access. If the `periodType` is `trial`, this is the trial expiration date.                                                                                           |
-| **`expirationDateMillis`**         | <code>number \| null</code>                                         | The expiration date for the entitlement in milliseconds, can be `null` for lifetime access. If the `periodType` is `trial`, this is the trial expiration date.                                                                                      |
+| **`expirationDate`**               | <code>string \| null</code>                                         | The expiration date for the entitlement in ISO8601, can be `null` for lifetime access. If the `periodType` is `TRIAL`, this is the trial expiration date.                                                                                           |
+| **`expirationDateMillis`**         | <code>number \| null</code>                                         | The expiration date for the entitlement in milliseconds, can be `null` for lifetime access. If the `periodType` is `TRIAL`, this is the trial expiration date.                                                                                      |
 | **`store`**                        | <code><a href="#store">Store</a></code>                             | The store where this entitlement was unlocked from.                                                                                                                                                                                                 |
 | **`productIdentifier`**            | <code>string</code>                                                 | The product identifier that unlocked this entitlement                                                                                                                                                                                               |
 | **`productPlanIdentifier`**        | <code>string \| null</code>                                         | The product plan identifier that unlocked this entitlement. Android subscriptions only, null on consumables and iOS.                                                                                                                                |
@@ -1907,6 +1907,13 @@ The result of a redemption attempt.
 <code>{ result: <a href="#webpurchaseredemptionresulttype">WebPurchaseRedemptionResultType.SUCCESS</a>; customerInfo: <a href="#customerinfo">CustomerInfo</a>; } | { result: <a href="#webpurchaseredemptionresulttype">WebPurchaseRedemptionResultType.ERROR</a>; error: <a href="#purchaseserror">PurchasesError</a>; } | { result: <a href="#webpurchaseredemptionresulttype">WebPurchaseRedemptionResultType.PURCHASE_BELONGS_TO_OTHER_USER</a>; } | { result: <a href="#webpurchaseredemptionresulttype">WebPurchaseRedemptionResultType.INVALID_TOKEN</a>; } | { result: <a href="#webpurchaseredemptionresulttype">WebPurchaseRedemptionResultType.EXPIRED</a>; obfuscatedEmail: string; }</code>
 
 
+#### PeriodType
+
+The supported period types for an entitlement.
+
+<code>"NORMAL" | "INTRO" | "TRIAL" | "PREPAID"</code>
+
+
 #### Store
 
 The supported stores for purchases.
@@ -1919,13 +1926,6 @@ The supported stores for purchases.
 The supported ownership types for an entitlement.
 
 <code>"PURCHASED" | "FAMILY_SHARED" | "UNKNOWN"</code>
-
-
-#### PeriodType
-
-The supported period types for an entitlement.
-
-<code>"NORMAL" | "INTRO" | "TRIAL" | "PREPAID"</code>
 
 
 #### CustomerInfoUpdateListener
