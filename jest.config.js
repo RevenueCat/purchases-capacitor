@@ -1,5 +1,11 @@
-/* eslint-env node */
-const tsconfig = { module: 'commonjs', target: 'es2017', allowJs: true };
+const tsconfig = {
+  module: 'commonjs',
+  moduleResolution: 'bundler',
+  target: 'es2017',
+  allowJs: true,
+  esModuleInterop: true,
+  types: ['jest', 'node'],
+};
 
 module.exports = {
   preset: 'ts-jest',
