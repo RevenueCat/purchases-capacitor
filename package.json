@@ -93,7 +93,8 @@
       "src": "android"
     }
   },
+  "//": "TODO: before releasing 14.0.0, switch purchases-typescript-internal-esm back to the published PHC 20 package and drop phc-20.0-dev/",
   "dependencies": {
-    "@revenuecat/purchases-typescript-internal-esm": "19.4.1"
+    "@revenuecat/purchases-typescript-internal-esm": "file:./phc-20.0-dev/purchases-typescript-internal-esm.tgz"
   }
 }
