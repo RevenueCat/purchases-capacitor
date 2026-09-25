@@ -311,12 +311,18 @@ export interface SyncAmazonPurchaseOptions {
     isoCurrencyCode?: string | null;
     price?: number | null;
     productID: string;
-    purchaseTime?: number | null;
+    purchaseTime: number;
     receiptID: string;
 }
 
 // @public @deprecated (undocumented)
-export type SyncObserverModeAmazonPurchaseOptions = SyncAmazonPurchaseOptions;
+export interface SyncObserverModeAmazonPurchaseOptions {
+    amazonUserID: string;
+    isoCurrencyCode?: string | null;
+    price?: number | null;
+    productID: string;
+    receiptID: string;
+}
 
 // @public
 export interface TrackCustomPaywallImpressionOptions {

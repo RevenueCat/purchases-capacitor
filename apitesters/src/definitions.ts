@@ -91,6 +91,7 @@ function checkSyncAmazonPurchaseOptions() {
     productID: 'product1',
     receiptID: 'receipt1',
     amazonUserID: 'amazon1',
+    purchaseTime: 1700000000000,
   };
   const options2: SyncAmazonPurchaseOptions = {
     productID: 'product1',
@@ -98,6 +99,7 @@ function checkSyncAmazonPurchaseOptions() {
     amazonUserID: 'amazon1',
     isoCurrencyCode: 'USD',
     price: 9.99,
+    purchaseTime: 1700000000000,
   };
 }
 

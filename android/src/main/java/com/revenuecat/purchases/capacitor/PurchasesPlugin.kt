@@ -389,7 +389,21 @@ class PurchasesPlugin : Plugin() {
 
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun syncObserverModeAmazonPurchase(call: PluginCall) {
-        syncAmazonPurchase(call)
+        if (rejectIfNotConfigured(call)) return
+        val productID = call.getStringOrReject("productID") ?: return
+        val receiptID = call.getStringOrReject("receiptID") ?: return
+        val amazonUserID = call.getStringOrReject("amazonUserID") ?: return
+        val isoCurrencyCode = call.getString("isoCurrencyCode")
+        val price = call.getDouble("price")
+        @Suppress("DEPRECATION")
+        Purchases.sharedInstance.syncAmazonPurchase(
+            productID,
+            receiptID,
+            amazonUserID,
+            isoCurrencyCode,
+            price,
+        )
+        call.resolve()
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
@@ -400,27 +414,15 @@ class PurchasesPlugin : Plugin() {
         val amazonUserID = call.getStringOrReject("amazonUserID") ?: return
         val isoCurrencyCode = call.getString("isoCurrencyCode")
         val price = call.getDouble("price")
-        // PluginCall.getLong only accepts Long instances, so read through JSONObject to coerce any Number.
-        val purchaseTime = if (call.data.isNull("purchaseTime")) null else call.data.getLong("purchaseTime")
-        if (purchaseTime != null) {
-            Purchases.sharedInstance.syncAmazonPurchase(
-                productID,
-                receiptID,
-                amazonUserID,
-                isoCurrencyCode,
-                price,
-                purchaseTime,
-            )
-        } else {
-            @Suppress("DEPRECATION")
-            Purchases.sharedInstance.syncAmazonPurchase(
-                productID,
-                receiptID,
-                amazonUserID,
-                isoCurrencyCode,
-                price,
-            )
-        }
+        val purchaseTime = call.getLongOrReject("purchaseTime") ?: return
+        Purchases.sharedInstance.syncAmazonPurchase(
+            productID,
+            receiptID,
+            amazonUserID,
+            isoCurrencyCode,
+            price,
+            purchaseTime,
+        )
         call.resolve()
     }
 
@@ -879,6 +881,15 @@ class PurchasesPlugin : Plugin() {
             return null
         }
         return value
+    }
+
+    // PluginCall.getLong only accepts Long instances, so read through JSONObject to coerce any Number.
+    private fun PluginCall.getLongOrReject(key: String): Long? {
+        if (data.isNull(key)) {
+            reject("Missing $key parameter")
+            return null
+        }
+        return data.getLong(key)
     }
 
     private fun PluginCall.getObjectOrReject(key: String): JSObject? {
