@@ -203,16 +203,36 @@ export interface SyncAmazonPurchaseOptions {
   price?: number | null;
   /**
    * Time the product was purchased, in milliseconds since the epoch. Can be obtained from Amazon's
-   * PurchaseResponse > Receipt > purchaseTime. Usage of this parameter is highly recommended and
-   * usages without it are deprecated and will be removed in future versions. Android only.
+   * PurchaseResponse > Receipt > purchaseTime. Android only.
    */
-  purchaseTime?: number | null;
+  purchaseTime: number;
 }
 
 /**
  * @deprecated - Use SyncAmazonPurchaseOptions instead
  */
-export type SyncObserverModeAmazonPurchaseOptions = SyncAmazonPurchaseOptions;
+export interface SyncObserverModeAmazonPurchaseOptions {
+  /**
+   * Product ID associated to the purchase.
+   */
+  productID: string;
+  /**
+   * ReceiptId that represents the Amazon purchase.
+   */
+  receiptID: string;
+  /**
+   * Amazon's userID. This parameter will be ignored when syncing a Google purchase.
+   */
+  amazonUserID: string;
+  /**
+   * Product's currency code in ISO 4217 format.
+   */
+  isoCurrencyCode?: string | null;
+  /**
+   * Product's price.
+   */
+  price?: number | null;
+}
 
 export interface GetPromotionalOfferOptions {
   /**
@@ -516,8 +536,7 @@ export interface PurchasesPlugin {
    *
    * The receipt IDs are cached if successfully posted, so they are not posted more than once.
    *
-   * Passing `purchaseTime` in the options is highly recommended. Usages without it are deprecated and will be
-   * removed in future versions.
+   * `purchaseTime` is required and can be obtained from Amazon's PurchaseResponse > Receipt > purchaseTime.
    *
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet or if there's an error
    * syncing purchases.
