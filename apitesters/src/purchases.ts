@@ -296,6 +296,14 @@ async function checkAmazonSync(plugin: PurchasesPlugin) {
     isoCurrencyCode: 'USD',
     price: 9.99,
   });
+  await plugin.syncAmazonPurchase({
+    productID: 'product1',
+    receiptID: 'receipt1',
+    amazonUserID: 'amazon1',
+    isoCurrencyCode: 'USD',
+    price: 9.99,
+    purchaseTime: 1700000000000,
+  });
 }
 
 async function checkAdServices(plugin: PurchasesPlugin) {

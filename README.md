@@ -613,6 +613,9 @@ in Amazon observer mode or performing a client side migration of your current us
 
 The receipt IDs are cached if successfully posted, so they are not posted more than once.
 
+Passing `purchaseTime` in the options is highly recommended. Usages without it are deprecated and will be
+removed in future versions.
+
 | Param         | Type                                                                            |
 | ------------- | ------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#syncamazonpurchaseoptions">SyncAmazonPurchaseOptions</a></code> |
@@ -1783,13 +1786,14 @@ Holds the logIn result
 
 #### SyncAmazonPurchaseOptions
 
-| Prop                  | Type                        | Description                                                                     |
-| --------------------- | --------------------------- | ------------------------------------------------------------------------------- |
-| **`productID`**       | <code>string</code>         | Product ID associated to the purchase.                                          |
-| **`receiptID`**       | <code>string</code>         | ReceiptId that represents the Amazon purchase.                                  |
-| **`amazonUserID`**    | <code>string</code>         | Amazon's userID. This parameter will be ignored when syncing a Google purchase. |
-| **`isoCurrencyCode`** | <code>string \| null</code> | Product's currency code in ISO 4217 format.                                     |
-| **`price`**           | <code>number \| null</code> | Product's price.                                                                |
+| Prop                  | Type                        | Description                                                                                                                                                                                                                                                                              |
+| --------------------- | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`productID`**       | <code>string</code>         | Product ID associated to the purchase.                                                                                                                                                                                                                                                   |
+| **`receiptID`**       | <code>string</code>         | ReceiptId that represents the Amazon purchase.                                                                                                                                                                                                                                           |
+| **`amazonUserID`**    | <code>string</code>         | Amazon's userID. This parameter will be ignored when syncing a Google purchase.                                                                                                                                                                                                          |
+| **`isoCurrencyCode`** | <code>string \| null</code> | Product's currency code in ISO 4217 format.                                                                                                                                                                                                                                              |
+| **`price`**           | <code>number \| null</code> | Product's price.                                                                                                                                                                                                                                                                         |
+| **`purchaseTime`**    | <code>number \| null</code> | Time the product was purchased, in milliseconds since the epoch. Can be obtained from Amazon's PurchaseResponse &gt; Receipt &gt; purchaseTime. Usage of this parameter is highly recommended and usages without it are deprecated and will be removed in future versions. Android only. |
 
 
 #### IntroEligibility
