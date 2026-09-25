@@ -87,12 +87,12 @@ class PurchasesPlugin : Plugin() {
 
     companion object {
         private const val PLATFORM_NAME = "capacitor"
-        private const val PLUGIN_VERSION = "13.6.0"
+        private const val PLUGIN_VERSION = "13.6.1"
 
         private const val CUSTOMER_INFO_KEY = "customerInfo"
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun configure(call: PluginCall) {
         val apiKey = call.getStringOrReject("apiKey") ?: return
         val appUserID = call.getString("appUserID")
@@ -142,7 +142,7 @@ class PurchasesPlugin : Plugin() {
         getVirtualCurrenciesCommon(getOnResult(call, "virtualCurrencies"))
     }  
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun invalidateVirtualCurrenciesCache(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         invalidateVirtualCurrenciesCacheCommon()
@@ -173,7 +173,7 @@ class PurchasesPlugin : Plugin() {
         redeemWebPurchaseCommon(redemptionLink, getOnResult(call))
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setMockWebResults(call: PluginCall) {
         Log.e(
             "PurchasesCapacitor",
@@ -182,7 +182,7 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setSimulatesAskToBuyInSandbox(call: PluginCall) {
         logNotSupportedFunctionalityInAndroid("setSimulatesAskToBuyInSandbox")
         call.resolve()
@@ -358,10 +358,11 @@ class PurchasesPlugin : Plugin() {
         logOutCommon(getOnResult(call, CUSTOMER_INFO_KEY))
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setLogLevel(call: PluginCall) {
         val logLevel = call.getStringOrReject("level") ?: return
         setLogLevelCommon(logLevel)
+        call.resolve()
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
@@ -386,12 +387,12 @@ class PurchasesPlugin : Plugin() {
         syncPurchasesCommon(getOnResult(call))
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun syncObserverModeAmazonPurchase(call: PluginCall) {
         syncAmazonPurchase(call)
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun syncAmazonPurchase(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val productID = call.getStringOrReject("productID") ?: return
@@ -409,7 +410,7 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun enableAdServicesAttributionTokenCollection(call: PluginCall) {
         logNotSupportedFunctionalityInAndroid("enableAdServicesAttributionTokenCollection")
         call.resolve()
@@ -459,20 +460,20 @@ class PurchasesPlugin : Plugin() {
         call.unavailable()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun invalidateCustomerInfoCache(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         invalidateCustomerInfoCacheCommon()
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun presentCodeRedemptionSheet(call: PluginCall) {
         logNotSupportedFunctionalityInAndroid("presentCodeRedemptionSheet")
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setAttributes(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val attributes = call.data.convertToMap()
@@ -480,7 +481,7 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setEmail(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val email = call.getString("email")
@@ -488,7 +489,7 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setPhoneNumber(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val phoneNumber = call.getString("phoneNumber")
@@ -496,7 +497,7 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setDisplayName(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val displayName = call.getString("displayName")
@@ -504,7 +505,7 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setPushToken(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val pushToken = call.getString("pushToken")
@@ -512,21 +513,21 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setProxyURL(call: PluginCall) {
         val urlString = call.getString("url")
         setProxyURLStringCommon(urlString)
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun collectDeviceIdentifiers(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         collectDeviceIdentifiersCommon()
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setAdjustID(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val adjustID = call.getString("adjustID")
@@ -534,7 +535,7 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setAppsflyerID(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val appsflyerID = call.getString("appsflyerID")
@@ -542,7 +543,7 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setFBAnonymousID(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val fbAnonymousID = call.getString("fbAnonymousID")
@@ -550,7 +551,7 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setMparticleID(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val mparticleID = call.getString("mparticleID")
@@ -558,7 +559,7 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setCleverTapID(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val cleverTapID = call.getString("cleverTapID")
@@ -566,7 +567,7 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setMixpanelDistinctID(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val mixpanelDistinctID = call.getString("mixpanelDistinctID")
@@ -574,7 +575,7 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setFirebaseAppInstanceID(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val firebaseAppInstanceID = call.getString("firebaseAppInstanceID")
@@ -582,7 +583,7 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setOnesignalID(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val onesignalID = call.getString("onesignalID")
@@ -590,7 +591,7 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setOnesignalUserID(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val onesignalUserID = call.getString("onesignalUserID")
@@ -598,7 +599,7 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setSingularDeviceID(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val singularDeviceID = call.getString("singularDeviceID")
@@ -606,7 +607,7 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setAirshipChannelID(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val airshipChannelID = call.getString("airshipChannelID")
@@ -614,7 +615,7 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setMediaSource(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val mediaSource = call.getString("mediaSource")
@@ -622,7 +623,7 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setCampaign(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val campaign = call.getString("campaign")
@@ -630,7 +631,7 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setAdGroup(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val adGroup = call.getString("adGroup")
@@ -638,7 +639,7 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setAd(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val ad = call.getString("ad")
@@ -646,7 +647,7 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setKeyword(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val keyword = call.getString("keyword")
@@ -654,7 +655,7 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun setCreative(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val creative = call.getString("creative")
@@ -697,7 +698,7 @@ class PurchasesPlugin : Plugin() {
         rejectNotSupportedInAndroid(call, "beginRefundRequestForProduct")
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun showInAppMessages(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val messageTypes = call.getArray("messageTypes")?.toList<Int>()?.mapNotNull {
@@ -712,7 +713,7 @@ class PurchasesPlugin : Plugin() {
         call.resolveWithMap(mapOf("isConfigured" to Purchases.isConfigured))
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun overridePreferredUILocale(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         val locale = call.getString("locale")
@@ -720,7 +721,7 @@ class PurchasesPlugin : Plugin() {
         call.resolve()
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun trackCustomPaywallImpression(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return
         trackCustomPaywallImpressionCommon(mapWithoutNullValues(call.data))

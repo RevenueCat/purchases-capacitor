@@ -1,6 +1,6 @@
 {
   "name": "@revenuecat/purchases-capacitor-ui",
-  "version": "13.6.0",
+  "version": "13.6.1",
   "packageManager": "yarn@1.22.22",
   "description": "UI components for RevenueCat Capacitor SDK",
   "main": "dist/esm/index.js",
@@ -54,7 +54,7 @@
     "verify:web": "npm run build",
     "lint": "npm run eslint && npm run prettier -- --check",
     "fmt": "npm run eslint -- --fix && npm run prettier -- --write",
-    "eslint": "eslint . --ext ts",
+    "eslint": "eslint",
     "prettier": "prettier \"**/*.{css,html,js,java,json,md,ts,tsx}\"",
     "docgen": "docgen --api RevenueCatUIPlugin --output-readme README.md",
     "build": "npm run clean && tsc && rollup -c ../rollup.config.js",
@@ -66,15 +66,18 @@
   },
   "dependencies": {
     "@capacitor/core": "^8.0.0",
-    "@revenuecat/purchases-typescript-internal-esm": "19.2.0"
+    "@revenuecat/purchases-typescript-internal-esm": "19.4.1"
   },
   "peerDependencies": {
     "@capacitor/core": ">=8.0.0",
-    "@revenuecat/purchases-capacitor": "13.6.0"
+    "@revenuecat/purchases-capacitor": "13.6.1"
   },
   "lint-staged": {
-    "*.{ts,js,java,html,css}": [
-      "eslint --fix",
+    "*.{ts,tsx}": [
+      "eslint --fix --no-warn-ignored",
+      "prettier --write"
+    ],
+    "*.{js,java,html,css}": [
       "prettier --write --plugin=prettier-plugin-java"
     ]
   },
@@ -83,15 +86,15 @@
     "lint-staged": "^16.4.0",
     "@capacitor/cli": "^8.0.0",
     "@capacitor/docgen": "^0.3.1",
-    "@ionic/eslint-config": "^0.4.0",
+    "@ionic/eslint-config": "^0.5.0",
     "@ionic/prettier-config": "^4.0.0",
     "@types/node": "^24.10.1",
-    "eslint": "^8.57.1",
+    "eslint": "^10.0.0",
     "prettier": "^3.6.2",
     "prettier-plugin-java": "^2.7.7",
     "rimraf": "^6.1.0",
     "rollup": "^4.53.2",
     "@microsoft/api-extractor": "^7.43.1",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   }
 }
