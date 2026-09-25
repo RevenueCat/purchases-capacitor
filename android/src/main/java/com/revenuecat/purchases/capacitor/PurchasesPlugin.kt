@@ -399,13 +399,27 @@ class PurchasesPlugin : Plugin() {
         val amazonUserID = call.getStringOrReject("amazonUserID") ?: return
         val isoCurrencyCode = call.getString("isoCurrencyCode")
         val price = call.getDouble("price")
-        Purchases.sharedInstance.syncAmazonPurchase(
-            productID,
-            receiptID,
-            amazonUserID,
-            isoCurrencyCode,
-            price,
-        )
+        // PluginCall.getLong only accepts Long instances, so read through JSONObject to coerce any Number.
+        val purchaseTime = if (call.data.isNull("purchaseTime")) null else call.data.getLong("purchaseTime")
+        if (purchaseTime != null) {
+            Purchases.sharedInstance.syncAmazonPurchase(
+                productID,
+                receiptID,
+                amazonUserID,
+                isoCurrencyCode,
+                price,
+                purchaseTime,
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            Purchases.sharedInstance.syncAmazonPurchase(
+                productID,
+                receiptID,
+                amazonUserID,
+                isoCurrencyCode,
+                price,
+            )
+        }
         call.resolve()
     }
 
