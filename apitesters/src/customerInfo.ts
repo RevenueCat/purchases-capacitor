@@ -44,7 +44,7 @@ function checkEntitlementInfo(info: PurchasesEntitlementInfo) {
   const identifier: string = info.identifier;
   const isActive: boolean = info.isActive;
   const willRenew: boolean = info.willRenew;
-  const periodType: string = info.periodType;
+  const periodType: PeriodType = info.periodType;
   const latestPurchaseDate: string = info.latestPurchaseDate;
   const originalPurchaseDate: string = info.originalPurchaseDate;
   const expirationDate: string | null = info.expirationDate;
