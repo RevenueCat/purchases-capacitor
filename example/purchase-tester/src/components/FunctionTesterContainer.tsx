@@ -518,6 +518,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
       productID: productIDToSync,
       receiptID: receiptIDToSync,
       amazonUserID: amazonUserIDToSync,
+      purchaseTime: Date.now(),
     });
     updateLastFunctionWithoutContent('syncAmazonPurchase');
   };
