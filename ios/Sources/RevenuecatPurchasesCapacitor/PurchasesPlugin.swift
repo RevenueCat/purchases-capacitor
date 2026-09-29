@@ -177,15 +177,15 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
 
     @objc func parseAsWebPurchaseRedemption(_ call: CAPPluginCall) {
         guard let urlString = call.getOrRejectString("urlString") else { return }
-        let result: [String: Any?]
+        let result: PluginCallResultData
         if CommonFunctionality.isWebPurchaseRedemptionURL(urlString: urlString) {
             result = ["webPurchaseRedemption": ["redemptionLink": urlString]]
         } else {
             result = [
-                "webPurchaseRedemption": nil
+                "webPurchaseRedemption": NSNull()
             ]
         }
-        call.resolve(result as PluginCallResultData)
+        call.resolve(result)
     }
 
     @objc func redeemWebPurchase(_ call: CAPPluginCall) {
