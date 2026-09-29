@@ -171,7 +171,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
     @objc func getCachedVirtualCurrencies(_ call: CAPPluginCall) {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
         call.resolve([
-            "cachedVirtualCurrencies": CommonFunctionality.getCachedVirtualCurrencies()
+            "cachedVirtualCurrencies": CommonFunctionality.getCachedVirtualCurrencies() ?? NSNull()
         ])
     }
 
