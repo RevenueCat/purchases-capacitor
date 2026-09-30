@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { WebPlugin } from '@capacitor/core';
 import type {
   BILLING_FEATURE,

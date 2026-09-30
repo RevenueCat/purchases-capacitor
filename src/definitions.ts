@@ -201,6 +201,12 @@ export interface SyncAmazonPurchaseOptions {
    * Product's price.
    */
   price?: number | null;
+  /**
+   * Time the product was purchased, in milliseconds since the epoch. Can be obtained from Amazon's
+   * PurchaseResponse > Receipt > purchaseTime. Usage of this parameter is highly recommended and
+   * usages without it are deprecated and will be removed in future versions. Android only.
+   */
+  purchaseTime?: number | null;
 }
 
 /**
@@ -509,6 +515,9 @@ export interface PurchasesPlugin {
    * in Amazon observer mode or performing a client side migration of your current users to RevenueCat.
    *
    * The receipt IDs are cached if successfully posted, so they are not posted more than once.
+   *
+   * Passing `purchaseTime` in the options is highly recommended. Usages without it are deprecated and will be
+   * removed in future versions.
    *
    * @returns {Promise<void>} The promise will be rejected if configure has not been called yet or if there's an error
    * syncing purchases.

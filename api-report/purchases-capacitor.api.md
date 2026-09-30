@@ -311,6 +311,7 @@ export interface SyncAmazonPurchaseOptions {
     isoCurrencyCode?: string | null;
     price?: number | null;
     productID: string;
+    purchaseTime?: number | null;
     receiptID: string;
 }
 
