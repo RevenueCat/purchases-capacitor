@@ -97,6 +97,8 @@ async function checkConfigure(plugin: PurchasesPlugin) {
     diagnosticsEnabled: true,
     automaticDeviceIdentifierCollectionEnabled: false,
     preferredUILocaleOverride: 'en-US',
+    useExternalPurchaseCustomLinks: true,
+    enableExternalPurchasesInSimulator: false,
   });
 
   const isConfiguredResult: { isConfigured: boolean } = await plugin.isConfigured();

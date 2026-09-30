@@ -134,6 +134,8 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
         let diagnosticsEnabled = call.getBool("diagnosticsEnabled") ?? false
         let automaticDeviceIdentifierCollectionEnabled = call.getBool("automaticDeviceIdentifierCollectionEnabled") ?? true
         let preferredLocale = call.getString("preferredUILocaleOverride")
+        let useExternalPurchaseCustomLinks = call.getBool("useExternalPurchaseCustomLinks") ?? false
+        let enableExternalPurchasesInSimulator = call.getBool("enableExternalPurchasesInSimulator") ?? true
 
         let purchases = Purchases.configure(apiKey: apiKey,
                                             appUserID: appUserID,
@@ -147,7 +149,9 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
                                             verificationMode: entitlementVerificationMode,
                                             diagnosticsEnabled: diagnosticsEnabled,
                                             automaticDeviceIdentifierCollectionEnabled: automaticDeviceIdentifierCollectionEnabled,
-                                            preferredLocale: preferredLocale)
+                                            preferredLocale: preferredLocale,
+                                            useExternalPurchaseCustomLinks: useExternalPurchaseCustomLinks,
+                                            enableExternalPurchasesInSimulator: enableExternalPurchasesInSimulator)
         purchases.delegate = self
         call.resolve()
     }
