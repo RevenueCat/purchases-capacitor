@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>SDK Update Tester</title>
     <style>
       :root {
@@ -15,7 +15,8 @@
       }
       body {
         margin: 0;
-        padding: 24px 20px;
+        padding: calc(24px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right))
+          calc(24px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-left));
       }
       #app {
         display: flex;
@@ -27,6 +28,7 @@
       p {
         margin: 0;
         line-height: 24px;
+        max-width: 100%;
         overflow-wrap: anywhere;
       }
       h1 {
