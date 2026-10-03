@@ -1,3 +1,5 @@
 node_modules
+build
+fastlane/test_output
 example
 purchases-capacitor-ui/.build

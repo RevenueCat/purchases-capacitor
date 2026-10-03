@@ -1,0 +1,20 @@
+{
+  "name": "sdk-update-tester",
+  "version": "1.0.0",
+  "private": true,
+  "author": "Antonio Pallares",
+  "scripts": {
+    "build": "tsc --noEmit && vite build"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.1.0",
+    "@capacitor/core": "8.1.0",
+    "@capacitor/ios": "8.1.0",
+    "@revenuecat/purchases-capacitor": "file:../.."
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.1.0",
+    "typescript": "5.2.2",
+    "vite": "6.4.3"
+  }
+}
