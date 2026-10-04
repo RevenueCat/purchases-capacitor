@@ -8,6 +8,9 @@ app built against the local checkout over the released build.
 
 ## Builds
 
+The test host uses Capacitor 8.5.2 and its scene lifecycle support. Use Xcode 27.0,
+matching the SDK update CI jobs.
+
 ```sh
 bundle exec fastlane build_sdk_update_test_apps platform:ios
 bundle exec fastlane build_sdk_update_test_apps platform:android

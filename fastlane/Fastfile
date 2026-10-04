@@ -356,11 +356,7 @@ lane :build_sdk_update_test_apps do |options|
     FileUtils.cp("#{project}/package-lock.json", "#{dir}/package-lock.json")
     if platform == 'ios'
       FileUtils.cp("#{template}/ios/AppDelegate.swift", "#{project}/ios/App/App/AppDelegate.swift")
-      storyboard_path = "#{project}/ios/App/App/Base.lproj/Main.storyboard"
-      storyboard = File.read(storyboard_path)
-      UI.user_error!('Capacitor bridge view controller not found') unless storyboard.include?('customClass="CAPBridgeViewController"')
-      File.write(storyboard_path, storyboard.sub('customClass="CAPBridgeViewController" customModule="Capacitor"',
-        'customClass="SDKUpdateBridgeViewController" customModule="App" customModuleProvider="target"'))
+      FileUtils.cp("#{template}/ios/SceneDelegate.swift", "#{project}/ios/App/App/SceneDelegate.swift")
       app_package = "#{project}/ios/App/CapApp-SPM/Package.swift"
       sdk_path = File.read(app_package).match(/\.package\(name: "RevenuecatPurchasesCapacitor", path: "([^"]+)"\)/)&.captures&.first
       UI.user_error!('App does not depend on the installed Capacitor SDK') unless
