@@ -65,3 +65,8 @@ An online customer-info refresh can recover entitlements from the server and hid
 entitlement cache. These screenshot checks cover identity and entitlement continuity after an
 update; they do not prove offline cache preservation. Stronger offline/cache assertions should be
 coordinated across the SDKs and their shared flows.
+
+The Xcode 27 [CI run](https://app.circleci.com/pipelines/github/RevenueCat/purchases-capacitor/2735)
+passed all four cases on their first attempt. A local logged-in iOS run showed an anonymous ID
+after the update, then passed on a fresh attempt. The cause is unresolved; the retry does not
+prove that identity is always preserved.
