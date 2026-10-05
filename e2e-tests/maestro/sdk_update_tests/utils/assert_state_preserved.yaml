@@ -16,6 +16,10 @@ name: Assert state preserved after SDK update
 - tapOn:
     text: "Purchase screen"
 - extendedWaitUntil:
+    visible:
+      text: "Entitlements: .*"
+    timeout: 30000
+- extendedWaitUntil:
     notVisible:
       text: "Entitlements: Loading\\.\\.\\."
     timeout: 30000
