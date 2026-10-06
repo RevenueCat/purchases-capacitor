@@ -60,6 +60,8 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation 'com.revenuecat.purchases:purchases-hybrid-common:19.6.0'
     testImplementation "junit:junit:$junitVersion"
+    testImplementation 'io.mockk:mockk:1.13.16'
+    testImplementation 'org.json:json:20240303'
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
 }
