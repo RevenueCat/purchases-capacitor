@@ -1560,6 +1560,7 @@ Type representing a product from the <a href="#store">Store</a>.
 | **`subscriptionOptions`**         | <code>SubscriptionOption[] \| null</code>                                             | Collection of subscription options for a product. Google Play only.                                                                                                                                                                                                                                                                                                                                                                                              |
 | **`presentedOfferingIdentifier`** | <code>string \| null</code>                                                           | Offering identifier the store product was presented from. Null if not using offerings or if fetched directly from store via getProducts.                                                                                                                                                                                                                                                                                                                         |
 | **`presentedOfferingContext`**    | <code><a href="#presentedofferingcontext">PresentedOfferingContext</a> \| null</code> | Offering context this package belongs to. Null if not using offerings or if fetched directly from store via getProducts.                                                                                                                                                                                                                                                                                                                                         |
+| **`installmentsInfo`**            | <code><a href="#installmentsinfo">InstallmentsInfo</a> \| null</code>                 | For installment subscriptions, the details of the installment plan the customer commits to. Null for non-installment subscriptions. iOS only. Always null on Android, use the installmentsInfo of the defaultOption or subscriptionOptions instead.                                                                                                                                                                                                              |
 
 
 #### PurchasesIntroPrice
@@ -1672,12 +1673,20 @@ Contains data about the context in which an offering was presented.
 
 #### InstallmentsInfo
 
-Type containing information of installment subscriptions. Currently only supported in Google Play.
+Type containing information of installment subscriptions.
+Supported in Google Play (via <a href="#subscriptionoption">SubscriptionOption</a>) and iOS (via <a href="#purchasesstoreproduct">PurchasesStoreProduct</a>).
 
-| Prop                                 | Type                | Description                                                                                            |
-| ------------------------------------ | ------------------- | ------------------------------------------------------------------------------------------------------ |
-| **`commitmentPaymentsCount`**        | <code>number</code> | Number of payments the customer commits to in order to purchase the subscription.                      |
-| **`renewalCommitmentPaymentsCount`** | <code>number</code> | After the commitment payments are complete, the number of payments the user commits to upon a renewal. |
+| Prop                                 | Type                                                            | Description                                                                                                                                                    |
+| ------------------------------------ | --------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`commitmentPaymentsCount`**        | <code>number</code>                                             | Number of payments the customer commits to in order to purchase the subscription.                                                                              |
+| **`renewalCommitmentPaymentsCount`** | <code>number</code>                                             | After the commitment payments are complete, the number of payments the user commits to upon a renewal. On iOS this is always equal to commitmentPaymentsCount. |
+| **`commitmentInstallmentPeriod`**    | <code>string</code>                                             | Duration of each installment, specified in ISO 8601 format. For example, P1M equates to one month. iOS only. Undefined on Android.                             |
+| **`installmentBillingPrice`**        | <code>number</code>                                             | <a href="#price">Price</a> charged for each installment billing period. iOS only. Undefined on Android.                                                        |
+| **`installmentBillingPriceString`**  | <code>string</code>                                             | Formatted price charged for each installment billing period, including its currency sign. iOS only. Undefined on Android.                                      |
+| **`commitmentTotalPeriod`**          | <code>string</code>                                             | Total duration of the customer's installment commitment, specified in ISO 8601 format. iOS only. Undefined on Android.                                         |
+| **`commitmentTotalPrice`**           | <code>number</code>                                             | Total price the customer commits to paying across all installments. iOS only. Undefined on Android.                                                            |
+| **`commitmentTotalPriceString`**     | <code>string</code>                                             | Formatted total price the customer commits to paying across all installments, including its currency sign. iOS only. Undefined on Android.                     |
+| **`billingPlanType`**                | <code><a href="#billing_plan_type">BILLING_PLAN_TYPE</a></code> | The billing plan used for the installments. iOS only. Undefined on Android.                                                                                    |
 
 
 #### GetProductOptions
@@ -2119,6 +2128,15 @@ Listener used to receive log messages from the SDK.
 | **`FREE_TRIAL`**                   | <code>"FREE_TRIAL"</code>                   | Subscribers don't pay until the specified period ends                 |
 | **`SINGLE_PAYMENT`**               | <code>"SINGLE_PAYMENT"</code>               | Subscribers pay up front for a specified period                       |
 | **`DISCOUNTED_RECURRING_PAYMENT`** | <code>"DISCOUNTED_RECURRING_PAYMENT"</code> | Subscribers pay a discounted amount for a specified number of periods |
+
+
+#### BILLING_PLAN_TYPE
+
+| Members        | Value                   | Description                                            |
+| -------------- | ----------------------- | ------------------------------------------------------ |
+| **`UP_FRONT`** | <code>"UP_FRONT"</code> | The customer pays in full when purchasing the product. |
+| **`MONTHLY`**  | <code>"MONTHLY"</code>  | The customer pays in monthly installments.             |
+| **`UNKNOWN`**  | <code>"UNKNOWN"</code>  | Unable to determine the billing plan type.             |
 
 
 #### PRORATION_MODE
