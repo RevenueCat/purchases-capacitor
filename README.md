@@ -595,9 +595,9 @@ for subscriptions anytime a sync is needed, like after a successful purchase.
 syncObserverModeAmazonPurchase(options: SyncObserverModeAmazonPurchaseOptions) => Promise<void>
 ```
 
-| Param         | Type                                                                            |
-| ------------- | ------------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#syncamazonpurchaseoptions">SyncAmazonPurchaseOptions</a></code> |
+| Param         | Type                                                                                                    |
+| ------------- | ------------------------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#syncobservermodeamazonpurchaseoptions">SyncObserverModeAmazonPurchaseOptions</a></code> |
 
 --------------------
 
@@ -613,8 +613,7 @@ in Amazon observer mode or performing a client side migration of your current us
 
 The receipt IDs are cached if successfully posted, so they are not posted more than once.
 
-Passing `purchaseTime` in the options is highly recommended. Usages without it are deprecated and will be
-removed in future versions.
+`purchaseTime` is required and can be obtained from Amazon's PurchaseResponse &gt; Receipt &gt; purchaseTime.
 
 | Param         | Type                                                                            |
 | ------------- | ------------------------------------------------------------------------------- |
@@ -1403,13 +1402,13 @@ The EntitlementInfo object gives you access to all of the information about the 
 | **`identifier`**                   | <code>string</code>                                                 | The entitlement identifier configured in the RevenueCat dashboard                                                                                                                                                                                   |
 | **`isActive`**                     | <code>boolean</code>                                                | True if the user has access to this entitlement                                                                                                                                                                                                     |
 | **`willRenew`**                    | <code>boolean</code>                                                | True if the underlying subscription is set to renew at the end of the billing period (expirationDate).                                                                                                                                              |
-| **`periodType`**                   | <code>string</code>                                                 | The last period type this entitlement was in. Either: NORMAL, INTRO, TRIAL, PREPAID.                                                                                                                                                                |
+| **`periodType`**                   | <code><a href="#periodtype">PeriodType</a></code>                   | The last period type this entitlement was in. Either: NORMAL, INTRO, TRIAL, PREPAID.                                                                                                                                                                |
 | **`latestPurchaseDate`**           | <code>string</code>                                                 | The latest purchase or renewal date for the entitlement in ISO8601 format.                                                                                                                                                                          |
 | **`latestPurchaseDateMillis`**     | <code>number</code>                                                 | The latest purchase or renewal date for the entitlement in milliseconds.                                                                                                                                                                            |
 | **`originalPurchaseDate`**         | <code>string</code>                                                 | The first date this entitlement was purchased in ISO8601 format.                                                                                                                                                                                    |
 | **`originalPurchaseDateMillis`**   | <code>number</code>                                                 | The first date this entitlement was purchased in milliseconds.                                                                                                                                                                                      |
-| **`expirationDate`**               | <code>string \| null</code>                                         | The expiration date for the entitlement in ISO8601, can be `null` for lifetime access. If the `periodType` is `trial`, this is the trial expiration date.                                                                                           |
-| **`expirationDateMillis`**         | <code>number \| null</code>                                         | The expiration date for the entitlement in milliseconds, can be `null` for lifetime access. If the `periodType` is `trial`, this is the trial expiration date.                                                                                      |
+| **`expirationDate`**               | <code>string \| null</code>                                         | The expiration date for the entitlement in ISO8601, can be `null` for lifetime access. If the `periodType` is `TRIAL`, this is the trial expiration date.                                                                                           |
+| **`expirationDateMillis`**         | <code>number \| null</code>                                         | The expiration date for the entitlement in milliseconds, can be `null` for lifetime access. If the `periodType` is `TRIAL`, this is the trial expiration date.                                                                                      |
 | **`store`**                        | <code><a href="#store">Store</a></code>                             | The store where this entitlement was unlocked from.                                                                                                                                                                                                 |
 | **`productIdentifier`**            | <code>string</code>                                                 | The product identifier that unlocked this entitlement                                                                                                                                                                                               |
 | **`productPlanIdentifier`**        | <code>string \| null</code>                                         | The product plan identifier that unlocked this entitlement. Android subscriptions only, null on consumables and iOS.                                                                                                                                |
@@ -1786,16 +1785,27 @@ Holds the logIn result
 | **`created`**      | <code>boolean</code>                                  | True if the call resulted in a new user getting created in the RevenueCat backend. |
 
 
+#### SyncObserverModeAmazonPurchaseOptions
+
+| Prop                  | Type                        | Description                                                                     |
+| --------------------- | --------------------------- | ------------------------------------------------------------------------------- |
+| **`productID`**       | <code>string</code>         | Product ID associated to the purchase.                                          |
+| **`receiptID`**       | <code>string</code>         | ReceiptId that represents the Amazon purchase.                                  |
+| **`amazonUserID`**    | <code>string</code>         | Amazon's userID. This parameter will be ignored when syncing a Google purchase. |
+| **`isoCurrencyCode`** | <code>string \| null</code> | Product's currency code in ISO 4217 format.                                     |
+| **`price`**           | <code>number \| null</code> | Product's price.                                                                |
+
+
 #### SyncAmazonPurchaseOptions
 
-| Prop                  | Type                        | Description                                                                                                                                                                                                                                                                              |
-| --------------------- | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`productID`**       | <code>string</code>         | Product ID associated to the purchase.                                                                                                                                                                                                                                                   |
-| **`receiptID`**       | <code>string</code>         | ReceiptId that represents the Amazon purchase.                                                                                                                                                                                                                                           |
-| **`amazonUserID`**    | <code>string</code>         | Amazon's userID. This parameter will be ignored when syncing a Google purchase.                                                                                                                                                                                                          |
-| **`isoCurrencyCode`** | <code>string \| null</code> | Product's currency code in ISO 4217 format.                                                                                                                                                                                                                                              |
-| **`price`**           | <code>number \| null</code> | Product's price.                                                                                                                                                                                                                                                                         |
-| **`purchaseTime`**    | <code>number \| null</code> | Time the product was purchased, in milliseconds since the epoch. Can be obtained from Amazon's PurchaseResponse &gt; Receipt &gt; purchaseTime. Usage of this parameter is highly recommended and usages without it are deprecated and will be removed in future versions. Android only. |
+| Prop                  | Type                        | Description                                                                                                                                                   |
+| --------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`productID`**       | <code>string</code>         | Product ID associated to the purchase.                                                                                                                        |
+| **`receiptID`**       | <code>string</code>         | ReceiptId that represents the Amazon purchase.                                                                                                                |
+| **`amazonUserID`**    | <code>string</code>         | Amazon's userID. This parameter will be ignored when syncing a Google purchase.                                                                               |
+| **`isoCurrencyCode`** | <code>string \| null</code> | Product's currency code in ISO 4217 format.                                                                                                                   |
+| **`price`**           | <code>number \| null</code> | Product's price.                                                                                                                                              |
+| **`purchaseTime`**    | <code>number</code>         | Time the product was purchased, in milliseconds since the epoch. Can be obtained from Amazon's PurchaseResponse &gt; Receipt &gt; purchaseTime. Android only. |
 
 
 #### IntroEligibility
@@ -1913,6 +1923,13 @@ The result of a redemption attempt.
 <code>{ result: <a href="#webpurchaseredemptionresulttype">WebPurchaseRedemptionResultType.SUCCESS</a>; customerInfo: <a href="#customerinfo">CustomerInfo</a>; } | { result: <a href="#webpurchaseredemptionresulttype">WebPurchaseRedemptionResultType.ERROR</a>; error: <a href="#purchaseserror">PurchasesError</a>; } | { result: <a href="#webpurchaseredemptionresulttype">WebPurchaseRedemptionResultType.PURCHASE_BELONGS_TO_OTHER_USER</a>; } | { result: <a href="#webpurchaseredemptionresulttype">WebPurchaseRedemptionResultType.INVALID_TOKEN</a>; } | { result: <a href="#webpurchaseredemptionresulttype">WebPurchaseRedemptionResultType.EXPIRED</a>; obfuscatedEmail: string; }</code>
 
 
+#### PeriodType
+
+The supported period types for an entitlement.
+
+<code>"NORMAL" | "INTRO" | "TRIAL" | "PREPAID"</code>
+
+
 #### Store
 
 The supported stores for purchases.
@@ -1925,13 +1942,6 @@ The supported stores for purchases.
 The supported ownership types for an entitlement.
 
 <code>"PURCHASED" | "FAMILY_SHARED" | "UNKNOWN"</code>
-
-
-#### PeriodType
-
-The supported period types for an entitlement.
-
-<code>"NORMAL" | "INTRO" | "TRIAL" | "PREPAID"</code>
 
 
 #### CustomerInfoUpdateListener
@@ -1958,11 +1968,6 @@ Result of a successful purchase
 Listener used to receive log messages from the SDK.
 
 <code>(logLevel: <a href="#log_level">LOG_LEVEL</a>, message: string): void</code>
-
-
-#### SyncObserverModeAmazonPurchaseOptions
-
-<code><a href="#syncamazonpurchaseoptions">SyncAmazonPurchaseOptions</a></code>
 
 
 ### Enums
