@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   macos: circleci/macos@2.3.6
   android: circleci/android@3.0.2
-  revenuecat: revenuecat/sdks-common-config@4.6.2
+  revenuecat: revenuecat/sdks-common-config@4.7.0
 
 aliases:
   base-mac-job: &base-mac-job
@@ -260,7 +260,7 @@ jobs:
 
   run-api-tests:
     docker:
-      - image: cimg/ruby:3.2.0
+      - image: cimg/ruby:3.3.0
     steps:
       - checkout
       - yarn-dependencies-unix
@@ -271,7 +271,7 @@ jobs:
 
   run-unit-tests:
     docker:
-      - image: cimg/ruby:3.2.0
+      - image: cimg/ruby:3.3.0
     steps:
       - checkout
       - yarn-dependencies-unix
@@ -281,7 +281,7 @@ jobs:
 
   run-lint:
     docker:
-      - image: cimg/ruby:3.2.0
+      - image: cimg/ruby:3.3.0
     steps:
       - checkout
       - yarn-dependencies-unix
@@ -397,7 +397,7 @@ jobs:
     description: >
       Runs automatic bump
     docker:
-      - image: cimg/ruby:3.2.0
+      - image: cimg/ruby:3.3.0
     shell: /bin/bash --login -o pipefail
     steps:
       - checkout
@@ -415,7 +415,7 @@ jobs:
   check-api-changes:
     description: "Check for unexpected API changes in purchases-capacitor and purchases-capacitor-ui"
     docker:
-      - image: cimg/ruby:3.2.0
+      - image: cimg/ruby:3.3.0
     steps:
       - checkout
       - yarn-dependencies-unix
@@ -438,7 +438,7 @@ jobs:
   run-api-tests-ui:
     description: "Run API tests for purchases-capacitor-ui package"
     docker:
-      - image: cimg/ruby:3.2.0
+      - image: cimg/ruby:3.3.0
     steps:
       - checkout
       - yarn-dependencies-unix
@@ -451,7 +451,7 @@ jobs:
   run-lint-ui:
     description: "Run linting for purchases-capacitor-ui package"
     docker:
-      - image: cimg/ruby:3.2.0
+      - image: cimg/ruby:3.3.0
     steps:
       - checkout
       - yarn-dependencies-unix
@@ -464,7 +464,7 @@ jobs:
   dry-run-release-ui:
     description: "Validate purchases-capacitor-ui package can be published"
     docker:
-      - image: cimg/ruby:3.2.0
+      - image: cimg/ruby:3.3.0
     steps:
       - checkout
       - revenuecat/install-mise-tools:
