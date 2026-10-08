@@ -1,13 +1,10 @@
-## RevenueCat SDK
-### 📦 Dependency Updates
-* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 17.25.0 (#633) via RevenueCat Git Bot (@RCGitBot)
-  * [Android 9.18.0](https://github.com/RevenueCat/purchases-android/releases/tag/9.18.0)
-  * [Android 9.17.1](https://github.com/RevenueCat/purchases-android/releases/tag/9.17.1)
-  * [Android 9.17.0](https://github.com/RevenueCat/purchases-android/releases/tag/9.17.0)
-  * [Android 9.16.0](https://github.com/RevenueCat/purchases-android/releases/tag/9.16.0)
-  * [iOS 5.51.1](https://github.com/RevenueCat/purchases-ios/releases/tag/5.51.1)
-  * [iOS 5.51.0](https://github.com/RevenueCat/purchases-ios/releases/tag/5.51.0)
+> [!WARNING]
+> This release fixes a bug where device identifiers (`$idfa`, `$idfv`, `$ip`, `$deviceVersion`) were collected on iOS when setting an attribution ID, even with `automaticDeviceIdentifierCollectionEnabled` set to `false`. Identifiers already collected are not cleared automatically; the app must clear them.
 
-### 🔄 Other Changes
-* Bump fastlane-plugin-revenuecat_internal from `76a3a08` to `e6454e3` (#634) via dependabot[bot] (@dependabot[bot])
-* Bump fastlane from 2.229.1 to 2.230.0 (#631) via dependabot[bot] (@dependabot[bot])
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Fix iOS ignoring `automaticDeviceIdentifierCollectionEnabled` in `configure` (RevenueCat/purchases-hybrid-common#1956) via Álvaro Brey (@AlvaroBrey)
+### 📦 Dependency Updates
+* Updates purchases-hybrid-common to 17.55.2 (#955) via Álvaro Brey (@AlvaroBrey)
+  * [Android 9.29.0](https://github.com/RevenueCat/purchases-android/releases/tag/9.29.0)
+  * [iOS 5.67.1](https://github.com/RevenueCat/purchases-ios/releases/tag/5.67.1)
