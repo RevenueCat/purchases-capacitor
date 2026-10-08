@@ -11,6 +11,7 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   testMatch: ['<rootDir>/__tests__/**/*.test.ts'],
+  modulePathIgnorePatterns: ['<rootDir>/build/'],
   transform: {
     '^.+\\.(ts|js)$': ['ts-jest', { tsconfig }],
   },

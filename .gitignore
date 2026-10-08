@@ -65,6 +65,7 @@ captures
 
 # Lock files
 package-lock.json
+!e2e-tests/SDKUpdateTester/package-lock.json
 yarn.lock
 !/yarn.lock
 !/purchases-capacitor-ui/yarn.lock
@@ -72,6 +73,8 @@ yarn.lock
 # fastlane
 report.xml
 fastlane/.env
+fastlane/test_output/
+/.bundle/
 
 # CI dependencies
 vendor
