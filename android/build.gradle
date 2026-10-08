@@ -58,7 +58,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':capacitor-android')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
-    implementation 'com.revenuecat.purchases:purchases-hybrid-common:19.9.0'
+    implementation 'com.revenuecat.purchases:purchases-hybrid-common:19.10.0'
     testImplementation "junit:junit:$junitVersion"
     testImplementation 'io.mockk:mockk:1.13.16'
     testImplementation 'org.json:json:20240303'
