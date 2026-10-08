@@ -118,11 +118,13 @@ desc "Creates GitHub release and publishes package"
 lane :release do |options|
   version_number = current_version_number
   is_prerelease = Gem::Version.new(version_number).prerelease?
+  is_hotfix = !is_prerelease && hotfix?('@revenuecat/purchases-capacitor')
 
   args = [
     'npm',
     'publish',
-    is_prerelease ? '--tag next' : nil
+    is_prerelease ? '--tag next' : nil,
+    is_hotfix ? '--tag hotfix' : nil
   ].compact
 
   Dir.chdir(get_root_folder) do
@@ -135,11 +137,12 @@ desc "Create purchases-capacitor-ui release"
 lane :release_purchases_capacitor_ui do |options|
   version_number = current_version_number
   is_prerelease = Gem::Version.new(version_number).prerelease?
+  is_hotfix = !is_prerelease && hotfix?('@revenuecat/purchases-capacitor-ui')
   dry_run = options[:dry_run] || false
 
   # First do a dry run to validate the package
   Dir.chdir(File.expand_path('purchases-capacitor-ui', get_root_folder)) do
-    sh('npm', 'publish', '--dry-run')
+    sh(['npm', 'publish', '--dry-run', is_hotfix ? '--tag hotfix' : nil].compact)
   end
 
   if dry_run
@@ -156,7 +159,8 @@ lane :release_purchases_capacitor_ui do |options|
   args = [
     'npm',
     'publish',
-    is_prerelease ? '--tag next' : nil
+    is_prerelease ? '--tag next' : nil,
+    is_hotfix ? '--tag hotfix' : nil
   ].compact
 
   Dir.chdir(File.expand_path('purchases-capacitor-ui', get_root_folder)) do
@@ -262,6 +266,11 @@ end
 
 def get_root_folder
   return File.expand_path('../../', __FILE__)
+end
+
+def hotfix?(package_name)
+  last_published_version = sh('npm', 'view', package_name, 'version').strip
+  Gem::Version.new(current_version_number) < Gem::Version.new(last_published_version)
 end
 
 def current_version_number
