@@ -82,16 +82,16 @@ function checkPaywallListener(listener: PaywallListener) {
   const onPurchaseStarted: ((args: { packageBeingPurchased: PurchasesPackage }) => void) | undefined =
     listener.onPurchaseStarted;
   const onPurchaseCompleted:
-    | ((args: { customerInfo: CustomerInfo; storeTransaction: PurchasesStoreTransaction }) => void)
-    | undefined = listener.onPurchaseCompleted;
+    ((args: { customerInfo: CustomerInfo; storeTransaction: PurchasesStoreTransaction }) => void) | undefined =
+    listener.onPurchaseCompleted;
   const onPurchaseError: ((args: { error: PurchasesError }) => void) | undefined = listener.onPurchaseError;
   const onPurchaseCancelled: (() => void) | undefined = listener.onPurchaseCancelled;
   const onRestoreStarted: (() => void) | undefined = listener.onRestoreStarted;
   const onRestoreCompleted: ((args: { customerInfo: CustomerInfo }) => void) | undefined = listener.onRestoreCompleted;
   const onRestoreError: ((args: { error: PurchasesError }) => void) | undefined = listener.onRestoreError;
   const onPurchaseInitiated:
-    | ((args: { packageBeingPurchased: PurchasesPackage; resumable: PurchaseResumable }) => void)
-    | undefined = listener.onPurchaseInitiated;
+    ((args: { packageBeingPurchased: PurchasesPackage; resumable: PurchaseResumable }) => void) | undefined =
+    listener.onPurchaseInitiated;
 }
 
 function checkPurchaseResumable(resumable: PurchaseResumable) {
