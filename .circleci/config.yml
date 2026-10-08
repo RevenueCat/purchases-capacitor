@@ -258,7 +258,7 @@ jobs:
           command: cd purchases-capacitor-ui && npm run build
       - run:
           name: Dry run UI package release
-          command: cd purchases-capacitor-ui && npm publish --dry-run
+          command: bundle exec fastlane release_purchases_capacitor_ui dry_run:true
 
   make-release-ui:
     description: "Publishes the UI package to npm"
