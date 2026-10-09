@@ -373,7 +373,8 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
       await refreshCustomerInfo();
       updateLastFunction(functionName, purchaseResult);
     } catch (err) {
-      updateLastFunction(functionName, JSON.stringify(err));
+      // Error.message is non-enumerable, so add it explicitly before stringifying
+      updateLastFunction(functionName, err instanceof Error ? { ...err, message: err.message } : String(err));
     }
   };
 
@@ -1297,25 +1298,11 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
                   {aPackage.product.installmentsInfo && (
                     <>
                       <h3>InstallmentsInfo</h3>
-                      <p>commitmentPaymentsCount: {String(aPackage.product.installmentsInfo.commitmentPaymentsCount)}</p>
-                      <p>
-                        renewalCommitmentPaymentsCount:{' '}
-                        {String(aPackage.product.installmentsInfo.renewalCommitmentPaymentsCount)}
-                      </p>
-                      <p>
-                        commitmentInstallmentPeriod: {String(aPackage.product.installmentsInfo.commitmentInstallmentPeriod)}
-                      </p>
-                      <p>installmentBillingPrice: {String(aPackage.product.installmentsInfo.installmentBillingPrice)}</p>
-                      <p>
-                        installmentBillingPriceString:{' '}
-                        {String(aPackage.product.installmentsInfo.installmentBillingPriceString)}
-                      </p>
-                      <p>commitmentTotalPeriod: {String(aPackage.product.installmentsInfo.commitmentTotalPeriod)}</p>
-                      <p>commitmentTotalPrice: {String(aPackage.product.installmentsInfo.commitmentTotalPrice)}</p>
-                      <p>
-                        commitmentTotalPriceString: {String(aPackage.product.installmentsInfo.commitmentTotalPriceString)}
-                      </p>
-                      <p>billingPlanType: {String(aPackage.product.installmentsInfo.billingPlanType)}</p>
+                      {Object.entries(aPackage.product.installmentsInfo).map(([key, value]) => (
+                        <p key={key}>
+                          {key}: {String(value)}
+                        </p>
+                      ))}
                     </>
                   )}
                 </IonLabel>
