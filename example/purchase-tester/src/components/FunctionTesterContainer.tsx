@@ -1297,17 +1297,25 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
                   {aPackage.product.installmentsInfo && (
                     <>
                       <h3>InstallmentsInfo</h3>
-                      <p>Commitment payments: {aPackage.product.installmentsInfo.commitmentPaymentsCount}</p>
-                      <p>Renewal commitment payments: {aPackage.product.installmentsInfo.renewalCommitmentPaymentsCount}</p>
-                      <p>Billing plan: {aPackage.product.installmentsInfo.billingPlanType}</p>
+                      <p>commitmentPaymentsCount: {String(aPackage.product.installmentsInfo.commitmentPaymentsCount)}</p>
                       <p>
-                        Installment: {aPackage.product.installmentsInfo.installmentBillingPriceString} every{' '}
-                        {aPackage.product.installmentsInfo.commitmentInstallmentPeriod}
+                        renewalCommitmentPaymentsCount:{' '}
+                        {String(aPackage.product.installmentsInfo.renewalCommitmentPaymentsCount)}
                       </p>
                       <p>
-                        Total: {aPackage.product.installmentsInfo.commitmentTotalPriceString} over{' '}
-                        {aPackage.product.installmentsInfo.commitmentTotalPeriod}
+                        commitmentInstallmentPeriod: {String(aPackage.product.installmentsInfo.commitmentInstallmentPeriod)}
                       </p>
+                      <p>installmentBillingPrice: {String(aPackage.product.installmentsInfo.installmentBillingPrice)}</p>
+                      <p>
+                        installmentBillingPriceString:{' '}
+                        {String(aPackage.product.installmentsInfo.installmentBillingPriceString)}
+                      </p>
+                      <p>commitmentTotalPeriod: {String(aPackage.product.installmentsInfo.commitmentTotalPeriod)}</p>
+                      <p>commitmentTotalPrice: {String(aPackage.product.installmentsInfo.commitmentTotalPrice)}</p>
+                      <p>
+                        commitmentTotalPriceString: {String(aPackage.product.installmentsInfo.commitmentTotalPriceString)}
+                      </p>
+                      <p>billingPlanType: {String(aPackage.product.installmentsInfo.billingPlanType)}</p>
                     </>
                   )}
                 </IonLabel>
