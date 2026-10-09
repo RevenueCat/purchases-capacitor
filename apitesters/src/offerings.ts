@@ -22,6 +22,7 @@ import type {
   SubscriptionOption,
   UpgradeInfo,
   InstallmentsInfo,
+  BILLING_PLAN_TYPE,
   GoogleProductChangeInfo,
   PurchasesWinBackOffer,
   PurchasesVirtualCurrency,
@@ -54,6 +55,7 @@ function checkProduct(product: PurchasesStoreProduct) {
   const presentedOfferingIdentifier: string | null = product.presentedOfferingIdentifier;
   const presentedOfferingContext: PresentedOfferingContext | null = product.presentedOfferingContext;
   const productType: PRODUCT_TYPE = product.productType;
+  const installmentsInfo: InstallmentsInfo | null = product.installmentsInfo;
 }
 
 function checkDiscount(discount: PurchasesStoreProductDiscount) {
@@ -137,6 +139,13 @@ function checkSubscriptionOption(option: SubscriptionOption) {
 function checkInstallmentsInfo(installmentsInfo: InstallmentsInfo) {
   const commitmentPaymentsCount: number = installmentsInfo.commitmentPaymentsCount;
   const renewalCommitmentPaymentsCount: number = installmentsInfo.renewalCommitmentPaymentsCount;
+  const commitmentInstallmentPeriod: string | null = installmentsInfo.commitmentInstallmentPeriod;
+  const installmentBillingPrice: number | null = installmentsInfo.installmentBillingPrice;
+  const installmentBillingPriceString: string | null = installmentsInfo.installmentBillingPriceString;
+  const commitmentTotalPeriod: string | null = installmentsInfo.commitmentTotalPeriod;
+  const commitmentTotalPrice: number | null = installmentsInfo.commitmentTotalPrice;
+  const commitmentTotalPriceString: string | null = installmentsInfo.commitmentTotalPriceString;
+  const billingPlanType: BILLING_PLAN_TYPE | null = installmentsInfo.billingPlanType;
 }
 
 function checkPricingPhase(pricePhase: PricingPhase) {

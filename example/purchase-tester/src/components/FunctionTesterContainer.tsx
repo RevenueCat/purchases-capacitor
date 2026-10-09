@@ -11,6 +11,7 @@ import {
   IonLabel,
   IonSelect,
   IonSelectOption,
+  useIonActionSheet,
 } from '@ionic/react';
 import React, {useEffect, useState} from 'react';
 import {
@@ -46,6 +47,8 @@ type CustomerInfoWithActiveSubscriptions = {
 };
 
 const FunctionTesterContainer: React.FC<ContainerProps> = () => {
+  const [presentActionSheet] = useIonActionSheet();
+
   useEffect(() => {
     (async function () {
       await Purchases.setMockWebResults({ shouldMockWebResults: true });
@@ -359,6 +362,31 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
     });
     await refreshCustomerInfo();
     updateLastFunction('purchasePackage', purchaseResult);
+  };
+
+  const purchaseFromOfferingDisplay = async (aPackage: PurchasesPackage, purchaseType: 'package' | 'product') => {
+    const functionName = purchaseType === 'package' ? 'purchasePackage' : 'purchaseStoreProduct';
+    try {
+      const purchaseResult = purchaseType === 'package'
+        ? await Purchases.purchasePackage({ aPackage })
+        : await Purchases.purchaseStoreProduct({ product: aPackage.product });
+      await refreshCustomerInfo();
+      updateLastFunction(functionName, purchaseResult);
+    } catch (err) {
+      // Error.message is non-enumerable, so add it explicitly before stringifying
+      updateLastFunction(functionName, err instanceof Error ? { ...err, message: err.message } : String(err));
+    }
+  };
+
+  const showPurchaseOptions = (aPackage: PurchasesPackage) => {
+    void presentActionSheet({
+      header: `Purchase ${aPackage.product.identifier}`,
+      buttons: [
+        { text: 'Purchase as package', handler: () => { void purchaseFromOfferingDisplay(aPackage, 'package'); } },
+        { text: 'Purchase as product', handler: () => { void purchaseFromOfferingDisplay(aPackage, 'product'); } },
+        { text: 'Cancel', role: 'cancel' },
+      ],
+    });
   };
 
   const getProductChangeTargetPackage = async (): Promise<PurchasesPackage | null> => {
@@ -1259,6 +1287,27 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
                 ))}
               </IonSelect>
             </IonItem>
+            {productChangeTargetPackages.map((aPackage) => (
+              <IonItem key={aPackage.identifier} button onClick={() => showPurchaseOptions(aPackage)}>
+                <IonLabel className="ion-text-wrap">
+                  <h2>{aPackage.product.title}</h2>
+                  <p>{aPackage.product.priceString}</p>
+                  <p>{aPackage.product.identifier}</p>
+                  <p>{aPackage.product.subscriptionPeriod}</p>
+                  <p>{aPackage.packageType}</p>
+                  {aPackage.product.installmentsInfo && (
+                    <>
+                      <h3>InstallmentsInfo</h3>
+                      {Object.entries(aPackage.product.installmentsInfo).map(([key, value]) => (
+                        <p key={key}>
+                          {key}: {String(value)}
+                        </p>
+                      ))}
+                    </>
+                  )}
+                </IonLabel>
+              </IonItem>
+            ))}
           </IonCardContent>
         </IonCard>
         <IonButton size="small" onClick={configure}>
