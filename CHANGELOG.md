@@ -1,3 +1,35 @@
+## 13.7.3
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 19.10.0 (#958) via RevenueCat Git Bot (@RCGitBot)
+  * [iOS 5.94.0](https://github.com/RevenueCat/purchases-ios/releases/tag/5.94.0)
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 19.9.0 (#956) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump CI to Ruby 3.3 (#953) via Josh Holtz (@joshdholtz)
+
+## 13.7.2
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Fix iOS ignoring `automaticDeviceIdentifierCollectionEnabled` in `configure` (RevenueCat/purchases-hybrid-common#1956) via Álvaro Brey (@AlvaroBrey)
+### 📦 Dependency Updates
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 19.8.0 (#949) via RevenueCat Git Bot (@RCGitBot)
+  * [Android 10.26.0](https://github.com/RevenueCat/purchases-android/releases/tag/10.26.0)
+  * [Android 10.25.0](https://github.com/RevenueCat/purchases-android/releases/tag/10.25.0)
+  * [Android 10.24.2](https://github.com/RevenueCat/purchases-android/releases/tag/10.24.2)
+  * [iOS 5.93.0](https://github.com/RevenueCat/purchases-ios/releases/tag/5.93.0)
+
+## 13.7.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Replay latest customer info to new Android listeners (#946) via Antonio Pallares (@ajpallares)
+### 📦 Dependency Updates
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 19.6.0 (#944) via RevenueCat Git Bot (@RCGitBot)
+  * [Android 10.24.1](https://github.com/RevenueCat/purchases-android/releases/tag/10.24.1)
+
+### 🔄 Other Changes
+* chore(deps): bump fastlane-plugin-revenuecat_internal from `9f7a03e` to `4c49d48` (#947) via dependabot[bot] (@dependabot[bot])
+
 ## 13.7.0
 ## RevenueCat SDK
 ### ✨ New Features
