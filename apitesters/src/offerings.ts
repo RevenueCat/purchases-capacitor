@@ -139,13 +139,13 @@ function checkSubscriptionOption(option: SubscriptionOption) {
 function checkInstallmentsInfo(installmentsInfo: InstallmentsInfo) {
   const commitmentPaymentsCount: number = installmentsInfo.commitmentPaymentsCount;
   const renewalCommitmentPaymentsCount: number = installmentsInfo.renewalCommitmentPaymentsCount;
-  const commitmentInstallmentPeriod: string | undefined = installmentsInfo.commitmentInstallmentPeriod;
-  const installmentBillingPrice: number | undefined = installmentsInfo.installmentBillingPrice;
-  const installmentBillingPriceString: string | undefined = installmentsInfo.installmentBillingPriceString;
-  const commitmentTotalPeriod: string | undefined = installmentsInfo.commitmentTotalPeriod;
-  const commitmentTotalPrice: number | undefined = installmentsInfo.commitmentTotalPrice;
-  const commitmentTotalPriceString: string | undefined = installmentsInfo.commitmentTotalPriceString;
-  const billingPlanType: BILLING_PLAN_TYPE | undefined = installmentsInfo.billingPlanType;
+  const commitmentInstallmentPeriod: string | null = installmentsInfo.commitmentInstallmentPeriod;
+  const installmentBillingPrice: number | null = installmentsInfo.installmentBillingPrice;
+  const installmentBillingPriceString: string | null = installmentsInfo.installmentBillingPriceString;
+  const commitmentTotalPeriod: string | null = installmentsInfo.commitmentTotalPeriod;
+  const commitmentTotalPrice: number | null = installmentsInfo.commitmentTotalPrice;
+  const commitmentTotalPriceString: string | null = installmentsInfo.commitmentTotalPriceString;
+  const billingPlanType: BILLING_PLAN_TYPE | null = installmentsInfo.billingPlanType;
 }
 
 function checkPricingPhase(pricePhase: PricingPhase) {
