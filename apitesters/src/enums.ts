@@ -1,5 +1,6 @@
 import {
   BILLING_FEATURE,
+  BILLING_PLAN_TYPE,
   INTRO_ELIGIBILITY_STATUS,
   PACKAGE_TYPE,
   PRODUCT_CATEGORY,
@@ -230,6 +231,17 @@ function checkProductType(type: PRODUCT_TYPE): boolean {
     case PRODUCT_TYPE.PREPAID_SUBSCRIPTION:
       return true;
     case PRODUCT_TYPE.UNKNOWN:
+      return true;
+  }
+}
+
+function checkBillingPlanType(type: BILLING_PLAN_TYPE): boolean {
+  switch (type) {
+    case BILLING_PLAN_TYPE.UP_FRONT:
+      return true;
+    case BILLING_PLAN_TYPE.MONTHLY:
+      return true;
+    case BILLING_PLAN_TYPE.UNKNOWN:
       return true;
   }
 }
