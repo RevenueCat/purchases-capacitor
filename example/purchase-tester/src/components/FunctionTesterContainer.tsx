@@ -78,15 +78,14 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
   const [activeSubscriptionIdentifiers, setActiveSubscriptionIdentifiers] = useState<string[]>([]);
   const resolvedCustomVariables = Object.keys(customVariables).length > 0 ? customVariables : undefined;
 
-  const selectedOfferingForProductChange = availableOfferings.find(
+  const selectedOffering = availableOfferings.find(
     offering => offering.identifier === (selectedOfferingIdentifier || currentOfferingIdentifier),
   );
-  const productChangeTargetPackages =
-    selectedOfferingForProductChange?.availablePackages ?? [];
+  const selectedOfferingPackages = selectedOffering?.availablePackages ?? [];
   const selectedProductChangeTargetPackage =
-    productChangeTargetPackages.find(
+    selectedOfferingPackages.find(
       aPackage => aPackage.identifier === productChangeTargetPackageIdentifier,
-    ) ?? productChangeTargetPackages[0] ?? null;
+    ) ?? selectedOfferingPackages[0] ?? null;
   const productChangeSubscriptionOptions =
     selectedProductChangeTargetPackage?.product.subscriptionOptions ?? [];
 
@@ -1287,7 +1286,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
                 ))}
               </IonSelect>
             </IonItem>
-            {productChangeTargetPackages.map((aPackage) => (
+            {selectedOfferingPackages.map((aPackage) => (
               <IonItem key={aPackage.identifier} button onClick={() => showPurchaseOptions(aPackage)}>
                 <IonLabel className="ion-text-wrap">
                   <h2>{aPackage.product.title}</h2>
@@ -1570,7 +1569,7 @@ const FunctionTesterContainer: React.FC<ContainerProps> = () => {
                 placeholder="First package"
                 onIonChange={(event) => setProductChangeTargetPackageIdentifier(event.detail.value ?? '')}
               >
-                {productChangeTargetPackages.map((aPackage) => (
+                {selectedOfferingPackages.map((aPackage) => (
                   <IonSelectOption key={aPackage.identifier} value={aPackage.identifier}>
                     {`${aPackage.identifier} (${aPackage.product.identifier})`}
                   </IonSelectOption>
