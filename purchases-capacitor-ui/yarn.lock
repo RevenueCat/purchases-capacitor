@@ -336,10 +336,10 @@
   dependencies:
     "@tybys/wasm-util" "^0.10.3"
 
-"@revenuecat/purchases-typescript-internal-esm@19.11.0":
-  version "19.11.0"
-  resolved "https://registry.yarnpkg.com/@revenuecat/purchases-typescript-internal-esm/-/purchases-typescript-internal-esm-19.11.0.tgz#61ef5b3ccbf380f8ababf74bb7deb0406709c3c8"
-  integrity sha512-6TL5qYBlwQv8Q7HbH8aPYKachUALWEXp+TaRuvSdNTSM1k68tRlJlJb9uu3o/xTwXc/Av8kh8RsqqfSk8H+RmQ==
+"@revenuecat/purchases-typescript-internal-esm@19.12.0":
+  version "19.12.0"
+  resolved "https://registry.yarnpkg.com/@revenuecat/purchases-typescript-internal-esm/-/purchases-typescript-internal-esm-19.12.0.tgz#f334152bfc5688c4c4625d75e89e8ec9d59c9262"
+  integrity sha512-Hsuo4ACBK2CLRS59OiU8YxnO2IFqjgQ+7ZGIO8U4+VHQ3hWSmWWoHGcfTeMfL7jqUPLQoqLiQCZ1H30iQpzijQ==
 
 "@rollup/rollup-android-arm-eabi@4.62.2":
   version "4.62.2"
