@@ -743,8 +743,8 @@
     "@tybys/wasm-util" "^0.10.3"
 
 "@revenuecat/purchases-typescript-internal-esm@file:./phc-20.0-dev/purchases-typescript-internal-esm.tgz":
-  version "19.4.0"
-  resolved "file:./phc-20.0-dev/purchases-typescript-internal-esm.tgz#182623130f1e0717ef841282958bb89c6fcd561a"
+  version "19.11.0"
+  resolved "file:./phc-20.0-dev/purchases-typescript-internal-esm.tgz#7d9b0b9d3640e3e54bbd727c5bac180fae23be75"
 
 "@rollup/plugin-node-resolve@^16.0.1":
   version "16.0.3"
