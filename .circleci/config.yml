@@ -565,8 +565,10 @@ workflows:
             - verify-android-agp9-legacy-kotlin
           <<: *release-branches
       - make-release:
+          context: npm-publishing
           <<: *release-tags
       - make-release-ui:
+          context: npm-publishing
           requires:
             - make-release
           <<: *release-tags
