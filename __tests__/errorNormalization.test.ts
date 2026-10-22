@@ -20,6 +20,7 @@ nativeLogIn.toString = () => 'logIn() { [capacitor code] }';
 Object.defineProperty(nativeLogIn, 'name', { value: 'logIn' });
 
 const trackCustomPaywallImpression = jest.fn(() => Promise.resolve());
+const redeemWebPurchase = jest.fn();
 
 jest.mock('@capacitor/core', () => ({
   registerPlugin: () => ({
@@ -27,6 +28,7 @@ jest.mock('@capacitor/core', () => ({
     getCustomerInfo: () => Promise.resolve({ activeSubscriptions: [] }),
     addListener: () => Object.assign(Promise.resolve({ remove: removeListener }), { remove: removeListener }),
     trackCustomPaywallImpression,
+    redeemWebPurchase,
   }),
 }));
 
@@ -110,5 +112,39 @@ describe('errors surfaced by the Purchases plugin', () => {
     };
 
     expect(returned.remove).toBe(removeListener);
+  });
+});
+
+describe('errors delivered in a resolved web redemption result', () => {
+  const webPurchaseRedemption = { redemptionLink: 'https://pay.rev.cat/redeem/abc' };
+
+  it('match the PurchasesError interface', async () => {
+    redeemWebPurchase.mockResolvedValueOnce({
+      result: 'ERROR',
+      error: {
+        code: 1,
+        message: 'Purchase was cancelled.',
+        readableErrorCode: 'PURCHASE_CANCELLED',
+        underlyingErrorMessage: '',
+      },
+    });
+
+    const result = await Purchases.redeemWebPurchase({ webPurchaseRedemption });
+
+    const error: PurchasesError = result.error;
+    expect(error.code).toBe('1');
+    expect(error.userInfo.readableErrorCode).toBe('PURCHASE_CANCELLED');
+    expect(error.readableErrorCode).toBe('PURCHASE_CANCELLED');
+    expect(error.message).toBe('Purchase was cancelled.');
+    expect(error.userCancelled).toBe(true);
+  });
+
+  it('leave results without an error alone', async () => {
+    redeemWebPurchase.mockResolvedValueOnce({ result: 'EXPIRED', obfuscatedEmail: 'a***@example.com' });
+
+    await expect(Purchases.redeemWebPurchase({ webPurchaseRedemption })).resolves.toEqual({
+      result: 'EXPIRED',
+      obfuscatedEmail: 'a***@example.com',
+    });
   });
 });

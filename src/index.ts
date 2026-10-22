@@ -27,6 +27,16 @@ function normalizeRejection(result: unknown): unknown {
   return normalized;
 }
 
+function normalizeRedemptionError(result: unknown): unknown {
+  if (!(result instanceof Promise)) {
+    return result;
+  }
+  return result.then((redemption: { error?: unknown } | undefined) => {
+    normalizePurchasesError(redemption?.error);
+    return redemption;
+  });
+}
+
 function getNativeTrackCustomPaywallImpressionOptions(
   options?: TrackCustomPaywallImpressionOptions,
 ): NativeTrackCustomPaywallImpressionOptions {
@@ -66,7 +76,10 @@ const Purchases = new Proxy(nativePlugin, {
     // An apply trap keeps whatever Capacitor puts on the method it hands back, such as
     // the `name` and `toString` that logs and crash reports read.
     return new Proxy(value as (...callArgs: unknown[]) => unknown, {
-      apply: (method, _thisArg, args) => normalizeRejection(Reflect.apply(method, target, toNativeArgs(prop, args))),
+      apply: (method, _thisArg, args) => {
+        const result = normalizeRejection(Reflect.apply(method, target, toNativeArgs(prop, args)));
+        return prop === 'redeemWebPurchase' ? normalizeRedemptionError(result) : result;
+      },
     });
   },
 }) as PurchasesPlugin;
