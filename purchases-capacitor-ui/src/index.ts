@@ -1,5 +1,7 @@
 import { registerPlugin } from '@capacitor/core';
 import type { PluginListenerHandle } from '@capacitor/core';
+import { normalizePurchasesError } from '@revenuecat/purchases-typescript-internal-esm';
+import type { PurchasesError } from '@revenuecat/purchases-typescript-internal-esm';
 
 import type {
   PaywallListener,
@@ -147,7 +149,7 @@ async function presentWithListenerSupport(
         const cb = listener.onPurchaseError;
         handles.push(
           await nativePlugin.addListener('onPurchaseError', (data: any) => {
-            cb({ error: data.error ?? data });
+            cb({ error: normalizePurchasesError(data.error ?? data) as PurchasesError });
           }),
         );
       }
@@ -179,7 +181,7 @@ async function presentWithListenerSupport(
         const cb = listener.onRestoreError;
         handles.push(
           await nativePlugin.addListener('onRestoreError', (data: any) => {
-            cb({ error: data.error ?? data });
+            cb({ error: normalizePurchasesError(data.error ?? data) as PurchasesError });
           }),
         );
       }
