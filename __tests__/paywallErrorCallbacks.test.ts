@@ -1,8 +1,7 @@
 type Listener = (data: unknown) => void;
 const listeners = new Map<string, Listener>();
 
-// purchases-capacitor-ui resolves its own copy of @capacitor/core
-jest.mock('../purchases-capacitor-ui/node_modules/@capacitor/core', () => ({
+jest.doMock(require.resolve('@capacitor/core', { paths: [`${__dirname}/../purchases-capacitor-ui`] }), () => ({
   registerPlugin: () => ({
     addListener: (eventName: string, listener: Listener) => {
       listeners.set(eventName, listener);
