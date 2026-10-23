@@ -240,12 +240,11 @@ private class PaywallDelegateAdapter: NSObject, PaywallViewControllerDelegateWra
 
     func paywallViewController(_ controller: PaywallViewController,
                                 didFinishPurchasingWith customerInfoDictionary: [String: Any],
-                                transaction transactionDictionary: [String: Any]?) {
-        var data: [String: Any] = ["customerInfo": customerInfoDictionary]
-        if let transactionDictionary = transactionDictionary {
-            data["storeTransaction"] = transactionDictionary
-        }
-        plugin?.notifyListeners("onPurchaseCompleted", data: data)
+                                transaction transactionDictionary: [String: Any]) {
+        plugin?.notifyListeners("onPurchaseCompleted", data: [
+            "customerInfo": customerInfoDictionary,
+            "storeTransaction": transactionDictionary
+        ])
     }
 
     func paywallViewController(_ controller: PaywallViewController,
