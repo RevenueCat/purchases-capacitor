@@ -82,12 +82,13 @@ import com.revenuecat.purchases.hybridcommon.trackCustomPaywallImpression as tra
 @CapacitorPlugin(name = "Purchases")
 class PurchasesPlugin : Plugin() {
     private val customerInfoListeners = mutableListOf<String>()
-    private val lastSeenCustomerInfo: CustomerInfo? = null
+    @Volatile
+    private var lastSeenCustomerInfo: CustomerInfo? = null
     private var logHandlerCallbackId: String? = null
 
     companion object {
         private const val PLATFORM_NAME = "capacitor"
-        private const val PLUGIN_VERSION = "13.7.0"
+        private const val PLUGIN_VERSION = "13.7.6"
 
         private const val CUSTOMER_INFO_KEY = "customerInfo"
     }
@@ -127,6 +128,7 @@ class PurchasesPlugin : Plugin() {
             preferredLocale = preferredLocale,
         )
         Purchases.sharedInstance.updatedCustomerInfoListener = UpdatedCustomerInfoListener { customerInfo ->
+            lastSeenCustomerInfo = customerInfo
             customerInfo.mapAsync { map ->
                 for (callbackId in customerInfoListeners) {
                     bridge.getSavedCall(callbackId)?.resolveWithMap(map)
