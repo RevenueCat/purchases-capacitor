@@ -310,6 +310,163 @@ lane :run_maestro_e2e_tests_android do
   run_maestro_e2e_tests(flow_dir: "../e2e-tests/maestro/", output_dir: "test_output")
 end
 
+desc "Build released and local Capacitor SDK update test apps"
+lane :build_sdk_update_test_apps do |options|
+  require 'json'
+  require 'fileutils'
+  platform = sdk_update_test_platform(options)
+  root = get_root_folder
+  output = sdk_update_test_apps_dir(platform, options)
+  template = "#{root}/e2e-tests/SDKUpdateTester"
+  api_key = ENV['WORKFLOWS_TEST_STORE_API_KEY']
+  UI.user_error!('WORKFLOWS_TEST_STORE_API_KEY must contain a Test Store key') unless api_key&.start_with?('test_')
+  release_version = options[:release_version] || get_latest_release_before_version(
+    repo_name: 'purchases-capacitor', version: Gem::Version.new(current_version_number).bump.to_s
+  )
+  Dir.chdir(get_root_folder) do
+    sh('yarn', 'install', '--frozen-lockfile')
+    sh('yarn', 'build')
+  end
+  FileUtils.rm_rf(output)
+  %w[release local].each_with_index do |variant, index|
+    dir = "#{output}/#{variant}"
+    project = "#{dir}/project"
+    FileUtils.mkdir_p(project)
+    %w[package.json package-lock.json capacitor.config.ts tsconfig.json index.html src].each do |name|
+      FileUtils.cp_r("#{template}/#{name}", project)
+    end
+    manifest = JSON.parse(File.read("#{project}/package.json"))
+    manifest['dependencies']['@revenuecat/purchases-capacitor'] = variant == 'release' ? release_version : "file:#{root}"
+    File.write("#{project}/package.json", JSON.pretty_generate(manifest))
+    version = variant == 'release' ? release_version : current_version_number
+    metadata = nil
+    Dir.chdir(project) do
+      dependency = variant == 'release' ? "@revenuecat/purchases-capacitor@#{release_version}" : root
+      sh('npm', 'install', dependency, '--save-exact', '--package-lock-only', '--no-audit', '--no-fund')
+      sh('npm', 'ci', '--no-audit', '--no-fund')
+      metadata = sdk_update_test_dependency(project, platform, variant, version, root)
+      File.write('src/build-config.json', JSON.generate(apiKey: api_key, sdkVersion: "#{version} #{metadata[:source]}"))
+      sh('npm', 'run', 'build')
+      sh('npx', 'cap', 'add', platform)
+      sh('npx', 'cap', 'sync', platform)
+    end
+    File.write("#{dir}/version.txt", metadata[:version])
+    File.write("#{dir}/source.txt", metadata[:source])
+    File.write("#{dir}/resolved-sdk.json", JSON.pretty_generate(metadata))
+    FileUtils.cp("#{project}/package-lock.json", "#{dir}/package-lock.json")
+    if platform == 'ios'
+      FileUtils.cp("#{template}/ios/AppDelegate.swift", "#{project}/ios/App/App/AppDelegate.swift")
+      FileUtils.cp("#{template}/ios/SceneDelegate.swift", "#{project}/ios/App/App/SceneDelegate.swift")
+      app_package = "#{project}/ios/App/CapApp-SPM/Package.swift"
+      sdk_path = File.read(app_package).match(/\.package\(name: "RevenuecatPurchasesCapacitor", path: "([^"]+)"\)/)&.captures&.first
+      UI.user_error!('App does not depend on the installed Capacitor SDK') unless
+        sdk_path && File.realpath(File.expand_path(sdk_path, File.dirname(app_package))) == metadata[:path]
+      args = ['xcodebuild', '-project', "#{project}/ios/App/App.xcodeproj", '-scheme', 'App',
+        '-configuration', 'Debug', '-sdk', 'iphonesimulator', '-destination', 'generic/platform=iOS Simulator',
+        '-derivedDataPath', "#{dir}/derived_data", 'ARCHS=arm64', 'CODE_SIGNING_ALLOWED=NO']
+      sdk_update_test_build(args, "#{dir}/build.log", api_key)
+      resolved = "#{project}/ios/App/App.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
+      pins = JSON.parse(File.read(resolved)).fetch('pins')
+      phc = pins.find { |pin| pin['identity'] == 'purchases-hybrid-common' }
+      UI.user_error!('iOS resolved an unexpected hybrid-common version') unless phc&.dig('state', 'version') == metadata[:hybrid_common]
+      FileUtils.cp(resolved, "#{dir}/Package.resolved")
+      FileUtils.cp_r("#{dir}/derived_data/Build/Products/Debug-iphonesimulator/App.app", "#{dir}/SDKUpdateTester.app")
+    else
+      native_source = "#{project}/android/app/src/main/java/com/revenuecat/SDKUpdateTester"
+      FileUtils.mkdir_p(native_source)
+      %w[MainActivity.java LaunchArgsPlugin.java].each { |name| FileUtils.cp("#{template}/android/#{name}", native_source) }
+      build_file = "#{project}/android/app/build.gradle"
+      File.write(build_file, File.read(build_file).sub('versionCode 1', "versionCode #{index + 1}"))
+      File.open(build_file, 'a') { |file| file.write(File.read("#{template}/android/verify-dependencies.gradle")) }
+      sdk_update_test_build(['./gradlew', 'assembleDebug', 'verifySdkUpdateDependencies'], "#{dir}/build.log", api_key,
+        directory: "#{project}/android")
+      FileUtils.cp("#{project}/android/app/build/outputs/apk/debug/app-debug.apk", "#{dir}/SDKUpdateTester.apk")
+    end
+    UI.success("Built #{platform} #{variant}: #{version} #{metadata[:source]} (hybrid-common #{metadata[:hybrid_common]})")
+  end
+end
+
+desc "Run a Capacitor SDK update Maestro test case"
+lane :run_sdk_update_test do |options|
+  platform = sdk_update_test_platform(options)
+  test_case = options[:test_case]
+  UI.user_error!('test_case must be anonymous_user or logged_in_user') unless %w[anonymous_user logged_in_user].include?(test_case)
+  apps = sdk_update_test_apps_dir(platform, options)
+  flows = "#{get_root_folder}/e2e-tests/maestro/sdk_update_tests/#{test_case}"
+  steps = %w[release local].each_with_index.map do |variant, index|
+    dir = "#{apps}/#{variant}"
+    UI.user_error!("#{dir}/version.txt not found. Build both apps first.") unless File.file?("#{dir}/version.txt")
+    {
+      app_path: "#{dir}/SDKUpdateTester.#{platform == 'ios' ? 'app' : 'apk'}",
+      sdk_version: "#{File.read("#{dir}/version.txt").strip} #{File.read("#{dir}/source.txt").strip}",
+      flow: "#{flows}/#{index.zero? ? 'before' : 'after'}_update.yaml"
+    }
+  end
+  run_sdk_update_maestro_test(
+    platform: platform, app_id: 'com.revenuecat.SDKUpdateTester', steps: steps,
+    output_dir: "#{get_root_folder}/fastlane/test_output/sdk_update_tests/#{platform}/#{test_case}",
+    max_attempts: Integer(options.fetch(:max_attempts, 3))
+  )
+end
+
+def sdk_update_test_platform(options)
+  platform = options[:platform].to_s
+  UI.user_error!('platform must be ios or android') unless %w[ios android].include?(platform)
+  platform
+end
+
+def sdk_update_test_apps_dir(platform, options)
+  base = "#{get_root_folder}/build/sdk_update_tests"
+  output = File.expand_path(options[:apps_dir] || options[:output_dir] || platform, base)
+  UI.user_error!("SDK update app outputs must be inside #{base}") unless output.start_with?("#{base}/")
+  output
+end
+
+def sdk_update_test_dependency(project, platform, variant, expected_version, root)
+  require 'digest'
+  sdk = File.realpath("#{project}/node_modules/@revenuecat/purchases-capacitor")
+  manifest = JSON.parse(File.read("#{sdk}/package.json"))
+  lock = JSON.parse(File.read("#{project}/package-lock.json")).fetch('packages').fetch('node_modules/@revenuecat/purchases-capacitor')
+  UI.user_error!('Installed SDK version differs from the selected version') unless manifest['version'] == expected_version
+  if variant == 'release'
+    registry = 'https://registry.npmjs.org/@revenuecat/purchases-capacitor/-/'
+    UI.user_error!('Released app must resolve the published npm artifact') unless
+      !lock['link'] && lock['version'] == expected_version && lock['resolved']&.start_with?(registry) && lock['integrity']
+  else
+    UI.user_error!('Local app must resolve the SDK checkout') unless lock['link'] && sdk == File.realpath(root)
+  end
+  swift = File.read("#{sdk}/ios/Sources/RevenuecatPurchasesCapacitor/PurchasesPlugin.swift")
+  kotlin = File.read("#{sdk}/android/src/main/java/com/revenuecat/purchases/capacitor/PurchasesPlugin.kt")
+  UI.user_error!('Native Capacitor wrapper versions differ from the selected SDK') unless
+    swift.include?("platformVersion = \"#{expected_version}\"") && kotlin.include?("PLUGIN_VERSION = \"#{expected_version}\"")
+  phc = if platform == 'ios'
+    File.read("#{sdk}/Package.swift").match(/purchases-hybrid-common\.git", exact: "([^"]+)"/)[1]
+  else
+    File.read("#{sdk}/android/build.gradle").match(/purchases-hybrid-common:([^'\"]+)/)[1]
+  end
+  {
+    version: expected_version, source: variant == 'release' ? 'Registry' : 'Local', path: sdk,
+    hybrid_common: phc, registry_url: lock['resolved'], registry_integrity: lock['integrity'],
+    javascript_sha256: Digest::SHA256.file("#{sdk}/#{manifest.fetch('main')}").hexdigest,
+    swift_sha256: Digest::SHA256.hexdigest(swift), kotlin_sha256: Digest::SHA256.hexdigest(kotlin)
+  }
+end
+
+def sdk_update_test_build(args, log, api_key, directory: get_root_folder)
+  require 'open3'
+  status = nil
+  File.open(log, 'w') do |file|
+    Open3.popen2e(*args, chdir: directory) do |input, output, process|
+      input.close
+      IO.copy_stream(output, file)
+      status = process.value
+    end
+  end
+  return if status.success?
+  UI.error(File.readlines(log).last(150).join.gsub(api_key, '[redacted]'))
+  UI.user_error!("SDK update app build failed; see #{log}")
+end
+
 desc "Tag current branch with current version number"
 lane :tag_current_branch do |options|
   version_number = current_version_number

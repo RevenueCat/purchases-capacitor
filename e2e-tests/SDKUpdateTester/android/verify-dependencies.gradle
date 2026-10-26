@@ -1,0 +1,21 @@
+// Created by Antonio Pallares. Copyright (c) 2026 RevenueCat, Inc.
+
+tasks.register('verifySdkUpdateDependencies') {
+    doLast {
+        def metadataFile = file('../../../resolved-sdk.json')
+        def metadata = new groovy.json.JsonSlurper().parse(metadataFile)
+        def sdkProject = project(':revenuecat-purchases-capacitor')
+        if (sdkProject.projectDir.canonicalFile != new File(metadata.path, 'android').canonicalFile) {
+            throw new GradleException('App is not compiling the selected Capacitor SDK sources')
+        }
+        def components = configurations.debugRuntimeClasspath.incoming.resolutionResult.allComponents
+        def phc = components.find {
+            it.moduleVersion?.group == 'com.revenuecat.purchases' && it.moduleVersion?.name == 'purchases-hybrid-common'
+        }
+        if (phc?.moduleVersion?.version != metadata.hybrid_common) {
+            throw new GradleException('Android resolved an unexpected hybrid-common version')
+        }
+        def report = components.findAll { it.moduleVersion != null }.collect { it.moduleVersion.toString() }.sort().join('\n')
+        new File(metadataFile.parentFile, 'resolved-native-dependencies.txt').text = report + '\n'
+    }
+}

@@ -101,6 +101,54 @@ Build purchase tester and opens it in Android Studio to run in Android
 
 Update purchases-hybrid-common version, pushes changes to a new branch if open_pr option is true
 
+### change_maestro_test_app_api_key
+
+```sh
+[bundle exec] fastlane change_maestro_test_app_api_key
+```
+
+Replace the Maestro test app API key placeholder
+
+### build_maestro_test_app
+
+```sh
+[bundle exec] fastlane build_maestro_test_app
+```
+
+Build the Maestro E2E test app for the given platform (platform:ios or platform:android)
+
+### run_maestro_e2e_tests_ios
+
+```sh
+[bundle exec] fastlane run_maestro_e2e_tests_ios
+```
+
+Run maestro E2E tests on iOS (build_maestro_test_app must have been run beforehand and a booted simulator is required)
+
+### run_maestro_e2e_tests_android
+
+```sh
+[bundle exec] fastlane run_maestro_e2e_tests_android
+```
+
+Run maestro E2E tests on Android (build_maestro_test_app must have been run beforehand and a running emulator is required)
+
+### build_sdk_update_test_apps
+
+```sh
+[bundle exec] fastlane build_sdk_update_test_apps
+```
+
+Build released and local Capacitor SDK update test apps
+
+### run_sdk_update_test
+
+```sh
+[bundle exec] fastlane run_sdk_update_test
+```
+
+Run a Capacitor SDK update Maestro test case
+
 ### tag_current_branch
 
 ```sh
