@@ -11,6 +11,7 @@ const CheckpointsScreen: React.FC = () => {
   const [log, setLog] = useState<string[]>([]);
   const removers = useRef(new Set<() => Promise<void>>());
   const mounted = useRef(true);
+  const detachGeneration = useRef(0);
   const append = (message: string) => {
     if (mounted.current) setLog(current => [message, ...current].slice(0, 30));
   };
@@ -25,15 +26,17 @@ const CheckpointsScreen: React.FC = () => {
 
   const run = async () => {
     append(`Starting ${identifier} (${mode})`);
+    const generation = detachGeneration.current;
     let passed = false;
     let remove: (() => Promise<void>) | undefined;
     try {
       remove = await RevenueCatUI.checkpoint(identifier, result => {
         passed = true;
+        if (!mounted.current || generation !== detachGeneration.current) return;
         append(`Passed: ${JSON.stringify(result)}`);
         if (remove) removers.current.delete(remove);
       }, { customVariables: { source: 'capacitor-tester', level: 12, premium: false }, presentationMode: mode });
-      if (!mounted.current || passed) await remove();
+      if (!mounted.current || passed || generation !== detachGeneration.current) await remove();
       else removers.current.add(remove);
       append('Setup completed. Waiting for onPassed.');
     } catch (error) {
@@ -58,6 +61,7 @@ const CheckpointsScreen: React.FC = () => {
         </IonItem>
         <IonButton onClick={() => { void run(); }}>Run checkpoint</IonButton>
         <IonButton onClick={() => {
+          detachGeneration.current += 1;
           removers.current.forEach(remove => { void remove(); });
           removers.current.clear();
           append('Callbacks detached. Native UI is not dismissed.');
