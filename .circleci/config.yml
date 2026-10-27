@@ -525,8 +525,8 @@ workflows:
       - run-api-tests
       - run-unit-tests
       - run-tests-ios
-      # TODO: restore after Nov 7, 2026, once the matching RevenueCat pods are backfilled.
-      # - run-tests-ios-cocoapods
+      # Temporarily enabled to validate the CocoaPods job on CI.
+      - run-tests-ios-cocoapods
       - run-tests-android
       - run-lint
       - build-purchase-tester
