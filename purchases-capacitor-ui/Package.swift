@@ -19,6 +19,7 @@ let package = Package(
             dependencies: [
                 .product(name: "Capacitor", package: "capacitor-swift-pm"),
                 .product(name: "Cordova", package: "capacitor-swift-pm"),
+                .product(name: "PurchasesHybridCommon", package: "purchases-hybrid-common"),
                 .product(name: "PurchasesHybridCommonUI", package: "purchases-hybrid-common")
             ],
             path: "ios/Sources/RevenuecatPurchasesCapacitorUI")

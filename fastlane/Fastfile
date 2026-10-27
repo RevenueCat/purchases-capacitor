@@ -10,8 +10,8 @@ files_to_update_phc_version = {
     'android/build.gradle' => ['com.revenuecat.purchases:purchases-hybrid-common:{x}'],
     'package.json' => ['"@revenuecat/purchases-typescript-internal-esm": "{x}"'],
     './purchases-capacitor-ui/package.json' => ['"@revenuecat/purchases-typescript-internal-esm": "{x}"'],
-    'purchases-capacitor-ui/RevenuecatPurchasesCapacitorUi.podspec' => ["'PurchasesHybridCommonUI', '{x}'"],
-    'purchases-capacitor-ui/android/build.gradle' => ['com.revenuecat.purchases:purchases-hybrid-common-ui:{x}'],
+    'purchases-capacitor-ui/RevenuecatPurchasesCapacitorUI.podspec' => ["'PurchasesHybridCommonUI', '{x}'"],
+    'purchases-capacitor-ui/android/build.gradle' => ['com.revenuecat.purchases:purchases-hybrid-common-ui:{x}', 'com.revenuecat.purchases:purchases-hybrid-common:{x}'],
     'Package.swift' => ['.package(url: "https://github.com/RevenueCat/purchases-hybrid-common.git", exact: "{x}")'],
     'purchases-capacitor-ui/Package.swift' => ['.package(url: "https://github.com/RevenueCat/purchases-hybrid-common.git", exact: "{x}")'],
 }

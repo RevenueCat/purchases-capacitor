@@ -12,6 +12,7 @@ public class RevenueCatUIPlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "RevenueCatUIPlugin"
     public let jsName = "RevenueCatUI"
     public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "checkpoint", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "presentPaywall", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "presentPaywallIfNeeded", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "presentCustomerCenter", returnType: CAPPluginReturnPromise),

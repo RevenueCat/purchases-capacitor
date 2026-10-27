@@ -97,6 +97,41 @@ import { RevenueCatUI } from '@revenuecat/purchases-capacitor-ui';
 await RevenueCatUI.presentCustomerCenter();
 ```
 
+### Checkpoints (experimental, invite-only)
+
+A checkpoint gates navigation with a dashboard-defined flow. Configure Purchases first.
+Requires iOS 15+ or Android; web is unsupported, including mock web mode.
+
+```typescript
+import { RevenueCatUI, FLOW_PRESENTATION_MODE } from '@revenuecat/purchases-capacitor-ui';
+
+const remove = await RevenueCatUI.checkpoint(
+  'upgrade',
+  (result) => {
+    // Continue only from this callback. result.flow is null if nothing needed presenting.
+    console.log(result.customer, result.flow);
+  },
+  {
+    customVariables: { level: 12, premium: false },
+    presentationMode: FLOW_PRESENTATION_MODE.MODAL_SHEET,
+  },
+);
+
+// When the owning screen unmounts:
+await remove();
+```
+
+The promise resolves after native setup and returns an idempotent callback remover. It does
+not wait for the checkpoint to pass. The callback runs at most once, only when the native SDK
+allows the app to continue. Backing out, a blocking failure, or another checkpoint owning
+presentation does not call it. Setup failures reject the promise. Removing the callback
+neither dismisses native UI nor passes the checkpoint. The SDK presents errors with its
+native dialogs; custom error presenters are not included in this API.
+
+`CheckpointResult` contains `customer: CustomerInfo` and `flow: FlowResult | null`. A flow
+contains `obtainedEntitlements` (each with `entitlementInfo`) and `obtainedProducts` (each with
+`product`). Presentation modes are `DEFAULT`, `MODAL_FULL_SCREEN`, and `MODAL_SHEET`.
+
 ## Demo
 
 Here's a quick demo of Paywalls running on iOS:

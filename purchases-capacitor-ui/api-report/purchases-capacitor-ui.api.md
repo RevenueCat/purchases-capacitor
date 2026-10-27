@@ -8,9 +8,11 @@ import type { CustomerInfo } from '@revenuecat/purchases-typescript-internal-esm
 import { PAYWALL_RESULT } from '@revenuecat/purchases-typescript-internal-esm';
 import { PaywallInteractionEvent } from '@revenuecat/purchases-typescript-internal-esm';
 import type { PluginListenerHandle } from '@capacitor/core';
+import type { PurchasesEntitlementInfo } from '@revenuecat/purchases-typescript-internal-esm';
 import type { PurchasesError } from '@revenuecat/purchases-typescript-internal-esm';
 import type { PurchasesOffering } from '@revenuecat/purchases-typescript-internal-esm';
 import type { PurchasesPackage } from '@revenuecat/purchases-typescript-internal-esm';
+import type { PurchasesStoreProduct } from '@revenuecat/purchases-typescript-internal-esm';
 import type { PurchasesStoreTransaction } from '@revenuecat/purchases-typescript-internal-esm';
 
 // @public (undocumented)
@@ -22,6 +24,38 @@ export const ANDROID_PAYWALL_PRESENTATION_STYLE: {
 export type AndroidPaywallPresentationStyle = (typeof ANDROID_PAYWALL_PRESENTATION_STYLE)[keyof typeof ANDROID_PAYWALL_PRESENTATION_STYLE];
 
 // @public (undocumented)
+export interface CheckpointParams {
+    // (undocumented)
+    customVariables?: Record<string, string | number | boolean>;
+    // (undocumented)
+    presentationMode?: FLOW_PRESENTATION_MODE;
+}
+
+// @public (undocumented)
+export interface CheckpointResult {
+    customer: CustomerInfo;
+    flow: FlowResult | null;
+}
+
+// @public
+export enum FLOW_PRESENTATION_MODE {
+    // (undocumented)
+    DEFAULT = "DEFAULT",
+    // (undocumented)
+    MODAL_FULL_SCREEN = "MODAL_FULL_SCREEN",
+    // (undocumented)
+    MODAL_SHEET = "MODAL_SHEET"
+}
+
+// @public (undocumented)
+export interface FlowResult {
+    // (undocumented)
+    obtainedEntitlements: ObtainedEntitlement[];
+    // (undocumented)
+    obtainedProducts: ObtainedProduct[];
+}
+
+// @public (undocumented)
 export const IOS_PAYWALL_PRESENTATION_STYLE: {
     readonly FULL_SCREEN: "FULL_SCREEN";
     readonly SHEET: "SHEET";
@@ -29,6 +63,18 @@ export const IOS_PAYWALL_PRESENTATION_STYLE: {
 
 // @public
 export type IOSPaywallPresentationStyle = (typeof IOS_PAYWALL_PRESENTATION_STYLE)[keyof typeof IOS_PAYWALL_PRESENTATION_STYLE];
+
+// @public (undocumented)
+export interface ObtainedEntitlement {
+    // (undocumented)
+    entitlementInfo: PurchasesEntitlementInfo;
+}
+
+// @public (undocumented)
+export interface ObtainedProduct {
+    // (undocumented)
+    product: PurchasesStoreProduct;
+}
 
 export { PAYWALL_RESULT }
 export { PAYWALL_RESULT as PaywallResultEnum }
@@ -134,6 +180,7 @@ export const RevenueCatUI: RevenueCatUIPlugin;
 // @public (undocumented)
 export interface RevenueCatUIPlugin {
     addListener(eventName: 'paywallDisplayed' | 'paywallDismissed', listener: () => void): Promise<PluginListenerHandle>;
+    checkpoint(identifier: string, onPassed: (result: CheckpointResult) => void, params?: CheckpointParams): Promise<() => Promise<void>>;
     presentCustomerCenter(): Promise<void>;
     presentPaywall(options?: PresentPaywallOptions): Promise<PaywallResult>;
     presentPaywallIfNeeded(options: PresentPaywallIfNeededOptions): Promise<PaywallResult>;

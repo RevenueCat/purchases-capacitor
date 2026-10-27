@@ -9,6 +9,14 @@ import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
+import com.revenuecat.purchases.Purchases
+import com.revenuecat.purchases.InternalRevenueCatAPI
+import com.revenuecat.purchases.hybridcommon.mappers.map
+import com.revenuecat.purchases.ui.revenuecatui.CustomVariableValue
+import com.revenuecat.purchases.ui.revenuecatui.InviteOnlyCheckpointsAPI
+import com.revenuecat.purchases.ui.revenuecatui.checkpoints.CheckpointParams
+import com.revenuecat.purchases.ui.revenuecatui.checkpoints.FlowPresentationMode
+import com.revenuecat.purchases.ui.revenuecatui.checkpoints.checkpoint
 import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.hybridcommon.ui.PaywallListenerWrapper
 import com.revenuecat.purchases.hybridcommon.ui.PaywallResultListener
@@ -21,6 +29,8 @@ import org.json.JSONObject
 
 @CapacitorPlugin(name = "RevenueCatUI")
 class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
+
+    @Volatile private var destroyed = false
 
     private var savedCall: PluginCall? = null
     private var customerCenterLauncher: ActivityResultLauncher<Intent>? = null
@@ -36,6 +46,76 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
             savedCall?.resolve()
             savedCall = null
         }
+    }
+
+    @OptIn(InviteOnlyCheckpointsAPI::class, InternalRevenueCatAPI::class)
+    @PluginMethod
+    fun checkpoint(call: PluginCall) {
+        val identifier = call.getString("identifier")
+        val callId = call.getString("callId")
+        if (identifier == null || callId == null) {
+            call.reject("Missing checkpoint identifier or callId", "BAD_ARGS")
+            return
+        }
+        val currentActivity = activity
+        if (currentActivity == null) {
+            call.reject("No activity available for checkpoint presentation", "MISSING_ACTIVITY")
+            return
+        }
+        currentActivity.runOnUiThread {
+            if (destroyed) {
+                call.reject("Plugin was destroyed", "CHECKPOINT_ERROR")
+                return@runOnUiThread
+            }
+            if (!Purchases.isConfigured) {
+                call.reject("Configure Purchases before calling a checkpoint", "NOT_CONFIGURED")
+                return@runOnUiThread
+            }
+            val rawVariables = call.getObject("customVariables")
+            val variables = rawVariables?.keys()?.asSequence()?.mapNotNull { key ->
+                val value = when (val raw = rawVariables.opt(key)) {
+                    is String -> CustomVariableValue.String(raw)
+                    is Boolean -> CustomVariableValue.Boolean(raw)
+                    is Number -> CustomVariableValue.Number(raw.toDouble())
+                    else -> null
+                }
+                value?.let { key to it }
+            }?.toMap() ?: emptyMap()
+            val mode = when (call.getString("presentationMode")) {
+                "MODAL_FULL_SCREEN" -> FlowPresentationMode.MODAL_FULL_SCREEN
+                "MODAL_SHEET" -> FlowPresentationMode.MODAL_SHEET
+                else -> FlowPresentationMode.DEFAULT
+            }
+            val params = CheckpointParams.Builder()
+                .setCustomVariables(variables)
+                .setPresentationMode(mode)
+                .build()
+            // Setup completes even if the checkpoint never passes.
+            call.resolve()
+            Purchases.sharedInstance.checkpoint(identifier, params) { result ->
+                if (!destroyed) {
+                    val flow = result.flow?.let { flow -> mapOf(
+                        "obtainedEntitlements" to flow.obtainedEntitlements
+                            .sortedBy { it.entitlementInfo.identifier }
+                            .map { mapOf("entitlementInfo" to it.entitlementInfo.map()) },
+                        "obtainedProducts" to flow.obtainedProducts.sortedBy { it.product.id }
+                            .map { mapOf("product" to it.product.map()) },
+                    ) }
+                    notifyListeners("checkpointPassed", JSObject().apply {
+                        put("callId", callId)
+                        put("result", JSONObject(mapOf(
+                            "customer" to result.customer.map(),
+                            "flow" to (flow ?: JSONObject.NULL),
+                        )))
+                    })
+                }
+            }
+        }
+    }
+
+    override fun handleOnDestroy() {
+        destroyed = true
+        super.handleOnDestroy()
     }
 
     @PluginMethod
