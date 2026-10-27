@@ -90,3 +90,7 @@ function checkTransaction(transaction: PurchasesStoreTransaction) {
   const productIdentifier: string = transaction.productIdentifier;
   const purchaseDate: string = transaction.purchaseDate;
 }
+
+function checkOwnershipTypes() {
+  const ownershipTypes: OwnershipType[] = ['PURCHASED', 'FAMILY_SHARED', 'ASSIGNED', 'UNKNOWN'];
+}
