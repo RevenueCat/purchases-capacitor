@@ -178,6 +178,18 @@ jobs:
       - run: yarn verify:ios
       - run: yarn test:ios
 
+  run-tests-ios-cocoapods:
+    <<: *base-mac-job
+    steps:
+      - checkout
+      - revenuecat/install-mise-tools:
+          tools: ruby
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - yarn-dependencies-mac
+      - run: yarn build
+      - run: yarn verify:ios:cocoapods
+
   run-tests-android:
     <<: *base-android-job
     steps:
@@ -513,6 +525,8 @@ workflows:
       - run-api-tests
       - run-unit-tests
       - run-tests-ios
+      # TODO: restore after Nov 7, 2026, once the matching RevenueCat pods are backfilled.
+      # - run-tests-ios-cocoapods
       - run-tests-android
       - run-lint
       - build-purchase-tester
@@ -555,6 +569,8 @@ workflows:
             - run-api-tests
             - run-unit-tests
             - run-tests-ios
+            # TODO: restore after Nov 7, 2026, once the matching RevenueCat pods are backfilled.
+            # - run-tests-ios-cocoapods
             - run-tests-android
             - run-lint
             - run-api-tests-ui
