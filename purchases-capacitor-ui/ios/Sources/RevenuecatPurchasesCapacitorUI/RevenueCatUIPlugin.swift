@@ -13,6 +13,9 @@ public class RevenueCatUIPlugin: CAPPlugin, CAPBridgedPlugin {
     public let jsName = "RevenueCatUI"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "checkpoint", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "showCheckpointError", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "completeCheckpointError", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "cancelCheckpointErrors", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "presentPaywall", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "presentPaywallIfNeeded", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "presentCustomerCenter", returnType: CAPPluginReturnPromise),
@@ -20,6 +23,8 @@ public class RevenueCatUIPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "resumePurchaseLogicPurchase", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "resumePurchaseLogicRestore", returnType: CAPPluginReturnPromise),
     ]
+
+    @MainActor var checkpointErrorBridge: AnyObject?
 
     // MARK: - Properties
 

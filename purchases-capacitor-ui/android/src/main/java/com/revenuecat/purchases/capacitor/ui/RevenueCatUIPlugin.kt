@@ -31,6 +31,28 @@ import org.json.JSONObject
 class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
 
     @Volatile private var destroyed = false
+    private val checkpointErrors by lazy { CheckpointErrorBridge(this) }
+
+    internal fun emitCheckpointError(event: JSObject) { notifyListeners("checkpointError", event) }
+
+    @PluginMethod
+    fun showCheckpointError(call: PluginCall) { activity.runOnUiThread { checkpointErrors.show(call) } }
+
+    @PluginMethod
+    fun completeCheckpointError(call: PluginCall) {
+        activity.runOnUiThread {
+            checkpointErrors.complete(call.getString("callId") ?: "", call.getString("requestId") ?: "")
+            call.resolve()
+        }
+    }
+
+    @PluginMethod
+    fun cancelCheckpointErrors(call: PluginCall) {
+        activity.runOnUiThread {
+            checkpointErrors.cancel(call.getString("callId") ?: "")
+            call.resolve()
+        }
+    }
 
     private var savedCall: PluginCall? = null
     private var customerCenterLauncher: ActivityResultLauncher<Intent>? = null
@@ -67,6 +89,11 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
                 call.reject("Plugin was destroyed", "CHECKPOINT_ERROR")
                 return@runOnUiThread
             }
+            if (call.getBoolean("hasErrorPresenter") == true && call.getBoolean("debugSimulateError") == true) {
+                call.resolve()
+                checkpointErrors.probe(callId)
+                return@runOnUiThread
+            }
             if (!Purchases.isConfigured) {
                 call.reject("Configure Purchases before calling a checkpoint", "NOT_CONFIGURED")
                 return@runOnUiThread
@@ -89,6 +116,7 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
             val params = CheckpointParams.Builder()
                 .setCustomVariables(variables)
                 .setPresentationMode(mode)
+                .setErrorPresenter(if (call.getBoolean("hasErrorPresenter") == true) checkpointErrors.presenter(callId) else null)
                 .build()
             // Setup completes even if the checkpoint never passes.
             call.resolve()
@@ -115,6 +143,7 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
 
     override fun handleOnDestroy() {
         destroyed = true
+        activity.runOnUiThread { checkpointErrors.cancelAll() }
         super.handleOnDestroy()
     }
 

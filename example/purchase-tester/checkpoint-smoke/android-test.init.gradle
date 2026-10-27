@@ -1,0 +1,10 @@
+// Local smoke harness. Avoids overwriting an existing purchase-tester installation.
+allprojects { project ->
+    afterEvaluate {
+        if (project.path == ':app') {
+            project.android.defaultConfig.applicationId = 'com.revenuecat.capacitor.checkpointspike'
+            project.android.sourceSets.androidTest.java.srcDir(new File(project.rootDir, '../checkpoint-smoke/android'))
+            project.dependencies.add('androidTestImplementation', 'androidx.test.uiautomator:uiautomator:2.3.0')
+        }
+    }
+}

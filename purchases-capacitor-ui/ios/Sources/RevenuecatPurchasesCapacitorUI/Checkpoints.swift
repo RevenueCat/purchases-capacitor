@@ -20,6 +20,11 @@ extension RevenueCatUIPlugin {
                 call.reject("Missing checkpoint identifier or callId", "BAD_ARGS")
                 return
             }
+            if call.getBool("hasErrorPresenter") == true && call.getBool("debugSimulateError") == true {
+                call.resolve()
+                self.errorBridge.probe(callId: callId, fullScreen: call.getString("presentationMode") == "MODAL_FULL_SCREEN")
+                return
+            }
             guard Purchases.isConfigured else {
                 call.reject("Configure Purchases before calling a checkpoint", "NOT_CONFIGURED")
                 return
@@ -40,7 +45,8 @@ extension RevenueCatUIPlugin {
             }
             // Resolve setup separately: backing out or a blocking failure never calls onPassed.
             call.resolve()
-            Purchases.shared.checkpoint(identifier, customVariables: variables, presentationMode: mode) { [weak self] result in
+            let errors = call.getBool("hasErrorPresenter") == true ? self.errorBridge.handler(callId: callId) : nil
+            Purchases.shared.checkpoint(identifier, customVariables: variables, presentationMode: mode, errorPresenter: errors) { [weak self] result in
                 let customer = result.customer.dictionary
                 let entitlements = (customer["entitlements"] as? [String: Any])?["all"] as? [String: Any] ?? [:]
                 let flow: Any = result.flow.map { flow -> [String: Any] in

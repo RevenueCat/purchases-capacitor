@@ -126,7 +126,7 @@ not wait for the checkpoint to pass. The callback runs at most once, only when t
 allows the app to continue. Backing out, a blocking failure, or another checkpoint owning
 presentation does not call it. Setup failures reject the promise. Removing the callback
 neither dismisses native UI nor passes the checkpoint. The SDK presents errors with its
-native dialogs; custom error presenters are not included in this API.
+native dialogs by default. This branch also contains a [custom error-host spike](./CHECKPOINT_ERROR_SPIKE.md), which is not a supported API.
 
 `CheckpointResult` contains `customer: CustomerInfo` and `flow: FlowResult | null`. A flow
 contains `obtainedEntitlements` (each with `entitlementInfo`) and `obtainedProducts` (each with

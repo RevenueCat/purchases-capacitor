@@ -38,7 +38,23 @@ export interface CheckpointResult {
   customer: CustomerInfo;
 }
 
+/** Experimental spike. Why the SDK requested error UI. */
+export type CheckpointErrorKind = 'flowCouldNotBeShown' | 'flowActionFailed' | 'flowResultSyncFailed';
+
+/** Experimental spike. Mount error UI in container, then resolve after dismissing it. */
+export type CheckpointErrorPresenter = (request: {
+  requestId: string;
+  kind: CheckpointErrorKind;
+  error: PurchasesError;
+  container: HTMLElement;
+  complete: () => Promise<void>;
+}) => Promise<void>;
+
 export interface CheckpointParams {
+  /** SPIKE ONLY. App-owned DOM UI rendered above the native flow. */
+  errorPresenter?: CheckpointErrorPresenter;
+  /** SPIKE ONLY. Displays a synthetic native modal and error, without Purchases configuration. */
+  debugSimulateError?: boolean;
   customVariables?: Record<string, string | number | boolean>;
   presentationMode?: FLOW_PRESENTATION_MODE;
 }

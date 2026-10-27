@@ -23,10 +23,24 @@ export const ANDROID_PAYWALL_PRESENTATION_STYLE: {
 // @public
 export type AndroidPaywallPresentationStyle = (typeof ANDROID_PAYWALL_PRESENTATION_STYLE)[keyof typeof ANDROID_PAYWALL_PRESENTATION_STYLE];
 
+// @public
+export type CheckpointErrorKind = 'flowCouldNotBeShown' | 'flowActionFailed' | 'flowResultSyncFailed';
+
+// @public
+export type CheckpointErrorPresenter = (request: {
+    requestId: string;
+    kind: CheckpointErrorKind;
+    error: PurchasesError;
+    container: HTMLElement;
+    complete: () => Promise<void>;
+}) => Promise<void>;
+
 // @public (undocumented)
 export interface CheckpointParams {
     // (undocumented)
     customVariables?: Record<string, string | number | boolean>;
+    debugSimulateError?: boolean;
+    errorPresenter?: CheckpointErrorPresenter;
     // (undocumented)
     presentationMode?: FLOW_PRESENTATION_MODE;
 }

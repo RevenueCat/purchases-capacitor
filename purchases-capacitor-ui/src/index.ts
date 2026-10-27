@@ -3,7 +3,9 @@ import type { PluginListenerHandle } from '@capacitor/core';
 import { normalizePurchasesError } from '@revenuecat/purchases-typescript-internal-esm';
 import type { PurchasesError } from '@revenuecat/purchases-typescript-internal-esm';
 
+import { presentCheckpointError } from './checkpointErrors';
 import type {
+  CheckpointErrorKind,
   CheckpointParams,
   CheckpointResult,
   PaywallListener,
@@ -30,6 +32,8 @@ interface RevenueCatUINativePlugin {
   checkpoint(options: {
     identifier: string;
     callId: string;
+    hasErrorPresenter?: boolean;
+    debugSimulateError?: boolean;
     customVariables?: Record<string, string | number | boolean>;
     presentationMode: FLOW_PRESENTATION_MODE;
   }): Promise<void>;
@@ -50,6 +54,9 @@ interface RevenueCatUINativePlugin {
     hasPurchaseLogic?: boolean;
     customVariables?: Record<string, string | number | boolean>;
   }): Promise<PaywallResult>;
+  showCheckpointError(options: { callId: string; requestId: string }): Promise<void>;
+  completeCheckpointError(options: { callId: string; requestId: string }): Promise<void>;
+  cancelCheckpointErrors(options: { callId: string }): Promise<void>;
   presentCustomerCenter(): Promise<void>;
   setMockWebResults?(options: { shouldMockWebResults: boolean }): Promise<void>;
 
@@ -316,25 +323,51 @@ const RevenueCatUI: RevenueCatUIPlugin = {
     const callId = `${checkpointCallIdPrefix}-${++nextCheckpointCallId}`;
     let active = true;
     let removal: Promise<void> | undefined;
+    const requests = new Map<string, ReturnType<typeof presentCheckpointError>>();
+    let errorHandle: PluginListenerHandle | undefined;
+    const presenter = params.errorPresenter;
+    if (presenter) {
+      errorHandle = await nativePlugin.addListener(
+        'checkpointError',
+        (event: { callId: string; requestId: string; kind: CheckpointErrorKind; error: unknown }) => {
+          if (!active || event.callId !== callId || requests.has(event.requestId)) return;
+          const request = presentCheckpointError(event, presenter, nativePlugin);
+          requests.set(event.requestId, request);
+          void request.finished.catch((error) =>
+            console.warn('[RevenueCatUI] Custom error presentation failed:', error),
+          );
+        },
+      );
+    }
+    const detachErrors = async () => {
+      await errorHandle?.remove();
+      if (presenter) {
+        await Promise.all([...requests.values()].map((request) => request.cancel()));
+        await nativePlugin.cancelCheckpointErrors({ callId });
+      }
+    };
     // Register before starting: an unconfigured checkpoint identifier may pass immediately.
-    const handle = await nativePlugin.addListener(
-      'checkpointPassed',
-      (event: { callId: string; result: CheckpointResult }) => {
+    const handle = await nativePlugin
+      .addListener('checkpointPassed', (event: { callId: string; result: CheckpointResult }) => {
         if (!active || event.callId !== callId) return;
         active = false;
-        removal = handle.remove();
+        removal = Promise.all([handle.remove(), detachErrors()]).then(() => undefined);
         void removal.catch((error) => console.warn('[RevenueCatUI] Failed to remove checkpoint listener:', error));
         onPassed(event.result);
-      },
-    );
+      })
+      .catch(async (error) => {
+        await detachErrors();
+        throw error;
+      });
     const remove = (): Promise<void> => {
       active = false;
-      return (removal ??= handle.remove());
+      return (removal ??= Promise.all([handle.remove(), detachErrors()]).then(() => undefined));
     };
     try {
       await nativePlugin.checkpoint({
         identifier,
         callId,
+        ...(presenter ? { hasErrorPresenter: true, debugSimulateError: params.debugSimulateError ?? false } : {}),
         ...(params.customVariables !== undefined ? { customVariables: params.customVariables } : {}),
         presentationMode: params.presentationMode ?? FLOW_PRESENTATION_MODE.DEFAULT,
       });
