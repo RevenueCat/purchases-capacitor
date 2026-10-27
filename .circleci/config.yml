@@ -175,7 +175,7 @@ jobs:
           cache-version: v1
       - yarn-dependencies-mac
       - run: yarn build
-      - run: yarn verify:ios:spm
+      - run: yarn verify:ios
       - run: yarn test:ios
 
   run-tests-ios-cocoapods:
