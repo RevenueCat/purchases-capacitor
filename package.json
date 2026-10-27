@@ -1,6 +1,6 @@
 {
   "name": "@revenuecat/purchases-capacitor",
-  "version": "13.7.6",
+  "version": "13.8.0",
   "packageManager": "yarn@1.22.22",
   "description": "Capacitor in-app purchases and subscriptions made easy. Support for iOS and Android.",
   "main": "dist/esm/index.js",
@@ -94,6 +94,6 @@
     }
   },
   "dependencies": {
-    "@revenuecat/purchases-typescript-internal-esm": "19.16.0"
+    "@revenuecat/purchases-typescript-internal-esm": "19.17.0"
   }
 }
