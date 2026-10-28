@@ -50,19 +50,9 @@ repositories {
     mavenCentral()
 }
 
-// TODO: remove with the purchases-hybrid-common 20.0.0-SNAPSHOT pin, before merging.
-rootProject.allprojects {
-    repositories {
-        maven {
-            url 'https://central.sonatype.com/repository/maven-snapshots/'
-            content { includeGroup 'com.revenuecat.purchases' }
-        }
-    }
-}
-
 dependencies {
     implementation project(':capacitor-android')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
-    implementation 'com.revenuecat.purchases:purchases-hybrid-common-ui:20.0.0-SNAPSHOT'
+    implementation 'com.revenuecat.purchases:purchases-hybrid-common-ui:20.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:2.2.20"
 }
