@@ -6,10 +6,60 @@ import type {
   PurchasesOffering,
   PurchasesPackage,
   PurchasesStoreTransaction,
+  PurchasesEntitlementInfo,
+  PurchasesStoreProduct,
 } from '@revenuecat/purchases-typescript-internal-esm';
 import { PAYWALL_RESULT } from '@revenuecat/purchases-typescript-internal-esm';
 
+/** How the native SDK presents the flow selected by a checkpoint. */
+export enum FLOW_PRESENTATION_MODE {
+  DEFAULT = 'DEFAULT',
+  MODAL_FULL_SCREEN = 'MODAL_FULL_SCREEN',
+  MODAL_SHEET = 'MODAL_SHEET',
+}
+
+export interface ObtainedEntitlement {
+  entitlementInfo: PurchasesEntitlementInfo;
+}
+
+export interface ObtainedProduct {
+  product: PurchasesStoreProduct;
+}
+
+export interface FlowResult {
+  obtainedEntitlements: ObtainedEntitlement[];
+  obtainedProducts: ObtainedProduct[];
+}
+
+export interface CheckpointResult {
+  /** Null when the checkpoint had nothing to present. */
+  flow: FlowResult | null;
+  /** Customer information after passing the checkpoint. */
+  customer: CustomerInfo;
+}
+
+export interface CheckpointParams {
+  customVariables?: Record<string, string | number | boolean>;
+  presentationMode?: FLOW_PRESENTATION_MODE;
+}
+
 export interface RevenueCatUIPlugin {
+  /**
+   * Experimental, invite-only API. Calls onPassed only when the app may continue
+   * past the checkpoint. Backing out, a blocking failure, or another checkpoint
+   * owning presentation does not invoke it. The native SDK presents errors.
+   *
+   * Requires native iOS 15+ or Android. The promise resolves after native setup,
+   * not after passing the checkpoint. It returns an idempotent async remover;
+   * call it when the owning screen unmounts. Removing the callback does not
+   * dismiss native UI. Setup errors reject the promise.
+   */
+  checkpoint(
+    identifier: string,
+    onPassed: (result: CheckpointResult) => void,
+    params?: CheckpointParams,
+  ): Promise<() => Promise<void>>;
+
   /**
    * Presents a paywall configured in the RevenueCat dashboard.
    * @param options The options for presenting the paywall.

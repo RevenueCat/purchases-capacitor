@@ -4,6 +4,7 @@ import type { ComponentType } from 'react';
 import { Route, type RouteProps } from 'react-router-dom';
 import CustomPaywallImpressionTestingScreen from './pages/CustomPaywallImpressionTestingScreen';
 import Home from './pages/Home';
+import CheckpointsScreen from './pages/CheckpointsScreen';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -32,6 +33,7 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
+        <RouterRoute exact path="/checkpoints" component={CheckpointsScreen} />
         <RouterRoute exact path="/" component={Home} />
         <RouterRoute exact path="/custom-paywall-impression" component={CustomPaywallImpressionTestingScreen} />
       </IonRouterOutlet>

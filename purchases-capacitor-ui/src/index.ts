@@ -1,9 +1,11 @@
-import { registerPlugin } from '@capacitor/core';
+import { Capacitor, registerPlugin } from '@capacitor/core';
 import type { PluginListenerHandle } from '@capacitor/core';
 import { normalizePurchasesError } from '@revenuecat/purchases-typescript-internal-esm';
 import type { PurchasesError } from '@revenuecat/purchases-typescript-internal-esm';
 
 import type {
+  CheckpointParams,
+  CheckpointResult,
   PaywallListener,
   PaywallPresentationConfiguration,
   PaywallResult,
@@ -14,6 +16,7 @@ import type {
   RevenueCatUIPlugin,
 } from './definitions';
 import {
+  FLOW_PRESENTATION_MODE,
   IOS_PAYWALL_PRESENTATION_STYLE,
   ANDROID_PAYWALL_PRESENTATION_STYLE,
   PURCHASE_LOGIC_RESULT,
@@ -24,6 +27,12 @@ import {
  * This is not exported to consumers.
  */
 interface RevenueCatUINativePlugin {
+  checkpoint(options: {
+    identifier: string;
+    callId: string;
+    customVariables?: Record<string, string | number | boolean>;
+    presentationMode: FLOW_PRESENTATION_MODE;
+  }): Promise<void>;
   presentPaywall(options: {
     offering?: any;
     useFullScreenPresentation?: boolean;
@@ -292,7 +301,52 @@ async function presentWithListenerSupport(
   }
 }
 
+const checkpointCallIdPrefix = `${Date.now()}-${Math.random()}`;
+let nextCheckpointCallId = 0;
+
 const RevenueCatUI: RevenueCatUIPlugin = {
+  async checkpoint(
+    identifier: string,
+    onPassed: (result: CheckpointResult) => void,
+    params: CheckpointParams = {},
+  ): Promise<() => Promise<void>> {
+    if (Capacitor.getPlatform() !== 'ios' && Capacitor.getPlatform() !== 'android') {
+      throw new Error('[RevenueCatUI] Checkpoints require a native iOS or Android build.');
+    }
+    const callId = `${checkpointCallIdPrefix}-${++nextCheckpointCallId}`;
+    let active = true;
+    let removal: Promise<void> | undefined;
+    // Register before starting: an unconfigured checkpoint identifier may pass immediately.
+    const handle = await nativePlugin.addListener(
+      'checkpointPassed',
+      (event: { callId: string; result: CheckpointResult }) => {
+        if (!active || event.callId !== callId) return;
+        active = false;
+        removal = handle.remove();
+        void removal.catch((error) => console.warn('[RevenueCatUI] Failed to remove checkpoint listener:', error));
+        onPassed(event.result);
+      },
+    );
+    const remove = (): Promise<void> => {
+      active = false;
+      return (removal ??= handle.remove());
+    };
+    try {
+      await nativePlugin.checkpoint({
+        identifier,
+        callId,
+        ...(params.customVariables !== undefined ? { customVariables: params.customVariables } : {}),
+        presentationMode: params.presentationMode ?? FLOW_PRESENTATION_MODE.DEFAULT,
+      });
+    } catch (error) {
+      await remove().catch((cleanupError) =>
+        console.warn('[RevenueCatUI] Failed to remove checkpoint listener:', cleanupError),
+      );
+      throw error;
+    }
+    return remove;
+  },
+
   async presentPaywall(options?: PresentPaywallOptions): Promise<PaywallResult> {
     assertValidPresentationConfiguration(options?.presentationConfiguration);
 

@@ -10,6 +10,8 @@ import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
 import com.revenuecat.purchases.PresentedOfferingContext
+import com.revenuecat.purchases.hybridcommon.ui.CheckpointListener
+import com.revenuecat.purchases.hybridcommon.ui.presentCheckpoint
 import com.revenuecat.purchases.hybridcommon.ui.PaywallListenerWrapper
 import com.revenuecat.purchases.hybridcommon.ui.PaywallResultListener
 import com.revenuecat.purchases.hybridcommon.ui.PaywallSource
@@ -21,6 +23,8 @@ import org.json.JSONObject
 
 @CapacitorPlugin(name = "RevenueCatUI")
 class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
+
+    @Volatile private var destroyed = false
 
     private var savedCall: PluginCall? = null
     private var customerCenterLauncher: ActivityResultLauncher<Intent>? = null
@@ -36,6 +40,53 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
             savedCall?.resolve()
             savedCall = null
         }
+    }
+
+    @PluginMethod
+    fun checkpoint(call: PluginCall) {
+        val identifier = call.getString("identifier")
+        val callId = call.getString("callId")
+        if (identifier == null || callId == null) {
+            call.reject("Missing checkpoint identifier or callId", "BAD_ARGS")
+            return
+        }
+        val currentActivity = activity
+        if (currentActivity == null) {
+            call.reject("No activity available for checkpoint presentation", "MISSING_ACTIVITY")
+            return
+        }
+        currentActivity.runOnUiThread {
+            if (destroyed) {
+                call.reject("Plugin was destroyed", "CHECKPOINT_ERROR")
+                return@runOnUiThread
+            }
+            val variables = call.getObject("customVariables")?.let { values ->
+                values.keys().asSequence().associateWith { values.opt(it) }
+            }
+            var setupFailed = false
+            presentCheckpoint(identifier, variables, call.getString("presentationMode"), object : CheckpointListener {
+                override fun onCheckpointPassed(checkpointResult: Map<String, Any?>) {
+                    if (!destroyed) {
+                        notifyListeners("checkpointPassed", JSObject().apply {
+                            put("callId", callId)
+                            put("result", JSONObject(checkpointResult))
+                        })
+                    }
+                }
+
+                override fun onCheckpointError(code: String, message: String) {
+                    setupFailed = true
+                    call.reject(message, code)
+                }
+            })
+            // PHC reports startup failures synchronously. Passing the checkpoint is a separate event.
+            if (!setupFailed) call.resolve()
+        }
+    }
+
+    override fun handleOnDestroy() {
+        destroyed = true
+        super.handleOnDestroy()
     }
 
     @PluginMethod

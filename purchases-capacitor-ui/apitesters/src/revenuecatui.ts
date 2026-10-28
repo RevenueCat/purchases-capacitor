@@ -9,6 +9,11 @@ import type {
 import { PAYWALL_RESULT } from '@revenuecat/purchases-typescript-internal-esm';
 
 import type {
+  CheckpointParams,
+  CheckpointResult,
+  FlowResult,
+  ObtainedEntitlement,
+  ObtainedProduct,
   PaywallListener,
   PaywallPresentationConfiguration,
   PaywallResult,
@@ -20,6 +25,7 @@ import type {
   RevenueCatUIPlugin,
 } from '@revenuecat/purchases-capacitor-ui';
 import {
+  FLOW_PRESENTATION_MODE,
   IOS_PAYWALL_PRESENTATION_STYLE,
   PaywallPresentationConfiguration as PaywallPresentationConfigurationPresets,
   PURCHASE_LOGIC_RESULT,
@@ -196,4 +202,34 @@ async function checkCombinedOptions(plugin: RevenueCatUIPlugin) {
     presentationConfiguration: PaywallPresentationConfigurationPresets.DEFAULT,
     customVariables: { discount: 20 },
   });
+}
+
+async function checkCheckpoint(plugin: RevenueCatUIPlugin) {
+  const remove: () => Promise<void> = await plugin.checkpoint(
+    'upgrade',
+    (result: CheckpointResult) => {
+      const flow: FlowResult | null = result.flow;
+      const customer: CustomerInfo = result.customer;
+      const entitlements: ObtainedEntitlement[] | undefined = flow?.obtainedEntitlements;
+      const products: ObtainedProduct[] | undefined = flow?.obtainedProducts;
+      entitlements?.forEach((value) => {
+        const identifier: string = value.entitlementInfo.identifier;
+      });
+      products?.forEach((value) => {
+        const identifier: string = value.product.identifier;
+      });
+    },
+    {
+      customVariables: { level: 12, name: 'Taylor', premium: false },
+      presentationMode: FLOW_PRESENTATION_MODE.MODAL_SHEET,
+    },
+  );
+  await remove();
+  const params: CheckpointParams = { presentationMode: FLOW_PRESENTATION_MODE.MODAL_FULL_SCREEN };
+  await (
+    await plugin.checkpoint('upgrade', () => {}, params)
+  )();
+  await (
+    await plugin.checkpoint('upgrade', () => {})
+  )();
 }
