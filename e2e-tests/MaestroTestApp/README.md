@@ -82,6 +82,28 @@ The test uses a RevenueCat project configured with:
 - A `pro` entitlement (the test checks entitlement status after purchase)
 - The **Test Store** environment for purchase confirmation
 
+The checkpoint tests use the same fixtures as purchases-flutter:
+
+- `donottouch_sdk_everyone`: presents a paywall to every user, with
+  `pro_monthly_subscription` preselected. A successful purchase must pass the
+  checkpoint and grant `pro`.
+- `maestro_unknown_checkpoint`: must not exist in the dashboard. It should pass
+  without presenting a flow or granting entitlements.
+
+Both tests start with cleared app state and a new anonymous customer. They check
+that the callback runs once and that its obtained products, entitlements and
+customer info cross the native bridge correctly.
+
+After building and installing the app on a simulator or emulator, run from the
+repository root:
+
+```bash
+maestro test e2e-tests/maestro/e2e_tests/checkpoint_purchase.yaml
+maestro test e2e-tests/maestro/e2e_tests/checkpoint_unknown_identifier.yaml
+```
+
+The existing CI Maestro suite discovers both flows through `e2e_tests/*`.
+
 ## Dependencies
 
 `@revenuecat/purchases-capacitor` and `@revenuecat/purchases-capacitor-ui` are

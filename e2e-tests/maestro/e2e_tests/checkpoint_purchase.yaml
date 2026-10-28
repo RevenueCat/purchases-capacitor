@@ -1,0 +1,33 @@
+# donottouch_sdk_everyone presents a paywall with the monthly package preselected.
+# Verify that the native checkpoint result crosses the bridge with its purchase data.
+
+appId: com.revenuecat.automatedsdktests
+name: Checkpoint purchase
+
+---
+- clearState
+- pressKey: home
+- launchApp:
+    arguments:
+        e2e_test_flow: checkpoint_purchase
+- extendedWaitUntil:
+    visible: "Hit checkpoint"
+    timeout: 30000
+- assertVisible: "Callback: not invoked"
+- tapOn:
+    text: "Hit checkpoint"
+- extendedWaitUntil:
+    visible: "Continue"
+    timeout: 20000
+- tapOn:
+    text: "Continue"
+- runFlow:
+    file: ../utils/confirm_purchase.yaml
+- extendedWaitUntil:
+    visible: "Callback: passed, entitlements: pro"
+    timeout: 20000
+- assertVisible: "Callback invocations: 1"
+- assertVisible: "Obtained products: pro_monthly_subscription"
+- assertVisible: "Entitlement pro obtained: true"
+- assertVisible: "Product pro_monthly_subscription obtained: true"
+- assertVisible: "Customer active entitlements: pro"
