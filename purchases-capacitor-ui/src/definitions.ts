@@ -62,11 +62,12 @@ export interface RevenueCatUIPlugin {
    * Starts a checkpoint configured in the RevenueCat dashboard.
    * Experimental, invite-only API. Requires Purchases to be configured and a native iOS 15+ or Android build.
    *
-   * Continue your app from onPassed. It runs at most once, when the checkpoint lets the user continue.
+   * Continue your app inside the callback passed as the second argument.
+   * The callback runs at most once, when the checkpoint lets the user continue.
    * It is not called if the user dismisses the flow, an error blocks it, or another checkpoint is already presenting.
    * The native SDK shows errors in its own dialogs.
    *
-   * Await this method to finish setup and receive a function that stops listening for onPassed.
+   * Await this method to finish setup and receive a function that stops listening for the callback.
    * Call that function when the screen closes. It is safe to call more than once.
    * Stopping the callback does not dismiss the flow or pass the checkpoint. Setup errors reject the promise.
    *

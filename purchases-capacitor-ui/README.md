@@ -121,8 +121,9 @@ const remove = await RevenueCatUI.checkpoint(
 await remove();
 ```
 
-Continue your app from `onPassed`. It runs at most once, when the checkpoint lets the user
-continue. It won't run if the user dismisses the flow, an error blocks it, or another
+Continue your app inside the callback passed as the second argument to `checkpoint()`.
+The callback runs at most once, when the checkpoint lets the user continue.
+It won't run if the user dismisses the flow, an error blocks it, or another
 checkpoint is already presenting. Errors are shown in native SDK dialogs.
 
 `await RevenueCatUI.checkpoint(...)` waits for setup and returns `remove`. Setup errors
