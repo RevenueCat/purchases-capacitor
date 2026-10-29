@@ -2,12 +2,17 @@ import {
   IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonInput,
   IonItem, IonLabel, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar,
 } from '@ionic/react';
-import { useEffect, useRef, useState } from 'react';
 import { RevenueCatUI, FLOW_PRESENTATION_MODE } from '@revenuecat/purchases-capacitor-ui';
+import { useEffect, useRef, useState } from 'react';
+
+import CustomVariablesEditor from '../components/CustomVariablesEditor';
 
 const CheckpointsScreen: React.FC = () => {
   const [identifier, setIdentifier] = useState('upgrade');
   const [mode, setMode] = useState(FLOW_PRESENTATION_MODE.DEFAULT);
+  const [customVariables, setCustomVariables] = useState<Record<string, string | number | boolean>>({
+    source: 'capacitor-tester', level: 12, premium: false,
+  });
   const [log, setLog] = useState<string[]>([]);
   const removers = useRef(new Set<() => Promise<void>>());
   const mounted = useRef(true);
@@ -26,6 +31,7 @@ const CheckpointsScreen: React.FC = () => {
 
   const run = async () => {
     append(`Starting ${identifier} (${mode})`);
+    append(`Custom variables: ${JSON.stringify(customVariables)}`);
     const generation = detachGeneration.current;
     let passed = false;
     let remove: (() => Promise<void>) | undefined;
@@ -35,7 +41,7 @@ const CheckpointsScreen: React.FC = () => {
         if (!mounted.current || generation !== detachGeneration.current) return;
         append(`Passed: ${JSON.stringify(result)}`);
         if (remove) removers.current.delete(remove);
-      }, { customVariables: { source: 'capacitor-tester', level: 12, premium: false }, presentationMode: mode });
+      }, { customVariables, presentationMode: mode });
       if (!mounted.current || passed || generation !== detachGeneration.current) await remove();
       else removers.current.add(remove);
       append('Setup completed. Waiting for onPassed.');
@@ -59,6 +65,8 @@ const CheckpointsScreen: React.FC = () => {
             {Object.values(FLOW_PRESENTATION_MODE).map(value => <IonSelectOption key={value} value={value}>{value}</IonSelectOption>)}
           </IonSelect>
         </IonItem>
+        <CustomVariablesEditor variables={customVariables} onVariablesChanged={setCustomVariables} />
+        <pre style={{ whiteSpace: 'pre-wrap' }}>{JSON.stringify(customVariables, null, 2)}</pre>
         <IonButton onClick={() => { void run(); }}>Run checkpoint</IonButton>
         <IonButton onClick={() => {
           detachGeneration.current += 1;
