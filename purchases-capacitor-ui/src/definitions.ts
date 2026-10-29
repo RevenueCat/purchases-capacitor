@@ -59,8 +59,10 @@ export interface CheckpointParams {
 
 export interface RevenueCatUIPlugin {
   /**
+   * **Experimental, invite-only API.**
+   *
    * Starts a checkpoint configured in the RevenueCat dashboard.
-   * Experimental, invite-only API. Requires Purchases to be configured and a native iOS 15+ or Android build.
+   * Requires Purchases to be configured and a native iOS 15+ or Android build.
    *
    * Continue your app inside the callback passed as the second argument.
    * The callback runs at most once, when the checkpoint lets the user continue.

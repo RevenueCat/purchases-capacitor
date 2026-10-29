@@ -99,6 +99,9 @@ await RevenueCatUI.presentCustomerCenter();
 
 ### Checkpoints (experimental, invite-only)
 
+> [!WARNING]
+> **Experimental, invite-only API.**
+
 A checkpoint gates navigation with a dashboard-defined flow. Configure Purchases first.
 Requires iOS 15+ or Android; web is unsupported, including mock web mode.
 
