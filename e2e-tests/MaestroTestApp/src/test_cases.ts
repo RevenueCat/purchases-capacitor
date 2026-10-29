@@ -6,6 +6,7 @@
 // Mirrors the pattern used by purchases-flutter (lib/test_cases.dart) and
 // cordova-plugin-purchases (www/js/test_cases.js).
 
+import { showCheckpointScreen } from './screens/checkpoint';
 import { showPurchaseThroughPaywallScreen } from './screens/purchase_through_paywall';
 
 export interface TestCase {
@@ -15,4 +16,13 @@ export interface TestCase {
 
 export const TEST_CASES: Record<string, TestCase> = {
   purchase_through_paywall: { title: 'Purchase through paywall', show: showPurchaseThroughPaywallScreen },
+  checkpoint_purchase: {
+    title: 'Checkpoint purchase',
+    // This checkpoint presents its paywall to every user, with the monthly package preselected.
+    show: () => showCheckpointScreen('donottouch_sdk_everyone'),
+  },
+  checkpoint_unknown_identifier: {
+    title: 'Checkpoint unknown identifier',
+    show: () => showCheckpointScreen('maestro_unknown_checkpoint'),
+  },
 };

@@ -3,6 +3,8 @@ import type { PluginListenerHandle } from '@capacitor/core';
 import { PAYWALL_RESULT } from '@revenuecat/purchases-typescript-internal-esm';
 
 import type {
+  CheckpointParams,
+  CheckpointResult,
   PaywallResult,
   PresentPaywallIfNeededOptions,
   PresentPaywallOptions,
@@ -15,6 +17,14 @@ export class RevenueCatUIWeb extends WebPlugin implements RevenueCatUIPlugin {
 
   constructor() {
     super();
+  }
+
+  async checkpoint(
+    _identifier: string,
+    _onPassed: (result: CheckpointResult) => void,
+    _params?: CheckpointParams,
+  ): Promise<() => Promise<void>> {
+    throw this.unimplemented('Checkpoints require a native iOS or Android build.');
   }
 
   async setMockWebResults(options: { shouldMockWebResults: boolean }): Promise<void> {
