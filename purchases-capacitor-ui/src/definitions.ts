@@ -13,46 +13,67 @@ import { PAYWALL_RESULT } from '@revenuecat/purchases-typescript-internal-esm';
 
 /** How the native SDK presents the flow selected by a checkpoint. */
 export enum FLOW_PRESENTATION_MODE {
+  /** Let the native SDK choose how to present the flow. */
   DEFAULT = 'DEFAULT',
+  /** Present the flow as a modal that covers the whole screen. */
   MODAL_FULL_SCREEN = 'MODAL_FULL_SCREEN',
+  /** Present the flow as a modal sheet over the app's content. */
   MODAL_SHEET = 'MODAL_SHEET',
 }
 
+/** An entitlement that became active during a checkpoint flow. */
 export interface ObtainedEntitlement {
+  /** Details of the entitlement that became active. */
   entitlementInfo: PurchasesEntitlementInfo;
 }
 
+/** A product whose purchase was newly reported during a checkpoint flow. */
 export interface ObtainedProduct {
+  /** Store details of the product. */
   product: PurchasesStoreProduct;
 }
 
+/** Entitlements and products obtained during a completed checkpoint flow. */
 export interface FlowResult {
+  /** Entitlements active after the flow that were not active before it started. */
   obtainedEntitlements: ObtainedEntitlement[];
+  /** Products from the flow's offerings with new purchases reported, including renewals and repeat purchases. */
   obtainedProducts: ObtainedProduct[];
 }
 
+/** The flow result and customer information delivered when a checkpoint passes. */
 export interface CheckpointResult {
-  /** Null when the checkpoint had nothing to present. */
+  /** Result of the completed flow, or null if no flow needed to be presented. */
   flow: FlowResult | null;
   /** Customer information after passing the checkpoint. */
   customer: CustomerInfo;
 }
 
+/** Optional settings for a checkpoint flow. */
 export interface CheckpointParams {
+  /** Custom values for checkpoint targeting and the presented flow. Supports strings, numbers and booleans. */
   customVariables?: Record<string, string | number | boolean>;
+  /** How to present the flow. Defaults to FLOW_PRESENTATION_MODE.DEFAULT. */
   presentationMode?: FLOW_PRESENTATION_MODE;
 }
 
 export interface RevenueCatUIPlugin {
   /**
-   * Experimental, invite-only API. Calls onPassed only when the app may continue
-   * past the checkpoint. Backing out, a blocking failure, or another checkpoint
-   * owning presentation does not invoke it. The native SDK presents errors.
+   * Starts a checkpoint configured in the RevenueCat dashboard.
+   * Experimental, invite-only API. Requires Purchases to be configured and a native iOS 15+ or Android build.
    *
-   * Requires native iOS 15+ or Android. The promise resolves after native setup,
-   * not after passing the checkpoint. It returns an idempotent async remover;
-   * call it when the owning screen unmounts. Removing the callback does not
-   * dismiss native UI. Setup errors reject the promise.
+   * Continue your app from onPassed. It runs at most once, when the checkpoint lets the user continue.
+   * It is not called if the user dismisses the flow, an error blocks it, or another checkpoint is already presenting.
+   * The native SDK shows errors in its own dialogs.
+   *
+   * Await this method to finish setup and receive a function that stops listening for onPassed.
+   * Call that function when the screen closes. It is safe to call more than once.
+   * Stopping the callback does not dismiss the flow or pass the checkpoint. Setup errors reject the promise.
+   *
+   * @param identifier - Checkpoint identifier configured in the RevenueCat dashboard.
+   * @param onPassed - Callback to continue the app, with customer information and any completed flow result.
+   * @param params - Optional custom variables and presentation mode.
+   * @returns A promise that resolves after setup with an async function to stop listening for the callback.
    */
   checkpoint(
     identifier: string,

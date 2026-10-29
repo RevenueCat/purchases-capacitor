@@ -121,12 +121,13 @@ const remove = await RevenueCatUI.checkpoint(
 await remove();
 ```
 
-The promise resolves after native setup and returns an idempotent callback remover. It does
-not wait for the checkpoint to pass. The callback runs at most once, only when the native SDK
-allows the app to continue. Backing out, a blocking failure, or another checkpoint owning
-presentation does not call it. Setup failures reject the promise. Removing the callback
-neither dismisses native UI nor passes the checkpoint. The SDK presents errors with its
-native dialogs; custom error presenters are not included in this API.
+Continue your app from `onPassed`. It runs at most once, when the checkpoint lets the user
+continue. It won't run if the user dismisses the flow, an error blocks it, or another
+checkpoint is already presenting. Errors are shown in native SDK dialogs.
+
+`await RevenueCatUI.checkpoint(...)` waits for setup and returns `remove`. Setup errors
+reject the promise. Call `await remove()` when the screen closes to stop listening for the
+callback. It is safe to call more than once. It does not dismiss the flow or pass the checkpoint.
 
 `CheckpointResult` contains `customer: CustomerInfo` and `flow: FlowResult | null`. A flow
 contains `obtainedEntitlements` (each with `entitlementInfo`) and `obtainedProducts` (each with

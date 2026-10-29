@@ -23,15 +23,13 @@ export const ANDROID_PAYWALL_PRESENTATION_STYLE: {
 // @public
 export type AndroidPaywallPresentationStyle = (typeof ANDROID_PAYWALL_PRESENTATION_STYLE)[keyof typeof ANDROID_PAYWALL_PRESENTATION_STYLE];
 
-// @public (undocumented)
+// @public
 export interface CheckpointParams {
-    // (undocumented)
     customVariables?: Record<string, string | number | boolean>;
-    // (undocumented)
     presentationMode?: FLOW_PRESENTATION_MODE;
 }
 
-// @public (undocumented)
+// @public
 export interface CheckpointResult {
     customer: CustomerInfo;
     flow: FlowResult | null;
@@ -39,19 +37,14 @@ export interface CheckpointResult {
 
 // @public
 export enum FLOW_PRESENTATION_MODE {
-    // (undocumented)
     DEFAULT = "DEFAULT",
-    // (undocumented)
     MODAL_FULL_SCREEN = "MODAL_FULL_SCREEN",
-    // (undocumented)
     MODAL_SHEET = "MODAL_SHEET"
 }
 
-// @public (undocumented)
+// @public
 export interface FlowResult {
-    // (undocumented)
     obtainedEntitlements: ObtainedEntitlement[];
-    // (undocumented)
     obtainedProducts: ObtainedProduct[];
 }
 
@@ -64,15 +57,13 @@ export const IOS_PAYWALL_PRESENTATION_STYLE: {
 // @public
 export type IOSPaywallPresentationStyle = (typeof IOS_PAYWALL_PRESENTATION_STYLE)[keyof typeof IOS_PAYWALL_PRESENTATION_STYLE];
 
-// @public (undocumented)
+// @public
 export interface ObtainedEntitlement {
-    // (undocumented)
     entitlementInfo: PurchasesEntitlementInfo;
 }
 
-// @public (undocumented)
+// @public
 export interface ObtainedProduct {
-    // (undocumented)
     product: PurchasesStoreProduct;
 }
 
