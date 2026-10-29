@@ -16,6 +16,7 @@ extension RevenueCatUIPlugin {
             }
 #if targetEnvironment(macCatalyst)
             call.reject("Checkpoints require iOS", "UNSUPPORTED_PLATFORM")
+            return
 #else
             var setupFailed = false
             CheckpointProxy.present(

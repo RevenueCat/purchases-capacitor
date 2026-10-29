@@ -108,20 +108,24 @@ Requires iOS 15+ or Android; web is unsupported, including mock web mode.
 ```typescript
 import { RevenueCatUI, FLOW_PRESENTATION_MODE } from '@revenuecat/purchases-capacitor-ui';
 
-const remove = await RevenueCatUI.checkpoint(
-  'upgrade',
-  (result) => {
-    // Continue only from this callback. result.flow is null if nothing needed presenting.
-    console.log(result.customer, result.flow);
-  },
-  {
-    customVariables: { level: 12, premium: false },
-    presentationMode: FLOW_PRESENTATION_MODE.MODAL_SHEET,
-  },
-);
+try {
+  const remove = await RevenueCatUI.checkpoint(
+    'upgrade',
+    (result) => {
+      // Continue only from this callback. result.flow is null if nothing needed presenting.
+      console.log(result.customer, result.flow);
+    },
+    {
+      customVariables: { level: 12, premium: false },
+      presentationMode: FLOW_PRESENTATION_MODE.MODAL_SHEET,
+    },
+  );
 
-// When the owning screen unmounts:
-await remove();
+  // When the owning screen unmounts:
+  await remove();
+} catch (error) {
+  console.error('Checkpoint error:', error);
+}
 ```
 
 Continue your app inside the callback passed as the second argument to `checkpoint()`.
