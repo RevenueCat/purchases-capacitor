@@ -147,11 +147,6 @@ lane :release_purchases_capacitor_ui do |options|
     next
   end
 
-  # Copy npm credentials
-  Dir.chdir(get_root_folder) do
-    sh('cp', '.npmrc.SAMPLE', '.npmrc')
-  end
-
   # Publish the UI package
   args = [
     'npm',
