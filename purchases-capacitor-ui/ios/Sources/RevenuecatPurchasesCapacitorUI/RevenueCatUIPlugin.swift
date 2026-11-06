@@ -169,6 +169,10 @@ public class RevenueCatUIPlugin: CAPPlugin, CAPBridgedPlugin {
                 DispatchQueue.main.async {
                     call.resolve()
                 }
+            }, errorHandler: { error in
+                DispatchQueue.main.async {
+                    call.reject(error.localizedDescription, "CUSTOMER_CENTER_ERROR", error)
+                }
             })
         }
     }
@@ -374,7 +378,7 @@ private protocol PaywallProxyType: AnyObject {
 
 /// Type alias for CustomerCenterProxy to avoid direct reference to the concrete type
 private protocol CustomerCenterProxyType: AnyObject {
-    func present(resultHandler: @escaping () -> Void)
+    func present(resultHandler: @escaping () -> Void, errorHandler: @escaping (NSError) -> Void)
 }
 
 // MARK: - Proxy Conformances
