@@ -63,6 +63,9 @@ This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package
 * [`setSimulatesAskToBuyInSandbox(...)`](#setsimulatesasktobuyinsandbox)
 * [`addCustomerInfoUpdateListener(...)`](#addcustomerinfoupdatelistener)
 * [`removeCustomerInfoUpdateListener(...)`](#removecustomerinfoupdatelistener)
+* [`addShouldPurchasePromoProductListener(...)`](#addshouldpurchasepromoproductlistener)
+* [`removeShouldPurchasePromoProductListener(...)`](#removeshouldpurchasepromoproductlistener)
+* [`makeDeferredPurchase(...)`](#makedeferredpurchase)
 * [`getOfferings()`](#getofferings)
 * [`getCurrentOfferingForPlacement(...)`](#getcurrentofferingforplacement)
 * [`syncAttributesAndOfferingsIfNeeded()`](#syncattributesandofferingsifneeded)
@@ -289,6 +292,60 @@ Removes a given <a href="#customerinfoupdatelistener">CustomerInfoUpdateListener
 | **`options`** | <code>{ listenerToRemove: string; }</code> | Include listenerToRemove, which is a CustomerInfoUpdateListener reference of the listener to remove |
 
 **Returns:** <code>Promise&lt;{ wasRemoved: boolean; }&gt;</code>
+
+--------------------
+
+
+### addShouldPurchasePromoProductListener(...)
+
+```typescript
+addShouldPurchasePromoProductListener(listener: ShouldPurchasePromoProductListener) => Promise<PurchasesCallbackId>
+```
+
+iOS only. Receives purchases initiated on the App <a href="#store">Store</a>, including pending purchases received before registration.
+Save the deferredPurchase function until onboarding, login or parental approval is complete, then call it.
+The purchase does not start unless it is called. Each pending purchase can be started only once across all
+listeners, even after cancellation or failure. Pending purchases are kept in memory for this plugin instance.
+
+| Param          | Type                                                                                              |
+| -------------- | ------------------------------------------------------------------------------------------------- |
+| **`listener`** | <code><a href="#shouldpurchasepromoproductlistener">ShouldPurchasePromoProductListener</a></code> |
+
+**Returns:** <code>Promise&lt;string&gt;</code>
+
+--------------------
+
+
+### removeShouldPurchasePromoProductListener(...)
+
+```typescript
+removeShouldPurchasePromoProductListener(options: { listenerToRemove: PurchasesCallbackId; }) => Promise<{ wasRemoved: boolean; }>
+```
+
+Removes a listener. Previously delivered deferredPurchase functions remain valid.
+
+| Param         | Type                                       |
+| ------------- | ------------------------------------------ |
+| **`options`** | <code>{ listenerToRemove: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ wasRemoved: boolean; }&gt;</code>
+
+--------------------
+
+
+### makeDeferredPurchase(...)
+
+```typescript
+makeDeferredPurchase(options: { callbackID: string; }) => Promise<MakePurchaseResult>
+```
+
+iOS only. Starts a pending promoted purchase. Prefer the listener's deferredPurchase function.
+
+| Param         | Type                                 |
+| ------------- | ------------------------------------ |
+| **`options`** | <code>{ callbackID: string; }</code> |
+
+**Returns:** <code>Promise&lt;<a href="#makepurchaseresult">MakePurchaseResult</a>&gt;</code>
 
 --------------------
 
@@ -1963,6 +2020,13 @@ Listener used on updated customer info
 #### PurchasesCallbackId
 
 <code>string</code>
+
+
+#### ShouldPurchasePromoProductListener
+
+Listener used to determine if a user should be able to purchase a promo product.
+
+<code>(deferredPurchase: () =&gt; Promise&lt;<a href="#makepurchaseresult">MakePurchaseResult</a>&gt;): void</code>
 
 
 #### MakePurchaseResult

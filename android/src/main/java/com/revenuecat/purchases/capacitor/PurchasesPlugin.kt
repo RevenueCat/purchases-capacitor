@@ -207,6 +207,24 @@ class PurchasesPlugin : Plugin() {
         call.resolveWithMap(mapOf("wasRemoved" to wasRemoved))
     }
 
+    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
+    fun addShouldPurchasePromoProductListener(call: PluginCall) {
+        logNotSupportedFunctionalityInAndroid("addShouldPurchasePromoProductListener")
+        // Release the JS callback with a terminal response; the JS wrapper ignores empty events.
+        call.resolve()
+    }
+
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
+    fun removeShouldPurchasePromoProductListener(call: PluginCall) {
+        logNotSupportedFunctionalityInAndroid("removeShouldPurchasePromoProductListener")
+        call.resolveWithMap(mapOf("wasRemoved" to false))
+    }
+
+    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
+    fun makeDeferredPurchase(call: PluginCall) {
+        call.unavailable("Promoted App Store purchases are only available on iOS")
+    }
+
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun getOfferings(call: PluginCall) {
         if (rejectIfNotConfigured(call)) return

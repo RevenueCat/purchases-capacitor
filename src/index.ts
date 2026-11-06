@@ -1,5 +1,6 @@
 import { registerPlugin } from '@capacitor/core';
 import { normalizePurchasesError } from '@revenuecat/purchases-typescript-internal-esm';
+import type { ShouldPurchasePromoProductListener } from '@revenuecat/purchases-typescript-internal-esm';
 
 import type { PurchasesPlugin, TrackCustomPaywallImpressionOptions } from './definitions';
 
@@ -61,6 +62,18 @@ function getNativeTrackCustomPaywallImpressionOptions(
 }
 
 function toNativeArgs(prop: string | symbol, args: unknown[]): unknown[] {
+  if (prop === 'addShouldPurchasePromoProductListener') {
+    const listener = args[0] as ShouldPurchasePromoProductListener;
+    return [
+      (event?: { callbackID?: string }) => {
+        // A terminal native response releases the bridge callback without delivering a promotion.
+        if (typeof event?.callbackID === 'string') {
+          const callbackID = event.callbackID;
+          listener(() => Purchases.makeDeferredPurchase({ callbackID }));
+        }
+      },
+    ];
+  }
   if (prop !== 'trackCustomPaywallImpression') {
     return args;
   }

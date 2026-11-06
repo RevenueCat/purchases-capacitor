@@ -9,6 +9,7 @@ import type {
   LogHandler,
   LogInResult,
   MakePurchaseResult,
+  ShouldPurchasePromoProductListener,
   PRODUCT_CATEGORY,
   PurchasesConfiguration,
   PurchasesEntitlementInfo,
@@ -329,29 +330,21 @@ export interface PurchasesPlugin {
     listenerToRemove: PurchasesCallbackId;
   }): Promise<{ wasRemoved: boolean }>;
 
-  // TODO: Support addShouldPurchasePromoProductListener functionality
-  // /**
-  //  * Sets a function to be called on purchases initiated on the Apple App Store. This is only used in iOS.
-  //  * @param {ShouldPurchasePromoProductListener} shouldPurchasePromoProductListener Called when a user initiates a
-  //  * promotional in-app purchase from the App Store. If your app is able to handle a purchase at the current time, run
-  //  * the deferredPurchase function. If the app is not in a state to make a purchase: cache the deferredPurchase, then
-  //  * call the deferredPurchase when the app is ready to make the promotional purchase.
-  //  * If the purchase should never be made, you don't need to ever call the deferredPurchase and the app will not
-  //  * proceed with promotional purchases.
-  //  */
-  // addShouldPurchasePromoProductListener(
-  //   shouldPurchasePromoProductListener: ShouldPurchasePromoProductListener,
-  // ): Promise<PurchasesCallbackId>;
-  //
-  // /**
-  //  * Removes a given ShouldPurchasePromoProductListener
-  //  * @param {ShouldPurchasePromoProductListener} listenerToRemove ShouldPurchasePromoProductListener reference of
-  //  * the listener to remove
-  //  * @returns Promise with boolean. True if listener was removed, false otherwise
-  //  */
-  // removeShouldPurchasePromoProductListener(
-  //   listenerToRemove: PurchasesCallbackId,
-  // ): Promise<{ wasRemoved: boolean }>;
+  /**
+   * iOS only. Receives purchases initiated on the App Store, including pending purchases received before registration.
+   * Save the deferredPurchase function until onboarding, login or parental approval is complete, then call it.
+   * The purchase does not start unless it is called. Each pending purchase can be started only once across all
+   * listeners, even after cancellation or failure. Pending purchases are kept in memory for this plugin instance.
+   */
+  addShouldPurchasePromoProductListener(listener: ShouldPurchasePromoProductListener): Promise<PurchasesCallbackId>;
+
+  /** Removes a listener. Previously delivered deferredPurchase functions remain valid. */
+  removeShouldPurchasePromoProductListener(options: {
+    listenerToRemove: PurchasesCallbackId;
+  }): Promise<{ wasRemoved: boolean }>;
+
+  /** iOS only. Starts a pending promoted purchase. Prefer the listener's deferredPurchase function. */
+  makeDeferredPurchase(options: { callbackID: string }): Promise<MakePurchaseResult>;
 
   /**
    * Gets the map of entitlements -> offerings -> products
