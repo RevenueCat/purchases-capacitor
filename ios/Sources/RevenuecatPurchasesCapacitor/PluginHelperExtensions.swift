@@ -4,6 +4,29 @@ import PurchasesHybridCommon
 import RevenueCat
 
 internal extension PurchasesPlugin {
+    // Returns true when this optional path handled the request, including rejection.
+    func purchaseWithIntroductoryOfferEligibilityJWSIfPresent(_ call: CAPPluginCall,
+                                                             options: [String: Any]) -> Bool {
+        guard let value = call.options["introductoryOfferEligibilityJWS"], !(value is NSNull) else {
+            return false
+        }
+        guard let token = value as? String, !token.isEmpty else {
+            call.reject("introductoryOfferEligibilityJWS must be a non-empty string.",
+                        String(ErrorCode.purchaseInvalidError.rawValue))
+            return true
+        }
+        // An older PHC accepts arbitrary options but would silently discard this token.
+        guard CommonFunctionality.responds(to: NSSelectorFromString("purchase:introductoryOfferEligibilityJWS:completionBlock:")) else {
+            call.reject("This PurchasesHybridCommon version does not support introductory offer eligibility JWS.",
+                        String(ErrorCode.unsupportedError.rawValue))
+            return true
+        }
+        var options = options
+        options["introductoryOfferEligibilityJWS"] = token
+        CommonFunctionality.purchase(options: options, completion: self.getCompletionBlockHandler(call))
+        return true
+    }
+
     func rejectIfPurchasesNotConfigured(_ call: CAPPluginCall) -> Bool {
         if !Purchases.isConfigured {
             call.reject("Purchases must be configured before calling this function")
