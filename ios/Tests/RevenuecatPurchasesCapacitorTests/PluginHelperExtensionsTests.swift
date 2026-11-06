@@ -81,8 +81,9 @@ final class IntroductoryOfferEligibilityDispatchTests: XCTestCase {
             let plugin = DispatchSpy()
             let call = try XCTUnwrap(CAPPluginCall(callbackId: "test", methodName: "purchaseWithIntroductoryOfferEligibilityJWS",
                 options: ["introductoryOfferEligibilityJWS": "header.deny.signature", "purchasableItemType": itemType,
-                          "product": ["identifier": "product"], "aPackage": ["identifier": "monthly"]],
-                success: { _, _ in XCTFail("unexpected purchase") }, error: { _ in XCTFail("unexpected rejection") }))
+                          "product": ["identifier": "product"] as JSObject,
+                          "aPackage": ["identifier": "monthly"] as JSObject],
+                success: { _, _ in XCTFail("unexpected purchase") }, error: { XCTFail("unexpected rejection: \($0.message)") }))
             plugin.purchaseWithIntroductoryOfferEligibilityJWS(call)
             XCTAssertEqual(plugin.itemType, itemType)
         }
@@ -95,7 +96,7 @@ final class IntroductoryOfferEligibilityDispatchTests: XCTestCase {
             let otherKey = itemType == "product" ? "aPackage" : "product"
             let call = try XCTUnwrap(CAPPluginCall(callbackId: "test", methodName: "purchaseWithIntroductoryOfferEligibilityJWS",
                 options: ["introductoryOfferEligibilityJWS": "header.deny.signature", "purchasableItemType": itemType,
-                          otherKey: ["identifier": "other"]],
+                          otherKey: ["identifier": "other"] as JSObject],
                 success: { _, _ in XCTFail("unexpected purchase") }, error: { rejection = $0 }))
             plugin.purchaseWithIntroductoryOfferEligibilityJWS(call)
             XCTAssertNotNil(rejection)
