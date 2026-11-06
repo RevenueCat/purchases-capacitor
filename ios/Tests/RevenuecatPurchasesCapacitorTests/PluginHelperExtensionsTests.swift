@@ -47,3 +47,59 @@ final class RejectWithErrorContainerTests: XCTestCase {
         return try XCTUnwrap(rejection)
     }
 }
+
+final class IntroductoryOfferEligibilityParameterTests: XCTestCase {
+    func testAbsentTokensKeepExistingPath() throws {
+        for options: [String: Any] in [[:], ["introductoryOfferEligibilityJWS": NSNull()]] {
+            let call = try XCTUnwrap(CAPPluginCall(callbackId: "test", methodName: "purchasePackage", options: options,
+                success: { _, _ in XCTFail("unexpected purchase") }, error: { _ in XCTFail("unexpected rejection") }))
+            XCTAssertFalse(PurchasesPlugin().purchaseWithIntroductoryOfferEligibilityJWSIfPresent(call, options: [:]))
+        }
+    }
+
+    func testMalformedTokensRejectWithoutFallingBack() throws {
+        for value: Any in ["", 123, false, ["token"]] {
+            var error: CAPPluginCallError?
+            let call = try XCTUnwrap(CAPPluginCall(callbackId: "test", methodName: "purchaseStoreProduct",
+                options: ["introductoryOfferEligibilityJWS": value],
+                success: { _, _ in XCTFail("unexpected purchase") }, error: { error = $0 }))
+            XCTAssertTrue(PurchasesPlugin().purchaseWithIntroductoryOfferEligibilityJWSIfPresent(call, options: [:]))
+            XCTAssertNotNil(error?.code)
+        }
+    }
+}
+
+final class IntroductoryOfferEligibilityDispatchTests: XCTestCase {
+    private final class DispatchSpy: PurchasesPlugin {
+        var itemType: String?
+        override func purchaseStoreProduct(_ call: CAPPluginCall) { itemType = "product" }
+        override func purchasePackage(_ call: CAPPluginCall) { itemType = "package" }
+    }
+
+    func testDispatchUsesRequestedTypeEvenWhenBothItemsArePresent() throws {
+        for itemType in ["product", "package"] {
+            let plugin = DispatchSpy()
+            let call = try XCTUnwrap(CAPPluginCall(callbackId: "test", methodName: "purchaseWithIntroductoryOfferEligibilityJWS",
+                options: ["introductoryOfferEligibilityJWS": "header.deny.signature", "purchasableItemType": itemType,
+                          "product": ["identifier": "product"], "aPackage": ["identifier": "monthly"]],
+                success: { _, _ in XCTFail("unexpected purchase") }, error: { _ in XCTFail("unexpected rejection") }))
+            plugin.purchaseWithIntroductoryOfferEligibilityJWS(call)
+            XCTAssertEqual(plugin.itemType, itemType)
+        }
+    }
+
+    func testMissingRequestedItemDoesNotFallBackToAnotherKind() throws {
+        for itemType in ["product", "package"] {
+            var rejection: CAPPluginCallError?
+            let plugin = DispatchSpy()
+            let otherKey = itemType == "product" ? "aPackage" : "product"
+            let call = try XCTUnwrap(CAPPluginCall(callbackId: "test", methodName: "purchaseWithIntroductoryOfferEligibilityJWS",
+                options: ["introductoryOfferEligibilityJWS": "header.deny.signature", "purchasableItemType": itemType,
+                          otherKey: ["identifier": "other"]],
+                success: { _, _ in XCTFail("unexpected purchase") }, error: { rejection = $0 }))
+            plugin.purchaseWithIntroductoryOfferEligibilityJWS(call)
+            XCTAssertNotNil(rejection)
+            XCTAssertNil(plugin.itemType)
+        }
+    }
+}
