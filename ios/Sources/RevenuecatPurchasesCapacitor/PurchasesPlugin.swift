@@ -88,6 +88,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
         CAPPluginMethod(name: "removeCustomerInfoUpdateListener", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "addShouldPurchasePromoProductListener", returnType: CAPPluginReturnCallback),
         CAPPluginMethod(name: "removeShouldPurchasePromoProductListener", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "makeDeferredPurchase", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "overridePreferredUILocale", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "trackCustomPaywallImpression", returnType: CAPPluginReturnPromise),
     ]
@@ -106,6 +107,15 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
     // WIP: Need to handle concurrency for these...
     private var customerInfoUpdateListeners: [String] = []
     private var lastReceivedCustomerInfo: CustomerInfo?
+
+    // Accessed only on the main queue, including calls arriving from Capacitor's plugin queue.
+    private final class PromotedPurchaseListener {
+        weak var call: CAPPluginCall?
+        init(_ call: CAPPluginCall) { self.call = call }
+    }
+    // The bridge owns listener calls and releases them on WebView navigation/reset.
+    private var promotedPurchaseListeners: [String: PromotedPurchaseListener] = [:]
+    private var pendingPromotedPurchases: [String: StartPurchaseBlock] = [:]
 
     @objc func configure(_ call: CAPPluginCall) {
         guard let apiKey = call.getOrRejectString("apiKey") else { return }
@@ -239,6 +249,53 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
     @objc func getOfferings(_ call: CAPPluginCall) {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
         CommonFunctionality.getOfferings(completion: self.getCompletionBlockHandler(call))
+    }
+
+    @objc func addShouldPurchasePromoProductListener(_ call: CAPPluginCall) {
+        call.keepAlive = true
+        DispatchQueue.main.async {
+            self.promotedPurchaseListeners = self.promotedPurchaseListeners.filter { $0.value.call != nil }
+            self.promotedPurchaseListeners[call.callbackId] = PromotedPurchaseListener(call)
+            for callbackID in Array(self.pendingPromotedPurchases.keys) {
+                call.resolve(["callbackID": callbackID])
+            }
+        }
+    }
+
+    @objc func removeShouldPurchasePromoProductListener(_ call: CAPPluginCall) {
+        guard let callbackID = call.getOrRejectString("listenerToRemove") else { return }
+        DispatchQueue.main.async {
+            let listener = self.promotedPurchaseListeners.removeValue(forKey: callbackID)?.call
+            listener?.keepAlive = false
+            // A terminal response also releases Capacitor's JS callback/closure.
+            listener?.resolve()
+            self.bridge?.releaseCall(withID: callbackID)
+            call.resolve(["wasRemoved": listener != nil])
+        }
+    }
+
+    @objc func makeDeferredPurchase(_ call: CAPPluginCall) {
+        guard let callbackID = call.getOrRejectString("callbackID") else { return }
+        DispatchQueue.main.async {
+            // Consume before invoking app/native code, including when the purchase fails or is cancelled.
+            guard let purchase = self.pendingPromotedPurchases.removeValue(forKey: callbackID) else {
+                call.reject("No pending promoted purchase for callbackID (it may already have been used).")
+                return
+            }
+            CommonFunctionality.makeDeferredPurchase(purchase,
+                                                       completion: self.getCompletionBlockHandler(call))
+        }
+    }
+
+    func receivePromotedPurchase(_ startPurchase: @escaping StartPurchaseBlock) {
+        DispatchQueue.main.async {
+            let callbackID = UUID().uuidString
+            self.pendingPromotedPurchases[callbackID] = startPurchase
+            self.promotedPurchaseListeners = self.promotedPurchaseListeners.filter { $0.value.call != nil }
+            for listener in Array(self.promotedPurchaseListeners.values) {
+                listener.call?.resolve(["callbackID": callbackID])
+            }
+        }
     }
 
     @objc func getCurrentOfferingForPlacement(_ call: CAPPluginCall) {
@@ -693,6 +750,11 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
             self?.bridge?.savedCall(withID: callbackId)?.resolve(CommonFunctionality.encode(customerInfo: customerInfo))
         }
         self.lastReceivedCustomerInfo = customerInfo
+    }
+
+    public func purchases(_ purchases: Purchases, readyForPromotedProduct product: StoreProduct,
+                          purchase startPurchase: @escaping StartPurchaseBlock) {
+        self.receivePromotedPurchase(startPurchase)
     }
 
 }

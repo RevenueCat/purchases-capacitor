@@ -385,10 +385,13 @@ function checkPurchaseParams(
   };
 }
 
-function checkShouldPurchasePromoProductListener() {
+async function checkShouldPurchasePromoProductListener(plugin: PurchasesPlugin) {
   const listener: ShouldPurchasePromoProductListener = (deferredPurchase: () => Promise<MakePurchaseResult>) => {
     deferredPurchase();
   };
+  const listenerToRemove = await plugin.addShouldPurchasePromoProductListener(listener);
+  await plugin.removeShouldPurchasePromoProductListener({ listenerToRemove });
+  const result: MakePurchaseResult = await plugin.makeDeferredPurchase({ callbackID: 'pending' });
 }
 
 async function checkLocaleAndPaywallImpression(plugin: PurchasesPlugin) {
