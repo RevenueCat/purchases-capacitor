@@ -449,6 +449,16 @@ jobs:
           name: API Tests (UI)
           command: cd purchases-capacitor-ui && yarn apitest
 
+  run-tests-ios-ui:
+    description: "Build the purchases-capacitor-ui iOS package"
+    <<: *base-mac-job
+    steps:
+      - checkout
+      - yarn-dependencies-ui-mac
+      - run:
+          name: Verify iOS (UI)
+          command: cd purchases-capacitor-ui && yarn verify:ios
+
   run-lint-ui:
     description: "Run linting for purchases-capacitor-ui package"
     docker:
@@ -539,6 +549,7 @@ workflows:
       - check-api-changes
       # UI Package jobs
       - run-api-tests-ui
+      - run-tests-ios-ui
       - run-lint-ui
       - dry-run-release-ui
       - run-maestro-e2e-tests-ios:
@@ -564,6 +575,7 @@ workflows:
             - run-tests-android
             - run-lint
             - run-api-tests-ui
+            - run-tests-ios-ui
             - run-lint-ui
             - check-api-changes
             - verify-android-agp8
