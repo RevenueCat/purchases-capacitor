@@ -64,21 +64,29 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
                 values.keys().asSequence().associateWith { values.opt(it) }
             }
             var setupFailed = false
-            presentCheckpoint(identifier, variables, call.getString("presentationMode"), object : CheckpointListener {
-                override fun onCheckpointPassed(checkpointResult: Map<String, Any?>) {
-                    if (!destroyed) {
-                        notifyListeners("checkpointPassed", JSObject().apply {
-                            put("callId", callId)
-                            put("result", JSONObject(checkpointResult))
-                        })
+            presentCheckpoint(
+                identifier = identifier,
+                callId = callId,
+                customVariables = variables,
+                presentationMode = call.getString("presentationMode"),
+                useCustomPaywallPresenter = false,
+                hasErrorDialogFactory = false,
+                listener = object : CheckpointListener {
+                    override fun onCheckpointPassed(checkpointResult: Map<String, Any?>) {
+                        if (!destroyed) {
+                            notifyListeners("checkpointPassed", JSObject().apply {
+                                put("callId", callId)
+                                put("result", JSONObject(checkpointResult))
+                            })
+                        }
+                    }
+
+                    override fun onCheckpointError(code: String, message: String) {
+                        setupFailed = true
+                        call.reject(message, code)
                     }
                 }
-
-                override fun onCheckpointError(code: String, message: String) {
-                    setupFailed = true
-                    call.reject(message, code)
-                }
-            })
+            )
             // PHC reports startup failures synchronously. Passing the checkpoint is a separate event.
             if (!setupFailed) call.resolve()
         }
