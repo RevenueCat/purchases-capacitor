@@ -83,7 +83,7 @@ final class IntroductoryOfferEligibilityDispatchTests: XCTestCase {
                 options: ["introductoryOfferEligibilityJWS": "header.deny.signature", "purchasableItemType": itemType,
                           "product": ["identifier": "product"] as JSObject,
                           "aPackage": ["identifier": "monthly"] as JSObject],
-                success: { _, _ in XCTFail("unexpected purchase") }, error: { XCTFail("unexpected rejection: \($0.message)") }))
+                success: { _, _ in XCTFail("unexpected purchase") }, error: { XCTFail("unexpected rejection: \($0?.message ?? "unknown")") }))
             plugin.purchaseWithIntroductoryOfferEligibilityJWS(call)
             XCTAssertEqual(plugin.itemType, itemType)
         }
