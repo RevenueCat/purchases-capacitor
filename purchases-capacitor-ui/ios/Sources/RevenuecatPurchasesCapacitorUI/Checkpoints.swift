@@ -21,6 +21,7 @@ extension RevenueCatUIPlugin {
             var setupFailed = false
             CheckpointProxy.present(
                 identifier: identifier,
+                callId: callId,
                 customVariables: call.getObject("customVariables"),
                 presentationMode: call.getString("presentationMode"),
                 onPassed: { [weak self] result in
@@ -29,7 +30,9 @@ extension RevenueCatUIPlugin {
                 onError: { code, message in
                     setupFailed = true
                     call.reject(message, code)
-                }
+                },
+                onPaywallPresentationRequested: nil,
+                onErrorDialogRequested: nil
             )
             // PHC reports startup failures synchronously. Passing the checkpoint is a separate event.
             if !setupFailed { call.resolve() }

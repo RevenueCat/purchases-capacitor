@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   macos: circleci/macos@2.3.6
   android: circleci/android@3.0.2
-  revenuecat: revenuecat/sdks-common-config@4.7.1
+  revenuecat: revenuecat/sdks-common-config@4.8.0
 
 aliases:
   base-mac-job: &base-mac-job
@@ -553,6 +553,7 @@ workflows:
           type: approval
           <<: *release-branches
       - revenuecat/tag-current-branch:
+          context: github-bot-public
           ruby_version: "3.3.0"
           requires:
             - wait-for-pr-approval
@@ -571,7 +572,9 @@ workflows:
             - verify-android-agp9-legacy-kotlin
           <<: *release-branches
       - make-release:
-          context: npm-publishing
+          context:
+            - npm-publishing
+            - github-bot-public
           <<: *release-tags
       - make-release-ui:
           context: npm-publishing
@@ -579,6 +582,7 @@ workflows:
             - make-release
           <<: *release-tags
       - revenuecat/merge-release-pr:
+          context: github-bot-public
           repo_name: purchases-capacitor
           ruby_version: "3.3.0"
           requires:
@@ -588,6 +592,7 @@ workflows:
   danger:
     jobs:
       - revenuecat/danger:
+          context: danger-bot
           ruby_version: "3.3.0"
           filters:
             branches:
@@ -599,16 +604,19 @@ workflows:
         - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
         - equal: [ "release-train", << pipeline.schedule.name >> ]
     jobs:
-      - bump
+      - bump:
+          context: github-bot-public
 
   manual-trigger-bump:
     when:
       equal: [ bump, << pipeline.parameters.action >> ]
     jobs:
-      - bump
+      - bump:
+          context: github-bot-public
 
   update-hybrid-common-versions:
     when:
       equal: [ upgrade-hybrid-common, << pipeline.parameters.action >> ]
     jobs:
-      - update-hybrid-common-versions
+      - update-hybrid-common-versions:
+          context: github-bot-public
