@@ -72,11 +72,11 @@ class RevenueCatUIPlugin : Plugin(), PaywallResultListener {
                 useCustomPaywallPresenter = false,
                 hasErrorDialogFactory = false,
                 listener = object : CheckpointListener {
-                    override fun onCheckpointPassed(checkpointResult: Map<String, Any?>) {
+                    override fun onCheckpointPassed(result: Map<String, Any?>) {
                         if (!destroyed) {
                             notifyListeners("checkpointPassed", JSObject().apply {
                                 put("callId", callId)
-                                put("result", JSONObject(checkpointResult))
+                                put("result", JSONObject(result))
                             })
                         }
                     }
