@@ -68,6 +68,12 @@ export interface PurchaseStoreProductOptions {
    * See https://developer.android.com/google/play/billing/integrate#personalized-price for more info.
    */
   googleIsPersonalizedPrice?: boolean | null;
+  /**
+   * Apple StoreKit 2 only. Developer-signed introductory offer eligibility JWS.
+   * Requires iOS 15+ and a supporting PHC release. Unsupported paths reject;
+   * null/undefined preserves default store eligibility. Sign on your server.
+   */
+  introductoryOfferEligibilityJWS?: string | null;
 }
 
 export interface PurchaseDiscountedProductOptions {
@@ -141,6 +147,12 @@ export interface PurchasePackageOptions {
    * See https://developer.android.com/google/play/billing/integrate#personalized-price for more info.
    */
   googleIsPersonalizedPrice?: boolean | null;
+  /**
+   * Apple StoreKit 2 only. Developer-signed introductory offer eligibility JWS.
+   * Requires iOS 15+ and a supporting PHC release. Unsupported paths reject;
+   * null/undefined preserves default store eligibility. Sign on your server.
+   */
+  introductoryOfferEligibilityJWS?: string | null;
 }
 
 export interface PurchaseSubscriptionOptionOptions {

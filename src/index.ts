@@ -1,13 +1,17 @@
 import { registerPlugin } from '@capacitor/core';
 import { normalizePurchasesError } from '@revenuecat/purchases-typescript-internal-esm';
 
-import type { PurchasesPlugin, TrackCustomPaywallImpressionOptions } from './definitions';
+import type { MakePurchaseResult, PurchasesPlugin, TrackCustomPaywallImpressionOptions } from './definitions';
 
 type NativeTrackCustomPaywallImpressionOptions = Omit<TrackCustomPaywallImpressionOptions, 'offering'> & {
   presentedOfferingContext?: unknown;
 };
 
-const nativePlugin = registerPlugin<PurchasesPlugin>('Purchases', {
+type NativePurchasesPlugin = PurchasesPlugin & {
+  purchaseWithIntroductoryOfferEligibilityJWS(options: unknown): Promise<MakePurchaseResult>;
+};
+
+const nativePlugin = registerPlugin<NativePurchasesPlugin>('Purchases', {
   web: () => import('./web').then((m) => new m.PurchasesWeb()),
 });
 
@@ -77,6 +81,20 @@ const Purchases = new Proxy(nativePlugin, {
     // the `name` and `toString` that logs and crash reports read.
     return new Proxy(value as (...callArgs: unknown[]) => unknown, {
       apply: (method, _thisArg, args) => {
+        const options = args[0] as { introductoryOfferEligibilityJWS?: unknown } | undefined;
+        if (
+          (prop === 'purchaseStoreProduct' || prop === 'purchasePackage') &&
+          options?.introductoryOfferEligibilityJWS != null
+        ) {
+          // A separate bridge entry point makes older native plugins reject instead of
+          // silently accepting an option their existing purchase methods would discard.
+          return normalizeRejection(
+            nativePlugin.purchaseWithIntroductoryOfferEligibilityJWS({
+              ...options,
+              purchasableItemType: prop === 'purchaseStoreProduct' ? 'product' : 'package',
+            }),
+          );
+        }
         const result = normalizeRejection(Reflect.apply(method, target, toNativeArgs(prop, args)));
         return prop === 'redeemWebPurchase' ? normalizeRedemptionError(result) : result;
       },
