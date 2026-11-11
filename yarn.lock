@@ -311,9 +311,9 @@
     typescript "~4.2.4"
 
 "@capacitor/ios@^8.0.0":
-  version "8.4.1"
-  resolved "https://registry.yarnpkg.com/@capacitor/ios/-/ios-8.4.1.tgz#afc483682406eae1a703e8751082e1bfc9fe8652"
-  integrity sha512-EgcAk7NYheHMTyP3CUrA65qKs4D2UEAKgw44HI6Uk3dTw6KjLQkdLOQWvbeRncHaZ2gklfOojUoc5DlSw2lhYg==
+  version "8.4.3"
+  resolved "https://registry.yarnpkg.com/@capacitor/ios/-/ios-8.4.3.tgz#f2dea2c6da0f44721d71f7a307fc15ef1b30593c"
+  integrity sha512-ziFt4WskFjUFgwCcudhxklcCFMCPNTUk1yVuwutw6xxCvUZzmiOJjVLjDrZ+3A1G02nV+oizUiGPff97htPRIg==
 
 "@emnapi/core@1.10.0":
   version "1.10.0"
