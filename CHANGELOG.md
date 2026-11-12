@@ -1,3 +1,11 @@
+## 15.0.0 (unreleased)
+
+<!-- TODO: before merging 15.0-dev into main, preserve these breaking notes in the final major release changelog and remove this staging heading. (SDK-4606) -->
+
+### 💥 Breaking Changes
+
+- **Apple installation:** PHC 21 stops publishing its core/UI podspecs to CocoaPods trunk. Standard CocoaPods installation of RevenueCat is no longer supported. Migrate to Swift Package Manager before upgrading; see the [Capacitor migration guide](https://rev.cat/capacitor-spm-migration).
+
 ## 14.1.0
 ## RevenueCat SDK
 ### ✨ New Features
