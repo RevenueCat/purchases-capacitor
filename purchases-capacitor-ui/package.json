@@ -1,6 +1,7 @@
 {
   "name": "@revenuecat/purchases-capacitor-ui",
   "version": "14.1.0",
+  "//": "TODO: before merging 15.0-dev into main, use the released PHC 21 artifact here. (SDK-4604) Remove this comment after aligning the PHC dependencies.",
   "packageManager": "yarn@1.22.22",
   "description": "UI components for RevenueCat Capacitor SDK",
   "main": "dist/esm/index.js",

@@ -53,6 +53,7 @@ repositories {
 dependencies {
     implementation project(':capacitor-android')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    // TODO: before merging 15.0-dev into main, use the released PHC 21 artifact here. (SDK-4604)
     implementation 'com.revenuecat.purchases:purchases-hybrid-common-ui:20.8.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:2.2.20"
 }

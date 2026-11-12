@@ -11,7 +11,8 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "8.0.0"),
-         .package(url: "https://github.com/RevenueCat/purchases-hybrid-common.git", exact: "20.8.0")
+         // TODO: before merging 15.0-dev into main, replace this development reference with the published PHC 21 version. (SDK-4604)
+         .package(url: "https://github.com/RevenueCat/purchases-hybrid-common.git", branch: "21.0-dev")
     ],
     targets: [
         .target(
