@@ -213,10 +213,7 @@ jobs:
             xcrun simctl boot "iPhone 17" || true
             xcrun simctl bootstatus "iPhone 17" -b
             xcrun simctl install booted e2e-tests/CocoaPodsSmokeTest/build/Build/Products/Debug-iphonesimulator/App.app
-            maestro test --format junit --output build/cocoapods-smoke-results/report.xml \
-              e2e-tests/CocoaPodsSmokeTest/flow.yaml
-      - store_test_results:
-          path: build/cocoapods-smoke-results
+            maestro test e2e-tests/CocoaPodsSmokeTest/flow.yaml
 
   run-tests-android:
     <<: *base-android-job

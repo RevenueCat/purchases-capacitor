@@ -2,3 +2,5 @@ App/App/public/
 App/App/capacitor.config.json
 App/App/capacitor.plugins.json
 App/App.xcworkspace/
+App/App/config.xml
+capacitor-cordova-ios-plugins/
