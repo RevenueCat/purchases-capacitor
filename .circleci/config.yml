@@ -407,7 +407,7 @@ jobs:
       - yarn-dependencies-unix
       - run:
           name: Create automatic PR
-          command: bundle exec fastlane automatic_bump github_rate_limit:10
+          command: bundle exec fastlane automatic_bump github_rate_limit:2
 
   check-api-changes:
     description: "Check for unexpected API changes in purchases-capacitor and purchases-capacitor-ui"
