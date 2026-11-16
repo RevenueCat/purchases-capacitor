@@ -15,7 +15,8 @@ files_to_update_phc_version = {
     'Package.swift' => ['.package(url: "https://github.com/RevenueCat/purchases-hybrid-common.git", exact: "{x}")'],
     'purchases-capacitor-ui/Package.swift' => ['.package(url: "https://github.com/RevenueCat/purchases-hybrid-common.git", exact: "{x}")'],
 }
-repo_name = 'purchases-capacitor'
+internal_repo_name = 'purchases-capacitor_internal'
+public_repo_name = 'purchases-capacitor'
 changelog_latest_path = './CHANGELOG.latest.md'
 changelog_path = './CHANGELOG.md'
 versions_path = './VERSIONS.md'
@@ -33,14 +34,15 @@ lane :bump do |options|
     changelog_path: changelog_path,
     files_to_update: files_with_version_number,
     files_to_update_without_prerelease_modifiers: {},
-    repo_name: repo_name,
+    repo_name: internal_repo_name,
     github_rate_limit: options[:github_rate_limit],
     editor: options[:editor],
     next_version: options[:next_version],
     automatic_release: options[:automatic_release],
     hybrid_common_version: phc_version,
     versions_file_path: versions_path,
-    is_prerelease: options[:is_prerelease]
+    is_prerelease: options[:is_prerelease],
+    omit_pr_references_in_changelog_files: true
   )
   update_hybrids_versions_file(
     versions_file_path: versions_path,
@@ -60,7 +62,7 @@ end
 desc "Automatically bumps version, edit changelog, and create pull request"
 lane :automatic_bump do |options|
   next_version, type_of_bump = determine_next_version_using_labels(
-    repo_name: repo_name,
+    repo_name: internal_repo_name,
     github_rate_limit: options[:github_rate_limit]
   )
   options[:next_version] = next_version
@@ -79,7 +81,7 @@ desc "Make github release"
 lane :github_release do |options|
   create_github_release(
     version: options[:version],
-    repo_name: repo_name,
+    repo_name: public_repo_name,
     github_api_token: ENV["GITHUB_TOKEN"],
     changelog_latest_path: changelog_latest_path,
     upload_assets: []
@@ -227,7 +229,7 @@ lane :update_hybrid_common do |options|
   end
 
   bump_phc_version(
-    repo_name: repo_name,
+    repo_name: internal_repo_name,
     files_to_update: files_to_update_phc_version,
     current_version: current_phc_version,
     next_version: new_version_number,
