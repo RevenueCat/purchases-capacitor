@@ -84,3 +84,4 @@ DerivedData/
 .netrc
 Package.resolved
 /.build
+!e2e-tests/CocoaPodsSmokeTest/package-lock.json

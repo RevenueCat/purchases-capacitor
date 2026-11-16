@@ -1,0 +1,33 @@
+require_relative '../../node_modules/@capacitor/ios/scripts/pods_helpers'
+
+platform :ios, '15.0'
+use_frameworks!
+
+# workaround to avoid Xcode caching of Pods that requires
+# Product -> Clean Build Folder after new Cordova plugins installed
+# Requires CocoaPods 1.6 or newer
+install! 'cocoapods', :disable_input_output_paths => true
+
+def capacitor_pods
+  pod 'Capacitor', :path => '../../node_modules/@capacitor/ios'
+  pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
+  pod 'RevenuecatPurchasesCapacitor', :path => '../../../..'
+  pod 'RevenuecatPurchasesCapacitorUi', :path => '../../../../purchases-capacitor-ui'
+end
+
+target 'App' do
+  # TODO: before merging 15.0-dev into main, pin the PHC release and change :branch to :tag. (SDK-4604)
+  phc_version = '21.0-dev'
+  native_ios_version = '5.103.0'
+  pod 'RevenueCat', :git => 'https://github.com/RevenueCat/purchases-ios.git', :tag => native_ios_version
+  pod 'RevenueCatUI', :git => 'https://github.com/RevenueCat/purchases-ios.git', :tag => native_ios_version
+  pod 'PurchasesHybridCommon', :git => 'https://github.com/RevenueCat/purchases-hybrid-common.git', :branch => phc_version
+  pod 'PurchasesHybridCommonUI', :git => 'https://github.com/RevenueCat/purchases-hybrid-common.git', :branch => phc_version
+
+  capacitor_pods
+  # Add your Pods here
+end
+
+post_install do |installer|
+  assertDeploymentTarget(installer)
+end

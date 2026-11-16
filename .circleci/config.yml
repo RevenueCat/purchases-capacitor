@@ -167,6 +167,7 @@ jobs:
       - run: yarn test:ios
 
   run-tests-ios-cocoapods:
+    description: "Build Git-sourced core/UI pods and run a native Purchases smoke test"
     <<: *base-mac-job
     steps:
       - checkout
@@ -175,8 +176,47 @@ jobs:
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
       - yarn-dependencies-mac
+      - yarn-dependencies-ui-mac
       - run: yarn build
-      - run: yarn verify:ios:cocoapods
+      - run:
+          working_directory: purchases-capacitor-ui
+          command: yarn build
+      - run:
+          name: Verify both committed CocoaPods installation fixtures
+          command: |
+            bundle exec yarn verify:ios:cocoapods
+            bundle exec yarn --cwd purchases-capacitor-ui verify:ios:cocoapods
+      - run:
+          name: Install the committed CocoaPods smoke app
+          working_directory: e2e-tests/CocoaPodsSmokeTest
+          command: |
+            npm ci
+            npm run build
+            bundle exec npx cap sync ios
+            cp ios/App/Podfile /tmp/capacitor-git-pods-Podfile
+            bundle exec npx cap sync ios
+            cmp ios/App/Podfile /tmp/capacitor-git-pods-Podfile
+      - run:
+          name: Build the CocoaPods workspace
+          working_directory: e2e-tests/CocoaPodsSmokeTest
+          command: |
+            xcodebuild -workspace ios/App/App.xcworkspace -scheme App -configuration Debug \
+              -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 17' \
+              -derivedDataPath build CODE_SIGNING_ALLOWED=NO build
+            app=build/Build/Products/Debug-iphonesimulator/App.app
+            test -n "$(find "$app" -name PurchasesHybridCommon.bundle -type d -print -quit)"
+            test -n "$(find "$app" -name RevenueCat_RevenueCatUI.bundle -type d -print -quit)"
+      - revenuecat/install-maestro
+      - run:
+          name: Configure Purchases and call the native API
+          command: |
+            xcrun simctl boot "iPhone 17" || true
+            xcrun simctl bootstatus "iPhone 17" -b
+            xcrun simctl install booted e2e-tests/CocoaPodsSmokeTest/build/Build/Products/Debug-iphonesimulator/App.app
+            maestro test --format junit --output build/cocoapods-smoke-results/report.xml \
+              e2e-tests/CocoaPodsSmokeTest/flow.yaml
+      - store_test_results:
+          path: build/cocoapods-smoke-results
 
   run-tests-android:
     <<: *base-android-job

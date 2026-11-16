@@ -15,6 +15,14 @@ files_to_update_phc_version = {
     'Package.swift' => ['.package(url: "https://github.com/RevenueCat/purchases-hybrid-common.git", exact: "{x}")'],
     'purchases-capacitor-ui/Package.swift' => ['.package(url: "https://github.com/RevenueCat/purchases-hybrid-common.git", exact: "{x}")'],
 }
+cocoapods_test_podfiles = %w[
+  ios/CocoapodsInstallationTest/Podfile
+  purchases-capacitor-ui/ios/CocoapodsInstallationTest/Podfile
+  e2e-tests/CocoaPodsSmokeTest/ios/App/Podfile
+]
+cocoapods_test_podfiles.each do |podfile|
+  files_to_update_phc_version[podfile] = ["phc_version = '{x}'"]
+end
 repo_name = 'purchases-capacitor'
 changelog_latest_path = './CHANGELOG.latest.md'
 changelog_path = './CHANGELOG.md'
@@ -233,8 +241,28 @@ lane :update_hybrid_common do |options|
     next_version: new_version_number,
     open_pr: options[:open_pr] || false,
     automatic_release: options[:automatic_release] || false,
-    enable_auto_merge: options[:automatic_release] || false
+    enable_auto_merge: false
   )
+
+  # Git-sourced pods must use the native version required by the new PHC podspec.
+  require 'fastlane/plugin/revenuecat_internal/helper/update_hybrids_versions_file_helper'
+  native_ios_version = Fastlane::Helper::UpdateHybridsVersionsFileHelper.get_ios_version_for_hybrid_common_version(
+    new_version_number, ENV["GITHUB_TOKEN"]
+  )
+  native_pins_changed = false
+  cocoapods_test_podfiles.each do |path|
+    podfile = File.join(get_root_folder, path)
+    contents = File.read(podfile)
+    updated = contents.sub(/native_ios_version = '[^']+'/, "native_ios_version = '#{native_ios_version}'")
+    next if updated == contents
+    File.write(podfile, updated)
+    native_pins_changed = true
+  end
+  if options[:open_pr] && native_pins_changed
+    commit_current_changes(commit_message: 'Update CocoaPods test native iOS pins')
+    push_to_git_remote
+  end
+
 
   # Regenerate the lockfiles so CI's reproducible installs stay in sync after
   # the dependency bump, and push them to the PR branch opened above.
@@ -250,6 +278,14 @@ lane :update_hybrid_common do |options|
       commit_current_changes(commit_message: 'Update lockfiles')
       push_to_git_remote(set_upstream: true)
     end
+  end
+
+  # Arm auto-merge only after the Git pins and any lockfile updates have been pushed.
+  if options[:open_pr] && options[:automatic_release]
+    enable_auto_merge_for_pr(
+      github_token: ENV["GITHUB_TOKEN"], repo_name: repo_name,
+      base_branch: 'main', merge_method: 'SQUASH'
+    )
   end
 end
 
