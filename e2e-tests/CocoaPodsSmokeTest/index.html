@@ -1,12 +1,28 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CocoaPods smoke test</title>
-  </head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CocoaPods smoke test</title>
   <body>
-    <p id="app">Running CocoaPods smoke test</p>
-    <script type="module" src="/app.ts"></script>
+    Running CocoaPods smoke test
+    <script type="module">
+      import { Capacitor } from '@capacitor/core';
+      import { Purchases } from '@revenuecat/purchases-capacitor';
+      import { RevenueCatUI } from '@revenuecat/purchases-capacitor-ui';
+
+      async function run() {
+        const appUserID = 'git-cocoapods-smoke-test';
+        await Purchases.configure({ apiKey: 'appl_cocoapods_smoke_test', appUserID });
+        const result = await Purchases.getAppUserID();
+        if (result.appUserID !== appUserID) throw new Error('Wrong native app user ID');
+        if (typeof RevenueCatUI.presentPaywall !== 'function' || !Capacitor.isPluginAvailable('RevenueCatUI')) {
+          throw new Error('The UI plugin is not registered');
+        }
+        document.body.textContent = 'COCOAPODS_SMOKE_PASSED';
+      }
+      run().catch((error) => {
+        document.body.textContent = `COCOAPODS_SMOKE_FAILED: ${error.message}`;
+      });
+    </script>
   </body>
 </html>

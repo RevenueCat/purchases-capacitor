@@ -190,7 +190,7 @@ jobs:
           name: Install the committed CocoaPods smoke app
           working_directory: e2e-tests/CocoaPodsSmokeTest
           command: |
-            npm ci
+            npm install
             npm run build
             bundle exec npx cap sync ios
             cp ios/App/Podfile /tmp/capacitor-git-pods-Podfile
