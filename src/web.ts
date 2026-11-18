@@ -86,8 +86,17 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
   ): Promise<string> {
     return this.mockReturningFunctionIfEnabled('addShouldPurchasePromoProductListener', 'mock-callback-id');
   }
-  removeShouldPurchasePromoProductListener(_listenerToRemove: string): Promise<{ wasRemoved: boolean }> {
+  removeShouldPurchasePromoProductListener(
+    _options: { listenerToRemove: string } | string,
+  ): Promise<{ wasRemoved: boolean }> {
     return this.mockReturningFunctionIfEnabled('removeShouldPurchasePromoProductListener', { wasRemoved: false });
+  }
+  makeDeferredPurchase(_options: { callbackID: string }): Promise<MakePurchaseResult> {
+    return this.mockReturningFunctionIfEnabled('makeDeferredPurchase', {
+      productIdentifier: 'mock-promoted-product',
+      customerInfo: this.mockEmptyCustomerInfo,
+      transaction: this.mockTransaction('mock-promoted-product'),
+    });
   }
   getOfferings(): Promise<PurchasesOfferings> {
     const mockOfferings: PurchasesOfferings = {
