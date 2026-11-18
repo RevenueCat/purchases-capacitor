@@ -94,6 +94,6 @@
     }
   },
   "dependencies": {
-    "@revenuecat/purchases-typescript-internal-esm": "20.9.1"
+    "@revenuecat/purchases-typescript-internal-esm": "20.10.0"
   }
 }
