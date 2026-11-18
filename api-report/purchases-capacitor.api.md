@@ -73,6 +73,7 @@ export interface PurchasePackageOptions {
     googleIsPersonalizedPrice?: boolean | null;
     // @deprecated
     googleProductChangeInfo?: GoogleProductChangeInfo | null;
+    introductoryOfferEligibilityJWS?: string | null;
     storeProductChangeInfo?: StoreProductChangeInfo | null;
 }
 
@@ -292,6 +293,7 @@ export interface PurchaseStoreProductOptions {
     googleIsPersonalizedPrice?: boolean | null;
     // @deprecated
     googleProductChangeInfo?: GoogleProductChangeInfo | null;
+    introductoryOfferEligibilityJWS?: string | null;
     product: PurchasesStoreProduct;
     storeProductChangeInfo?: StoreProductChangeInfo | null;
 }

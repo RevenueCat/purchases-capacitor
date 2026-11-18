@@ -30,6 +30,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
         CAPPluginMethod(name: "purchaseStoreProduct", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "purchaseDiscountedProduct", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "purchasePackage", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "purchaseWithIntroductoryOfferEligibilityJWS", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "purchaseSubscriptionOption", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "purchaseDiscountedPackage", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "restorePurchases", returnType: CAPPluginReturnPromise),
@@ -262,11 +263,38 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
         }
     }
 
+    @objc func purchaseWithIntroductoryOfferEligibilityJWS(_ call: CAPPluginCall) {
+        guard let token = call.options["introductoryOfferEligibilityJWS"] as? String, !token.isEmpty else {
+            call.reject("introductoryOfferEligibilityJWS must be a non-empty string.",
+                        String(ErrorCode.purchaseInvalidError.rawValue))
+            return
+        }
+        switch call.getString("purchasableItemType") {
+        case "product":
+            guard call.getObject("product") != nil else {
+                call.reject("Must provide product parameter.", String(ErrorCode.purchaseInvalidError.rawValue))
+                return
+            }
+            self.purchaseStoreProduct(call)
+        case "package":
+            guard call.getObject("aPackage") != nil else {
+                call.reject("Must provide aPackage parameter.", String(ErrorCode.purchaseInvalidError.rawValue))
+                return
+            }
+            self.purchasePackage(call)
+        default:
+            call.reject("Must provide a product or package purchase type.", String(ErrorCode.purchaseInvalidError.rawValue))
+        }
+    }
+
     @objc func purchaseStoreProduct(_ call: CAPPluginCall) {
         guard self.rejectIfPurchasesNotConfigured(call) else { return }
         guard let storeProduct = call.getOrRejectObject("product") else { return }
         guard let productId = storeProduct["identifier"] as? String else {
             call.reject("Product parameter did not have identifier key")
+            return
+        }
+        if self.purchaseWithIntroductoryOfferEligibilityJWSIfPresent(call, options: ["productIdentifier": productId]) {
             return
         }
         CommonFunctionality.purchase(product: productId,
@@ -300,6 +328,12 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
         }
         guard let presentedOfferingContext = package["presentedOfferingContext"] as? [String: Any] else {
             call.reject("aPackage parameter did not have presentedOfferingContext key")
+            return
+        }
+        if self.purchaseWithIntroductoryOfferEligibilityJWSIfPresent(call, options: [
+            "packageIdentifier": packageId,
+            "presentedOfferingContext": presentedOfferingContext
+        ]) {
             return
         }
         CommonFunctionality.purchase(package: packageId,
