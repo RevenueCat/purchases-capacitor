@@ -77,6 +77,20 @@ lane :automatic_bump do |options|
   bump(options)
 end
 
+desc "Open a hotfix release PR that patches an older release with a PR merged into main. Usage: fastlane hotfix pr:1234 version:9.16.0"
+lane :hotfix do |options|
+  create_hotfix(
+    pr_number: options[:pr],
+    version: options[:version],
+    changelog_latest_path: changelog_latest_path,
+    changelog_path: changelog_path,
+    files_to_update: files_with_version_number,
+    repo_name: internal_repo_name,
+    omit_pr_references_in_changelog_files: true,
+    dry_run: options[:dry_run]
+  )
+end
+
 desc "Make github release"
 lane :github_release do |options|
   create_github_release(
@@ -118,25 +132,15 @@ end
 
 desc "Creates GitHub release and publishes package"
 lane :release do |options|
-  version_number = current_version_number
-  is_prerelease = Gem::Version.new(version_number).prerelease?
-
-  args = [
-    'npm',
-    'publish',
-    is_prerelease ? '--tag next' : nil
-  ].compact
-
+  tag = npm_publish_tag(get_root_folder)
   Dir.chdir(get_root_folder) do
-    sh(args)
+    sh(['npm', 'publish', tag].compact)
   end
-  github_release(version: version_number)
+  github_release(version: current_version_number)
 end
 
 desc "Create purchases-capacitor-ui release"
 lane :release_purchases_capacitor_ui do |options|
-  version_number = current_version_number
-  is_prerelease = Gem::Version.new(version_number).prerelease?
   dry_run = options[:dry_run] || false
 
   # First do a dry run to validate the package
@@ -150,14 +154,10 @@ lane :release_purchases_capacitor_ui do |options|
   end
 
   # Publish the UI package
-  args = [
-    'npm',
-    'publish',
-    is_prerelease ? '--tag next' : nil
-  ].compact
-
-  Dir.chdir(File.expand_path('purchases-capacitor-ui', get_root_folder)) do
-    sh(args)
+  ui_folder = File.expand_path('purchases-capacitor-ui', get_root_folder)
+  tag = npm_publish_tag(ui_folder)
+  Dir.chdir(ui_folder) do
+    sh(['npm', 'publish', tag].compact)
   end
 end
 
@@ -324,6 +324,17 @@ def get_phc_version
   Dir.chdir(get_root_folder) do
     return (sh "cat RevenuecatPurchasesCapacitor.podspec | grep \"'PurchasesHybridCommon', '\" | awk '{print($3)}' | sed \"s/\'//g\"").strip
   end
+end
+
+# npm moves `latest` to every version published without a tag, so a release older than the
+# latest published version goes out under `hotfix` instead.
+def npm_publish_tag(package_folder)
+  version = Gem::Version.new(current_version_number)
+  return '--tag next' if version.prerelease?
+
+  package_name = JSON.parse(File.read(File.join(package_folder, 'package.json')))['name']
+  # fastlane's `sh` merges stderr into its output, so npm warnings would break the version parse
+  '--tag hotfix' if version < Gem::Version.new(sh("npm view #{package_name} version 2>/dev/null", log: false).strip)
 end
 
 def get_root_folder

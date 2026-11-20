@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   macos: circleci/macos@2.3.6
   android: circleci/android@3.0.2
-  revenuecat: revenuecat/sdks-common-config@4.9.0
+  revenuecat: revenuecat/sdks-common-config@4.12.0
 
 aliases:
   base-mac-job: &base-mac-job
@@ -46,8 +46,14 @@ aliases:
 parameters:
   action:
     type: enum
-    enum: [build, upgrade-hybrid-common, bump]
+    enum: [build, upgrade-hybrid-common, bump, hotfix]
     default: build
+  hotfix_pr:
+    type: integer
+    default: 0
+  hotfix_version:
+    type: string
+    default: ''
   version:
     type: string
     default: ''
@@ -504,8 +510,11 @@ workflows:
   version: 2
   build-test-hold-deploy:
     when:
-      not:
-        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+      and:
+        - not:
+            equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+        - not:
+            equal: [ hotfix, << pipeline.parameters.action >> ]
     jobs:
       # Testing phase - runs on all branches
       - run-api-tests
@@ -627,6 +636,15 @@ workflows:
     jobs:
       - bump:
           context: github-bot-internal
+
+  manual-trigger-hotfix:
+    when:
+      equal: [ hotfix, << pipeline.parameters.action >> ]
+    jobs:
+      - revenuecat/hotfix:
+          context: github-bot-internal
+          pr_number: << pipeline.parameters.hotfix_pr >>
+          version: << pipeline.parameters.hotfix_version >>
 
   update-hybrid-common-versions:
     when:
