@@ -266,7 +266,7 @@ jobs:
 
   run-api-tests:
     docker:
-      - image: cimg/ruby:3.3.0
+      - image: cimg/ruby:3.3.14
     steps:
       - checkout
       - yarn-dependencies-unix
@@ -277,7 +277,7 @@ jobs:
 
   run-unit-tests:
     docker:
-      - image: cimg/ruby:3.3.0
+      - image: cimg/ruby:3.3.14
     steps:
       - checkout
       - yarn-dependencies-unix
@@ -287,7 +287,7 @@ jobs:
 
   run-lint:
     docker:
-      - image: cimg/ruby:3.3.0
+      - image: cimg/ruby:3.3.14
     steps:
       - checkout
       - yarn-dependencies-unix
@@ -400,7 +400,7 @@ jobs:
     description: >
       Runs automatic bump
     docker:
-      - image: cimg/ruby:3.3.0
+      - image: cimg/ruby:3.3.14
     shell: /bin/bash --login -o pipefail
     steps:
       - checkout
@@ -418,7 +418,7 @@ jobs:
   check-api-changes:
     description: "Check for unexpected API changes in purchases-capacitor and purchases-capacitor-ui"
     docker:
-      - image: cimg/ruby:3.3.0
+      - image: cimg/ruby:3.3.14
     steps:
       - checkout
       - yarn-dependencies-unix
@@ -441,7 +441,7 @@ jobs:
   run-api-tests-ui:
     description: "Run API tests for purchases-capacitor-ui package"
     docker:
-      - image: cimg/ruby:3.3.0
+      - image: cimg/ruby:3.3.14
     steps:
       - checkout
       - yarn-dependencies-unix
@@ -454,7 +454,7 @@ jobs:
   run-lint-ui:
     description: "Run linting for purchases-capacitor-ui package"
     docker:
-      - image: cimg/ruby:3.3.0
+      - image: cimg/ruby:3.3.14
     steps:
       - checkout
       - yarn-dependencies-unix
@@ -467,7 +467,7 @@ jobs:
   dry-run-release-ui:
     description: "Validate purchases-capacitor-ui package can be published"
     docker:
-      - image: cimg/ruby:3.3.0
+      - image: cimg/ruby:3.3.14
     steps:
       - checkout
       - revenuecat/install-mise-tools:
@@ -558,7 +558,7 @@ workflows:
           <<: *release-branches
       - revenuecat/tag-current-branch:
           context: github-bot-internal
-          ruby_version: "3.3.0"
+          ruby_version: "3.3.14"
           requires:
             - wait-for-pr-approval
             - run-api-tests
@@ -593,7 +593,7 @@ workflows:
       - revenuecat/merge-release-pr:
           context: github-bot-internal
           repo_name: purchases-capacitor_internal
-          ruby_version: "3.3.0"
+          ruby_version: "3.3.14"
           requires:
             - make-release-ui
           <<: *release-tags
@@ -616,7 +616,7 @@ workflows:
     jobs:
       - revenuecat/danger:
           context: danger-bot
-          ruby_version: "3.3.0"
+          ruby_version: "3.3.14"
           filters:
             branches:
               ignore: main
