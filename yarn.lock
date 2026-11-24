@@ -289,9 +289,9 @@
     keyv "^5.6.0"
 
 "@capacitor/android@^8.0.0":
-  version "8.4.1"
-  resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-8.4.1.tgz#d2a42c051c3a8127510bae62875aaf4237c33719"
-  integrity sha512-igtDCJ7QQn0P2qHFD9p4KXaa6V1b2PRNt+MxjVwtjTm/BJvqmiazOJq6rPjwFSZnfHm6iFoZk8TfzHd44pyBGw==
+  version "8.4.3"
+  resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-8.4.3.tgz#7145a1cb77b6eea444d45c70e32de85f77175904"
+  integrity sha512-VICd1+E2u5uPvCb5hseoZr84u7/wi334BqayKyXvSLeqURn/iw7nCFEWK29RQNW2rxiW5l1vTVHQ2K6tAJkpTQ==
 
 "@capacitor/core@^8.0.0":
   version "8.4.1"
