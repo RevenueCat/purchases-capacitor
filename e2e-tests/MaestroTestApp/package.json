@@ -7,9 +7,9 @@
     "sync": "npx cap sync"
   },
   "dependencies": {
-    "@capacitor/core": "^8.0.0",
-    "@capacitor/android": "^8.0.0",
-    "@capacitor/ios": "^8.0.0",
+    "@capacitor/android": "^8.4.3",
+    "@capacitor/core": "^8.4.3",
+    "@capacitor/ios": "^8.4.3",
     "@revenuecat/purchases-capacitor": "file:../../",
     "@revenuecat/purchases-capacitor-ui": "file:../../purchases-capacitor-ui"
   },

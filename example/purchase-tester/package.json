@@ -8,7 +8,6 @@
     "build": "tsc && vite build",
     "preview": "tsc && vite build && vite preview",
     "test.e2e": "cypress run",
-    "test.unit": "vitest",
     "lint": "eslint"
   },
   "dependencies": {
@@ -34,9 +33,6 @@
   },
   "devDependencies": {
     "@capacitor/cli": "^8.0.0",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^14.0.0",
-    "@testing-library/user-event": "^14.4.3",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-legacy": "^5.4.0",
@@ -44,11 +40,9 @@
     "cypress": "^12.7.0",
     "eslint": "^8.35.0",
     "eslint-plugin-react": "^7.32.2",
-    "jsdom": "^22.1.0",
     "terser": "^5.19.2",
     "typescript": "^5.1.6",
-    "vite": "~5.4.20",
-    "vitest": "^0.32.2"
+    "vite": "~5.4.20"
   },
   "description": "An Ionic project"
 }
