@@ -1,3 +1,40 @@
+## 14.2.0
+## RevenueCat SDK
+### ✨ New Features
+* Add dangerousSettings with forceAllowTestStoreInReleaseBuilds to configure via Toni Rico (@tonidero)
+### 📦 Dependency Updates
+* [RENOVATE] Update dependency revenuecat to v4.13.1 via RevenueCat Git Bot (@RCGitBot)
+* [RENOVATE] Update ruby-dependencies to v9.6.2 via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 20.13.0 via RevenueCat Git Bot (@RCGitBot)
+  * [Android 11.4.3](https://github.com/RevenueCat/purchases-android/releases/tag/11.4.3)
+  * [Android 11.4.2](https://github.com/RevenueCat/purchases-android/releases/tag/11.4.2)
+  * [Android 11.4.1](https://github.com/RevenueCat/purchases-android/releases/tag/11.4.1)
+  * [iOS 5.103.2](https://github.com/RevenueCat/purchases-ios/releases/tag/5.103.2)
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 20.12.0 via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 20.11.0 via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 20.10.1 via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* [AUTOMATIC BUMP] Updates purchases-hybrid-common to 20.14.0 (#55) via RevenueCat Git Bot
+* Allow passing a version to the CircleCI bump action via Toni Rico (@tonidero)
+* chore(deps): bump Capacitor to 8.4.3 in the Maestro test app and remove vitest from the purchase tester via Álvaro Brey (@AlvaroBrey)
+* chore(deps): bump tar to 7.5.23 in the Maestro test app via Álvaro Brey (@AlvaroBrey)
+* chore(deps): bump handlebars from 4.7.9 to 4.7.10 via dependabot[bot] (@dependabot[bot])
+* chore(deps-dev): bump @capacitor/ios from 8.4.1 to 8.4.3 via dependabot[bot] (@dependabot[bot])
+* chore(deps): bump brace-expansion from 1.1.15 to 1.1.22 via dependabot[bot] (@dependabot[bot])
+* chore(deps): bump tar from 7.5.19 to 7.5.23 in /purchases-capacitor-ui via dependabot[bot] (@dependabot[bot])
+* chore(deps-dev): bump @capacitor/android from 8.4.1 to 8.4.3 via dependabot[bot] (@dependabot[bot])
+* chore(deps): bump brace-expansion from 5.0.7 to 5.1.0 in /purchases-capacitor-ui via dependabot[bot] (@dependabot[bot])
+* chore(deps-dev): bump brace-expansion from 5.0.4 to 5.1.0 in /e2e-tests/MaestroTestApp via dependabot[bot] (@dependabot[bot])
+* chore(deps): bump @xmldom/xmldom from 0.9.10 to 0.9.12 in /purchases-capacitor-ui via dependabot[bot] (@dependabot[bot])
+* chore(deps): bump fast-uri from 3.1.3 to 3.1.9 in /purchases-capacitor-ui via dependabot[bot] (@dependabot[bot])
+* ci: move Ruby gem updates to Renovate via Álvaro Brey (@AlvaroBrey)
+* chore(deps): bump fastlane-plugin-revenuecat_internal to v0.3.1 via Antonio Pallares (@ajpallares)
+* ci: export main and release tags to the public repo with the orb's Copybara job via Antonio Pallares (@ajpallares)
+* chore: bump Ruby to 3.3.14 for the Regexp/String security advisory via Tony Cosentini (@tonycosentini)
+* ci: add the hotfix PR comment command via Álvaro Brey (@AlvaroBrey)
+* chore(deps): bump fast-uri from 3.1.3 to 3.1.9 via dependabot[bot] (@dependabot[bot])
+
 ## 14.1.2
 ## RevenueCat SDK
 ### 📦 Dependency Updates
