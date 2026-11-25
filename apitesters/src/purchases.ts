@@ -1,6 +1,7 @@
 import type {
   CustomerInfo,
   CustomerInfoUpdateListener,
+  DangerousSettings,
   ENTITLEMENT_VERIFICATION_MODE,
   IN_APP_MESSAGE_TYPE,
   IntroEligibility,
@@ -99,6 +100,14 @@ async function checkConfigure(plugin: PurchasesPlugin) {
     preferredUILocaleOverride: 'en-US',
     useExternalPurchaseCustomLinks: true,
     enableExternalPurchasesInSimulator: false,
+  });
+
+  const dangerousSettings: DangerousSettings = {
+    forceAllowTestStoreInReleaseBuilds: false,
+  };
+  await plugin.configure({
+    apiKey,
+    dangerousSettings,
   });
 
   const isConfiguredResult: { isConfigured: boolean } = await plugin.isConfigured();

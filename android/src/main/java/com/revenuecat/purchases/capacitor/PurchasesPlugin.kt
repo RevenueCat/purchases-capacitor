@@ -9,6 +9,7 @@ import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
 import com.revenuecat.purchases.CustomerInfo
+import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesAreCompletedBy
 import com.revenuecat.purchases.Store
@@ -112,6 +113,12 @@ class PurchasesPlugin : Plugin() {
         val diagnosticsEnabled = call.getBoolean("diagnosticsEnabled")
         val automaticDeviceIdentifierCollectionEnabled = call.getBoolean("automaticDeviceIdentifierCollectionEnabled")
         val preferredLocale = call.getString("preferredUILocaleOverride")
+        val dangerousSettings = DangerousSettings()
+        val forceAllowTestStoreInReleaseBuilds = call.getObject("dangerousSettings")
+            ?.optBoolean("forceAllowTestStoreInReleaseBuilds", false) ?: false
+        if (forceAllowTestStoreInReleaseBuilds) {
+            dangerousSettings.forceAllowTestStoreInReleaseBuilds()
+        }
 
         configure(
             context.applicationContext,
@@ -120,6 +127,7 @@ class PurchasesPlugin : Plugin() {
             purchasesAreCompletedBy,
             platformInfo,
             store,
+            dangerousSettings = dangerousSettings,
             shouldShowInAppMessagesAutomatically = shouldShowInAppMessages,
             verificationMode = entitlementVerificationMode,
             pendingTransactionsForPrepaidPlansEnabled = pendingTransactionsForPrepaidPlansEnabled,

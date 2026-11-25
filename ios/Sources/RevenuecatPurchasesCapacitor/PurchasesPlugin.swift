@@ -137,6 +137,11 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
         let preferredLocale = call.getString("preferredUILocaleOverride")
         let useExternalPurchaseCustomLinks = call.getBool("useExternalPurchaseCustomLinks") ?? false
         let enableExternalPurchasesInSimulator = call.getBool("enableExternalPurchasesInSimulator") ?? true
+        let forceAllowTestStoreInReleaseBuilds = call.getObject("dangerousSettings")?["forceAllowTestStoreInReleaseBuilds"] as? Bool ?? false
+        let dangerousSettings = DangerousSettings(
+            autoSyncPurchases: true,
+            forceAllowTestStoreInReleaseBuilds: forceAllowTestStoreInReleaseBuilds
+        )
 
         let purchases = Purchases.configure(apiKey: apiKey,
                                             appUserID: appUserID,
@@ -145,7 +150,7 @@ public class PurchasesPlugin: CAPPlugin, PurchasesDelegate, CAPBridgedPlugin {
                                             platformFlavor: self.platformFlavor,
                                             platformFlavorVersion: self.platformVersion,
                                             storeKitVersion: storeKitVersion,
-                                            dangerousSettings: DangerousSettings(),
+                                            dangerousSettings: dangerousSettings,
                                             shouldShowInAppMessagesAutomatically: shouldShowInAppMessagesAutomatically,
                                             verificationMode: entitlementVerificationMode,
                                             diagnosticsEnabled: diagnosticsEnabled,
