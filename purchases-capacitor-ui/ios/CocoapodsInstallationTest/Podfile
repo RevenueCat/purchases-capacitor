@@ -10,6 +10,13 @@ use_frameworks!
 install! 'cocoapods', :disable_input_output_paths => true
 
 target 'CocoapodsInstallationTest' do
+  phc_version = '21.0.0'
+  native_ios_version = '5.103.2'
+  pod 'RevenueCat', :git => 'https://github.com/RevenueCat/purchases-ios.git', :tag => native_ios_version
+  pod 'RevenueCatUI', :git => 'https://github.com/RevenueCat/purchases-ios.git', :tag => native_ios_version
+  pod 'PurchasesHybridCommon', :git => 'https://github.com/RevenueCat/purchases-hybrid-common.git', :tag => phc_version
+  pod 'PurchasesHybridCommonUI', :git => 'https://github.com/RevenueCat/purchases-hybrid-common.git', :tag => phc_version
+
   pod 'Capacitor', :path => '../../../node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../../../node_modules/@capacitor/ios'
   pod 'RevenuecatPurchasesCapacitorUi', :path => '../../'

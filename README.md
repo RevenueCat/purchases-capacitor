@@ -1,55 +1,143 @@
-<h3 align="center">😻 In-App Subscriptions Made Easy 😻</h3>
+# @revenuecat/purchases-capacitor
 
-[![License](https://img.shields.io/github/license/RevenueCat/purchases-capacitor.svg?style=flat)](https://github.com/RevenueCat/purchases-capacitor/blob/main/LICENSE)
-[![Release](https://img.shields.io/github/release/RevenueCat/purchases-capacitor.svg?style=flat)](https://github.com/RevenueCat/purchases-capacitor/releases)
+The RevenueCat SDK for Capacitor. It wraps StoreKit and Google Play Billing and handles purchases, entitlements, and subscription status.
 
-RevenueCat is a powerful, reliable, and free to use in-app purchase server with cross-platform support. Our open-source framework provides a backend and a wrapper around StoreKit and Google Play Billing to make implementing in-app purchases and subscriptions easy.
+[![npm version](https://img.shields.io/npm/v/@revenuecat/purchases-capacitor.svg)](https://www.npmjs.com/package/@revenuecat/purchases-capacitor) [![License: MIT](https://img.shields.io/npm/l/@revenuecat/purchases-capacitor.svg)](https://github.com/RevenueCat/purchases-capacitor/blob/main/LICENSE)
 
-Whether you are building a new app or already have millions of customers, you can use RevenueCat to:
+[Docs](https://www.revenuecat.com/docs?utm_source=github&utm_medium=sdk_readme&utm_content=purchases-capacitor) · [Install guide](https://www.revenuecat.com/docs/getting-started/installation/capacitor?utm_source=github&utm_medium=sdk_readme&utm_content=purchases-capacitor) · [SDK reference](https://github.com/RevenueCat/purchases-capacitor#api-reference) · [Sample app](https://github.com/RevenueCat/purchases-capacitor/tree/main/example/purchase-tester) · [Changelog](https://github.com/RevenueCat/purchases-capacitor/releases) · [Migration guide](https://github.com/RevenueCat/purchases-capacitor/blob/main/migrations/v15-MIGRATION.md)
 
-* Fetch products, make purchases, and check subscription status with our [native SDKs](https://docs.revenuecat.com/docs/installation).
-* Host and [configure products](https://docs.revenuecat.com/docs/entitlements) remotely from our dashboard.
-* Analyze the most important metrics for your app business [in one place](https://docs.revenuecat.com/docs/charts).
-* See customer transaction histories, chart lifetime value, and [grant promotional subscriptions](https://docs.revenuecat.com/docs/customers).
-* Get notified of real-time events through [webhooks](https://docs.revenuecat.com/docs/webhooks).
-* Send enriched purchase events to analytics and attribution tools with our easy integrations.
+## Requirements
 
-Sign up to [get started for free](https://app.revenuecat.com/signup).
+| Requirement | Minimum |
+|---|---|
+| Capacitor | 8.0.0 |
+| iOS | 15.0 |
+| Android | 7.0 (API level 24) |
+| Android compile SDK | API 35 |
+| Kotlin | 2.1.0 |
 
-## @revenuecat/purchases-capacitor
+Capacitor 8 projects already meet the Android compile SDK and Kotlin minimums. The UI package has the same minimums as the core package.
 
-*@revenuecat/purchases-capacitor* is the client for the [RevenueCat](https://www.revenuecat.com/) subscription and purchase tracking system. It is an open source framework that provides a wrapper around StoreKit, Google Play Billing and the RevenueCat backend to make implementing in-app purchases in Capacitor easy.
+Web isn't supported. In a browser, `Purchases` methods reject with the string `Web not supported in this plugin.` unless you turn on mocked results with `Purchases.setMockWebResults`.
 
-## RevenueCat SDK Features
-|    | RevenueCat                                                                                                                                                   |
-|----|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| ✅  | Server-side receipt validation                                                                                                                               |
-| ➡️ | [Webhooks](https://docs.revenuecat.com/docs/webhooks) - enhanced server-to-server communication with events for purchases, renewals, cancellations, and more |
-| 🎯 | Subscription status tracking - know whether a user is subscribed whether they're on iOS, Android or web                                                      |
-| 📊 | Analytics - automatic calculation of metrics like conversion, mrr, and churn                                                                                 |
-| 📝 | [Online documentation](https://docs.revenuecat.com/docs) up to date                                                                                          |
-| 🔀 | [Integrations](https://www.revenuecat.com/integrations) - over a dozen integrations to easily send purchase data where you need it                           | 
-| 💯 | Well maintained - [frequent releases](https://github.com/RevenueCat/purchases-capacitor/releases)                                                            |
-| 📮 | Great support - [Help Center](https://revenuecat.zendesk.com)                                                                                                |
+## Installation
 
-## Getting Started
-For more detailed information, you can view our complete documentation at [docs.revenuecat.com](https://docs.revenuecat.com/docs).
+The SDK requires Swift Package Manager (SPM) on iOS. In Capacitor 8, `npx cap add ios` creates an SPM project by default. If your iOS project uses CocoaPods, [migrate it to SPM](https://www.revenuecat.com/docs/sdk-guides/capacitor-cocoapods-to-spm-migration?utm_source=github&utm_medium=sdk_readme&utm_content=purchases-capacitor) before you add or upgrade the SDK.
 
-Please follow the [Quickstart Guide](https://docs.revenuecat.com/docs/) for more information on how to install the SDK.
+Install the SDK from npm and sync your native projects:
 
-```bash
+```shell
 npm install @revenuecat/purchases-capacitor
 npx cap sync
 ```
 
+To show Paywalls or Customer Center, also add `@revenuecat/purchases-capacitor-ui` to `package.json` at the same version as `@revenuecat/purchases-capacitor`. After you add it, run `npm install` and `npx cap sync` again.
+
+Then set up each platform:
+
+- iOS: add the In-App Purchase capability to your app target in Xcode. App Store purchases need it; Test Store purchases don't.
+- Android: set your Activity's `launchMode` to `standard` or `singleTop` in `AndroidManifest.xml`. Other modes can cancel a purchase when Google Play sends the user to their banking app to verify it. Capacitor's Android template sets `singleTask`, so change it.
+
+| Package | What it's for | When you need it |
+|---|---|---|
+| `@revenuecat/purchases-capacitor` | Purchases, entitlements, subscription status | Always |
+| `@revenuecat/purchases-capacitor-ui` | Paywalls and Customer Center | You show RevenueCat Paywalls or Customer Center |
+
+## Quick start
+
+Before you start, create a RevenueCat project, connect your store or start with the Test Store, and add an entitlement. See the [Quickstart](https://www.revenuecat.com/docs/getting-started/quickstart?utm_source=github&utm_medium=sdk_readme&utm_content=purchases-capacitor).
+
+Configure the SDK with the public API key for each platform. While you test, pass your Test Store API key instead, and only in debug builds. Call `onDeviceReady` once when your app starts; the install guide's [Angular, React, and Vue.js examples](https://www.revenuecat.com/docs/getting-started/installation/capacitor?utm_source=github&utm_medium=sdk_readme&utm_content=purchases-capacitor#import-purchases) show where that code goes.
+
+```ts
+import { Capacitor } from '@capacitor/core';
+import { Purchases, LOG_LEVEL } from '@revenuecat/purchases-capacitor';
+
+const onDeviceReady = async () => {
+    const platform = Capacitor.getPlatform();
+    if (platform !== 'ios' && platform !== 'android') {
+        return;
+    }
+
+    const apiKey = platform === 'ios' ? '<public_apple_api_key>' : '<public_google_api_key>';
+    await Purchases.setLogLevel({ level: LOG_LEVEL.DEBUG });
+    await Purchases.configure({ apiKey });
+};
+```
+
+Check whether the user has an active entitlement before you show a paywall:
+
+```ts
+const platform = Capacitor.getPlatform();
+
+if (platform === 'ios' || platform === 'android') {
+  try {
+    const { customerInfo } = await Purchases.getCustomerInfo();
+    if (typeof customerInfo.entitlements.active['my_entitlement_identifier'] !== 'undefined') {
+      // Unlock that great "pro" content
+    }
+  } catch (error) {
+    // Error fetching customer info
+  }
+}
+```
+
+## What's included
+
+- [Paywalls](https://www.revenuecat.com/docs/tools/paywalls?utm_source=github&utm_medium=sdk_readme&utm_content=purchases-capacitor): build single-screen or multi-step paywalls in the dashboard, change them without an app update, and show them with the UI package.
+- [Customer Center](https://www.revenuecat.com/docs/tools/customer-center?utm_source=github&utm_medium=sdk_readme&utm_content=purchases-capacitor): a self-service screen in the UI package where users cancel subscriptions, restore purchases, and contact support. Refunds and plan changes are iOS only.
+- [Placements](https://www.revenuecat.com/docs/tools/targeting/placements?utm_source=github&utm_medium=sdk_readme&utm_content=purchases-capacitor): serve a different Offering at each paywall location in your app.
+- [Test Store](https://www.revenuecat.com/docs/test-and-launch/sandbox/test-store?utm_source=github&utm_medium=sdk_readme&utm_content=purchases-capacitor): test purchases before you set up App Store Connect or the Google Play Console.
+- [In-app currency](https://www.revenuecat.com/docs/offerings/in-app-currency?utm_source=github&utm_medium=sdk_readme&utm_content=purchases-capacitor): read the current Customer's in-app currency balances.
+- [Redemption Links](https://www.revenuecat.com/docs/web/redemption-links?utm_source=github&utm_medium=sdk_readme&utm_content=purchases-capacitor): unlock a web purchase in your app from a deep link.
+- [iOS subscription offers](https://www.revenuecat.com/docs/subscription-guidance/subscription-offers/ios-subscription-offers?utm_source=github&utm_medium=sdk_readme&utm_content=purchases-capacitor): promotional offers, the offer code redemption sheet, and win-back offers.
+- [Your own purchase code](https://www.revenuecat.com/docs/migrating-to-revenuecat/sdk-or-not/finishing-transactions?utm_source=github&utm_medium=sdk_readme&utm_content=purchases-capacitor): set `purchasesAreCompletedBy` when your app completes purchases with its own code. On Android, that code must support Google Play Billing Library 9 (see [Other Play Billing libraries in your app](https://github.com/RevenueCat/purchases-capacitor/blob/main/migrations/v14-MIGRATION.md#other-play-billing-libraries-in-your-app)).
+- [Trusted Entitlements](https://www.revenuecat.com/docs/customers/trusted-entitlements?utm_source=github&utm_medium=sdk_readme&utm_content=purchases-capacitor): informational by default. The SDK checks a signature on entitlement data and reports the result in `customerInfo.entitlements.verification` without blocking access. Your app decides how to handle unverified entitlements.
+- [Custom paywall impressions](https://www.revenuecat.com/docs/getting-started/tracking-custom-paywall-impressions?utm_source=github&utm_medium=sdk_readme&utm_content=purchases-capacitor): call `trackCustomPaywallImpression` when your own paywall appears, so RevenueCat counts its impressions. RevenueCat Paywalls track them automatically.
+
+## Documentation
+
+- [Install guide](https://www.revenuecat.com/docs/getting-started/installation/capacitor?utm_source=github&utm_medium=sdk_readme&utm_content=purchases-capacitor): Android and iOS project setup, and how to import the SDK in Angular, React, and Vue.js.
+- [Configure the SDK](https://www.revenuecat.com/docs/getting-started/configuring-sdk?utm_source=github&utm_medium=sdk_readme&utm_content=purchases-capacitor): initialization, debug logs, switching between Test Store and real stores, and proxy settings.
+- [Displaying paywalls](https://www.revenuecat.com/docs/tools/paywalls/displaying-paywalls?utm_source=github&utm_medium=sdk_readme&utm_content=purchases-capacitor#capacitor): present a paywall with `RevenueCatUI.presentPaywall`, or only when the user has no active entitlement with `presentPaywallIfNeeded`.
+- [Testing purchases](https://www.revenuecat.com/docs/test-and-launch/sandbox?utm_source=github&utm_medium=sdk_readme&utm_content=purchases-capacitor): Test Store and sandbox testing.
+- [Migration guide](https://github.com/RevenueCat/purchases-capacitor/blob/main/migrations/v15-MIGRATION.md): changes in the current major version.
+- [SDK reference](https://github.com/RevenueCat/purchases-capacitor#api-reference): every method and type in `@revenuecat/purchases-capacitor`, generated from its TypeScript definitions. The UI package isn't included.
+
+## Using an AI coding agent
+
+Your agent's training data is likely older than the current version of this SDK. Point it at current sources:
+
+- [llms.txt](https://www.revenuecat.com/docs/llms.txt?utm_source=github&utm_medium=sdk_readme&utm_content=purchases-capacitor): an index of the docs. Add `.md` to any docs URL for a Markdown version.
+- [RevenueCat MCP server](https://www.revenuecat.com/docs/tools/mcp?utm_source=github&utm_medium=sdk_readme&utm_content=purchases-capacitor): lets your agent read and change your RevenueCat project configuration.
+- [AI Toolkit](https://github.com/RevenueCat/ai-toolkit): installs RevenueCat skills and the MCP server in one step.
+- [Releases](https://github.com/RevenueCat/purchases-capacitor/releases): check the latest version before adding the dependency.
+
+## Sample apps
+
+- [purchase-tester](https://github.com/RevenueCat/purchases-capacitor/tree/main/example/purchase-tester): an Ionic React app with a button for most of the SDK's methods, including offerings, purchases, restores, win-back offers, and Customer attributes. It also presents Paywalls and Customer Center from the UI package.
+
+## Getting help
+
+- Bugs: open an issue in [this repo](https://github.com/RevenueCat/purchases-capacitor/issues).
+- Account or configuration questions: [RevenueCat Support](https://www.revenuecat.com/docs/revenuecat-support/support-first-steps?utm_source=github&utm_medium=sdk_readme&utm_content=purchases-capacitor).
+- Discussion: [RevenueCat Community](https://community.revenuecat.com/).
+
 ## Contributing
-Contributions are always welcome! To learn how you can contribute, please see the [Contributing Guide](./CONTRIBUTING.md).
+
+This repository is published from the `main` branch and release tags of RevenueCat's internal development repository. Issues are tracked here. Pull requests are welcome: a maintainer reviews them here and brings accepted changes into the internal repository, so they can't be merged directly.
+
+See the [contributing guide](https://github.com/RevenueCat/purchases-capacitor/blob/main/CONTRIBUTING.md).
 
 ## Acknowledgment
 
-This plugin is based on [CapGo's Capacitor plugin](https://www.npmjs.com/package/@capgo/capacitor-purchases). The plugin was transferred to RevenueCat to become an officially supported plugin.
+This SDK started as [CapGo's Capacitor plugin](https://www.npmjs.com/package/@capgo/capacitor-purchases). CapGo transferred it to RevenueCat, which now maintains and supports it.
 
-## API
+## License
+
+MIT. See [LICENSE](https://github.com/RevenueCat/purchases-capacitor/blob/main/LICENSE).
+
+## API reference
 
 <docgen-index>
 

@@ -10,11 +10,19 @@ files_to_update_phc_version = {
     'android/build.gradle' => ['com.revenuecat.purchases:purchases-hybrid-common:{x}'],
     'package.json' => ['"@revenuecat/purchases-typescript-internal-esm": "{x}"'],
     './purchases-capacitor-ui/package.json' => ['"@revenuecat/purchases-typescript-internal-esm": "{x}"'],
-    'purchases-capacitor-ui/RevenuecatPurchasesCapacitorUi.podspec' => ["'PurchasesHybridCommonUI', '{x}'"],
+    'purchases-capacitor-ui/RevenuecatPurchasesCapacitorUI.podspec' => ["'PurchasesHybridCommonUI', '{x}'"],
     'purchases-capacitor-ui/android/build.gradle' => ['com.revenuecat.purchases:purchases-hybrid-common-ui:{x}'],
     'Package.swift' => ['.package(url: "https://github.com/RevenueCat/purchases-hybrid-common.git", exact: "{x}")'],
     'purchases-capacitor-ui/Package.swift' => ['.package(url: "https://github.com/RevenueCat/purchases-hybrid-common.git", exact: "{x}")'],
 }
+cocoapods_test_podfiles = %w[
+  ios/CocoapodsInstallationTest/Podfile
+  purchases-capacitor-ui/ios/CocoapodsInstallationTest/Podfile
+  e2e-tests/CocoaPodsSmokeTest/ios/App/Podfile
+]
+cocoapods_test_podfiles.each do |podfile|
+  files_to_update_phc_version[podfile] = ["phc_version = '{x}'"]
+end
 internal_repo_name = 'purchases-capacitor_internal'
 public_repo_name = 'purchases-capacitor'
 changelog_latest_path = './CHANGELOG.latest.md'
@@ -228,6 +236,12 @@ lane :update_hybrid_common do |options|
     next
   end
 
+  # Git-sourced pods must use the native version required by the new PHC podspec.
+  require 'fastlane/plugin/revenuecat_internal/helper/update_hybrids_versions_file_helper'
+  native_ios_version = Fastlane::Helper::UpdateHybridsVersionsFileHelper.get_ios_version_for_hybrid_common_version(
+    new_version_number, ENV["GITHUB_TOKEN"]
+  )
+
   bump_phc_version(
     repo_name: internal_repo_name,
     files_to_update: files_to_update_phc_version,
@@ -235,7 +249,16 @@ lane :update_hybrid_common do |options|
     next_version: new_version_number,
     open_pr: options[:open_pr] || false,
     automatic_release: options[:automatic_release] || false,
-    enable_auto_merge: options[:automatic_release] || false
+    enable_auto_merge: false,
+    before_commit: lambda do
+      cocoapods_test_podfiles.each do |path|
+        podfile = File.join(get_root_folder, path)
+        contents = File.read(podfile)
+        updated = contents.sub(/native_ios_version = '[^']+'/, "native_ios_version = '#{native_ios_version}'")
+        next if updated == contents
+        File.write(podfile, updated)
+      end
+    end
   )
 
   # Regenerate the lockfiles so CI's reproducible installs stay in sync after
@@ -252,6 +275,14 @@ lane :update_hybrid_common do |options|
       commit_current_changes(commit_message: 'Update lockfiles')
       push_to_git_remote(set_upstream: true)
     end
+  end
+
+  # Arm auto-merge only after the Git pins and any lockfile updates have been pushed.
+  if options[:open_pr] && options[:automatic_release]
+    enable_auto_merge_for_pr(
+      github_token: ENV["GITHUB_TOKEN"], repo_name: internal_repo_name,
+      base_branch: 'main', merge_method: 'SQUASH'
+    )
   end
 end
 

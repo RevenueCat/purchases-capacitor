@@ -1,0 +1,178 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1E8D6F9FB55E20B3A0497332 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC2759A55A715B2B70DD8AE /* AppDelegate.swift */; };
+		B75E1CEBFCD77FA81F2A5541 /* public in Resources */ = {isa = PBXBuildFile; fileRef = FFFADF8506610794178E042C /* public */; };
+		DDD9EE31BE68AB8F77843E8A /* capacitor.config.json in Resources */ = {isa = PBXBuildFile; fileRef = DF07964EF219726DF34C7CF0 /* capacitor.config.json */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1EF5C5FC198D9A81A1B296E7 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5B4914BD8E695325747AF79E /* App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5DC2759A55A715B2B70DD8AE /* AppDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		DF07964EF219726DF34C7CF0 /* capacitor.config.json */ = {isa = PBXFileReference; includeInIndex = 1; path = capacitor.config.json; sourceTree = "<group>"; };
+		FFFADF8506610794178E042C /* public */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0470C58931AC5D393EA6A1D0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2BBCB2CA4B3EEDAFCB5054A0 = {
+			isa = PBXGroup;
+			children = (
+				7B315C2CA7AEAEDAF52B9B11 /* Products */,
+				FA60015EC2B90EF20B0CF8C4 /* App */,
+			);
+			sourceTree = "<group>";
+		};
+		7B315C2CA7AEAEDAF52B9B11 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5B4914BD8E695325747AF79E /* App.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FA60015EC2B90EF20B0CF8C4 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				5DC2759A55A715B2B70DD8AE /* AppDelegate.swift */,
+				FFFADF8506610794178E042C /* public */,
+				DF07964EF219726DF34C7CF0 /* capacitor.config.json */,
+				1EF5C5FC198D9A81A1B296E7 /* Info.plist */,
+			);
+			name = App;
+			path = App;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C83F43FEB6EF4B45389111BE /* App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 127609C1C87884C821439C84 /* Build configuration list for PBXNativeTarget "App" */;
+			buildPhases = (
+				6854EC2151ED0259E58C5B18 /* Sources */,
+				0470C58931AC5D393EA6A1D0 /* Frameworks */,
+				A5AEA98C10CA3BB01F5FE2A8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = App;
+			productName = App;
+			productReference = 5B4914BD8E695325747AF79E /* App.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		74AE807460FA7165B2ACC2A4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+			};
+			buildConfigurationList = 48B499AA8306C689AAAB818F /* Build configuration list for PBXProject "App" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 2BBCB2CA4B3EEDAFCB5054A0;
+			minimizedProjectReferenceProxies = 0;
+			preferredProjectObjectVersion = 100;
+			productRefGroup = 7B315C2CA7AEAEDAF52B9B11 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C83F43FEB6EF4B45389111BE /* App */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A5AEA98C10CA3BB01F5FE2A8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B75E1CEBFCD77FA81F2A5541 /* public in Resources */,
+				DDD9EE31BE68AB8F77843E8A /* capacitor.config.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6854EC2151ED0259E58C5B18 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1E8D6F9FB55E20B3A0497332 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		77FC372B42E0DBD6DFCE6E0B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.revenuecat.cocoapodssmoke;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7B1EEFDC983B8995C3E54DE1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		127609C1C87884C821439C84 /* Build configuration list for PBXNativeTarget "App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				77FC372B42E0DBD6DFCE6E0B /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		48B499AA8306C689AAAB818F /* Build configuration list for PBXProject "App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B1EEFDC983B8995C3E54DE1 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 74AE807460FA7165B2ACC2A4 /* Project object */;
+}
