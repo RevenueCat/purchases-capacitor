@@ -112,6 +112,9 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     return this.mockReturningFunctionIfEnabled('getProducts', mockProducts);
   }
   purchaseStoreProduct(_options: PurchaseStoreProductOptions): Promise<MakePurchaseResult> {
+    if (_options.introductoryOfferEligibilityJWS != null) {
+      return Promise.reject(this.unimplemented('Introductory offer eligibility JWS requires Apple StoreKit 2.'));
+    }
     const mockPurchaseResult: MakePurchaseResult = {
       productIdentifier: _options.product.identifier,
       customerInfo: this.mockEmptyCustomerInfo,
@@ -128,6 +131,9 @@ export class PurchasesWeb extends WebPlugin implements PurchasesPlugin {
     return this.mockReturningFunctionIfEnabled('purchaseDiscountedProduct', mockPurchaseResult);
   }
   purchasePackage(_options: PurchasePackageOptions): Promise<MakePurchaseResult> {
+    if (_options.introductoryOfferEligibilityJWS != null) {
+      return Promise.reject(this.unimplemented('Introductory offer eligibility JWS requires Apple StoreKit 2.'));
+    }
     const mockPurchaseResult: MakePurchaseResult = {
       productIdentifier: _options.aPackage.product.identifier,
       customerInfo: this.mockEmptyCustomerInfo,

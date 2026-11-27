@@ -254,6 +254,10 @@ class PurchasesPlugin : Plugin() {
 
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun purchaseStoreProduct(call: PluginCall) {
+        if (call.data.has("introductoryOfferEligibilityJWS") && !call.data.isNull("introductoryOfferEligibilityJWS")) {
+            rejectNotSupportedInAndroid(call, "introductoryOfferEligibilityJWS")
+            return
+        }
         if (rejectIfNotConfigured(call)) return
         val storeProduct = call.getObjectOrReject("product") ?: return
         val productIdentifier = storeProduct.getStringOrReject(call, "identifier") ?: return
@@ -286,6 +290,10 @@ class PurchasesPlugin : Plugin() {
 
     @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
     fun purchasePackage(call: PluginCall) {
+        if (call.data.has("introductoryOfferEligibilityJWS") && !call.data.isNull("introductoryOfferEligibilityJWS")) {
+            rejectNotSupportedInAndroid(call, "introductoryOfferEligibilityJWS")
+            return
+        }
         if (rejectIfNotConfigured(call)) return
         val packageToPurchase = call.getObjectOrReject("aPackage") ?: return
         val packageIdentifier = packageToPurchase.getStringOrReject(call, "identifier") ?: return
