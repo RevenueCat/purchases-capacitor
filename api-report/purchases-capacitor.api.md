@@ -27,6 +27,7 @@ import type { PurchasesStoreTransaction } from '@revenuecat/purchases-typescript
 import { PurchasesVirtualCurrencies } from '@revenuecat/purchases-typescript-internal-esm';
 import type { PurchasesWinBackOffer } from '@revenuecat/purchases-typescript-internal-esm';
 import type { REFUND_REQUEST_STATUS } from '@revenuecat/purchases-typescript-internal-esm';
+import type { ShouldPurchasePromoProductListener } from '@revenuecat/purchases-typescript-internal-esm';
 import type { Storefront } from '@revenuecat/purchases-typescript-internal-esm';
 import type { StoreProductChangeInfo } from '@revenuecat/purchases-typescript-internal-esm';
 import type { SubscriptionOption } from '@revenuecat/purchases-typescript-internal-esm';
@@ -97,6 +98,7 @@ export type PurchasesCallbackId = string;
 // @public (undocumented)
 export interface PurchasesPlugin {
     addCustomerInfoUpdateListener(customerInfoUpdateListener: CustomerInfoUpdateListener): Promise<PurchasesCallbackId>;
+    addShouldPurchasePromoProductListener(listener: ShouldPurchasePromoProductListener): Promise<PurchasesCallbackId>;
     beginRefundRequestForActiveEntitlement(): Promise<{
         refundRequestStatus: REFUND_REQUEST_STATUS;
     }>;
@@ -165,6 +167,9 @@ export interface PurchasesPlugin {
     logOut(): Promise<{
         customerInfo: CustomerInfo;
     }>;
+    makeDeferredPurchase(options: {
+        callbackID: string;
+    }): Promise<MakePurchaseResult>;
     overridePreferredUILocale(options: {
         locale: string | null;
     }): Promise<void>;
@@ -190,6 +195,11 @@ export interface PurchasesPlugin {
         webPurchaseRedemption: WebPurchaseRedemption;
     }): Promise<WebPurchaseRedemptionResult>;
     removeCustomerInfoUpdateListener(options: {
+        listenerToRemove: PurchasesCallbackId;
+    }): Promise<{
+        wasRemoved: boolean;
+    }>;
+    removeShouldPurchasePromoProductListener(options: {
         listenerToRemove: PurchasesCallbackId;
     }): Promise<{
         wasRemoved: boolean;
